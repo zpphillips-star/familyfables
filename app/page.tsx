@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { books, AMAZON_STORE_URL } from "@/lib/books";
 import BookCard from "@/components/BookCard";
-import NewsletterSection from "@/components/NewsletterSection";
+// NewsletterSection removed per product direction
 
 export default function HomePage() {
   // Show 4 featured/highlight books on homepage
@@ -111,7 +111,7 @@ export default function HomePage() {
               className="mt-10 flex flex-wrap gap-6 justify-center lg:justify-start text-sm font-semibold"
               style={{ color: "#9B8AC4" }}
             >
-              <span>📚 8 Beloved Books</span>
+              <span>📚 11 Books Published</span>
               <span>⭐ For Ages 2–8</span>
               <span>🌍 Ships Worldwide</span>
             </div>
@@ -182,7 +182,7 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
             {[
-              { emoji: "📚", value: "8", label: "Books Published" },
+              { emoji: "📚", value: "11", label: "Books Published" },
               { emoji: "👨‍👩‍👧‍👦", value: "1000s", label: "Happy Families" },
               { emoji: "⭐", value: "4.8★", label: "Avg. Rating" },
               { emoji: "🌍", value: "50+", label: "States Reached" },
@@ -249,95 +249,45 @@ export default function HomePage() {
               className="inline-block px-8 py-3.5 rounded-xl font-bold border-2 transition-all hover:bg-purple-50"
               style={{ borderColor: "#6B3FA0", color: "#6B3FA0" }}
             >
-              View All 8 Books →
+              View All Books →
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ─── ORIGIN STORY TEASER ──────────────────────────────── */}
+      {/* ─── ABOUT TEASER ─────────────────────────────────────── */}
       <section
-        className="py-20 px-4"
-        style={{
-          background:
-            "linear-gradient(135deg, #2D1B69 0%, #4A2875 50%, #6B3FA0 100%)",
-        }}
+        className="py-16 px-4"
+        style={{ backgroundColor: "#F0EBF8" }}
       >
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Decorative firefly visual */}
-            <div className="flex items-center justify-center order-2 lg:order-1">
-              <div
-                className="relative w-72 h-72 rounded-full flex items-center justify-center"
-                style={{
-                  background:
-                    "radial-gradient(circle, rgba(244,168,57,0.3) 0%, rgba(107,63,160,0.2) 60%, transparent 80%)",
-                }}
-              >
-                <div className="text-center">
-                  <div className="text-8xl sparkle mb-4">🪲</div>
-                  <div
-                    className="text-xl font-bold"
-                    style={{
-                      fontFamily: "var(--font-fredoka), cursive",
-                      color: "#F4A839",
-                    }}
-                  >
-                    The Immortal Firefly
-                  </div>
-                  <div
-                    className="text-sm mt-1"
-                    style={{ color: "#B8A8D8" }}
-                  >
-                    by Victor Plotkin
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Story content */}
-            <div className="order-1 lg:order-2">
-              <div
-                className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-6"
-                style={{ backgroundColor: "#F4A839", color: "#2D1B69" }}
-              >
-                �� Our Origin Story
-              </div>
-              <h2
-                className="text-4xl sm:text-5xl font-bold text-white mb-6 leading-tight"
-                style={{
-                  fontFamily: "var(--font-fredoka), 'Fredoka One', cursive",
-                }}
-              >
-                A Legacy Born From Love
-              </h2>
-              <p
-                className="text-base leading-relaxed mb-4"
-                style={{ color: "#C8B4E8" }}
-              >
-                Family Fables began with a boy from 1900s Brooklyn named
-                <strong className="text-white"> Victor Plotkin</strong> — a
-                creative soul who spent his whole life writing poems, songs, and
-                stories that he never published.
-              </p>
-              <p
-                className="text-base leading-relaxed mb-8"
-                style={{ color: "#C8B4E8" }}
-              >
-                After Victor passed, his son Warren published his first
-                children&apos;s book. Z.P. Phillips stepped in to carry on that
-                legacy — bringing joy to children and honoring a life full of
-                untold stories.
-              </p>
-              <Link
-                href="/about"
-                className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-white border-2 transition-all hover:bg-white hover:text-purple-800"
-                style={{ borderColor: "rgba(255,255,255,0.5)" }}
-              >
-                Read Our Full Story →
-              </Link>
-            </div>
+        <div className="max-w-3xl mx-auto text-center">
+          <div
+            className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-5"
+            style={{ backgroundColor: "#E8DCF5", color: "#6B3FA0" }}
+          >
+            🌿 About Family Fables
           </div>
+          <h2
+            className="text-3xl sm:text-4xl font-bold mb-4"
+            style={{
+              fontFamily: "var(--font-fredoka), 'Fredoka One', cursive",
+              color: "#2D1B69",
+            }}
+          >
+            Stories Built on a Family Legacy
+          </h2>
+          <p className="text-base leading-relaxed mb-8" style={{ color: "#4A3570" }}>
+            Family Fables was inspired by Z.P. Phillips&apos; grandfather — a creative
+            soul who spent his life writing poems and stories. That legacy of imagination
+            and love is woven into every book we publish.
+          </p>
+          <Link
+            href="/about"
+            className="inline-block px-8 py-3.5 rounded-xl font-bold border-2 transition-all hover:bg-purple-50"
+            style={{ borderColor: "#6B3FA0", color: "#6B3FA0" }}
+          >
+            Our Story →
+          </Link>
         </div>
       </section>
 
@@ -360,9 +310,6 @@ export default function HomePage() {
           </p>
         </div>
       </section>
-
-      {/* ─── NEWSLETTER ───────────────────────────────────────── */}
-      <NewsletterSection />
 
       {/* ─── SHOP CTA ─────────────────────────────────────────── */}
       <section

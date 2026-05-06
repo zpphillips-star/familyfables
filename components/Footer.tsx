@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { AMAZON_STORE_URL, INSTAGRAM_URL } from "@/lib/books";
+import Image from "next/image";
+import { AMAZON_STORE_URL } from "@/lib/books";
 
 export default function Footer() {
   return (
@@ -9,7 +10,13 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">📚</span>
+              <Image
+                src="/images/logo-teal.png"
+                alt="Family Fables"
+                width={36}
+                height={36}
+                className="rounded-full"
+              />
               <span
                 className="text-xl"
                 style={{
@@ -58,27 +65,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Social & Shop */}
+          {/* Shop */}
           <div>
             <h3
               className="font-bold text-sm uppercase tracking-widest mb-4"
               style={{ color: "#F4A839" }}
             >
-              Connect
+              Shop
             </h3>
             <div className="space-y-3">
-              <a
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm transition-colors hover:text-white group"
-                style={{ color: "#B8A8D8" }}
-              >
-                <span className="text-xl group-hover:scale-110 transition-transform">
-                  📸
-                </span>
-                <span>@familyfables</span>
-              </a>
               <a
                 href={AMAZON_STORE_URL}
                 target="_blank"

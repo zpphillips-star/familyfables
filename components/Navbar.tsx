@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { AMAZON_STORE_URL } from "@/lib/books";
 
@@ -22,9 +23,13 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <span className="text-2xl group-hover:scale-110 transition-transform duration-200">
-              📚
-            </span>
+            <Image
+              src="/images/logo-teal.png"
+              alt="Family Fables"
+              width={44}
+              height={44}
+              className="group-hover:scale-110 transition-transform duration-200 rounded-full"
+            />
             <span
               className="text-xl font-display tracking-wide"
               style={{ color: "#6B3FA0", fontFamily: "var(--font-fredoka), 'Fredoka One', cursive" }}
