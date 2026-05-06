@@ -1,27 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0f0e17;
-  --foreground: #f0ece4;
-  --surface: #1e1c2e;
-  --gold: #c9a84c;
-  --rose: #9b6b8a;
-  --muted: #8a8299;
-  --border: #2e2a42;
-  --footer-bg: #0a0912;
+  --background: #FFF8F0;
+  --foreground: #2D1B69;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-lora), 'Lora', serif;
+  --font-sans: var(--font-nunito), 'Nunito', sans-serif;
   --font-display: var(--font-fredoka), 'Fredoka One', cursive;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-lora), 'Lora', serif;
+  font-family: var(--font-nunito), 'Nunito', sans-serif;
 }
 
 * {
@@ -32,21 +26,6 @@ body {
   font-family: var(--font-fredoka), 'Fredoka One', cursive;
 }
 
-.font-serif {
-  font-family: var(--font-lora), 'Lora', serif;
-}
-
-/* Eyebrow / section label */
-.eyebrow {
-  display: inline-block;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #c9a84c;
-  font-family: 'Nunito', sans-serif;
-}
-
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
@@ -54,52 +33,42 @@ html {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f0e17;
+  background: #F5ECE0;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2e2a42;
+  background: #9B6FD0;
   border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #c9a84c;
 }
 
 /* Book card hover animation */
 .book-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .book-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 50px rgba(201, 168, 76, 0.12);
+  box-shadow: 0 20px 40px rgba(107, 63, 160, 0.15);
 }
 
-/* Floating animation */
+/* Floating animation for hero elements */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-12px); }
 }
-.float-slow { animation: float 5s ease-in-out infinite; }
-.float-mid  { animation: float 4s ease-in-out infinite 0.8s; }
-.float-fast { animation: float 3s ease-in-out infinite 1.5s; }
-
-/* Gold glow pulse — used on raven */
-@keyframes glow {
-  0%, 100% { filter: drop-shadow(0 0 6px rgba(201,168,76,0.25)); }
-  50%       { filter: drop-shadow(0 0 22px rgba(201,168,76,0.55)); }
-}
-.glow-pulse { animation: glow 3.5s ease-in-out infinite; }
+.float-slow { animation: float 4s ease-in-out infinite; }
+.float-mid  { animation: float 3s ease-in-out infinite 0.5s; }
+.float-fast { animation: float 2.5s ease-in-out infinite 1s; }
 
 /* Sparkle pulse */
 @keyframes sparkle {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.15); }
+  50% { opacity: 0.6; transform: scale(1.2); }
 }
-.sparkle { animation: sparkle 2.5s ease-in-out infinite; }
+.sparkle { animation: sparkle 2s ease-in-out infinite; }
 
-/* Button shine */
+/* Button shine effect */
 .btn-shine {
   position: relative;
   overflow: hidden;
@@ -111,17 +80,10 @@ html {
   left: -60%;
   width: 30%;
   height: 200%;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.3);
   transform: skewX(-20deg);
   transition: left 0.5s ease;
 }
 .btn-shine:hover::after {
   left: 130%;
-}
-
-/* Input focus — gold ring */
-input:focus {
-  outline: none;
-  border-color: #c9a84c !important;
-  box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
 }

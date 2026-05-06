@@ -14,49 +14,32 @@ export default function NewsletterSection() {
   };
 
   return (
-    <section
-      className="py-20 px-4"
-      style={{
-        backgroundColor: "#12111a",
-        borderTop: "1px solid #2e2a42",
-        borderBottom: "1px solid #2e2a42",
-      }}
-    >
+    <section className="py-20 px-4" style={{ backgroundColor: "#F0EBF8" }}>
       <div className="max-w-2xl mx-auto text-center">
-        <div className="text-4xl mb-4 float-slow inline-block" aria-hidden>🪶</div>
-        <div className="eyebrow mb-4">Stay in the Story</div>
+        <div className="text-5xl mb-4 sparkle inline-block">💌</div>
         <h2
           className="text-3xl sm:text-4xl font-bold mb-3"
           style={{
             fontFamily: "var(--font-fredoka), 'Fredoka One', cursive",
-            color: "#f0ece4",
+            color: "#2D1B69",
           }}
         >
-          Join the Family Fables Circle
+          Join the Family Fables Family
         </h2>
-        <p className="text-base mb-8" style={{ color: "#8a8299", fontFamily: "var(--font-lora), serif" }}>
-          Be first to know about new books, the stories behind the stories, and
-          rare dispatches from the collection. No noise — just legacy.
+        <p className="text-base mb-8" style={{ color: "#7B6898" }}>
+          Be the first to know about new books, special offers, and stories
+          behind the stories. No spam — just joy!
         </p>
 
         {submitted ? (
           <div
-            className="rounded-xl p-8 text-center border"
-            style={{
-              backgroundColor: "#1e1c2e",
-              borderColor: "#c9a84c",
-              boxShadow: "0 0 30px rgba(201,168,76,0.08)",
-            }}
+            className="rounded-2xl p-8 text-center"
+            style={{ backgroundColor: "#6B3FA0", color: "white" }}
           >
-            <div className="text-4xl mb-3">🐦‍⬛</div>
-            <p
-              className="font-bold text-lg"
-              style={{ color: "#f0ece4", fontFamily: "var(--font-fredoka), cursive" }}
-            >
-              You&apos;re in the circle now.
-            </p>
-            <p className="text-sm mt-1" style={{ color: "#8a8299", fontFamily: "var(--font-lora), serif" }}>
-              Watch your inbox for dispatches from the collection.
+            <div className="text-4xl mb-3">🎉</div>
+            <p className="font-bold text-lg">You&apos;re in the family now!</p>
+            <p className="text-sm mt-1 opacity-80">
+              Watch your inbox for magical updates.
             </p>
           </div>
         ) : (
@@ -67,29 +50,24 @@ export default function NewsletterSection() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com"
               required
-              className="flex-1 px-5 py-3.5 rounded-xl text-base border-2 transition-colors"
+              className="flex-1 px-5 py-3.5 rounded-xl text-base outline-none border-2 focus:border-purple-400 transition-colors"
               style={{
-                borderColor: "#2e2a42",
-                color: "#f0ece4",
-                backgroundColor: "#1e1c2e",
-                fontFamily: "var(--font-lora), serif",
+                borderColor: "#C8B4E8",
+                color: "#2D1B69",
+                backgroundColor: "white",
               }}
             />
             <button
               type="submit"
-              className="btn-shine px-7 py-3.5 rounded-xl font-bold transition-all hover:opacity-90 hover:shadow-lg whitespace-nowrap"
-              style={{
-                backgroundColor: "#c9a84c",
-                color: "#0f0e17",
-                fontFamily: "var(--font-fredoka), cursive",
-              }}
+              className="btn-shine px-7 py-3.5 rounded-xl font-bold text-white transition-all hover:opacity-90 hover:shadow-lg whitespace-nowrap"
+              style={{ backgroundColor: "#6B3FA0" }}
             >
-              Subscribe →
+              Subscribe ✨
             </button>
           </form>
         )}
 
-        <p className="text-xs mt-4" style={{ color: "#2e2a42", letterSpacing: "0.06em" }}>
+        <p className="text-xs mt-4" style={{ color: "#9B8AC4" }}>
           We respect your privacy. Unsubscribe anytime.
         </p>
       </div>
