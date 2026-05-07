@@ -303,7 +303,7 @@ export default function Home() {
       <section
         id="books"
         style={{
-          background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
+          background: 'linear-gradient(to bottom, #d9b5e5 0px, #d9b5e5 384px, #78087c 100%)',
           position: 'relative',
           marginTop: '-384px',
           paddingTop: '384px',
