@@ -61,18 +61,27 @@ function RainbowSVG({ className = '' }: { className?: string }) {
   );
 }
 
-// ── Wave Divider (smooth organic, no straight lines) ──────────────────────
-// Positioned absolute at bottom, EXTENDS into next section via negative offset
-function WaveDivider({ fill, fromColor }: { fill: string; fromColor: string }) {
+// ── Blob Divider (two-layer organic, zero straight lines) ─────────────────
+// Two overlapping sinusoidal blobs in slightly different shades of the destination
+// color — creates a depth/layered effect matching the original familyfables.org style.
+// NO overflow-hidden on the container — that's what caused the straight line clipping.
+// Extends 150px into the NEXT section via negative bottom. Next section uses
+// paddingTop ≥ 160px and marginTop: -148px to seamlessly overlap.
+function BlobDivider({
+  fill,           // front blob color (destination section primary)
+  fillDeep,       // back blob color (slightly darker/lighter variant for depth)
+}: { fill: string; fillDeep: string }) {
+  const H = 160;
   return (
-    <div className="absolute left-0 right-0 pointer-events-none overflow-hidden"
-      aria-hidden style={{ bottom: -2, zIndex: 10, height: 90 }}>
-      <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg"
+    <div className="absolute left-0 right-0 pointer-events-none"
+      aria-hidden style={{ bottom: -148, zIndex: 10, height: H }}>
+      <svg viewBox={`0 0 1440 ${H}`} xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '100%' }}>
-        {/* Fill section background color first so no gap */}
-        <rect width="1440" height="90" fill={fromColor}/>
-        {/* Smooth organic wave shape in next section's color */}
-        <path d="M0,90 L0,48 Q120,10 240,42 Q360,74 480,38 Q600,2 720,40 Q840,78 960,42 Q1080,6 1200,44 Q1320,82 1440,46 L1440,90 Z"
+        {/* Back layer — offset wave in slightly different shade, creates the "no flat line" depth */}
+        <path d={`M0,${H} L0,${H*0.72} Q160,${H*0.38} 320,${H*0.60} Q480,${H*0.82} 640,${H*0.50} Q800,${H*0.18} 960,${H*0.55} Q1120,${H*0.88} 1280,${H*0.58} Q1360,${H*0.42} 1440,${H*0.62} L1440,${H} Z`}
+          fill={fillDeep}/>
+        {/* Front layer — main organic wave, sits above back layer */}
+        <path d={`M0,${H} L0,${H*0.58} Q160,${H*0.22} 320,${H*0.48} Q480,${H*0.72} 640,${H*0.36} Q800,${H*0.02} 960,${H*0.42} Q1120,${H*0.76} 1280,${H*0.44} Q1360,${H*0.28} 1440,${H*0.50} L1440,${H} Z`}
           fill={fill}/>
       </svg>
     </div>
@@ -505,13 +514,13 @@ export default function HomePage() {
               }}/>
             </div>
           </div>
-          {/* Smooth wave into cream — NO straight line */}
-          <WaveDivider fill="#FDF6EE" fromColor="transparent"/>
+          {/* Blob into cream — two warm cream tones, no straight line */}
+          <BlobDivider fill="#FDF6EE" fillDeep="#F0E6D8"/>
         </section>
 
-        {/* ─── BOOKS GRID (warm cream) ── overlap pulls under hero wave ── */}
+        {/* ─── BOOKS GRID (warm cream) ── overlap pulls under hero blob ── */}
         <section className="relative pb-20 px-4" style={{
-          backgroundColor: '#FDF6EE', zIndex: 4, paddingTop: '100px', marginTop: '-2px',
+          backgroundColor: '#FDF6EE', zIndex: 4, paddingTop: '168px', marginTop: '-148px',
         }}>
           <div className="absolute top-10 right-12 float-slow opacity-20"><RainbowSVG /></div>
           <div className="absolute top-20 left-10 float-mid opacity-15"><StarSVG size={32} color="#9B5FD4"/></div>
@@ -539,14 +548,14 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          {/* Wave into teal — different phase so they feel alive */}
-          <WaveDivider fill="#0E7C8A" fromColor="transparent"/>
+          {/* Blob into teal — two teal tones for depth */}
+          <BlobDivider fill="#0E7C8A" fillDeep="#085F70"/>
         </section>
 
-        {/* ─── NARWHAL (teal ocean) ─── overlaps cream wave ─────────── */}
+        {/* ─── NARWHAL (teal ocean) ─── overlaps cream blob ─────────── */}
         <section className="relative pb-36 px-4 overflow-hidden" style={{
           background: 'linear-gradient(160deg, #0E7C8A 0%, #0A5C70 50%, #073D52 100%)',
-          paddingTop: '100px', marginTop: '-2px', zIndex: 3,
+          paddingTop: '168px', marginTop: '-148px', zIndex: 3,
         }}>
           <InteractiveBubble left="7%"  top="20%" size={20} delay="slow"/>
           <InteractiveBubble left="15%" top="63%" size={28} delay="mid"/>
@@ -580,14 +589,14 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          {/* Wave into lavender */}
-          <WaveDivider fill="#EEE4FF" fromColor="transparent"/>
+          {/* Blob into lavender — light lavender over slightly deeper lavender */}
+          <BlobDivider fill="#EEE4FF" fillDeep="#D4BEFF"/>
         </section>
 
-        {/* ─── ABOUT (lavender → deep purple) ─── overlaps teal wave ── */}
+        {/* ─── ABOUT (lavender → deep purple) ─── overlaps teal blob ── */}
         <section className="relative pb-32 px-4 text-center" style={{
           background: 'linear-gradient(160deg, #EEE4FF 0%, #D4B8F5 30%, #9B5FD4 65%, #5A1FA0 100%)',
-          paddingTop: '110px', marginTop: '-2px', zIndex: 2,
+          paddingTop: '168px', marginTop: '-148px', zIndex: 2,
         }}>
           <div className="absolute top-20 left-14 float-slow opacity-30"><StarSVG size={36} color="#FFFFFF"/></div>
           <div className="absolute top-28 right-16 float-mid opacity-22"><Sparkle4 size={26} color="#F4A839"/></div>
@@ -618,14 +627,14 @@ export default function HomePage() {
               Our Story →
             </Link>
           </div>
-          {/* Wave into gold CTA */}
-          <WaveDivider fill="#F4A839" fromColor="transparent"/>
+          {/* Blob into gold — warm gold over deeper amber */}
+          <BlobDivider fill="#F4A839" fillDeep="#D98520"/>
         </section>
 
         {/* ─── SHOP CTA (gold) ──────────────────────────────────────── */}
         <section className="relative pb-24 px-4 text-center" style={{
           background: 'linear-gradient(135deg, #F4A839 0%, #F0842A 60%, #E06A1A 100%)',
-          paddingTop: '110px', marginTop: '-2px', zIndex: 1,
+          paddingTop: '168px', marginTop: '-148px', zIndex: 1,
         }}>
           <div className="absolute top-16 left-14 float-mid opacity-35"><Sparkle4 size={28} color="white"/></div>
           <div className="absolute top-20 right-12 float-slow opacity-28"><StarSVG size={26} color="white"/></div>

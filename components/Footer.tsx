@@ -63,7 +63,7 @@ export default function Footer() {
 
         <div
           className="mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs"
-          style={{ borderTop: "1px solid #4A2875", color: "#9B8AC4" }}
+          style={{ color: "#9B8AC4" }}
         >
           <p>{new Date().getFullYear()} Family Fables. All rights reserved.</p>
           <p>Made with love for little readers everywhere.</p>
