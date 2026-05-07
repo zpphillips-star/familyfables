@@ -12,40 +12,57 @@ import NewsletterSection from '@/components/NewsletterSection';
 // All ellipses have cy = viewBox height (200) so only their top halves show.
 // Overlapping ellipses of varied sizes = organic bumpy cloud silhouette.
 // Back layer (tallest CSS height) peeks above front layer for depth effect.
-function SectionClouds({ fill, backFill }: { fill: string; backFill?: string }) {
-  const totalH = backFill ? 320 : 140;
+function SectionClouds({ fill, backFill, midFill }: { fill: string; backFill?: string; midFill?: string }) {
+  const totalH = backFill ? 360 : 140;
   const vb = 220; // viewBox height; ellipse centers sit at cy=220
 
-  // Front clouds — dramatic size variation: huge puffs, tiny puffs, medium
-  // ry range 65–200 so the big ones loom and the small ones sit daintily
-  const front = [
-    { cx:   30, rx: 155, ry: 175 },  // big — left anchor
-    { cx:  270, rx:  88, ry:  70 },  // tiny — small puff
-    { cx:  430, rx: 195, ry: 200 },  // HUGE — dominant center-left cloud
-    { cx:  680, rx: 105, ry:  85 },  // small-medium
-    { cx:  860, rx: 230, ry: 190 },  // HUGE — dominant center-right cloud
-    { cx: 1080, rx:  80, ry:  65 },  // tiny — gap filler
-    { cx: 1230, rx: 185, ry: 168 },  // large
-    { cx: 1430, rx: 110, ry:  95 },  // medium — right edge
-  ];
-
-  // Back clouds — also varied, phase-shifted to fill gaps between front
-  // tallest CSS height so their peaks poke above front layer for depth
+  // BACK layer — tallest CSS, peaks poke highest, slightly lighter shade
+  // Phase-shifted so its bumps appear between mid & front gaps
   const back = [
-    { cx:  140, rx: 170, ry: 155 },  // large — peeks in left gap
-    { cx:  360, rx: 130, ry: 118 },  // medium
-    { cx:  570, rx: 200, ry: 180 },  // HUGE back cloud (visible in gap between front big ones)
-    { cx:  780, rx:  95, ry:  80 },  // small
-    { cx:  970, rx: 175, ry: 158 },  // large — fills center-right gap
-    { cx: 1155, rx: 120, ry: 105 },  // medium
-    { cx: 1340, rx: 160, ry: 148 },  // large — right anchor
+    { cx:   80, rx: 175, ry: 162 },
+    { cx:  310, rx: 130, ry: 118 },
+    { cx:  510, rx: 205, ry: 188 },  // HUGE
+    { cx:  750, rx:  90, ry:  75 },  // tiny
+    { cx:  940, rx: 180, ry: 165 },
+    { cx: 1160, rx: 125, ry: 110 },
+    { cx: 1360, rx: 165, ry: 150 },
   ];
 
-  const frontH = Math.round(totalH * 0.80) + 2;
+  // MID layer — middle CSS height, medium-sized, between back & front
+  // Fills the gaps in back layer, creates the real sense of volume
+  const mid = [
+    { cx:   10, rx: 130, ry: 118 },  // tiny left anchor
+    { cx:  195, rx: 185, ry: 170 },  // large
+    { cx:  430, rx:  95, ry:  78 },  // small — between back big ones
+    { cx:  630, rx: 210, ry: 192 },  // HUGE center
+    { cx:  870, rx: 105, ry:  88 },  // small
+    { cx: 1050, rx: 190, ry: 172 },  // large
+    { cx: 1280, rx:  80, ry:  65 },  // tiny
+    { cx: 1440, rx: 155, ry: 140 },  // right edge
+  ];
+
+  // FRONT layer — shortest CSS height but largest ry — dominant foreground
+  // Biggest drama: huge puffs next to tiny ones
+  const front = [
+    { cx:   30, rx: 155, ry: 175 },
+    { cx:  270, rx:  88, ry:  70 },  // tiny
+    { cx:  430, rx: 195, ry: 200 },  // HUGE
+    { cx:  680, rx: 105, ry:  85 },  // small
+    { cx:  860, rx: 230, ry: 190 },  // HUGE
+    { cx: 1080, rx:  80, ry:  65 },  // tiny
+    { cx: 1230, rx: 185, ry: 168 },
+    { cx: 1430, rx: 110, ry:  95 },
+  ];
+
+  const midH  = Math.round(totalH * 0.88) + 2;  // 88% — mid layer
+  const frontH = Math.round(totalH * 0.75) + 2; // 75% — front layer (shortest)
+
+  // midFill defaults to a blend between backFill and fill if not provided
+  const resolvedMidFill = midFill ?? fill;
 
   return (
     <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH}px`, pointerEvents: 'none', zIndex: 2 }}>
-      {/* BACK — full totalH so its peaks poke above the front layer */}
+      {/* LAYER 1 — BACK: tallest, peaks highest, lightest/deepest shade */}
       {backFill && (
         <svg viewBox={`0 0 1440 ${vb}`} preserveAspectRatio="none"
           style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${totalH}px`, display: 'block' }}>
@@ -53,7 +70,15 @@ function SectionClouds({ fill, backFill }: { fill: string; backFill?: string }) 
           <rect x="0" y={vb - 2} width="1440" height="6" fill={backFill} />
         </svg>
       )}
-      {/* FRONT — shorter CSS height, larger ry → dominant bumpy cloud look */}
+      {/* LAYER 2 — MID: middle height, fills volume between back & front */}
+      {backFill && (
+        <svg viewBox={`0 0 1440 ${vb}`} preserveAspectRatio="none"
+          style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${midH}px`, display: 'block' }}>
+          {mid.map((c, i) => <ellipse key={i} cx={c.cx} cy={vb} rx={c.rx} ry={c.ry} fill={resolvedMidFill} />)}
+          <rect x="0" y={vb - 2} width="1440" height="6" fill={resolvedMidFill} />
+        </svg>
+      )}
+      {/* LAYER 3 — FRONT: shortest but largest ry — dominant foreground clouds */}
       <svg viewBox={`0 0 1440 ${vb}`} preserveAspectRatio="none"
         style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${frontH}px`, display: 'block' }}>
         {front.map((c, i) => <ellipse key={i} cx={c.cx} cy={vb} rx={c.rx} ry={c.ry} fill={fill} />)}
@@ -126,11 +151,11 @@ export default function Home() {
       <section
         id="hero"
         style={{
-          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 320px), #d9b5e5 100%)',
+          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 360px), #d9b5e5 100%)',
           position: 'relative',
           overflow: 'visible',
           minHeight: '92vh',
-          paddingBottom: '320px',
+          paddingBottom: '360px',
           display: 'flex',
           flexDirection: 'column',
           zIndex: 2,
@@ -230,7 +255,7 @@ export default function Home() {
         </div>
 
         {/* Clouds at bottom of hero — lavender front + lighter lavender back */}
-        <SectionClouds fill="#d9b5e5" backFill="#e8d0f2" />
+        <SectionClouds fill="#d9b5e5" midFill="#e2c4f0" backFill="#e8d0f2" />
       </section>
 
       {/* ── SECTION 2: BOOKS GRID ───────────────────────────────────── */}
@@ -239,9 +264,9 @@ export default function Home() {
         style={{
           background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
           position: 'relative',
-          marginTop: '-324px',
-          paddingTop: '324px',
-          paddingBottom: '320px',
+          marginTop: '-364px',
+          paddingTop: '364px',
+          paddingBottom: '360px',
           zIndex: 1,
         }}
       >
@@ -286,15 +311,15 @@ export default function Home() {
           </div>
         </div>
         {/* Clouds at bottom of books — mint front + lavender back */}
-        <SectionClouds fill="#daf8f2" backFill="#d9b5e5" />
+        <SectionClouds fill="#daf8f2" midFill="#c8eee8" backFill="#d9b5e5" />
       </section>
 
       {/* ── SECTION 3: CHARACTER / ABOUT ────────────────────────────── */}
       <section
         style={{
           background: '#daf8f2',
-          marginTop: '-324px',
-          paddingTop: '324px',
+          marginTop: '-364px',
+          paddingTop: '364px',
           position: 'relative',
           zIndex: 0,
         }}
@@ -391,3 +416,4 @@ export default function Home() {
     </div>
   );
 }
+
