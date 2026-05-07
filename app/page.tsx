@@ -9,11 +9,9 @@ import NewsletterSection from '@/components/NewsletterSection';
 
 // ── Section Clouds ─────────────────────────────────────────────────────────
 // Absolutely-positioned inside each section at bottom: 0.
-// NO container = NO straight lines. The section's own bg is what shows above.
-// 3 cloud layers with translateY offsets for multi-tonal depth.
-// fill = the color of the NEXT section (clouds bleed INTO it).
+// NO container = NO straight lines. The section's own bg shows above.
+// 3 cloud layers + filled base so no transparent gap/flat floor.
 function SectionClouds({ fill }: { fill: string }) {
-  // Real Divi cloud silhouette path (decoded from familyfables.org CSS)
   const cloud = "M1280 66.1c-3.8 0-7.6.3-11.4.8-18.3-32.6-59.6-44.2-92.2-25.9-3.5 2-6.9 4.3-10 6.9-22.7-41.7-74.9-57.2-116.6-34.5-14.2 7.7-25.9 19.3-33.8 33.3-.2.3-.3.6-.5.8-12.2-1.4-23.7 5.9-27.7 17.5-11.9-6.1-25.9-6.3-37.9-.6-21.7-30.4-64-37.5-94.4-15.7-12.1 8.6-21 21-25.4 35.2-10.8-9.3-24.3-15-38.5-16.2-8.1-24.6-34.6-38-59.2-29.9-14.3 4.7-25.5 16-30 30.3-4.3-1.9-8.9-3.2-13.6-3.8-13.6-45.5-61.5-71.4-107-57.8a86.38 86.38 0 0 0-43.2 29.4c-8.7-3.6-18.7-1.8-25.4 4.8-23.1-24.8-61.9-26.2-86.7-3.1-7.1 6.6-12.5 14.8-15.9 24-26.7-10.1-56.9-.4-72.8 23.3-2.6-2.7-5.6-5.1-8.9-6.9-.4-.2-.8-.4-1.2-.7-.6-25.9-22-46.4-47.9-45.8-11.5.3-22.5 4.7-30.9 12.5-16.5-33.5-57.1-47.3-90.6-30.8-21.9 11-36.3 32.7-37.6 57.1-7-2.3-14.5-2.8-21.8-1.6C84.8 47 55.7 40.7 34 54.8c-5.6 3.6-10.3 8.4-13.9 14-6.6-1.7-13.3-2.6-20.1-2.6-.1 0 0 19.8 0 19.8h1280V66.1z";
   return (
     <svg
@@ -28,22 +26,27 @@ function SectionClouds({ fill }: { fill: string }) {
         height: '130px',
         display: 'block',
         pointerEvents: 'none',
+        zIndex: 2,
       }}
     >
-      {/* Layer 1: shifted down 20px — lowest, faintest */}
+      {/* Solid base rect: fills below cloud bottom to SVG edge — eliminates flat floor */}
+      <rect x="0" y="62" width="1280" height="44" fill={fill} fillOpacity="0.35" />
+      <rect x="0" y="62" width="1280" height="44" fill={fill} fillOpacity="0.25" />
+      <rect x="0" y="66" width="1280" height="40" fill={fill} />
+
+      {/* Layer 1: shifted down 20 — lowest, faintest */}
       <g transform="translate(0,20)">
         <path d={cloud} fill={fill} fillOpacity="0.35" />
       </g>
-      {/* Layer 2: shifted down 10px — middle depth */}
+      {/* Layer 2: shifted down 10 — middle depth */}
       <g transform="translate(0,10)">
         <path d={cloud} fill={fill} fillOpacity="0.6" />
       </g>
-      {/* Layer 3: at natural position — solid, highest */}
+      {/* Layer 3: natural position — solid, highest */}
       <path d={cloud} fill={fill} />
     </svg>
   );
 }
-
 
 // ── Sparkle Trail ──────────────────────────────────────────────────────────
 import { useState, useEffect } from 'react';
@@ -210,26 +213,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Dragon sits above the clouds — zIndex 4 so it is in front */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 110,
-            right: 0,
-            width: 'clamp(160px, 24vw, 360px)',
-            zIndex: 4,
-            pointerEvents: 'none',
-          }}
-        >
-          <Image
-            src="/images/originals/poo-poo-dragon-flipped.png"
-            alt="Family Fables dragon character peeking up"
-            width={980}
-            height={630}
-            style={{ width: '100%', height: 'auto', display: 'block' }}
-          />
-        </div>
-
         {/* Clouds at bottom of hero — no wrapper div, section bg shows above */}
         <SectionClouds fill="#d9b5e5" />
       </section>
@@ -292,8 +275,11 @@ export default function Home() {
       <section
         style={{
           background: '#daf8f2',
-          marginTop: '-2px',
-          padding: 'clamp(48px, 8vw, 96px) 32px',
+          marginTop: '-130px',
+          paddingTop: 'calc(clamp(48px, 8vw, 96px) + 130px)',
+          padding: 'calc(clamp(48px, 8vw, 96px) + 130px) 32px clamp(48px, 8vw, 96px)',
+          position: 'relative',
+          zIndex: 1,
         }}
       >
         <div
