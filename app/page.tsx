@@ -436,6 +436,73 @@ function InteractiveBookCard({ book }: { book: typeof books[0] }) {
   );
 }
 
+// ── Emergency Dad Joke Button ──────────────────────────────────────────────
+const DAD_JOKES = [
+  { setup: "Why did the book go to the doctor?",           punchline: "It had too many problems." },
+  { setup: "Why can't the narwhal ever be trusted?",       punchline: "Because it always gives you the cold shoulder. (It's a horn. Get it?)" },
+  { setup: "What do you call a sleeping dinosaur?",        punchline: "A dino-snore. You're welcome." },
+  { setup: "Why did the turkey join the band?",            punchline: "He already had the drumsticks." },
+  { setup: "Why don't scientists trust atoms?",            punchline: "Because they make up everything. Just like my kids' bedtime excuses." },
+  { setup: "What do you call a bear with no teeth?",       punchline: "A gummy bear. (Kids lose their minds over this one.)" },
+  { setup: "What do books wear to the beach?",             punchline: "A cover-up." },
+  { setup: "What do you call a fish without eyes?",        punchline: "A fsh. Read it aloud. There you go." },
+  { setup: "Why did the kid bring a ladder to school?",    punchline: "Because they wanted to go to high school." },
+  { setup: "What happens when a frog parks illegally?",    punchline: "It gets toad away." },
+  { setup: "Why do cows wear bells?",                      punchline: "Because their horns don't work." },
+  { setup: "What do you call a pony with a cough?",        punchline: "A little hoarse. (Also me at every parent pickup.)" },
+];
+
+function DadJokeCard() {
+  const [jokeIndex, setJokeIndex] = useState<number | null>(null);
+  const [fading, setFading]       = useState(false);
+
+  const nextJoke = () => {
+    if (fading) return;
+    setFading(true);
+    setTimeout(() => {
+      setJokeIndex(prev => {
+        let next = Math.floor(Math.random() * DAD_JOKES.length);
+        if (next === prev) next = (next + 1) % DAD_JOKES.length;
+        return next;
+      });
+      setFading(false);
+    }, 180);
+  };
+
+  const joke = jokeIndex !== null ? DAD_JOKES[jokeIndex] : null;
+
+  return (
+    <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md select-none"
+      style={{ backgroundColor: '#FFFDF7', border: '2px solid #FF6B9D50' }}>
+      <div className="text-4xl text-center">🚨</div>
+      <h3 className="text-lg font-bold text-center"
+        style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D1B69' }}>
+        Emergency Dad Joke Button
+      </h3>
+
+      <div className="flex-1 min-h-[80px] flex flex-col items-center justify-center text-center"
+        style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.18s ease' }}>
+        {joke ? (
+          <>
+            <p className="text-sm font-semibold mb-2" style={{ color: '#2D1B69' }}>{joke.setup}</p>
+            <p className="text-sm italic" style={{ color: '#FF6B9D' }}>{joke.punchline}</p>
+          </>
+        ) : (
+          <p className="text-sm" style={{ color: '#7B6898' }}>
+            For when bedtime is hard and everyone just needs a groan.
+          </p>
+        )}
+      </div>
+
+      <button onClick={nextJoke}
+        className="btn-shine mt-auto w-full py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
+        style={{ backgroundColor: '#FF6B9D', color: 'white' }}>
+        {joke ? 'Another One! 😂' : 'Hit Me With It 🎯'}
+      </button>
+    </div>
+  );
+}
+
 // ── Mood Filter ────────────────────────────────────────────────────────────
 const MOODS = [
   { id: 'all',        label: 'All Books 📚', color: '#2D1B69' },
@@ -649,25 +716,12 @@ export default function HomePage() {
                 Free Fun Stuff 🎨
               </h2>
               <p className="text-base" style={{ color: '#7B6898' }}>
-                Because learning should come with coloring pages.
+                Because fun shouldn&apos;t require a credit card. Printables, dad jokes, and chaos — on the house.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Card 1 */}
-              <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: '#FFFDF7', border: '2px solid #F4A83940' }}>
-                <div className="text-4xl text-center">🎨</div>
-                <h3 className="text-lg font-bold text-center" style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D1B69' }}>
-                  Poo Poo Face Coloring Page
-                </h3>
-                <p className="text-sm text-center" style={{ color: '#7B6898' }}>
-                  Color the faces! All of them. No rules.
-                </p>
-                <button disabled
-                  className="mt-auto w-full py-3 rounded-xl font-bold text-sm cursor-not-allowed"
-                  style={{ backgroundColor: '#FDF8F2', color: '#B8A4D0', border: '2px dashed #C8B4E8' }}>
-                  Coming Soon!
-                </button>
-              </div>
+              {/* Card 1 — Dad Joke Generator */}
+              <DadJokeCard />
               {/* Card 2 */}
               <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: '#FFFDF7', border: '2px solid #F4A83940' }}>
                 <div className="text-4xl text-center">🦃</div>
@@ -798,8 +852,7 @@ export default function HomePage() {
               Ready to Start Reading?
             </h2>
             <p className="text-lg mb-8" style={{ color: '#C4B0EE' }}>
-              All Family Fables books are available on Amazon.
-              Perfect for birthdays, holidays, or just because.
+              All 11 books on Amazon — Prime shipping, no assembly required, and approximately zero splinters. Great for birthdays, holidays, or just because Tuesday deserves a story.
             </p>
             <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
               className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl transition-all hover:-translate-y-1"
