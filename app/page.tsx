@@ -1,401 +1,569 @@
-import Image from "next/image";
-import Link from "next/link";
-import { books, AMAZON_STORE_URL } from "@/lib/books";
-import BookCard from "@/components/BookCard";
+'use client';
 
-// Narwhal SVG mascot
-function Narwhal({ className = "", style = {} }: { className?: string; style?: React.CSSProperties }) {
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { books, AMAZON_STORE_URL } from '@/lib/books';
+
+// ── SVG Atoms ──────────────────────────────────────────────────────────────
+
+function StarSVG({ size = 28, color = '#F4A839', pulse = false }: {
+  size?: number; color?: string; pulse?: boolean;
+}) {
+  const [burst, setBurst] = useState(false);
+  const fire = () => { setBurst(true); setTimeout(() => setBurst(false), 500); };
   return (
-    <svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" className={className} style={style} aria-hidden>
-      {/* Horn */}
-      <path d="M60,62 L10,18" stroke="#F4A839" strokeWidth="5" strokeLinecap="round"
-        strokeDasharray="none" fill="none"/>
-      <path d="M62,60 L15,14" stroke="#E8932A" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-      {/* Body */}
-      <ellipse cx="145" cy="88" rx="98" ry="45" fill="#4CC9C9"/>
-      {/* Belly */}
-      <ellipse cx="148" cy="102" rx="72" ry="25" fill="#A8ECEC" opacity="0.7"/>
-      {/* Head bump */}
-      <ellipse cx="62" cy="77" rx="40" ry="36" fill="#4CC9C9"/>
-      {/* Eye */}
-      <circle cx="55" cy="68" r="8" fill="white"/>
-      <circle cx="57" cy="68" r="5" fill="#2D1B69"/>
-      <circle cx="59" cy="66" r="1.5" fill="white"/>
-      {/* Smile */}
-      <path d="M45,82 Q55,90 66,82" stroke="#2D1B69" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-      {/* Cheek blush */}
-      <ellipse cx="48" cy="79" rx="7" ry="4" fill="#F9A8D4" opacity="0.5"/>
-      {/* Spots */}
-      <circle cx="120" cy="72" r="5" fill="#38B2B2" opacity="0.4"/>
-      <circle cx="150" cy="64" r="4" fill="#38B2B2" opacity="0.3"/>
-      <circle cx="175" cy="75" r="6" fill="#38B2B2" opacity="0.3"/>
-      {/* Dorsal fin */}
-      <path d="M160,45 Q170,25 185,43 L160,50 Z" fill="#38B2B2"/>
-      {/* Tail */}
-      <path d="M238,73 Q260,50 265,88 Q260,125 238,103 Z" fill="#38B2B2"/>
-      <path d="M238,73 Q248,88 238,103" stroke="#2BA0A0" strokeWidth="2" fill="none"/>
-      {/* Flippers */}
-      <path d="M100,118 Q90,140 115,135 Q108,122 100,118 Z" fill="#38B2B2"/>
-      <path d="M160,118 Q155,140 178,133 Q168,120 160,118 Z" fill="#38B2B2"/>
-      {/* Little stars around */}
-      <text x="210" y="40" fontSize="14" fill="#F4A839" opacity="0.8">✦</text>
-      <text x="30" y="30" fontSize="10" fill="#F4A839" opacity="0.6">✦</text>
-      <text x="230" y="130" fontSize="10" fill="#C084FC" opacity="0.7">✦</text>
+    <svg width={size} height={size} viewBox="0 0 28 28"
+      className={`${pulse ? 'star-pulse' : ''} ${burst ? 'star-burst' : ''} select-none`}
+      style={{ cursor: 'pointer', display: 'block' }}
+      onClick={fire} onTouchStart={(e) => { e.preventDefault(); fire(); }} aria-hidden>
+      <polygon points="14,2 17.1,10.5 26,10.7 19.2,16.5 21.5,25.4 14,20.5 6.5,25.4 8.8,16.5 2,10.7 10.9,10.5" fill={color}/>
     </svg>
   );
 }
 
-// Cloud divider SVG
-function CloudDivider({ fill, fromFill, flip = false }: { fill: string; fromFill?: string; flip?: boolean }) {
+function Sparkle4({ size = 20, color = '#F4A839', className = '' }: {
+  size?: number; color?: string; className?: string;
+}) {
   return (
-    <div className="absolute bottom-0 left-0 right-0 pointer-events-none" aria-hidden
-      style={{ transform: flip ? "scaleY(-1)" : "none", zIndex: 5 }}>
-      <svg viewBox="0 0 1440 160" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
-        {fromFill && <rect width="1440" height="160" fill={fromFill}/>}
-        <path d="
-          M0,160 L0,105
-          C25,88 50,70 80,73 C105,76 122,92 150,95 C178,98 200,82 228,75
-          C256,68 280,71 305,81 C326,90 343,104 372,107 C400,110 422,96 450,89
-          C478,82 504,84 530,94 C553,102 570,115 598,117 C625,119 648,106 675,99
-          C702,92 728,94 754,104 C778,113 795,124 822,126 C850,128 872,115 900,108
-          C928,101 955,103 982,113 C1005,121 1022,132 1050,134
-          C1078,136 1102,123 1130,116 C1158,109 1185,111 1212,120 C1235,128 1252,138 1280,140
-          C1308,142 1335,132 1362,125 C1388,118 1414,120 1440,128
-          L1440,160 Z
-        " fill={fill}/>
+    <svg width={size} height={size} viewBox="0 0 20 20" className={className} aria-hidden fill={color}>
+      <path d="M10 0 L11.5 8.5 L20 10 L11.5 11.5 L10 20 L8.5 11.5 L0 10 L8.5 8.5 Z"/>
+    </svg>
+  );
+}
+
+function MoonSVG({ size = 52 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 52 52" aria-hidden fill="none">
+      <path d="M32 6 C22 8 15 18 17 29 C19 40 29 46 40 44 C29 49 16 43 11 32 C6 21 13 7 24 4 C27 3 30 4 32 6 Z"
+        fill="#F4DAFF" opacity="0.85"/>
+      <circle cx="38" cy="12" r="2.5" fill="#F4DAFF" opacity="0.4"/>
+      <circle cx="43" cy="22" r="1.5" fill="#F4DAFF" opacity="0.3"/>
+    </svg>
+  );
+}
+
+function RainbowSVG({ className = '' }: { className?: string }) {
+  const [shimmer, setShimmer] = useState(false);
+  const fire = () => { setShimmer(true); setTimeout(() => setShimmer(false), 600); };
+  return (
+    <svg width="240" height="88" viewBox="0 0 240 88"
+      className={`${shimmer ? 'rainbow-shimmer' : ''} select-none ${className}`}
+      style={{ cursor: 'pointer', display: 'block' }}
+      onClick={fire} onTouchStart={(e) => { e.preventDefault(); fire(); }} aria-hidden>
+      <path d="M8,78 Q120,-14 232,78"  stroke="#FF6B9D" strokeWidth="7" strokeLinecap="round" fill="none" opacity="0.7"/>
+      <path d="M14,81 Q120,-4 226,81"  stroke="#F4A839" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.7"/>
+      <path d="M20,83 Q120,5 220,83"   stroke="#FFE066" strokeWidth="5" strokeLinecap="round" fill="none" opacity="0.7"/>
+      <path d="M26,85 Q120,14 214,85"  stroke="#66D9A0" strokeWidth="5" strokeLinecap="round" fill="none" opacity="0.7"/>
+      <path d="M32,86 Q120,22 208,86"  stroke="#4CC9C9" strokeWidth="4" strokeLinecap="round" fill="none" opacity="0.7"/>
+      <path d="M38,87 Q120,30 202,87"  stroke="#9B6FD0" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.7"/>
+    </svg>
+  );
+}
+
+// ── Cloud Divider ──────────────────────────────────────────────────────────
+function CloudDivider({ fill }: { fill: string }) {
+  return (
+    <div className="absolute bottom-0 left-0 right-0 pointer-events-none" aria-hidden style={{ zIndex: 5 }}>
+      <svg viewBox="0 0 1440 160" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block' }}>
+        <path d="M0,160 L0,108 C25,92 50,72 82,75 C108,78 125,94 153,97 C180,100 202,84 230,77 C258,70 282,73 308,83 C330,92 348,106 377,109 C406,112 428,98 456,91 C484,84 510,86 536,96 C559,104 576,116 605,118 C632,120 655,107 682,100 C710,93 736,95 762,105 C786,114 803,125 830,127 C857,129 879,116 907,109 C935,102 962,104 989,114 C1012,122 1029,133 1057,135 C1085,137 1109,124 1137,117 C1165,110 1192,112 1219,121 C1242,129 1259,140 1287,141 C1315,142 1342,131 1369,124 C1395,117 1418,118 1440,126 L1440,160 Z" fill={fill}/>
       </svg>
     </div>
   );
 }
 
-export default function HomePage() {
-  const featuredBooks = books.filter((b) => b.image).slice(0, 6);
+// ── Cursor / Touch Sparkle Trail ───────────────────────────────────────────
+type Spark = { id: number; x: number; y: number; rot: number; size: number; color: string };
+const SPARK_COLORS = ['#F4A839', '#FF6B9D', '#4CC9C9', '#C084FC', '#66D9A0', '#FFE066'];
+
+function SparkleTrail() {
+  const [sparks, setSparks] = useState<Spark[]>([]);
+
+  useEffect(() => {
+    let lastTime = 0;
+    const add = (x: number, y: number) => {
+      const now = Date.now();
+      if (now - lastTime < 55) return;
+      lastTime = now;
+      const s: Spark = {
+        id: now + Math.random(),
+        x, y,
+        rot: Math.random() * 360,
+        size: 10 + Math.random() * 14,
+        color: SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)],
+      };
+      setSparks(prev => [...prev.slice(-14), s]);
+      setTimeout(() => setSparks(prev => prev.filter(p => p.id !== s.id)), 650);
+    };
+    const onMove  = (e: MouseEvent) => add(e.clientX, e.clientY);
+    const onTouch = (e: TouchEvent) => { for (const t of Array.from(e.touches)) add(t.clientX, t.clientY); };
+    window.addEventListener('mousemove',  onMove,  { passive: true });
+    window.addEventListener('touchmove',  onTouch, { passive: true });
+    window.addEventListener('touchstart', onTouch, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove',  onMove);
+      window.removeEventListener('touchmove',  onTouch);
+      window.removeEventListener('touchstart', onTouch);
+    };
+  }, []);
 
   return (
-    <div style={{ overflowX: "hidden" }}>
-
-      {/* ─── HERO ─────────────────────────────────────────────────────────── */}
-      <section
-        className="relative"
-        style={{
-          background: "linear-gradient(160deg, #9B3FCF 0%, #5A1FA0 35%, #2D0D6B 70%, #1C0A4F 100%)",
-          minHeight: "92vh",
-          paddingBottom: "160px",
-        }}
-      >
-        {/* ── Scattered magic: stars, sparkles, moon ── */}
-        <div className="absolute top-8 left-8 text-4xl float-slow opacity-70 pointer-events-none select-none" aria-hidden>⭐</div>
-        <div className="absolute top-16 right-20 text-5xl float-mid opacity-50 pointer-events-none select-none" aria-hidden>🌙</div>
-        <div className="absolute top-1/3 left-4 text-2xl float-fast opacity-40 pointer-events-none select-none" aria-hidden>✨</div>
-        <div className="absolute top-1/2 right-6 text-3xl float-slow opacity-35 pointer-events-none select-none" aria-hidden>⭐</div>
-        <div className="absolute top-3/4 left-20 text-xl float-mid opacity-45 pointer-events-none select-none" aria-hidden>✦</div>
-        <div className="absolute top-1/4 left-1/2 text-lg float-slow opacity-30 pointer-events-none select-none" aria-hidden>✨</div>
-        <div className="absolute top-2/3 right-16 text-2xl float-fast opacity-40 pointer-events-none select-none" aria-hidden>🌟</div>
-        {/* Rainbow arc decoration */}
-        <div className="absolute top-6 left-1/3 pointer-events-none opacity-20" aria-hidden>
-          <svg width="200" height="80" viewBox="0 0 200 80">
-            <path d="M10,70 Q100,-10 190,70" stroke="#F4A839" strokeWidth="6" fill="none" strokeLinecap="round"/>
-            <path d="M20,75 Q100,5 180,75" stroke="#E86BB5" strokeWidth="5" fill="none" strokeLinecap="round"/>
-            <path d="M30,78 Q100,15 170,78" stroke="#4CC9C9" strokeWidth="4" fill="none" strokeLinecap="round"/>
+    <div className="pointer-events-none fixed inset-0 z-[9999]" aria-hidden>
+      {sparks.map(s => (
+        <div key={s.id} className="absolute sparkle-burst"
+          style={{ left: s.x - s.size / 2, top: s.y - s.size / 2 }}>
+          <svg width={s.size} height={s.size} viewBox="0 0 20 20" style={{ transform: `rotate(${s.rot}deg)` }}>
+            <path d="M10 0 L11.5 8.5 L20 10 L11.5 11.5 L10 20 L8.5 11.5 L0 10 L8.5 8.5 Z" fill={s.color}/>
           </svg>
         </div>
-
-        {/* Hero content */}
-        <div className="relative max-w-6xl mx-auto px-6 lg:px-8 pt-20 pb-8 flex flex-col lg:flex-row items-center gap-10 min-h-[80vh]">
-
-          {/* Left: text */}
-          <div className="flex-1 text-center lg:text-left z-10">
-            <div
-              className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-6"
-              style={{ backgroundColor: "#F4A839", color: "#2D1B69" }}
-            >
-              📚 Children&apos;s Books for Every Family
-            </div>
-
-            <h1
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6"
-              style={{ fontFamily: "var(--font-fredoka), cursive", color: "#FFFFFF" }}
-            >
-              Stories That<br />
-              <span style={{ color: "#F4A839" }}>Spark</span> Every<br />
-              <span style={{ color: "#4CC9C9" }}>Imagination</span> ✨
-            </h1>
-
-            <p className="text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0" style={{ color: "#D4C5F0" }}>
-              Joyful, whimsical children&apos;s books that warm little hearts
-              and create lasting family memories — one story at a time.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Link
-                href="/books"
-                className="btn-shine px-8 py-4 rounded-2xl font-bold text-lg shadow-xl transition-all hover:-translate-y-1"
-                style={{ backgroundColor: "#F4A839", color: "#2D1B69" }}
-              >
-                Explore Our Books 📖
-              </Link>
-              <a
-                href={AMAZON_STORE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-8 py-4 rounded-2xl font-bold text-lg border-2 transition-all hover:-translate-y-1"
-                style={{ borderColor: "rgba(255,255,255,0.5)", color: "#FFFFFF" }}
-              >
-                Shop on Amazon →
-              </a>
-            </div>
-
-            <div className="mt-10 flex flex-wrap gap-5 justify-center lg:justify-start text-sm font-semibold" style={{ color: "#C4B3E8" }}>
-              <span>📚 11 Books Published</span>
-              <span>⭐ Ages 2–8</span>
-              <span>🌍 Ships Worldwide</span>
-            </div>
-          </div>
-
-          {/* Right: floating book stack */}
-          <div className="flex-1 flex justify-center items-end relative z-10" style={{ minHeight: "420px" }}>
-            {/* Back-left book */}
-            <div
-              className="absolute w-40 h-52 rounded-2xl overflow-hidden shadow-2xl float-slow"
-              style={{ transform: "rotate(-16deg) translate(-120px, 20px)", zIndex: 1, opacity: 0.85 }}
-            >
-              {books[2]?.image && (
-                <Image src={books[2].image} alt={books[2].title} fill className="object-cover" sizes="170px" />
-              )}
-            </div>
-            {/* Back-right book */}
-            <div
-              className="absolute w-40 h-52 rounded-2xl overflow-hidden shadow-2xl float-mid"
-              style={{ transform: "rotate(15deg) translate(120px, 15px)", zIndex: 1, opacity: 0.85 }}
-            >
-              {books[4]?.image && (
-                <Image src={books[4].image} alt={books[4].title} fill className="object-cover" sizes="170px" />
-              )}
-            </div>
-            {/* Far back book */}
-            <div
-              className="absolute w-36 h-48 rounded-2xl overflow-hidden shadow-xl float-fast"
-              style={{ transform: "rotate(-5deg) translate(60px, -80px)", zIndex: 0, opacity: 0.6 }}
-            >
-              {books[5]?.image && (
-                <Image src={books[5].image} alt={books[5].title} fill className="object-cover" sizes="150px" />
-              )}
-            </div>
-            {/* Front center book — overlaps the cloud divider below */}
-            <div
-              className="relative w-56 h-72 rounded-2xl overflow-hidden float-slow z-20"
-              style={{
-                boxShadow: "0 30px 80px rgba(0,0,0,0.5), 0 0 40px rgba(244,168,57,0.35)",
-                marginBottom: "-100px",
-              }}
-            >
-              {books[0]?.image && (
-                <Image src={books[0].image} alt={books[0].title} fill className="object-cover" sizes="240px" priority />
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* ── Cloud divider — bleeds into warm cream ── */}
-        <CloudDivider fill="#FDF6EE" />
-      </section>
-
-      {/* ─── BOOKS SECTION (warm cream) ────────────────────────────────────── */}
-      <section
-        className="relative pt-28 pb-16 px-4"
-        style={{ backgroundColor: "#FDF6EE", zIndex: 4 }}
-      >
-        {/* Decorative floating elements */}
-        <div className="absolute top-10 right-10 text-3xl float-slow opacity-30 pointer-events-none" aria-hidden>🌸</div>
-        <div className="absolute top-20 left-8 text-2xl float-mid opacity-25 pointer-events-none" aria-hidden>🌈</div>
-
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <h2
-              className="text-4xl sm:text-5xl font-bold mb-4"
-              style={{ fontFamily: "var(--font-fredoka), cursive", color: "#3B1A8C" }}
-            >
-              Books Kids Love 💜
-            </h2>
-            <p className="text-base max-w-xl mx-auto" style={{ color: "#7B6898" }}>
-              From giggle-out-loud potty humor to heartwarming tales of confidence and friendship.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredBooks.map((book) => (
-              <BookCard key={book.id} book={book} />
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link
-              href="/books"
-              className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all hover:-translate-y-1"
-              style={{ backgroundColor: "#7B2FBE", color: "#FFFFFF" }}
-            >
-              See All 11 Books ✨
-            </Link>
-          </div>
-        </div>
-
-        {/* ── Cloud into teal narwhal section ── */}
-        <CloudDivider fill="#0E7C8A" />
-      </section>
-
-      {/* ─── NARWHAL MAGIC SECTION (deep teal) ─────────────────────────────── */}
-      <section
-        className="relative pt-32 pb-32 px-4 overflow-hidden"
-        style={{
-          background: "linear-gradient(160deg, #0E7C8A 0%, #0A5C70 50%, #073D52 100%)",
-        }}
-      >
-        {/* Bubbles */}
-        {[
-          { left: "8%", top: "20%", size: "1rem", op: 0.25 },
-          { left: "15%", top: "65%", size: "1.5rem", op: 0.2 },
-          { right: "12%", top: "30%", size: "1.2rem", op: 0.3 },
-          { right: "5%", top: "70%", size: "0.9rem", op: 0.2 },
-          { left: "45%", top: "15%", size: "0.8rem", op: 0.25 },
-          { left: "70%", top: "75%", size: "1.3rem", op: 0.2 },
-        ].map((b, i) => (
-          <div key={i} className={`absolute rounded-full border-2 float-${["slow","mid","fast"][i%3]} pointer-events-none`}
-            style={{ left: b.left, right: (b as {right?: string}).right, top: b.top, width: b.size, height: b.size,
-              borderColor: "rgba(76,201,201,0.5)", opacity: b.op }} aria-hidden />
-        ))}
-
-        <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-12 relative z-10">
-          {/* Narwhal mascot — floats and swims */}
-          <div className="flex-1 flex justify-center lg:justify-end">
-            <div className="float-slow" style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.4))" }}>
-              <Narwhal style={{ width: "340px", maxWidth: "90vw" }} />
-            </div>
-          </div>
-          {/* Text */}
-          <div className="flex-1 text-center lg:text-left">
-            <div
-              className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-5"
-              style={{ backgroundColor: "#F4A839", color: "#073D52" }}
-            >
-              🌊 Welcome to the Magic
-            </div>
-            <h2
-              className="text-3xl sm:text-4xl font-bold mb-5"
-              style={{ fontFamily: "var(--font-fredoka), cursive", color: "#FFFFFF" }}
-            >
-              Where Stories Come<br />
-              <span style={{ color: "#4CC9C9" }}>Alive</span>
-            </h2>
-            <p className="text-base leading-relaxed mb-8" style={{ color: "#A8E8EC" }}>
-              Every Family Fables book is a little world waiting to be discovered.
-              Funny, heartwarming, and full of the kind of magic that only happens
-              when you open a book together.
-            </p>
-            <Link
-              href="/books"
-              className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-lg transition-all hover:-translate-y-1"
-              style={{ backgroundColor: "#F4A839", color: "#073D52" }}
-            >
-              Dive In 🐠
-            </Link>
-          </div>
-        </div>
-
-        {/* ── Cloud into light lavender ── */}
-        <CloudDivider fill="#F0E8FF" />
-      </section>
-
-      {/* ─── ABOUT BAND (light lavender → medium purple) ────────────────────── */}
-      <section
-        className="relative pt-28 pb-32 px-4 text-center"
-        style={{
-          background: "linear-gradient(160deg, #F0E8FF 0%, #D4B8F5 30%, #9B5FD4 65%, #5A1FA0 100%)",
-        }}
-      >
-        {/* Floating stars */}
-        <div className="absolute top-16 left-12 text-4xl float-slow opacity-30 pointer-events-none" aria-hidden>⭐</div>
-        <div className="absolute top-24 right-16 text-2xl float-mid opacity-25 pointer-events-none" aria-hidden>✨</div>
-        <div className="absolute bottom-24 left-16 text-3xl float-fast opacity-20 pointer-events-none" aria-hidden>🌟</div>
-
-        {/* A book floating up from the teal section */}
-        <div
-          className="absolute -top-14 left-1/2 float-slow z-10 pointer-events-none"
-          style={{ transform: "translateX(-50%) rotate(5deg)" }}
-          aria-hidden
-        >
-          <div className="w-28 h-36 rounded-xl overflow-hidden shadow-2xl opacity-70">
-            {books[1]?.image && (
-              <Image src={books[1].image} alt="" fill className="object-cover" sizes="112px" />
-            )}
-          </div>
-        </div>
-
-        <div className="max-w-3xl mx-auto relative z-10 pt-8">
-          <div
-            className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-5"
-            style={{ backgroundColor: "rgba(255,255,255,0.25)", color: "#2D0D6B", border: "1.5px solid rgba(255,255,255,0.4)" }}
-          >
-            🌿 About Family Fables
-          </div>
-          <h2
-            className="text-3xl sm:text-4xl font-bold mb-5"
-            style={{ fontFamily: "var(--font-fredoka), cursive", color: "#2D0D6B" }}
-          >
-            Stories Built on a Family Legacy
-          </h2>
-          <p className="text-base leading-relaxed mb-8" style={{ color: "#4A2080" }}>
-            Family Fables was inspired by Z.P. Phillips&apos; grandfather — a creative soul
-            who spent his life writing poems and stories that the world never got to read.
-            That legacy of imagination and love is woven into every book we publish.
-          </p>
-          <Link
-            href="/about"
-            className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-lg transition-all hover:opacity-90"
-            style={{ backgroundColor: "#F4A839", color: "#2D0D6B" }}
-          >
-            Our Story →
-          </Link>
-        </div>
-
-        {/* ── Cloud into gold CTA ── */}
-        <CloudDivider fill="#F4A839" />
-      </section>
-
-      {/* ─── SHOP CTA (warm sunny gold) ─────────────────────────────────────── */}
-      <section
-        className="relative pt-28 pb-20 px-4 text-center"
-        style={{
-          background: "linear-gradient(135deg, #F4A839 0%, #F0842A 60%, #E06A1A 100%)",
-        }}
-      >
-        {/* Decorative sparkles */}
-        <div className="absolute top-10 left-12 text-3xl float-mid opacity-40 pointer-events-none" aria-hidden>✨</div>
-        <div className="absolute top-16 right-10 text-2xl float-slow opacity-35 pointer-events-none" aria-hidden>⭐</div>
-        <div className="absolute bottom-10 left-1/4 text-xl float-fast opacity-30 pointer-events-none" aria-hidden>🌟</div>
-
-        <div className="max-w-2xl mx-auto relative z-10">
-          <h2
-            className="text-4xl sm:text-5xl font-bold mb-4"
-            style={{ fontFamily: "var(--font-fredoka), cursive", color: "#2D0D6B" }}
-          >
-            Ready to Start Reading? 🚀
-          </h2>
-          <p className="text-lg mb-8" style={{ color: "#5C2A00" }}>
-            All Family Fables books are available on Amazon.
-            Perfect for birthdays, holidays, or just because!
-          </p>
-          <a
-            href={AMAZON_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl transition-all hover:-translate-y-1"
-            style={{ backgroundColor: "#2D0D6B", color: "#FFFFFF" }}
-          >
-            Shop All Books on Amazon 📚
-          </a>
-        </div>
-      </section>
-
+      ))}
     </div>
   );
 }
+
+// ── Interactive Narwhal ────────────────────────────────────────────────────
+type Bubble = { id: number; x: number; size: number };
+
+function InteractiveNarwhal() {
+  const [mood, setMood] = useState<'idle' | 'happy' | 'dive'>('idle');
+  const [bubbles, setBubbles] = useState<Bubble[]>([]);
+
+  const interact = () => {
+    if (mood !== 'idle') return;
+    const next = Math.random() > 0.45 ? 'happy' : 'dive';
+    setMood(next);
+    const newBubs: Bubble[] = Array.from({ length: 3 + Math.floor(Math.random() * 3) }, (_, i) => ({
+      id: Date.now() + i,
+      x: 40 + Math.random() * 28,
+      size: 8 + Math.random() * 14,
+    }));
+    setBubbles(prev => [...prev, ...newBubs]);
+    setTimeout(() => setMood('idle'), 900);
+    setTimeout(() => setBubbles(prev => prev.filter(b => !newBubs.find(n => n.id === b.id))), 1500);
+  };
+
+  const narwhalTransform =
+    mood === 'happy' ? 'translateY(-30px) rotate(-9deg)' :
+    mood === 'dive'  ? 'translateY(20px)  rotate(13deg)' : 'none';
+
+  return (
+    <div className="relative inline-block select-none" style={{ cursor: 'pointer' }}
+      onClick={interact} onTouchStart={(e) => { e.preventDefault(); interact(); }}>
+      {/* Hint */}
+      <div className="absolute -top-9 left-1/2 text-sm font-bold pointer-events-none whitespace-nowrap"
+        style={{ transform: 'translateX(-50%)', color: '#A8E8EC', opacity: 0.85 }}>
+        tap me!
+      </div>
+
+      <svg viewBox="0 0 260 160"
+        style={{ width: 340, maxWidth: '88vw',
+          filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.4))',
+          transition: 'transform 0.18s cubic-bezier(.36,.07,.19,.97)',
+          transform: narwhalTransform,
+        }}
+        aria-label="Friendly narwhal mascot — tap to say hi!">
+        {/* Horn */}
+        <line x1="60" y1="62" x2="8" y2="14"  stroke="#F4A839" strokeWidth="5.5" strokeLinecap="round"/>
+        <line x1="61" y1="60" x2="12" y2="17" stroke="#E8C060" strokeWidth="2"   strokeLinecap="round"/>
+        <line x1="59" y1="63" x2="11" y2="19" stroke="#FFF0AA" strokeWidth="1"   strokeLinecap="round" opacity="0.5"/>
+        {/* Head */}
+        <ellipse cx="60" cy="76" rx="37" ry="34" fill="#3DBFBF"/>
+        {/* Body */}
+        <ellipse cx="145" cy="90" rx="100" ry="44" fill="#3DBFBF"/>
+        {/* Belly */}
+        <ellipse cx="148" cy="104" rx="74" ry="24" fill="#A8ECEC" opacity="0.65"/>
+        {/* Eye whites */}
+        <circle cx="51" cy="67" r="9" fill="white"/>
+        {/* Pupil — looks happy when in happy mode */}
+        <circle cx="53" cy={mood === 'happy' ? '68' : '67'} r="5.5" fill="#2D1B69"/>
+        <circle cx="55" cy="65" r="1.8" fill="white"/>
+        {/* Happy expression: curved eye + big smile */}
+        {mood === 'happy' && (
+          <path d="M44,67 Q51,59 58,67" stroke="#2D1B69" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+        )}
+        <path d={mood === 'happy' ? 'M42,83 Q53,95 65,83' : 'M44,83 Q52,90 63,83'}
+          stroke="#2D1B69" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+        {/* Blush */}
+        <ellipse cx="45" cy="79" rx="7" ry="4" fill="#F9A8D4" opacity={mood === 'happy' ? 0.7 : 0.35}/>
+        {/* Dorsal fin */}
+        <path d="M155,48 Q165,26 183,45 L155,52 Z" fill="#2AABAB"/>
+        {/* Tail */}
+        <path d="M240,75 Q264,50 268,90 Q264,128 240,105 Z" fill="#2AABAB"/>
+        <path d="M240,75 Q252,90 240,105" stroke="#1A9090" strokeWidth="2" fill="none"/>
+        {/* Flippers */}
+        <path d="M96,118 Q86,142 112,137 Q105,124 96,118 Z"   fill="#2AABAB"/>
+        <path d="M158,120 Q153,143 177,136 Q167,122 158,120 Z" fill="#2AABAB"/>
+        {/* Spots */}
+        <circle cx="118" cy="74" r="4.5" fill="#2AABAB" opacity="0.38"/>
+        <circle cx="148" cy="65" r="3.5" fill="#2AABAB" opacity="0.28"/>
+        <circle cx="174" cy="77" r="5"   fill="#2AABAB" opacity="0.28"/>
+      </svg>
+
+      {/* Rising bubbles on interact */}
+      {bubbles.map(b => (
+        <div key={b.id} className="absolute pointer-events-none bubble-rise"
+          style={{ left: `${b.x}%`, bottom: '58%', width: b.size, height: b.size }}>
+          <svg viewBox="0 0 20 20" width={b.size} height={b.size} aria-hidden>
+            <circle cx="10" cy="10" r="8" fill="none" stroke="#A8ECEC" strokeWidth="2" opacity="0.8"/>
+            <circle cx="7"  cy="7"  r="2" fill="white" opacity="0.5"/>
+          </svg>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Interactive Bubble (in narwhal section) ────────────────────────────────
+function InteractiveBubble({ left, right, top, size, delay }: {
+  left?: string; right?: string; top: string; size: number; delay: string;
+}) {
+  const [popped, setPopped] = useState(false);
+  const pop = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    if (popped) return;
+    setPopped(true);
+    setTimeout(() => setPopped(false), 500);
+  };
+  return (
+    <div className={`absolute float-${delay} select-none`}
+      style={{ left, right, top, cursor: 'pointer', zIndex: 2, opacity: 0.3 }}
+      onClick={pop} onTouchStart={pop}>
+      <svg width={size} height={size} viewBox="0 0 24 24"
+        className={popped ? 'bubble-pop' : ''}>
+        <circle cx="12" cy="12" r="10" fill="none" stroke="#4CC9C9" strokeWidth="2.5"/>
+        <circle cx="8"  cy="8"  r="3"  fill="white" opacity="0.4"/>
+      </svg>
+    </div>
+  );
+}
+
+// ── Hero Book (click to reveal) ────────────────────────────────────────────
+function HeroBook({ book, style, animClass }: {
+  book: typeof books[0];
+  style: React.CSSProperties;
+  animClass: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const toggle = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    setOpen(o => !o);
+  };
+  return (
+    <div className={`hero-book-wrap rounded-2xl overflow-hidden shadow-2xl ${animClass}`}
+      style={{ ...style, cursor: 'pointer' }}
+      onClick={toggle} onTouchStart={toggle}>
+      {book.image && (
+        <Image src={book.image} alt={book.title} fill className="object-cover" sizes="220px"/>
+      )}
+      <div className={`book-reveal-overlay ${open ? 'book-reveal-open' : ''}`}>
+        <span className="text-white font-bold text-sm leading-snug block mb-2">{book.title}</span>
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold"
+          style={{ backgroundColor: '#F4A839', color: '#2D0D6B' }}>
+          See this book
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ── Interactive Book Card (flip on tap) ───────────────────────────────────
+function InteractiveBookCard({ book }: { book: typeof books[0] }) {
+  const [flipped, setFlipped] = useState(false);
+  const toggle = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    setFlipped(f => !f);
+  };
+  return (
+    <div className="book-card-3d select-none" style={{ height: 380, cursor: 'pointer' }}
+      onClick={toggle} onTouchStart={toggle}>
+      <div className={`book-card-inner ${flipped ? 'book-card-flipped' : ''}`}>
+        {/* Front */}
+        <div className="book-card-face book-card-front rounded-2xl overflow-hidden"
+          style={{ boxShadow: `0 6px 28px ${book.accentColor}28` }}>
+          <div className="relative h-64 flex items-center justify-center"
+            style={{ backgroundColor: `${book.accentColor}18` }}>
+            {book.image && (
+              <Image src={book.image} alt={book.title} fill
+                className="object-contain p-4" sizes="280px"/>
+            )}
+            {book.tag && (
+              <div className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold text-white"
+                style={{ backgroundColor: book.accentColor }}>
+                {book.tag}
+              </div>
+            )}
+            <div className="absolute bottom-2 left-0 right-0 text-center text-xs font-semibold opacity-40"
+              style={{ color: book.accentColor }}>
+              tap to open
+            </div>
+          </div>
+          <div className="p-4 bg-white">
+            <h3 className="font-bold text-base leading-snug" style={{ color: '#2D1B69' }}>{book.title}</h3>
+          </div>
+        </div>
+        {/* Back */}
+        <div className="book-card-face book-card-back rounded-2xl overflow-hidden flex flex-col"
+          style={{ backgroundColor: book.accentColor, boxShadow: `0 6px 28px ${book.accentColor}50` }}>
+          <div className="flex-1 p-6 flex flex-col justify-between">
+            <div>
+              <h3 className="font-bold text-xl text-white mb-3"
+                style={{ fontFamily: 'var(--font-fredoka), cursive' }}>
+                {book.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-white opacity-90">{book.description}</p>
+            </div>
+            <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="btn-shine mt-4 block text-center py-3 rounded-xl font-bold text-sm transition-all hover:opacity-90"
+              style={{ backgroundColor: 'white', color: book.accentColor }}>
+              Get This Book on Amazon →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main Page ──────────────────────────────────────────────────────────────
+export default function HomePage() {
+  // Parallax on mouse move — books shift slightly relative to cursor
+  const [px, setPx] = useState(0);
+  const [py, setPy] = useState(0);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+      setPx((e.clientX - cx) / cx * 12);
+      setPy((e.clientY - cy) / cy * 8);
+    };
+    window.addEventListener('mousemove', handler, { passive: true });
+    return () => window.removeEventListener('mousemove', handler);
+  }, []);
+
+  return (
+    <>
+      <SparkleTrail />
+      <div style={{ overflowX: 'hidden' }}>
+
+        {/* ─── HERO ────────────────────────────────────────────────────── */}
+        <section className="relative" style={{
+          background: 'linear-gradient(160deg, #9B3FCF 0%, #5A1FA0 35%, #2D0D6B 70%, #1C0A4F 100%)',
+          minHeight: '92vh', paddingBottom: '180px',
+        }}>
+          {/* SVG decorations — all clickable */}
+          <div className="absolute top-8 left-8 float-slow">       <StarSVG size={34} color="#F4A839" pulse /></div>
+          <div className="absolute top-14 right-20 float-mid opacity-70"><MoonSVG size={56} /></div>
+          <div className="absolute top-1/3 left-4 float-fast opacity-50">  <Sparkle4 size={22} color="#C084FC" /></div>
+          <div className="absolute top-1/2 right-8 float-slow opacity-55"><StarSVG size={24} color="#4CC9C9" /></div>
+          <div className="absolute top-3/4 left-24 float-mid opacity-40"> <Sparkle4 size={18} color="#FF6B9D" /></div>
+          <div className="absolute top-1/4 right-1/3 float-fast opacity-30"><Sparkle4 size={14} color="#FFE066" /></div>
+          <div className="absolute top-6 left-1/3 opacity-15">            <RainbowSVG /></div>
+
+          {/* Hero layout */}
+          <div className="relative max-w-6xl mx-auto px-6 lg:px-8 pt-20 pb-8 flex flex-col lg:flex-row items-center gap-10 min-h-[80vh]">
+
+            {/* Text */}
+            <div className="flex-1 text-center lg:text-left z-10">
+              <div className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-6"
+                style={{ backgroundColor: '#F4A839', color: '#2D1B69' }}>
+                Children's Books for Every Family
+              </div>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
+                Stories That<br/>
+                <span style={{ color: '#F4A839' }}>Spark</span> Every<br/>
+                <span style={{ color: '#4CC9C9' }}>Imagination</span>
+              </h1>
+              <p className="text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0" style={{ color: '#D4C5F0' }}>
+                Joyful, whimsical children's books that warm little hearts
+                and create lasting family memories — one story at a time.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link href="/books"
+                  className="btn-shine px-8 py-4 rounded-2xl font-bold text-lg shadow-xl transition-all hover:-translate-y-1"
+                  style={{ backgroundColor: '#F4A839', color: '#2D1B69' }}>
+                  Explore Our Books
+                </Link>
+                <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
+                  className="px-8 py-4 rounded-2xl font-bold text-lg border-2 transition-all hover:-translate-y-1"
+                  style={{ borderColor: 'rgba(255,255,255,0.5)', color: '#FFFFFF' }}>
+                  Shop on Amazon →
+                </a>
+              </div>
+              <div className="mt-10 flex flex-wrap gap-5 justify-center lg:justify-start text-sm font-semibold"
+                style={{ color: '#C4B3E8' }}>
+                <span className="flex items-center gap-1.5"><StarSVG size={14} color="#C4B3E8"/>11 Books Published</span>
+                <span className="flex items-center gap-1.5"><Sparkle4 size={13} color="#C4B3E8"/>Ages 2–8</span>
+                <span className="flex items-center gap-1.5"><Sparkle4 size={13} color="#C4B3E8"/>Ships Worldwide</span>
+              </div>
+            </div>
+
+            {/* Books (parallax on mouse move, tap to reveal title) */}
+            <div className="flex-1 flex justify-center items-end relative z-10" style={{ minHeight: 440 }}>
+              <HeroBook book={books[2]} animClass="float-slow" style={{
+                width: 158, height: 206, zIndex: 1, opacity: 0.88,
+                transform: `rotate(-16deg) translate(calc(-112px + ${px * -1.2}px), calc(18px + ${py * 0.8}px))`,
+              }}/>
+              <HeroBook book={books[4]} animClass="float-mid" style={{
+                width: 154, height: 202, zIndex: 1, opacity: 0.85,
+                transform: `rotate(15deg) translate(calc(112px + ${px * 1.2}px), calc(14px + ${py * 0.6}px))`,
+              }}/>
+              <HeroBook book={books[5]} animClass="float-fast" style={{
+                width: 138, height: 182, zIndex: 0, opacity: 0.52,
+                transform: `rotate(-4deg) translate(calc(54px + ${px * 0.7}px), calc(-76px + ${py * -0.5}px))`,
+              }}/>
+              <HeroBook book={books[0]} animClass="float-slow" style={{
+                width: 224, height: 292, zIndex: 20, marginBottom: -110,
+                boxShadow: '0 30px 80px rgba(0,0,0,0.5), 0 0 40px rgba(244,168,57,0.35)',
+                transform: `translate(${px * -0.4}px, ${py * -0.3}px)`,
+              }}/>
+            </div>
+          </div>
+          <CloudDivider fill="#FDF6EE"/>
+        </section>
+
+        {/* ─── BOOKS GRID (warm cream) ───────────────────────────────── */}
+        <section className="relative pt-28 pb-20 px-4" style={{ backgroundColor: '#FDF6EE', zIndex: 4 }}>
+          <div className="absolute top-10 right-12 float-slow opacity-22">  <RainbowSVG /></div>
+          <div className="absolute top-20 left-10 float-mid opacity-18"> <StarSVG size={32} color="#9B5FD4"/></div>
+          <div className="absolute bottom-24 right-16 float-fast opacity-15"><Sparkle4 size={24} color="#FF6B9D"/></div>
+
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-14">
+              <h2 className="text-4xl sm:text-5xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#3B1A8C' }}>
+                Books Kids Love
+              </h2>
+              <p className="text-base max-w-md mx-auto" style={{ color: '#7B6898' }}>
+                Tap any book to open it and find out what it's about.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {books.filter(b => b.image).slice(0, 6).map(book => (
+                <InteractiveBookCard key={book.id} book={book}/>
+              ))}
+            </div>
+            <div className="text-center mt-12">
+              <Link href="/books"
+                className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all hover:-translate-y-1"
+                style={{ backgroundColor: '#7B2FBE', color: '#FFFFFF' }}>
+                See All 11 Books
+              </Link>
+            </div>
+          </div>
+          <CloudDivider fill="#0E7C8A"/>
+        </section>
+
+        {/* ─── NARWHAL (teal ocean) ──────────────────────────────────── */}
+        <section className="relative pt-36 pb-36 px-4 overflow-hidden" style={{
+          background: 'linear-gradient(160deg, #0E7C8A 0%, #0A5C70 50%, #073D52 100%)',
+        }}>
+          {/* Bubbles — each pops on tap */}
+          <InteractiveBubble left="7%"  top="20%" size={20} delay="slow"/>
+          <InteractiveBubble left="15%" top="63%" size={28} delay="mid"/>
+          <InteractiveBubble right="10%" top="27%" size={22} delay="fast"/>
+          <InteractiveBubble right="4%" top="70%" size={14} delay="slow"/>
+          <InteractiveBubble left="44%" top="13%" size={12} delay="mid"/>
+          <InteractiveBubble left="68%" top="73%" size={18} delay="fast"/>
+
+          <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-12 relative z-10">
+            <div className="flex-1 flex justify-center lg:justify-end">
+              <InteractiveNarwhal/>
+            </div>
+            <div className="flex-1 text-center lg:text-left">
+              <div className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-5"
+                style={{ backgroundColor: '#F4A839', color: '#073D52' }}>
+                Where Stories Come Alive
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-5"
+                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
+                Every book is a little<br/>
+                <span style={{ color: '#4CC9C9' }}>world to dive into</span>
+              </h2>
+              <p className="text-base leading-relaxed mb-8" style={{ color: '#A8E8EC' }}>
+                Funny, heartwarming, and full of the kind of magic that only happens
+                when you open a book together. Family Fables was built for those moments.
+              </p>
+              <Link href="/books"
+                className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-lg transition-all hover:-translate-y-1"
+                style={{ backgroundColor: '#F4A839', color: '#073D52' }}>
+                Dive In
+              </Link>
+            </div>
+          </div>
+          <CloudDivider fill="#F0E8FF"/>
+        </section>
+
+        {/* ─── ABOUT (lavender → deep purple) ──────────────────────── */}
+        <section className="relative pt-32 pb-36 px-4 text-center" style={{
+          background: 'linear-gradient(160deg, #F0E8FF 0%, #D4B8F5 28%, #9B5FD4 62%, #5A1FA0 100%)',
+        }}>
+          <div className="absolute top-14 left-14 float-slow opacity-30"><StarSVG size={36} color="#FFFFFF"/></div>
+          <div className="absolute top-22 right-16 float-mid opacity-22"><Sparkle4 size={26} color="#F4A839"/></div>
+          <div className="absolute bottom-28 left-20 float-fast opacity-18"><Sparkle4 size={18} color="#FFFFFF"/></div>
+          <div className="absolute top-1/2 left-6 opacity-10 pointer-events-none"><RainbowSVG/></div>
+
+          {/* Book floating up from the teal section below */}
+          <div className="absolute -top-16 left-1/2 float-slow z-10 pointer-events-none"
+            style={{ transform: 'translateX(-50%) rotate(5deg)' }}>
+            <div className="w-28 h-36 rounded-xl overflow-hidden shadow-2xl opacity-60" style={{ position: 'relative' }}>
+              {books[1]?.image && (
+                <Image src={books[1].image} alt="" fill className="object-cover" sizes="112px"/>
+              )}
+            </div>
+          </div>
+
+          <div className="max-w-3xl mx-auto relative z-10 pt-10">
+            <div className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-5"
+              style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#2D0D6B', border: '1.5px solid rgba(255,255,255,0.35)' }}>
+              About Family Fables
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-5"
+              style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D0D6B' }}>
+              Stories Built on a Family Legacy
+            </h2>
+            <p className="text-base leading-relaxed mb-8" style={{ color: '#4A2080' }}>
+              Family Fables was inspired by Z.P. Phillips' grandfather — a creative soul
+              who spent his life writing poems and stories that the world never got to read.
+              That legacy of imagination and love is woven into every book we publish.
+            </p>
+            <Link href="/about"
+              className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-lg transition-all hover:opacity-90"
+              style={{ backgroundColor: '#F4A839', color: '#2D0D6B' }}>
+              Our Story →
+            </Link>
+          </div>
+          <CloudDivider fill="#F4A839"/>
+        </section>
+
+        {/* ─── SHOP CTA (warm gold) ─────────────────────────────────── */}
+        <section className="relative pt-28 pb-20 px-4 text-center" style={{
+          background: 'linear-gradient(135deg, #F4A839 0%, #F0842A 60%, #E06A1A 100%)',
+        }}>
+          <div className="absolute top-12 left-14 float-mid opacity-35"><Sparkle4 size={28} color="white"/></div>
+          <div className="absolute top-16 right-12 float-slow opacity-28"><StarSVG size={26} color="white"/></div>
+          <div className="absolute bottom-14 left-1/4 float-fast opacity-22"><Sparkle4 size={20} color="#2D0D6B"/></div>
+
+          <div className="max-w-2xl mx-auto relative z-10">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4"
+              style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D0D6B' }}>
+              Ready to Start Reading?
+            </h2>
+            <p className="text-lg mb-8" style={{ color: '#5C2A00' }}>
+              All Family Fables books are available on Amazon.
+              Perfect for birthdays, holidays, or just because.
+            </p>
+            <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
+              className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl transition-all hover:-translate-y-1"
+              style={{ backgroundColor: '#2D0D6B', color: '#FFFFFF' }}>
+              Shop All Books on Amazon
+            </a>
+          </div>
+        </section>
+
+      </div>
+    </>
+  );
+}
+
