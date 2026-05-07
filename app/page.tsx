@@ -275,7 +275,7 @@ export default function Home() {
                 maxWidth: '420px',
               }}
             >
-              Weird. Warm. Wonderful. Award-winning children&apos;s books that turn bedtime into the best part of the day.
+              Weird. Warm. Wonderful. The books kids demand at bedtime — every single night.
             </p>
 
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
