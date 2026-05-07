@@ -13,49 +13,51 @@ import NewsletterSection from '@/components/NewsletterSection';
 // Overlapping ellipses of varied sizes = organic bumpy cloud silhouette.
 // Back layer (tallest CSS height) peeks above front layer for depth effect.
 function SectionClouds({ fill, backFill, midFill }: { fill: string; backFill?: string; midFill?: string }) {
-  const totalH = backFill ? 360 : 140;
-  const vb = 220; // viewBox height; ellipse centers sit at cy=220
+  const totalH = backFill ? 380 : 140;
+  const vb = 220;
 
-  // BACK layer — tallest CSS, peaks poke highest, slightly lighter shade
-  // Phase-shifted so its bumps appear between mid & front gaps
+  // BACK — 7 clouds, ALL large (these tower above everything else)
   const back = [
-    { cx:   80, rx: 175, ry: 162 },
-    { cx:  310, rx: 130, ry: 118 },
-    { cx:  510, rx: 205, ry: 188 },  // HUGE
-    { cx:  750, rx:  90, ry:  75 },  // tiny
-    { cx:  940, rx: 180, ry: 165 },
-    { cx: 1160, rx: 125, ry: 110 },
-    { cx: 1360, rx: 165, ry: 150 },
+    { cx:   80, rx: 200, ry: 195 },
+    { cx:  295, rx: 182, ry: 185 },
+    { cx:  505, rx: 212, ry: 205 },  // biggest back cloud
+    { cx:  725, rx: 178, ry: 172 },
+    { cx:  945, rx: 208, ry: 198 },
+    { cx: 1165, rx: 186, ry: 182 },
+    { cx: 1385, rx: 196, ry: 190 },
   ];
 
-  // MID layer — middle CSS height, medium-sized, between back & front
-  // Fills the gaps in back layer, creates the real sense of volume
+  // MID — 9 clouds, variety: large + medium + small mixed in
   const mid = [
-    { cx:   10, rx: 130, ry: 118 },  // tiny left anchor
-    { cx:  195, rx: 185, ry: 170 },  // large
-    { cx:  430, rx:  95, ry:  78 },  // small — between back big ones
-    { cx:  630, rx: 210, ry: 192 },  // HUGE center
-    { cx:  870, rx: 105, ry:  88 },  // small
-    { cx: 1050, rx: 190, ry: 172 },  // large
-    { cx: 1280, rx:  80, ry:  65 },  // tiny
-    { cx: 1440, rx: 155, ry: 140 },  // right edge
+    { cx:   25, rx: 142, ry: 132 },  // medium
+    { cx:  205, rx:  92, ry:  78 },  // small
+    { cx:  365, rx: 172, ry: 162 },  // large
+    { cx:  545, rx:  98, ry:  85 },  // small
+    { cx:  695, rx: 188, ry: 175 },  // large
+    { cx:  875, rx:  72, ry:  60 },  // tiny
+    { cx: 1015, rx: 158, ry: 148 },  // medium-large
+    { cx: 1195, rx: 108, ry:  96 },  // medium
+    { cx: 1385, rx: 168, ry: 158 },  // large
   ];
 
-  // FRONT layer — shortest CSS height but largest ry — dominant foreground
-  // Biggest drama: huge puffs next to tiny ones
+  // FRONT — 12 clouds: 2 BIG anchors, rest medium + small scattered
   const front = [
-    { cx:   30, rx: 155, ry: 175 },
-    { cx:  270, rx:  88, ry:  70 },  // tiny
-    { cx:  430, rx: 195, ry: 200 },  // HUGE
-    { cx:  680, rx: 105, ry:  85 },  // small
-    { cx:  860, rx: 230, ry: 190 },  // HUGE
-    { cx: 1080, rx:  80, ry:  65 },  // tiny
-    { cx: 1230, rx: 185, ry: 168 },
-    { cx: 1430, rx: 110, ry:  95 },
+    { cx:   25, rx:  78, ry:  62 },  // small
+    { cx:  155, rx: 188, ry: 192 },  // BIG #1 — dominant left
+    { cx:  340, rx:  62, ry:  52 },  // tiny
+    { cx:  448, rx: 128, ry: 115 },  // medium
+    { cx:  595, rx:  72, ry:  60 },  // small
+    { cx:  720, rx: 198, ry: 188 },  // BIG #2 — dominant right-center
+    { cx:  892, rx:  98, ry:  85 },  // medium-small
+    { cx:  992, rx:  52, ry:  45 },  // tiny
+    { cx: 1082, rx: 148, ry: 135 },  // medium
+    { cx: 1212, rx:  78, ry:  65 },  // small
+    { cx: 1318, rx: 162, ry: 150 },  // medium-large
+    { cx: 1445, rx:  88, ry:  75 },  // small edge
   ];
 
-  const midH  = Math.round(totalH * 0.88) + 2;  // 88% — mid layer
-  const frontH = Math.round(totalH * 0.75) + 2; // 75% — front layer (shortest)
+  const midH   = Math.round(totalH * 0.84) + 2;  // 84% — mid sits between
+  const frontH = Math.round(totalH * 0.70) + 2;  // 70% — front: shortest, big ry = dominant foreground
 
   // midFill defaults to a blend between backFill and fill if not provided
   const resolvedMidFill = midFill ?? fill;
@@ -151,11 +153,11 @@ export default function Home() {
       <section
         id="hero"
         style={{
-          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 360px), #d9b5e5 100%)',
+          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 380px), #d9b5e5 100%)',
           position: 'relative',
           overflow: 'visible',
           minHeight: '92vh',
-          paddingBottom: '360px',
+          paddingBottom: '380px',
           display: 'flex',
           flexDirection: 'column',
           zIndex: 2,
@@ -264,9 +266,9 @@ export default function Home() {
         style={{
           background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
           position: 'relative',
-          marginTop: '-364px',
-          paddingTop: '364px',
-          paddingBottom: '360px',
+          marginTop: '-384px',
+          paddingTop: '384px',
+          paddingBottom: '380px',
           zIndex: 1,
         }}
       >
@@ -318,8 +320,8 @@ export default function Home() {
       <section
         style={{
           background: '#daf8f2',
-          marginTop: '-364px',
-          paddingTop: '364px',
+          marginTop: '-384px',
+          paddingTop: '384px',
           position: 'relative',
           zIndex: 0,
         }}
