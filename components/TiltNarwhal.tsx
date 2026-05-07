@@ -8,7 +8,7 @@ function clamp(val: number, min: number, max: number) {
   return Math.max(min, Math.min(max, val));
 }
 
-export default function TiltNarwhal() {
+export default function TiltNarwhal({ size = 340 }: { size?: number }) {
   const [tiltX, setTiltX] = useState(0);
   const [tiltY, setTiltY] = useState(0);
   const [wiggling, setWiggling] = useState(false);
@@ -102,8 +102,8 @@ export default function TiltNarwhal() {
       <Image
         src="/images/logo-teal.png"
         alt="Family Fables narwhal mascot"
-        width={340}
-        height={340}
+        width={size}
+        height={size}
         className={wiggling ? 'narwhal-wiggle' : isMobile ? '' : 'hero-bob'}
         style={{
           maxWidth: '88vw',

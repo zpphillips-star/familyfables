@@ -57,7 +57,7 @@ export default function NewsletterSection() {
             <button
               type="submit"
               className="btn-shine px-7 py-3.5 rounded-xl font-bold text-white transition-all hover:opacity-90 hover:shadow-lg whitespace-nowrap"
-              style={{ backgroundColor: "#007d68" }}
+              style={{ backgroundColor: "#F7941D", boxShadow: "0 4px 14px rgba(247,148,29,0.4)" }}
             >
               Count me in
             </button>

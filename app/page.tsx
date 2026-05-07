@@ -181,6 +181,10 @@ function SparkleTrail() {
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────
+// Bright orange CTA — used across all buttons
+const CTA_ORANGE = '#F7941D';
+const CTA_ORANGE_SHADOW = 'rgba(247,148,29,0.45)';
+
 export default function Home() {
   const ff = "'Concert One', var(--font-concert-one), cursive";
 
@@ -202,31 +206,6 @@ export default function Home() {
           zIndex: 2,
         }}
       >
-        {/* Narwhal watermark — large decorative bg element, positioned left */}
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute',
-            left: '-6%',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            width: '52%',
-            maxWidth: '560px',
-            opacity: 0.12,
-            pointerEvents: 'none',
-            zIndex: 0,
-          }}
-        >
-          <Image
-            src="/images/originals/detail-logo-860.png"
-            alt=""
-            width={860}
-            height={860}
-            style={{ width: '100%', height: 'auto' }}
-            priority
-          />
-        </div>
-
         {/* Hero content row */}
         <div
           style={{
@@ -235,63 +214,122 @@ export default function Home() {
             zIndex: 2,
             maxWidth: '1200px',
             margin: '0 auto',
-            padding: 'clamp(60px, 10vw, 100px) 32px 60px',
+            padding: 'clamp(48px, 8vw, 88px) 32px 60px',
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            gap: '48px',
+            gap: '32px',
             flexWrap: 'wrap',
           }}
         >
+          {/* Narwhal — the star of the show, goes first (left on desktop, top on mobile) */}
+          <div style={{
+            flex: '0 0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            order: 0,
+          }}>
+            <TiltNarwhal size={520} />
+          </div>
+
           {/* Text side */}
-          <div style={{ flex: '1 1 300px', maxWidth: '580px' }}>
+          <div style={{ flex: '1 1 280px', maxWidth: '520px', order: 1 }}>
+            {/* Fun badge */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: CTA_ORANGE,
+              color: '#fff',
+              padding: '6px 18px',
+              borderRadius: '50px',
+              fontFamily: ff,
+              fontSize: '0.9rem',
+              letterSpacing: '0.05em',
+              marginBottom: '20px',
+              boxShadow: `0 4px 14px ${CTA_ORANGE_SHADOW}`,
+            }}>
+              ✨ Bedtime just got better
+            </div>
+
             <h1
               style={{
                 fontFamily: ff,
-                fontSize: 'clamp(2.2rem, 5.5vw, 4rem)',
-                lineHeight: 1.1,
+                fontSize: 'clamp(2rem, 5vw, 3.6rem)',
+                lineHeight: 1.08,
                 color: '#007d68',
-                marginBottom: '24px',
+                marginBottom: '20px',
                 letterSpacing: '-0.01em',
               }}
             >
-              Stories That Make Kids Smile (and Parents Laugh)
+              Books That Make Kids Giggle & Parents Cheer
             </h1>
             <p
               style={{
-                fontSize: 'clamp(1rem, 2.2vw, 1.25rem)',
+                fontSize: 'clamp(1rem, 2vw, 1.2rem)',
                 color: '#006e59',
-                marginBottom: '40px',
+                marginBottom: '36px',
                 lineHeight: 1.65,
-                maxWidth: '460px',
+                maxWidth: '420px',
               }}
             >
-              Award-winning children&apos;s books with heart, humor, and a little bit of weird.
+              Weird. Warm. Wonderful. Award-winning children&apos;s books that turn bedtime into the best part of the day.
             </p>
-            <a
-              href="#books"
-              className="btn-scale-pulse btn-shine"
-              style={{
-                display: 'inline-block',
-                background: '#007d68',
-                color: '#ffffff',
-                padding: '16px 44px',
-                borderRadius: '50px',
-                fontFamily: ff,
-                fontSize: '1.2rem',
-                textDecoration: 'none',
-                letterSpacing: '0.03em',
-                boxShadow: '0 6px 24px rgba(0,125,104,0.35)',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-              }}
-            >
-              See the Books
-            </a>
-          </div>
 
-          {/* Interactive narwhal mascot */}
-          <div style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <TiltNarwhal />
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <a
+                href="#books"
+                className="btn-scale-pulse btn-shine"
+                style={{
+                  display: 'inline-block',
+                  background: CTA_ORANGE,
+                  color: '#ffffff',
+                  padding: '16px 40px',
+                  borderRadius: '50px',
+                  fontFamily: ff,
+                  fontSize: '1.15rem',
+                  textDecoration: 'none',
+                  letterSpacing: '0.04em',
+                  boxShadow: `0 6px 24px ${CTA_ORANGE_SHADOW}`,
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                }}
+              >
+                See the Books →
+              </a>
+              <a
+                href="#about"
+                style={{
+                  fontFamily: ff,
+                  fontSize: '1rem',
+                  color: '#007d68',
+                  textDecoration: 'none',
+                  opacity: 0.8,
+                  letterSpacing: '0.02em',
+                }}
+              >
+                Our story ↓
+              </a>
+            </div>
+
+            {/* Social proof */}
+            <div style={{
+              marginTop: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              flexWrap: 'wrap',
+            }}>
+              <div style={{ display: 'flex' }}>
+                {['⭐','⭐','⭐','⭐','⭐'].map((s,i) => (
+                  <span key={i} style={{ fontSize: '1rem' }}>{s}</span>
+                ))}
+              </div>
+              <span style={{ fontFamily: ff, fontSize: '0.88rem', color: '#007d68', opacity: 0.85 }}>
+                Loved by thousands of families
+              </span>
+            </div>
           </div>
         </div>
 
@@ -433,18 +471,18 @@ export default function Home() {
               style={{
                 display: 'inline-block',
                 marginTop: '28px',
-                background: '#78087c',
+                background: CTA_ORANGE,
                 color: '#ffffff',
                 padding: '14px 36px',
                 borderRadius: '50px',
                 fontFamily: ff,
                 fontSize: '1.05rem',
                 textDecoration: 'none',
-                letterSpacing: '0.03em',
-                boxShadow: '0 4px 18px rgba(120,8,124,0.3)',
+                letterSpacing: '0.04em',
+                boxShadow: `0 4px 18px ${CTA_ORANGE_SHADOW}`,
               }}
             >
-              Browse All Books
+              Browse All Books →
             </a>
           </div>
         </div>
