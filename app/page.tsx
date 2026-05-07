@@ -334,13 +334,13 @@ export default function Home() {
             {/* Value-prop chips */}
             <div style={{ marginTop: '24px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               {[
-                { icon: '🎨', label: 'Free Kids Activities' },
-                { icon: '📖', label: 'Read-Aloud Friendly' },
-                { icon: '😂', label: 'Parents Love Them Too' },
-              ].map(({ icon, label }) => (
-                <div key={label} style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
+                { icon: '🎨', label: 'Free Kids Activities', href: '/activities' },
+                { icon: '📖', label: 'Read-Aloud Friendly', href: null },
+                { icon: '😂', label: 'Parents Love Them Too', href: null },
+              ].map(({ icon, label, href }) => {
+                const style = {
+                  display: 'inline-flex' as const,
+                  alignItems: 'center' as const,
                   gap: '6px',
                   background: 'rgba(0,125,104,0.1)',
                   border: '1.5px solid rgba(0,125,104,0.25)',
@@ -350,10 +350,13 @@ export default function Home() {
                   fontFamily: ff,
                   fontSize: '0.82rem',
                   letterSpacing: '0.02em',
-                }}>
-                  <span>{icon}</span> {label}
-                </div>
-              ))}
+                  textDecoration: 'none',
+                  cursor: href ? 'pointer' : 'default',
+                };
+                return href
+                  ? <a key={label} href={href} style={style}><span>{icon}</span> {label}</a>
+                  : <div key={label} style={style}><span>{icon}</span> {label}</div>;
+              })}
             </div>
           </div>
         </div>
