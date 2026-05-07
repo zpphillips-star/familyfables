@@ -8,43 +8,44 @@ import TiltNarwhal from '@/components/TiltNarwhal';
 import NewsletterSection from '@/components/NewsletterSection';
 
 // ── Section Hills ──────────────────────────────────────────────────────────
-// Three-layer rounded-hill transition, matching the original familyfables.org style.
-// Large circular arcs rise from the bottom — no thin cloud band, no straight lines.
-// fill        = foreground hill color (= next section's color)
-// midFill     = middle hill color (lighter tone of fill)
-// backFill    = back hill color (lightest tone, peeks highest)
-// All three SVG layers share viewBox "0 0 1440 400", stacked bottom-aligned.
-// Each layer is progressively shorter in CSS height → back peaks highest visually.
+// Three-layer rounded-hill transition matching the original familyfables.org style.
+// Uses ELLIPTICAL ARCS (not bezier) so hill height = exact ry value — no math guessing.
+// Arc: A rx ry 0 0 1 x y  (sweep=1 = clockwise = arcs UPWARD from baseline)
+// fill       = front hills (next section color)  — 3 large hills, 200px ry
+// midFill    = middle hills  — 4 medium hills, 140px ry, phase-shifted
+// backFill   = back hills    — 5 small hills, 170px ry, tallest CSS layer
+// Stacking: back SVG tallest → back peaks poke highest despite smaller hills
 function SectionClouds({ fill, midFill, backFill }: { fill: string; midFill?: string; backFill?: string }) {
   const has3 = midFill && backFill;
-  const totalH = has3 ? 300 : 130;
+  const totalH = has3 ? 340 : 130;   // wrapper height = back layer height
 
-  // Back layer — 6 smaller hills (shortest, peeks highest because SVG is tallest)
-  const backPath  = "M0 400 Q120 230 240 400 Q360 230 480 400 Q600 230 720 400 Q840 230 960 400 Q1080 230 1200 400 Q1320 230 1440 400 L1440 400 Z";
-  // Mid layer — 4 medium hills, offset phase from back, moderately tall
-  const midPath   = "M-180 400 Q60 140 300 400 Q540 140 780 400 Q1020 140 1260 400 Q1500 140 1620 400 L1440 400 Z";
-  // Front layer — 3 large hills, tallest bumps, fills screen convincingly
-  const frontPath = "M-240 400 Q240 50 720 400 Q960 50 1440 400 Q1680 50 1920 400 L1440 400 Z";
+  // viewBox "0 0 1440 300" for all. Hill peaks = 300 - ry (exact).
+  // Front: 3 hills, rx=240, ry=200  → peaks at y=100, hills 200px tall
+  const frontPath = "M 0 300 A 240 200 0 0 1 480 300 A 240 200 0 0 1 960 300 A 240 200 0 0 1 1440 300 L 1440 300 Z";
+  // Mid: 4 hills, rx=180, ry=140 — shifted 90px right so peaks fall between front peaks
+  const midPath   = "M -90 300 A 180 140 0 0 1 270 300 A 180 140 0 0 1 630 300 A 180 140 0 0 1 990 300 A 180 140 0 0 1 1350 300 A 180 140 0 0 1 1530 300 L 1440 300 Z";
+  // Back: 5 hills, rx=144, ry=170 — shifted 45px right, tallest CSS so they poke above
+  const backPath  = "M -45 300 A 144 170 0 0 1 243 300 A 144 170 0 0 1 531 300 A 144 170 0 0 1 819 300 A 144 170 0 0 1 1107 300 A 144 170 0 0 1 1395 300 L 1440 300 Z";
 
   return (
     <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH}px`, pointerEvents: 'none', zIndex: 2 }}>
-      {/* BACK — tallest SVG so back hills poke highest */}
+      {/* BACK — tallest CSS (340px) so ry=170 peaks poke 193px above bottom */}
       {backFill && (
-        <svg viewBox="0 0 1440 400" preserveAspectRatio="none"
+        <svg viewBox="0 0 1440 300" preserveAspectRatio="none"
           style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH}px`, display: 'block' }}>
           <path d={backPath} fill={backFill} />
         </svg>
       )}
-      {/* MID — slightly shorter */}
+      {/* MID — 290px CSS, ry=140 peaks reach 135px above bottom */}
       {midFill && (
-        <svg viewBox="0 0 1440 400" preserveAspectRatio="none"
-          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH * 0.85}px`, display: 'block' }}>
+        <svg viewBox="0 0 1440 300" preserveAspectRatio="none"
+          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${Math.round(totalH * 0.85)}px`, display: 'block' }}>
           <path d={midPath} fill={midFill} />
         </svg>
       )}
-      {/* FRONT — shortest SVG (but largest hills) — covers base fully */}
-      <svg viewBox="0 0 1440 400" preserveAspectRatio="none"
-        style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH * 0.70}px`, display: 'block' }}>
+      {/* FRONT — 240px CSS, ry=200 peaks reach 160px above bottom (2nd tallest) */}
+      <svg viewBox="0 0 1440 300" preserveAspectRatio="none"
+        style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${Math.round(totalH * 0.71)}px`, display: 'block' }}>
         <path d={frontPath} fill={fill} />
       </svg>
     </div>
@@ -114,11 +115,11 @@ export default function Home() {
       <section
         id="hero"
         style={{
-          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 300px), #d9b5e5 100%)',
+          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 340px), #d9b5e5 100%)',
           position: 'relative',
           overflow: 'visible',
           minHeight: '92vh',
-          paddingBottom: '300px',
+          paddingBottom: '340px',
           display: 'flex',
           flexDirection: 'column',
           zIndex: 2,
@@ -227,9 +228,9 @@ export default function Home() {
         style={{
           background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
           position: 'relative',
-          marginTop: '-300px',
-          paddingTop: '300px',
-          paddingBottom: '300px',
+          marginTop: '-340px',
+          paddingTop: '340px',
+          paddingBottom: '340px',
           zIndex: 1,
         }}
       >
@@ -281,8 +282,8 @@ export default function Home() {
       <section
         style={{
           background: '#daf8f2',
-          marginTop: '-300px',
-          paddingTop: '300px',
+          marginTop: '-340px',
+          paddingTop: '340px',
           position: 'relative',
           zIndex: 0,
         }}
