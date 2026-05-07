@@ -61,13 +61,46 @@ function RainbowSVG({ className = '' }: { className?: string }) {
   );
 }
 
-// ── Cloud Divider ──────────────────────────────────────────────────────────
-function CloudDivider({ fill }: { fill: string }) {
+// ── Wave Divider (smooth organic, no straight lines) ──────────────────────
+// Positioned absolute at bottom, EXTENDS into next section via negative offset
+function WaveDivider({ fill, fromColor }: { fill: string; fromColor: string }) {
   return (
-    <div className="absolute bottom-0 left-0 right-0 pointer-events-none" aria-hidden style={{ zIndex: 5 }}>
-      <svg viewBox="0 0 1440 160" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block' }}>
-        <path d="M0,160 L0,108 C25,92 50,72 82,75 C108,78 125,94 153,97 C180,100 202,84 230,77 C258,70 282,73 308,83 C330,92 348,106 377,109 C406,112 428,98 456,91 C484,84 510,86 536,96 C559,104 576,116 605,118 C632,120 655,107 682,100 C710,93 736,95 762,105 C786,114 803,125 830,127 C857,129 879,116 907,109 C935,102 962,104 989,114 C1012,122 1029,133 1057,135 C1085,137 1109,124 1137,117 C1165,110 1192,112 1219,121 C1242,129 1259,140 1287,141 C1315,142 1342,131 1369,124 C1395,117 1418,118 1440,126 L1440,160 Z" fill={fill}/>
+    <div className="absolute left-0 right-0 pointer-events-none overflow-hidden"
+      aria-hidden style={{ bottom: -2, zIndex: 10, height: 90 }}>
+      <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '100%' }}>
+        {/* Fill section background color first so no gap */}
+        <rect width="1440" height="90" fill={fromColor}/>
+        {/* Smooth organic wave shape in next section's color */}
+        <path d="M0,90 L0,48 Q120,10 240,42 Q360,74 480,38 Q600,2 720,40 Q840,78 960,42 Q1080,6 1200,44 Q1320,82 1440,46 L1440,90 Z"
+          fill={fill}/>
       </svg>
+    </div>
+  );
+}
+
+// ── Hidden Star Easter Egg ──────────────────────────────────────────────────
+// Tiny star bottom-right of hero — click/tap 3 times to reveal a secret message
+function HiddenStar() {
+  const [count, setCount] = useState(0);
+  const [show, setShow] = useState(false);
+  const msgs = ["You found the first star!", "Two down, one to go...", "✨ You're a true explorer! Check the About page for another secret."];
+  const tap = () => {
+    const next = count + 1;
+    setCount(next);
+    if (next <= 3) { setShow(true); setTimeout(() => setShow(false), 2800); }
+  };
+  return (
+    <div className="absolute bottom-28 right-6 z-20" style={{ cursor: 'pointer' }} onClick={tap} title="...">
+      <svg width="20" height="20" viewBox="0 0 20 20" style={{ opacity: count >= 3 ? 1 : 0.28, transition: 'opacity .4s' }}>
+        <polygon points="10,1 12.9,7 20,7.6 14.5,12.4 16.2,19.5 10,15.8 3.8,19.5 5.5,12.4 0,7.6 7.1,7" fill="#FFE066"/>
+      </svg>
+      {show && (
+        <div className="absolute bottom-8 right-0 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap shadow-xl z-50"
+          style={{ backgroundColor: '#2D0D6B', color: '#FFE066', border: '1px solid #F4A839' }}>
+          {msgs[Math.min(count - 1, 2)]}
+        </div>
+      )}
     </div>
   );
 }
@@ -122,15 +155,21 @@ function SparkleTrail() {
 }
 
 // ── Interactive Narwhal (uses the REAL logo) ──────────────────────────────
+// Easter egg: tap 7 times total to unlock secret message
 type Bubble = { id: number; x: number; size: number };
 
 function InteractiveNarwhal() {
   const [jumping, setJumping] = useState(false);
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [tapCount, setTapCount] = useState(0);
+  const [secretShown, setSecretShown] = useState(false);
 
   const interact = () => {
     if (jumping) return;
     setJumping(true);
+    const newCount = tapCount + 1;
+    setTapCount(newCount);
+
     const newBubs: Bubble[] = Array.from({ length: 4 + Math.floor(Math.random() * 3) }, (_, i) => ({
       id: Date.now() + i,
       x: 35 + Math.random() * 32,
@@ -139,12 +178,16 @@ function InteractiveNarwhal() {
     setBubbles(prev => [...prev, ...newBubs]);
     setTimeout(() => setJumping(false), 900);
     setTimeout(() => setBubbles(prev => prev.filter(b => !newBubs.find(n => n.id === b.id))), 1600);
+
+    // Easter egg at 7 taps
+    if (newCount === 7) {
+      setTimeout(() => { setSecretShown(true); setTimeout(() => setSecretShown(false), 4000); }, 400);
+    }
   };
 
   return (
     <div className="relative inline-block select-none" style={{ cursor: 'pointer' }}
       onClick={interact} onTouchStart={(e) => { e.preventDefault(); interact(); }}>
-      {/* Hint */}
       <div className="absolute -top-9 left-1/2 text-sm font-bold pointer-events-none whitespace-nowrap"
         style={{ transform: 'translateX(-50%)', color: '#A8E8EC', opacity: 0.85 }}>
         tap me!
@@ -153,8 +196,7 @@ function InteractiveNarwhal() {
       <Image
         src="/images/logo-teal.png"
         alt="Family Fables narwhal mascot"
-        width={340}
-        height={340}
+        width={340} height={340}
         style={{
           maxWidth: '88vw',
           filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.35))',
@@ -162,6 +204,17 @@ function InteractiveNarwhal() {
           transform: jumping ? 'translateY(-34px) rotate(-8deg) scale(1.06)' : 'none',
         }}
       />
+
+      {/* Secret easter egg toast */}
+      {secretShown && (
+        <div className="absolute -top-20 left-1/2 pointer-events-none z-50"
+          style={{ transform: 'translateX(-50%)', animation: 'fadeInUp 0.4s ease' }}>
+          <div className="px-5 py-3 rounded-2xl text-sm font-bold text-center whitespace-nowrap shadow-2xl"
+            style={{ backgroundColor: '#F4A839', color: '#2D0D6B', border: '3px solid white' }}>
+            You found a secret! The narwhal loves being tickled
+          </div>
+        </div>
+      )}
 
       {/* Rising bubbles */}
       {bubbles.map(b => (
@@ -173,6 +226,70 @@ function InteractiveNarwhal() {
           </svg>
         </div>
       ))}
+    </div>
+  );
+}
+
+// ── Roaming Character (easter egg: a book character wanders across the screen)
+function RoamingCharacter() {
+  const [visible, setVisible] = useState(false);
+  const [position, setPosition] = useState({ x: -120, direction: 1 });
+
+  useEffect(() => {
+    // Appear after 12 seconds, then every 35 seconds
+    const start = setTimeout(() => {
+      triggerRoam();
+    }, 12000);
+    return () => clearTimeout(start);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const triggerRoam = () => {
+    const dir = Math.random() > 0.5 ? 1 : -1;
+    const startX = dir === 1 ? -120 : window.innerWidth + 20;
+    setPosition({ x: startX, direction: dir });
+    setVisible(true);
+    // Animate across
+    const duration = 9000;
+    const startTime = Date.now();
+    const endX = dir === 1 ? window.innerWidth + 120 : -120;
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const currentX = startX + (endX - startX) * progress;
+      setPosition({ x: currentX, direction: dir });
+      if (progress < 1) requestAnimationFrame(animate);
+      else {
+        setVisible(false);
+        setTimeout(triggerRoam, 30000 + Math.random() * 15000);
+      }
+    };
+    requestAnimationFrame(animate);
+  };
+
+  if (!visible) return null;
+
+  // Use Gilroy as the roaming character (index 3 in books)
+  const book = books[3];
+  if (!book?.image) return null;
+
+  return (
+    <div className="fixed pointer-events-none z-[100]"
+      style={{ bottom: 20, left: position.x, transform: `scaleX(${position.direction})` }}>
+      <div className="relative">
+        <Image src={book.image} alt="" width={64} height={80}
+          style={{ borderRadius: 8, boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+            transform: `rotate(${position.direction === 1 ? '8deg' : '-8deg'})` }}
+        />
+        {/* Little legs wobbling underneath */}
+        <div className="absolute -bottom-2 left-1/2 flex gap-1"
+          style={{ transform: 'translateX(-50%)' }}>
+          <div style={{ width: 6, height: 10, backgroundColor: '#F4A839', borderRadius: 3,
+            animation: 'float 0.4s ease-in-out infinite' }}/>
+          <div style={{ width: 6, height: 10, backgroundColor: '#F4A839', borderRadius: 3,
+            animation: 'float 0.4s ease-in-out infinite 0.2s' }}/>
+        </div>
+      </div>
     </div>
   );
 }
@@ -308,35 +425,32 @@ export default function HomePage() {
   return (
     <>
       <SparkleTrail />
+      <RoamingCharacter />
       <div style={{ overflowX: 'hidden' }}>
 
         {/* ─── HERO ────────────────────────────────────────────────────── */}
         <section className="relative" style={{
           background: 'linear-gradient(160deg, #9B3FCF 0%, #5A1FA0 35%, #2D0D6B 70%, #1C0A4F 100%)',
-          minHeight: '92vh', paddingBottom: '180px',
+          minHeight: '92vh', paddingBottom: '110px',
         }}>
           {/* SVG decorations — all clickable */}
-          <div className="absolute top-8 left-8 float-slow">       <StarSVG size={34} color="#F4A839" pulse /></div>
+          <div className="absolute top-8 left-8 float-slow">            <StarSVG size={34} color="#F4A839" pulse /></div>
           <div className="absolute top-14 right-20 float-mid opacity-70"><MoonSVG size={56} /></div>
           <div className="absolute top-1/3 left-4 float-fast opacity-50">  <Sparkle4 size={22} color="#C084FC" /></div>
           <div className="absolute top-1/2 right-8 float-slow opacity-55"><StarSVG size={24} color="#4CC9C9" /></div>
           <div className="absolute top-3/4 left-24 float-mid opacity-40"> <Sparkle4 size={18} color="#FF6B9D" /></div>
-          <div className="absolute top-1/4 right-1/3 float-fast opacity-30"><Sparkle4 size={14} color="#FFE066" /></div>
-          <div className="absolute top-6 left-1/3 opacity-15">            <RainbowSVG /></div>
+          <div className="absolute top-6 left-1/3 opacity-15 pointer-events-none"><RainbowSVG /></div>
+          {/* Hidden easter egg: tiny star bottom-right. Tap it 3 times for a surprise hint */}
+          <HiddenStar />
 
           {/* Hero layout */}
           <div className="relative max-w-6xl mx-auto px-6 lg:px-8 pt-20 pb-8 flex flex-col lg:flex-row items-center gap-10 min-h-[80vh]">
 
             {/* Text */}
             <div className="flex-1 text-center lg:text-left z-10">
-              {/* Real logo in hero */}
               <div className="flex justify-center lg:justify-start mb-6">
-                <Image
-                  src="/images/logo-teal.png"
-                  alt="Family Fables"
-                  width={100}
-                  height={100}
-                  className="float-slow"
+                <Image src="/images/logo-teal.png" alt="Family Fables"
+                  width={100} height={100} className="float-slow"
                   style={{ filter: 'drop-shadow(0 4px 16px rgba(76,201,201,0.5))' }}
                 />
               </div>
@@ -370,7 +484,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Books (parallax on mouse move, tap to reveal title) */}
+            {/* Books with parallax */}
             <div className="flex-1 flex justify-center items-end relative z-10" style={{ minHeight: 440 }}>
               <HeroBook book={books[2]} animClass="float-slow" style={{
                 width: 158, height: 206, zIndex: 1, opacity: 0.88,
@@ -385,20 +499,22 @@ export default function HomePage() {
                 transform: `rotate(-4deg) translate(calc(54px + ${px * 0.7}px), calc(-76px + ${py * -0.5}px))`,
               }}/>
               <HeroBook book={books[0]} animClass="float-slow" style={{
-                width: 224, height: 292, zIndex: 20, marginBottom: -110,
+                width: 224, height: 292, zIndex: 20, marginBottom: -60,
                 boxShadow: '0 30px 80px rgba(0,0,0,0.5), 0 0 40px rgba(244,168,57,0.35)',
                 transform: `translate(${px * -0.4}px, ${py * -0.3}px)`,
               }}/>
             </div>
           </div>
-          <CloudDivider fill="#FDF6EE"/>
+          {/* Smooth wave into cream — NO straight line */}
+          <WaveDivider fill="#FDF6EE" fromColor="transparent"/>
         </section>
 
-        {/* ─── BOOKS GRID (warm cream) ───────────────────────────────── */}
-        <section className="relative pt-28 pb-20 px-4" style={{ backgroundColor: '#FDF6EE', zIndex: 4 }}>
-          <div className="absolute top-10 right-12 float-slow opacity-22">  <RainbowSVG /></div>
-          <div className="absolute top-20 left-10 float-mid opacity-18"> <StarSVG size={32} color="#9B5FD4"/></div>
-          <div className="absolute bottom-24 right-16 float-fast opacity-15"><Sparkle4 size={24} color="#FF6B9D"/></div>
+        {/* ─── BOOKS GRID (warm cream) ── overlap pulls under hero wave ── */}
+        <section className="relative pb-20 px-4" style={{
+          backgroundColor: '#FDF6EE', zIndex: 4, paddingTop: '100px', marginTop: '-2px',
+        }}>
+          <div className="absolute top-10 right-12 float-slow opacity-20"><RainbowSVG /></div>
+          <div className="absolute top-20 left-10 float-mid opacity-15"><StarSVG size={32} color="#9B5FD4"/></div>
 
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
@@ -407,7 +523,7 @@ export default function HomePage() {
                 Books Kids Love
               </h2>
               <p className="text-base max-w-md mx-auto" style={{ color: '#7B6898' }}>
-                Tap any book to open it and find out what it's about.
+                From silly to sweet, brave to heartwarming — every book crafted to delight little readers and the grown-ups who love them. Tap any cover to open it.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -423,14 +539,15 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          <CloudDivider fill="#0E7C8A"/>
+          {/* Wave into teal — different phase so they feel alive */}
+          <WaveDivider fill="#0E7C8A" fromColor="transparent"/>
         </section>
 
-        {/* ─── NARWHAL (teal ocean) ──────────────────────────────────── */}
-        <section className="relative pt-36 pb-36 px-4 overflow-hidden" style={{
+        {/* ─── NARWHAL (teal ocean) ─── overlaps cream wave ─────────── */}
+        <section className="relative pb-36 px-4 overflow-hidden" style={{
           background: 'linear-gradient(160deg, #0E7C8A 0%, #0A5C70 50%, #073D52 100%)',
+          paddingTop: '100px', marginTop: '-2px', zIndex: 3,
         }}>
-          {/* Bubbles — each pops on tap */}
           <InteractiveBubble left="7%"  top="20%" size={20} delay="slow"/>
           <InteractiveBubble left="15%" top="63%" size={28} delay="mid"/>
           <InteractiveBubble right="10%" top="27%" size={22} delay="fast"/>
@@ -463,36 +580,26 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          <CloudDivider fill="#F0E8FF"/>
+          {/* Wave into lavender */}
+          <WaveDivider fill="#EEE4FF" fromColor="transparent"/>
         </section>
 
-        {/* ─── ABOUT (lavender → deep purple) ──────────────────────── */}
-        <section className="relative pt-32 pb-36 px-4 text-center" style={{
-          background: 'linear-gradient(160deg, #F0E8FF 0%, #D4B8F5 28%, #9B5FD4 62%, #5A1FA0 100%)',
+        {/* ─── ABOUT (lavender → deep purple) ─── overlaps teal wave ── */}
+        <section className="relative pb-32 px-4 text-center" style={{
+          background: 'linear-gradient(160deg, #EEE4FF 0%, #D4B8F5 30%, #9B5FD4 65%, #5A1FA0 100%)',
+          paddingTop: '110px', marginTop: '-2px', zIndex: 2,
         }}>
-          <div className="absolute top-14 left-14 float-slow opacity-30"><StarSVG size={36} color="#FFFFFF"/></div>
-          <div className="absolute top-22 right-16 float-mid opacity-22"><Sparkle4 size={26} color="#F4A839"/></div>
-          <div className="absolute bottom-28 left-20 float-fast opacity-18"><Sparkle4 size={18} color="#FFFFFF"/></div>
-          <div className="absolute top-1/2 left-6 opacity-10 pointer-events-none"><RainbowSVG/></div>
+          <div className="absolute top-20 left-14 float-slow opacity-30"><StarSVG size={36} color="#FFFFFF"/></div>
+          <div className="absolute top-28 right-16 float-mid opacity-22"><Sparkle4 size={26} color="#F4A839"/></div>
+          <div className="absolute bottom-32 left-20 float-fast opacity-18"><Sparkle4 size={18} color="#FFFFFF"/></div>
+          <div className="absolute top-1/2 left-6 opacity-8 pointer-events-none"><RainbowSVG/></div>
 
-          {/* Book floating up from the teal section below */}
-          <div className="absolute -top-16 left-1/2 float-slow z-10 pointer-events-none"
-            style={{ transform: 'translateX(-50%) rotate(5deg)' }}>
-            <div className="w-28 h-36 rounded-xl overflow-hidden shadow-2xl opacity-60" style={{ position: 'relative' }}>
-              {books[1]?.image && (
-                <Image src={books[1].image} alt="" fill className="object-cover" sizes="112px"/>
-              )}
-            </div>
-          </div>
+          {/* NO floating Dream Ideas book here — removed */}
 
-          <div className="max-w-3xl mx-auto relative z-10 pt-10">
-            {/* Purple logo */}
+          <div className="max-w-3xl mx-auto relative z-10">
             <div className="flex justify-center mb-6">
-              <Image
-                src="/images/logo-purple.png"
-                alt="Family Fables"
-                width={90}
-                height={90}
+              <Image src="/images/logo-purple.png" alt="Family Fables"
+                width={90} height={90}
                 style={{ filter: 'drop-shadow(0 4px 16px rgba(45,13,107,0.3))' }}
               />
             </div>
@@ -511,16 +618,17 @@ export default function HomePage() {
               Our Story →
             </Link>
           </div>
-          <CloudDivider fill="#F4A839"/>
+          {/* Wave into gold CTA */}
+          <WaveDivider fill="#F4A839" fromColor="transparent"/>
         </section>
 
-        {/* ─── SHOP CTA (warm gold) ─────────────────────────────────── */}
-        <section className="relative pt-28 pb-20 px-4 text-center" style={{
+        {/* ─── SHOP CTA (gold) ──────────────────────────────────────── */}
+        <section className="relative pb-24 px-4 text-center" style={{
           background: 'linear-gradient(135deg, #F4A839 0%, #F0842A 60%, #E06A1A 100%)',
+          paddingTop: '110px', marginTop: '-2px', zIndex: 1,
         }}>
-          <div className="absolute top-12 left-14 float-mid opacity-35"><Sparkle4 size={28} color="white"/></div>
-          <div className="absolute top-16 right-12 float-slow opacity-28"><StarSVG size={26} color="white"/></div>
-          <div className="absolute bottom-14 left-1/4 float-fast opacity-22"><Sparkle4 size={20} color="#2D0D6B"/></div>
+          <div className="absolute top-16 left-14 float-mid opacity-35"><Sparkle4 size={28} color="white"/></div>
+          <div className="absolute top-20 right-12 float-slow opacity-28"><StarSVG size={26} color="white"/></div>
 
           <div className="max-w-2xl mx-auto relative z-10">
             <h2 className="text-4xl sm:text-5xl font-bold mb-4"
