@@ -436,11 +436,54 @@ function InteractiveBookCard({ book }: { book: typeof books[0] }) {
   );
 }
 
+// ── Mood Filter ────────────────────────────────────────────────────────────
+const MOODS = [
+  { id: 'all',        label: 'All Books 📚', color: '#2D1B69' },
+  { id: 'silly',      label: 'Silly 😂',     color: '#FF6B9D' },
+  { id: 'feel-good',  label: 'Feel Good 💛', color: '#F4A839' },
+  { id: 'bedtime',    label: 'Bedtime 🌙',   color: '#4CC9C9' },
+  { id: 'read-aloud', label: 'Read Aloud 📢', color: '#66D9A0' },
+  { id: 'spooky',     label: 'Spooky 🎃',    color: '#9B6FD0' },
+];
+
+const MOOD_TAGLINES: Record<string, string> = {
+  all:          'From silly to sweet, brave to heartwarming — every book crafted to delight. Tap any cover to open it.',
+  silly:        'Warning: side effects include snorting, floor-rolling, and demanding to read it again immediately. 😂',
+  'feel-good':  'Books that give you the warm fuzzies. 💛 Great for when someone needs a hug but you only have 10 minutes.',
+  bedtime:      'For the exact moment when kids are almost asleep. Almost. 🌙 No guarantees.',
+  'read-aloud': 'Grab a snack. These ones are meant to be performed. 📢 Full voice acting strongly encouraged.',
+  spooky:       'Spooky enough to be fun. Not spooky enough to cause nightmares. 🎃 (Probably.)',
+};
+
+function MoodFilter({ active, onChange }: { active: string; onChange: (id: string) => void }) {
+  return (
+    <div className="flex flex-wrap gap-2.5 justify-center">
+      {MOODS.map(mood => (
+        <button
+          key={mood.id}
+          onClick={() => onChange(mood.id)}
+          className="px-4 py-2 rounded-full font-bold text-sm transition-all duration-200 select-none"
+          style={{
+            backgroundColor: active === mood.id ? mood.color : 'white',
+            color: active === mood.id ? 'white' : mood.color,
+            border: `2px solid ${mood.color}`,
+            transform: active === mood.id ? 'scale(1.08)' : 'scale(1)',
+            boxShadow: active === mood.id ? `0 4px 14px ${mood.color}66` : 'none',
+          }}
+        >
+          {mood.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 // ── Main Page ──────────────────────────────────────────────────────────────
 export default function HomePage() {
   // Parallax on mouse move — books shift slightly relative to cursor
   const [px, setPx] = useState(0);
   const [py, setPy] = useState(0);
+  const [moodFilter, setMoodFilter] = useState('all');
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -550,27 +593,48 @@ export default function HomePage() {
           <div className="absolute top-20 left-10 float-mid opacity-15"><StarSVG size={32} color="#7B3FBE"/></div>
 
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-14">
+            <div className="text-center mb-10">
               <h2 className="text-4xl sm:text-5xl font-bold mb-4"
                 style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#3B1A8C' }}>
                 Books Kids Love
               </h2>
-              <p className="text-base max-w-md mx-auto" style={{ color: '#7B6898' }}>
-                From silly to sweet, brave to heartwarming — every book crafted to delight little readers and the grown-ups who love them. Tap any cover to open it.
+              <p className="text-base max-w-md mx-auto mb-8" style={{ color: '#5A3A8A' }}>
+                {MOOD_TAGLINES[moodFilter] || MOOD_TAGLINES.all}
               </p>
+              <MoodFilter active={moodFilter} onChange={setMoodFilter} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {books.filter(b => b.image).slice(0, 6).map(book => (
-                <InteractiveBookCard key={book.id} book={book}/>
+              {(moodFilter === 'all'
+                ? books.filter(b => b.image).slice(0, 6)
+                : books.filter(b => b.image && b.moods?.includes(moodFilter))
+              ).map((book, i) => (
+                <div key={book.id} style={{ animation: `mood-book-appear 0.35s ease-out ${i * 0.07}s both` }}>
+                  <InteractiveBookCard book={book}/>
+                </div>
               ))}
             </div>
-            <div className="text-center mt-12">
-              <Link href="/books"
-                className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all hover:-translate-y-1"
-                style={{ backgroundColor: '#5A1FA0', color: '#FFFFFF' }}>
-                See All 11 Books
-              </Link>
-            </div>
+            {moodFilter === 'all' ? (
+              <div className="text-center mt-12">
+                <Link href="/books"
+                  className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all hover:-translate-y-1"
+                  style={{ backgroundColor: '#5A1FA0', color: '#FFFFFF' }}>
+                  See All 11 Books
+                </Link>
+              </div>
+            ) : (
+              <div className="text-center mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button onClick={() => setMoodFilter('all')}
+                  className="px-6 py-3 rounded-xl font-bold text-sm transition-all hover:opacity-80"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.4)', color: '#2D1B69', border: '2px solid rgba(255,255,255,0.6)' }}>
+                  ← Show All Books
+                </button>
+                <Link href="/books"
+                  className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all hover:-translate-y-1"
+                  style={{ backgroundColor: '#5A1FA0', color: '#FFFFFF' }}>
+                  See All 11 Books
+                </Link>
+              </div>
+            )}
           </div>
           {/* Blob into medium purple — two purple tones for depth */}
           <BlobDivider fill="#8B5CC8" fillDeep="#6B3AAB"/>

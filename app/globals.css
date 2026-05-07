@@ -122,7 +122,12 @@ html { scroll-behavior: smooth; }
 }
 .book-reveal-open { transform: translateY(0); }
 
-/* ── Button shine ────────────────────────────────────────────────── */
+/* ── Mood filter book appear ─────────────────────────────────────── */
+@keyframes mood-book-appear {
+  0%   { opacity: 0; transform: translateY(16px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .btn-shine { position: relative; overflow: hidden; }
 .btn-shine::after {
   content: ''; position: absolute; top: -50%; left: -60%;
