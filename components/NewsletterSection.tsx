@@ -27,7 +27,7 @@ export default function NewsletterSection() {
           Get in on the silliness 📬
         </h2>
         <p className="text-base mb-8" style={{ color: "#7B6898" }}>
-          New stories, dad jokes you didn&apos;t ask for, and free printables — landing in your inbox every first Friday. Because weekends should start weird.
+          New books, printables, and dad jokes delivered to your inbox. First Friday of every month. Unsubscribe if you hate fun.
         </p>
 
         {submitted ? (
@@ -47,7 +47,7 @@ export default function NewsletterSection() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="your email (we promise to be fun)"
+              placeholder="your@email.com"
               required
               className="flex-1 px-5 py-3.5 rounded-xl text-base outline-none border-2 focus:border-purple-400 transition-colors"
               style={{
@@ -61,7 +61,7 @@ export default function NewsletterSection() {
               className="btn-shine px-7 py-3.5 rounded-xl font-bold text-white transition-all hover:opacity-90 hover:shadow-lg whitespace-nowrap"
               style={{ backgroundColor: "#6B3FA0" }}
             >
-              I&apos;m in! ✨
+              Count me in →
             </button>
           </form>
         )}

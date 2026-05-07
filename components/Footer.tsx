@@ -66,7 +66,7 @@ export default function Footer() {
           style={{ color: "#9B8AC4" }}
         >
           <p>{new Date().getFullYear()} Family Fables. All rights reserved.</p>
-          <p>Made with love for little readers everywhere.</p>
+          <p>Making bedtime the best part of the day, one ridiculous story at a time.</p>
         </div>
       </div>
     </footer>

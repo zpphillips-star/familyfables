@@ -1,0 +1,31 @@
+[data-bedtime='true'] {
+  --bg-hero: #1a0a2e;
+  --bg-books: #2d1f5e;
+  --bg-cta: #1f1040;
+  filter: none;
+}
+[data-bedtime='true'] body {
+  background: #1a0a2e;
+}
+[data-bedtime='true'] * {
+  --text-color: #f0e6ff !important;
+}
+/* Add twinkling stars in bedtime mode */
+[data-bedtime='true']::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(2px 2px at 20% 30%, white 0%, transparent 100%),
+    radial-gradient(2px 2px at 60% 70%, white 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 50%, white 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 20%, white 0%, transparent 100%),
+    radial-gradient(2px 2px at 10% 80%, white 0%, transparent 100%);
+  animation: twinkle 3s infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+@keyframes twinkle {
+  from { opacity: 0.4; }
+  to { opacity: 0.8; }
+}

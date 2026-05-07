@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { books, AMAZON_STORE_URL } from '@/lib/books';
 import NewsletterSection from '@/components/NewsletterSection';
+import ParentQuotes from '@/components/ParentQuotes';
 
 // ── SVG Atoms ──────────────────────────────────────────────────────────────
 
@@ -706,6 +707,9 @@ export default function HomePage() {
           {/* Blob into medium purple — two purple tones for depth */}
           <BlobDivider fill="#8B5CC8" fillDeep="#6B3AAB"/>
         </section>
+
+        {/* ─── PARENT QUOTES ─── */}
+        <ParentQuotes />
 
         {/* ─── FREE FUN STUFF ─── */}
         <section className="relative py-20 px-4" style={{ backgroundColor: '#FDF8F2', zIndex: 4 }}>

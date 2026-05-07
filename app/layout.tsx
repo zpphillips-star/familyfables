@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Nunito, Fredoka } from "next/font/google";
+import { Nunito, Fredoka, Caveat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PageTransition from "@/components/PageTransition";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -15,6 +16,13 @@ const fredoka = Fredoka({
   subsets: ["latin"],
   variable: "--font-fredoka",
   weight: ["400", "600"],
+  display: "swap",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
+  weight: ["400", "600", "700"],
   display: "swap",
 });
 
@@ -43,16 +51,31 @@ export const metadata: Metadata = {
   },
 };
 
+// Bedtime mode init — runs before hydration to avoid flash
+const bedtimeInitScript = `
+(function() {
+  try {
+    var mode = localStorage.getItem('ff-bedtime');
+    if (mode === 'on') document.documentElement.setAttribute('data-mode', 'bedtime');
+  } catch(e) {}
+})();
+`;
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${nunito.variable} ${fredoka.variable}`}>
+    <html lang="en" className={`${nunito.variable} ${fredoka.variable} ${caveat.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: bedtimeInitScript }} />
+      </head>
       <body className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <PageTransition>{children}</PageTransition>
+        </main>
         <Footer />
       </body>
     </html>
