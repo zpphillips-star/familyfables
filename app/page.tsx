@@ -320,7 +320,7 @@ function InteractiveBubble({ left, right, top, size, delay }: {
       onClick={pop} onTouchStart={pop}>
       <svg width={size} height={size} viewBox="0 0 24 24"
         className={popped ? 'bubble-pop' : ''}>
-        <circle cx="12" cy="12" r="10" fill="none" stroke="#4CC9C9" strokeWidth="2.5"/>
+        <circle cx="12" cy="12" r="10" fill="none" stroke="#C084FC" strokeWidth="2.5"/>
         <circle cx="8"  cy="8"  r="3"  fill="white" opacity="0.4"/>
       </svg>
     </div>
@@ -439,14 +439,14 @@ export default function HomePage() {
 
         {/* ─── HERO ────────────────────────────────────────────────────── */}
         <section className="relative" style={{
-          background: 'linear-gradient(160deg, #9B3FCF 0%, #5A1FA0 35%, #2D0D6B 70%, #1C0A4F 100%)',
+          background: 'linear-gradient(160deg, #B2EDE8 0%, #72C8C2 30%, #3DA8AA 65%, #1E7878 100%)',
           minHeight: '92vh', paddingBottom: '110px',
         }}>
           {/* SVG decorations — all clickable */}
           <div className="absolute top-8 left-8 float-slow">            <StarSVG size={34} color="#F4A839" pulse /></div>
           <div className="absolute top-14 right-20 float-mid opacity-70"><MoonSVG size={56} /></div>
           <div className="absolute top-1/3 left-4 float-fast opacity-50">  <Sparkle4 size={22} color="#C084FC" /></div>
-          <div className="absolute top-1/2 right-8 float-slow opacity-55"><StarSVG size={24} color="#4CC9C9" /></div>
+          <div className="absolute top-1/2 right-8 float-slow opacity-55"><StarSVG size={24} color="#F4A839" /></div>
           <div className="absolute top-3/4 left-24 float-mid opacity-40"> <Sparkle4 size={18} color="#FF6B9D" /></div>
           <div className="absolute top-6 left-1/3 opacity-15 pointer-events-none"><RainbowSVG /></div>
           {/* Hidden easter egg: tiny star bottom-right. Tap it 3 times for a surprise hint */}
@@ -467,9 +467,9 @@ export default function HomePage() {
                 style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
                 Stories That<br/>
                 <span style={{ color: '#F4A839' }}>Spark</span> Every<br/>
-                <span style={{ color: '#4CC9C9' }}>Imagination</span>
+                <span style={{ color: '#2D0D6B' }}>Imagination</span>
               </h1>
-              <p className="text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0" style={{ color: '#D4C5F0' }}>
+              <p className="text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0" style={{ color: '#1C5A5E' }}>
                 Joyful, whimsical children's books that warm little hearts
                 and create lasting family memories — one story at a time.
               </p>
@@ -481,15 +481,15 @@ export default function HomePage() {
                 </Link>
                 <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
                   className="px-8 py-4 rounded-2xl font-bold text-lg border-2 transition-all hover:-translate-y-1"
-                  style={{ borderColor: 'rgba(255,255,255,0.5)', color: '#FFFFFF' }}>
+                  style={{ borderColor: 'rgba(255,255,255,0.7)', color: '#FFFFFF', backgroundColor: 'rgba(255,255,255,0.15)' }}>
                   Shop on Amazon →
                 </a>
               </div>
               <div className="mt-10 flex flex-wrap gap-5 justify-center lg:justify-start text-sm font-semibold"
-                style={{ color: '#C4B3E8' }}>
-                <span className="flex items-center gap-1.5"><StarSVG size={14} color="#C4B3E8"/>11 Books Published</span>
-                <span className="flex items-center gap-1.5"><Sparkle4 size={13} color="#C4B3E8"/>Ages 2–8</span>
-                <span className="flex items-center gap-1.5"><Sparkle4 size={13} color="#C4B3E8"/>Ships Worldwide</span>
+                style={{ color: '#1C5A5E' }}>
+                <span className="flex items-center gap-1.5"><StarSVG size={14} color="#1C5A5E"/>11 Books Published</span>
+                <span className="flex items-center gap-1.5"><Sparkle4 size={13} color="#1C5A5E"/>Ages 2–8</span>
+                <span className="flex items-center gap-1.5"><Sparkle4 size={13} color="#1C5A5E"/>Ships Worldwide</span>
               </div>
             </div>
 
@@ -514,16 +514,16 @@ export default function HomePage() {
               }}/>
             </div>
           </div>
-          {/* Blob into cream — two warm cream tones, no straight line */}
-          <BlobDivider fill="#FDF6EE" fillDeep="#F0E6D8"/>
+          {/* Blob into light lavender — two lavender tones, no straight line */}
+          <BlobDivider fill="#DDD4FF" fillDeep="#C8B5F5"/>
         </section>
 
-        {/* ─── BOOKS GRID (warm cream) ── overlap pulls under hero blob ── */}
+        {/* ─── BOOKS GRID (light lavender) ── overlap pulls under hero blob ── */}
         <section className="relative pb-20 px-4" style={{
-          backgroundColor: '#FDF6EE', zIndex: 4, paddingTop: '168px', marginTop: '-148px',
+          background: 'linear-gradient(160deg, #DDD4FF 0%, #C8B5F5 50%, #B8A0EE 100%)', zIndex: 4, paddingTop: '168px', marginTop: '-148px',
         }}>
           <div className="absolute top-10 right-12 float-slow opacity-20"><RainbowSVG /></div>
-          <div className="absolute top-20 left-10 float-mid opacity-15"><StarSVG size={32} color="#9B5FD4"/></div>
+          <div className="absolute top-20 left-10 float-mid opacity-15"><StarSVG size={32} color="#7B3FBE"/></div>
 
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
@@ -543,18 +543,18 @@ export default function HomePage() {
             <div className="text-center mt-12">
               <Link href="/books"
                 className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all hover:-translate-y-1"
-                style={{ backgroundColor: '#7B2FBE', color: '#FFFFFF' }}>
+                style={{ backgroundColor: '#5A1FA0', color: '#FFFFFF' }}>
                 See All 11 Books
               </Link>
             </div>
           </div>
-          {/* Blob into teal — two teal tones for depth */}
-          <BlobDivider fill="#0E7C8A" fillDeep="#085F70"/>
+          {/* Blob into medium purple — two purple tones for depth */}
+          <BlobDivider fill="#8B5CC8" fillDeep="#6B3AAB"/>
         </section>
 
-        {/* ─── NARWHAL (teal ocean) ─── overlaps cream blob ─────────── */}
+        {/* ─── NARWHAL (medium purple) ─── overlaps lavender blob ─────────── */}
         <section className="relative pb-36 px-4 overflow-hidden" style={{
-          background: 'linear-gradient(160deg, #0E7C8A 0%, #0A5C70 50%, #073D52 100%)',
+          background: 'linear-gradient(160deg, #9B6CD4 0%, #7B3FBE 40%, #5A1FA0 75%, #3B1280 100%)',
           paddingTop: '168px', marginTop: '-148px', zIndex: 3,
         }}>
           <InteractiveBubble left="7%"  top="20%" size={20} delay="slow"/>
@@ -570,37 +570,37 @@ export default function HomePage() {
             </div>
             <div className="flex-1 text-center lg:text-left">
               <div className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-5"
-                style={{ backgroundColor: '#F4A839', color: '#073D52' }}>
+                style={{ backgroundColor: '#F4A839', color: '#3B1280' }}>
                 Where Stories Come Alive
               </div>
               <h2 className="text-3xl sm:text-4xl font-bold mb-5"
                 style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
                 Every book is a little<br/>
-                <span style={{ color: '#4CC9C9' }}>world to dive into</span>
+                <span style={{ color: '#C8EDFF' }}>world to dive into</span>
               </h2>
-              <p className="text-base leading-relaxed mb-8" style={{ color: '#A8E8EC' }}>
+              <p className="text-base leading-relaxed mb-8" style={{ color: '#DDD0FF' }}>
                 Funny, heartwarming, and full of the kind of magic that only happens
                 when you open a book together. Family Fables was built for those moments.
               </p>
               <Link href="/books"
                 className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-lg transition-all hover:-translate-y-1"
-                style={{ backgroundColor: '#F4A839', color: '#073D52' }}>
+                style={{ backgroundColor: '#F4A839', color: '#3B1280' }}>
                 Dive In
               </Link>
             </div>
           </div>
-          {/* Blob into lavender — light lavender over slightly deeper lavender */}
-          <BlobDivider fill="#EEE4FF" fillDeep="#D4BEFF"/>
+          {/* Blob into deep purple — rich deep tones for depth */}
+          <BlobDivider fill="#2D0D6B" fillDeep="#1C0A4F"/>
         </section>
 
-        {/* ─── ABOUT (lavender → deep purple) ─── overlaps teal blob ── */}
+        {/* ─── ABOUT (deep royal purple) ─── overlaps medium purple blob ── */}
         <section className="relative pb-32 px-4 text-center" style={{
-          background: 'linear-gradient(160deg, #EEE4FF 0%, #D4B8F5 30%, #9B5FD4 65%, #5A1FA0 100%)',
+          background: 'linear-gradient(160deg, #2D0D6B 0%, #1E0850 40%, #140638 70%, #0C0428 100%)',
           paddingTop: '168px', marginTop: '-148px', zIndex: 2,
         }}>
-          <div className="absolute top-20 left-14 float-slow opacity-30"><StarSVG size={36} color="#FFFFFF"/></div>
+          <div className="absolute top-20 left-14 float-slow opacity-30"><StarSVG size={36} color="#C084FC"/></div>
           <div className="absolute top-28 right-16 float-mid opacity-22"><Sparkle4 size={26} color="#F4A839"/></div>
-          <div className="absolute bottom-32 left-20 float-fast opacity-18"><Sparkle4 size={18} color="#FFFFFF"/></div>
+          <div className="absolute bottom-32 left-20 float-fast opacity-18"><Sparkle4 size={18} color="#C084FC"/></div>
           <div className="absolute top-1/2 left-6 opacity-8 pointer-events-none"><RainbowSVG/></div>
 
           {/* NO floating Dream Ideas book here — removed */}
@@ -613,10 +613,10 @@ export default function HomePage() {
               />
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold mb-5"
-              style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D0D6B' }}>
+              style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
               Stories Built on a Family Legacy
             </h2>
-            <p className="text-base leading-relaxed mb-8" style={{ color: '#4A2080' }}>
+            <p className="text-base leading-relaxed mb-8" style={{ color: '#C4B0EE' }}>
               Family Fables was inspired by Z.P. Phillips' grandfather — a creative soul
               who spent his life writing poems and stories that the world never got to read.
               That legacy of imagination and love is woven into every book we publish.
@@ -627,30 +627,30 @@ export default function HomePage() {
               Our Story →
             </Link>
           </div>
-          {/* Blob into gold — warm gold over deeper amber */}
-          <BlobDivider fill="#F4A839" fillDeep="#D98520"/>
+          {/* Blob into deepest purple — near-black for the final section */}
+          <BlobDivider fill="#120430" fillDeep="#0A0220"/>
         </section>
 
-        {/* ─── SHOP CTA (gold) ──────────────────────────────────────── */}
+        {/* ─── SHOP CTA (deepest purple, gold accents) ──────────────────────── */}
         <section className="relative pb-24 px-4 text-center" style={{
-          background: 'linear-gradient(135deg, #F4A839 0%, #F0842A 60%, #E06A1A 100%)',
+          background: 'linear-gradient(135deg, #120430 0%, #0A0220 60%, #060110 100%)',
           paddingTop: '168px', marginTop: '-148px', zIndex: 1,
         }}>
-          <div className="absolute top-16 left-14 float-mid opacity-35"><Sparkle4 size={28} color="white"/></div>
-          <div className="absolute top-20 right-12 float-slow opacity-28"><StarSVG size={26} color="white"/></div>
+          <div className="absolute top-16 left-14 float-mid opacity-35"><Sparkle4 size={28} color="#C084FC"/></div>
+          <div className="absolute top-20 right-12 float-slow opacity-28"><StarSVG size={26} color="#F4A839"/></div>
 
           <div className="max-w-2xl mx-auto relative z-10">
             <h2 className="text-4xl sm:text-5xl font-bold mb-4"
-              style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D0D6B' }}>
+              style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#F4A839' }}>
               Ready to Start Reading?
             </h2>
-            <p className="text-lg mb-8" style={{ color: '#5C2A00' }}>
+            <p className="text-lg mb-8" style={{ color: '#C4B0EE' }}>
               All Family Fables books are available on Amazon.
               Perfect for birthdays, holidays, or just because.
             </p>
             <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
               className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl transition-all hover:-translate-y-1"
-              style={{ backgroundColor: '#2D0D6B', color: '#FFFFFF' }}>
+              style={{ backgroundColor: '#F4A839', color: '#0C0428' }}>
               Shop All Books on Amazon
             </a>
           </div>
