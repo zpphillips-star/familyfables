@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { books, AMAZON_STORE_URL } from '@/lib/books';
+import NewsletterSection from '@/components/NewsletterSection';
 
 // ── SVG Atoms ──────────────────────────────────────────────────────────────
 
@@ -356,6 +357,14 @@ function HeroBook({ book, style, animClass }: {
   );
 }
 
+// ── Age badge color helper ─────────────────────────────────────────────────
+function ageBadgeColor(ageRange: string): string {
+  if (ageRange === 'Ages 2–4' || ageRange === 'Ages 2–5') return '#66D9A0';
+  if (ageRange === 'Ages 3–7') return '#4CC9C9';
+  if (ageRange === 'Ages 4–8') return '#9B6FD0';
+  return '#66D9A0';
+}
+
 // ── Interactive Book Card (flip on tap) ───────────────────────────────────
 function InteractiveBookCard({ book }: { book: typeof books[0] }) {
   const [flipped, setFlipped] = useState(false);
@@ -382,6 +391,12 @@ function InteractiveBookCard({ book }: { book: typeof books[0] }) {
                 {book.tag}
               </div>
             )}
+            {book.ageRange && (
+              <div className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold"
+                style={{ backgroundColor: ageBadgeColor(book.ageRange), color: '#1C3A2E' }}>
+                {book.ageRange}
+              </div>
+            )}
             <div className="absolute bottom-2 left-0 right-0 text-center text-xs font-semibold opacity-40"
               style={{ color: book.accentColor }}>
               tap to open
@@ -400,7 +415,13 @@ function InteractiveBookCard({ book }: { book: typeof books[0] }) {
                 style={{ fontFamily: 'var(--font-fredoka), cursive' }}>
                 {book.title}
               </h3>
+              {book.hook && (
+                <p className="text-white/80 italic text-sm mb-3">&ldquo;{book.hook}&rdquo;</p>
+              )}
               <p className="text-sm leading-relaxed text-white opacity-90">{book.description}</p>
+              {book.perfectFor && (
+                <p className="text-white/60 text-xs mt-3 italic">{book.perfectFor}</p>
+              )}
             </div>
             <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
@@ -463,12 +484,15 @@ export default function HomePage() {
                   style={{ filter: 'drop-shadow(0 4px 16px rgba(76,201,201,0.5))' }}
                 />
               </div>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-4"
                 style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
-                Stories That<br/>
-                <span style={{ color: '#F4A839' }}>Spark</span> Every<br/>
-                <span style={{ color: '#2D0D6B' }}>Imagination</span>
+                Books That Make<br/>
+                <span style={{ color: '#F4A839' }}>Bedtime</span> Worth<br/>
+                <span style={{ color: '#2D0D6B' }}>Fighting About</span>
               </h1>
+              <p className="text-base leading-snug mb-3 max-w-xl mx-auto lg:mx-0 italic font-semibold" style={{ color: '#A8E8EC' }}>
+                (The good kind of fighting. Mostly.)
+              </p>
               <p className="text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0" style={{ color: '#1C5A5E' }}>
                 Joyful, whimsical children's books that warm little hearts
                 and create lasting family memories — one story at a time.
@@ -551,6 +575,71 @@ export default function HomePage() {
           {/* Blob into medium purple — two purple tones for depth */}
           <BlobDivider fill="#8B5CC8" fillDeep="#6B3AAB"/>
         </section>
+
+        {/* ─── FREE FUN STUFF ─── */}
+        <section className="relative py-20 px-4" style={{ backgroundColor: '#FDF8F2', zIndex: 4 }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl sm:text-5xl font-bold mb-3"
+                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#6B3FA0' }}>
+                Free Fun Stuff 🎨
+              </h2>
+              <p className="text-base" style={{ color: '#7B6898' }}>
+                Because learning should come with coloring pages.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Card 1 */}
+              <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: '#FFFDF7', border: '2px solid #F4A83940' }}>
+                <div className="text-4xl text-center">🎨</div>
+                <h3 className="text-lg font-bold text-center" style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D1B69' }}>
+                  Poo Poo Face Coloring Page
+                </h3>
+                <p className="text-sm text-center" style={{ color: '#7B6898' }}>
+                  Color the faces! All of them. No rules.
+                </p>
+                <button disabled
+                  className="mt-auto w-full py-3 rounded-xl font-bold text-sm cursor-not-allowed"
+                  style={{ backgroundColor: '#FDF8F2', color: '#B8A4D0', border: '2px dashed #C8B4E8' }}>
+                  Coming Soon!
+                </button>
+              </div>
+              {/* Card 2 */}
+              <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: '#FFFDF7', border: '2px solid #F4A83940' }}>
+                <div className="text-4xl text-center">🦃</div>
+                <h3 className="text-lg font-bold text-center" style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D1B69' }}>
+                  Gilroy&apos;s Confidence Activity Sheet
+                </h3>
+                <p className="text-sm text-center" style={{ color: '#7B6898' }}>
+                  What&apos;s YOUR signature gobble? Fill in the blanks.
+                </p>
+                <button disabled
+                  className="mt-auto w-full py-3 rounded-xl font-bold text-sm cursor-not-allowed"
+                  style={{ backgroundColor: '#FDF8F2', color: '#B8A4D0', border: '2px dashed #C8B4E8' }}>
+                  Coming Soon!
+                </button>
+              </div>
+              {/* Card 3 */}
+              <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: '#FFFDF7', border: '2px solid #F4A83940' }}>
+                <div className="text-4xl text-center">🌙</div>
+                <h3 className="text-lg font-bold text-center" style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D1B69' }}>
+                  Dream Ideas Wish List
+                </h3>
+                <p className="text-sm text-center" style={{ color: '#7B6898' }}>
+                  Write down your top 5 dream ideas. Bonus points for the weird ones.
+                </p>
+                <button disabled
+                  className="mt-auto w-full py-3 rounded-xl font-bold text-sm cursor-not-allowed"
+                  style={{ backgroundColor: '#FDF8F2', color: '#B8A4D0', border: '2px dashed #C8B4E8' }}>
+                  Coming Soon!
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── NEWSLETTER ─── */}
+        <NewsletterSection />
 
         {/* ─── NARWHAL (medium purple) ─── overlaps lavender blob ─────────── */}
         <section className="relative pb-36 px-4" style={{

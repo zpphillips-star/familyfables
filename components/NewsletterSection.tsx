@@ -24,11 +24,10 @@ export default function NewsletterSection() {
             color: "#2D1B69",
           }}
         >
-          Join the Family Fables Family
+          Get in on the silliness 📬
         </h2>
         <p className="text-base mb-8" style={{ color: "#7B6898" }}>
-          Be the first to know about new books, special offers, and stories
-          behind the stories. No spam — just joy!
+          New stories, dad jokes you didn&apos;t ask for, and free printables — landing in your inbox every first Friday. Because weekends should start weird.
         </p>
 
         {submitted ? (
@@ -48,7 +47,7 @@ export default function NewsletterSection() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
+              placeholder="your email (we promise to be fun)"
               required
               className="flex-1 px-5 py-3.5 rounded-xl text-base outline-none border-2 focus:border-purple-400 transition-colors"
               style={{
@@ -62,13 +61,13 @@ export default function NewsletterSection() {
               className="btn-shine px-7 py-3.5 rounded-xl font-bold text-white transition-all hover:opacity-90 hover:shadow-lg whitespace-nowrap"
               style={{ backgroundColor: "#6B3FA0" }}
             >
-              Subscribe ✨
+              I&apos;m in! ✨
             </button>
           </form>
         )}
 
         <p className="text-xs mt-4" style={{ color: "#9B8AC4" }}>
-          We respect your privacy. Unsubscribe anytime.
+          No spam. Just wholesome chaos. Unsubscribe anytime (we&apos;ll understand).
         </p>
       </div>
     </section>
