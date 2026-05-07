@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AMAZON_STORE_URL } from "@/lib/books";
 import type { Metadata } from "next";
+import HiddenAboutSecret from "@/components/HiddenAboutSecret";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -357,15 +358,14 @@ export default function AboutPage() {
           <h2
             className="text-3xl font-bold mb-4"
             style={{
-              fontFamily: "var(--font-fredoka), '\''Fredoka One'\'', cursive",
+              fontFamily: "var(--font-fredoka), 'Fredoka One', cursive",
               color: "#2D1B69",
             }}
           >
-            Start Your Family Fables Journey
+            Stop reading about books. Start reading books.
           </h2>
           <p className="text-base mb-8" style={{ color: "#7B6898" }}>
-            Explore our full collection of children&apos;s books and find the
-            perfect story for your little one.
+            Victor would&apos;ve wanted it that way. (Probably. He was a very wise man.)
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -387,6 +387,11 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* ─── HIDDEN ABOUT EASTER EGG ────────────────────────── */}
+      {/* Fulfills the promise from the homepage HiddenStar:
+          "✨ You're a true explorer! Check the About page for another secret." */}
+      <HiddenAboutSecret />
     </div>
   );
 }
