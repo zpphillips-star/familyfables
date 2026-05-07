@@ -14,28 +14,26 @@ export default function NewsletterSection() {
   };
 
   return (
-    <section className="py-20 px-4" style={{ backgroundColor: "#F0EBF8" }}>
+    <section className="py-20 px-4" style={{ backgroundColor: "#daf8f2" }}>
       <div className="max-w-2xl mx-auto text-center">
-        <div className="text-5xl mb-4 sparkle inline-block">💌</div>
         <h2
           className="text-3xl sm:text-4xl font-bold mb-3"
           style={{
-            fontFamily: "var(--font-fredoka), 'Fredoka One', cursive",
-            color: "#2D1B69",
+            fontFamily: "var(--font-concert-one), 'Concert One', cursive",
+            color: "#007d68",
           }}
         >
-          Get in on the silliness 📬
+          Get in on the silliness
         </h2>
-        <p className="text-base mb-8" style={{ color: "#7B6898" }}>
+        <p className="text-base mb-8" style={{ color: "#006e59" }}>
           New books, printables, and dad jokes delivered to your inbox. First Friday of every month. Unsubscribe if you hate fun.
         </p>
 
         {submitted ? (
           <div
             className="rounded-2xl p-8 text-center"
-            style={{ backgroundColor: "#6B3FA0", color: "white" }}
+            style={{ backgroundColor: "#007d68", color: "white" }}
           >
-            <div className="text-4xl mb-3">🎉</div>
             <p className="font-bold text-lg">You&apos;re in the family now!</p>
             <p className="text-sm mt-1 opacity-80">
               Watch your inbox for magical updates.
@@ -49,24 +47,24 @@ export default function NewsletterSection() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com"
               required
-              className="flex-1 px-5 py-3.5 rounded-xl text-base outline-none border-2 focus:border-purple-400 transition-colors"
+              className="flex-1 px-5 py-3.5 rounded-xl text-base outline-none border-2 focus:border-teal-400 transition-colors"
               style={{
-                borderColor: "#C8B4E8",
-                color: "#2D1B69",
+                borderColor: "#a8e8dc",
+                color: "#006e59",
                 backgroundColor: "white",
               }}
             />
             <button
               type="submit"
               className="btn-shine px-7 py-3.5 rounded-xl font-bold text-white transition-all hover:opacity-90 hover:shadow-lg whitespace-nowrap"
-              style={{ backgroundColor: "#6B3FA0" }}
+              style={{ backgroundColor: "#007d68" }}
             >
-              Count me in →
+              Count me in
             </button>
           </form>
         )}
 
-        <p className="text-xs mt-4" style={{ color: "#9B8AC4" }}>
+        <p className="text-xs mt-4" style={{ color: "#007d68", opacity: 0.7 }}>
           No spam. Just wholesome chaos. Unsubscribe anytime (we&apos;ll understand).
         </p>
       </div>

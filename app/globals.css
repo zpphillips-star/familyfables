@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #E8F8F5;
-  --foreground: #2D1B69;
+  --background: #daf8f2;
+  --foreground: #0a2d61;
+  --mint: #daf8f2;
+  --teal: #007d68;
+  --dark-teal: #006e59;
+  --navy: #0a2d61;
+  --lavender: #d9b5e5;
+  --deep-purple: #78087c;
+  --white: #ffffff;
 }
 
 /* ── Bedtime Mode ────────────────────────────────────────────────── */
@@ -328,18 +335,18 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-nunito), 'Nunito', sans-serif;
-  --font-display: var(--font-fredoka), 'Fredoka One', cursive;
+  --font-sans: var(--font-concert-one), 'Concert One', cursive;
+  --font-display: var(--font-concert-one), 'Concert One', cursive;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  font-family: var(--font-concert-one), 'Concert One', cursive;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-.font-display { font-family: var(--font-fredoka), 'Fredoka One', cursive; }
+.font-display { font-family: var(--font-concert-one), 'Concert One', cursive; }
 
 @media (pointer: coarse) {
   .book-card-3d { cursor: default; }

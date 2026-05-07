@@ -17,7 +17,7 @@ export default function Navbar() {
   return (
     <nav
       className="sticky top-0 z-50 shadow-sm"
-      style={{ backgroundColor: "#FFF8F0", borderBottom: "2px solid #E8DCF5" }}
+      style={{ backgroundColor: "#daf8f2", borderBottom: "2px solid #a8e8dc" }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -32,7 +32,7 @@ export default function Navbar() {
             />
             <span
               className="text-xl font-display tracking-wide"
-              style={{ color: "#6B3FA0", fontFamily: "var(--font-fredoka), 'Fredoka One', cursive" }}
+              style={{ color: "#007d68", fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
             >
               Family Fables
             </span>
@@ -45,7 +45,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className="font-semibold text-sm transition-colors duration-200 hover:opacity-70"
-                style={{ color: "#2D1B69" }}
+                style={{ color: "#006e59" }}
               >
                 {link.label}
               </Link>
@@ -55,9 +55,9 @@ export default function Navbar() {
               target="_blank"
               rel="noopener noreferrer"
               className="btn-shine px-5 py-2 rounded-full font-bold text-sm shadow-md transition-transform duration-200 hover:scale-105"
-              style={{ backgroundColor: "#F4A839", color: "#2D1B69" }}
+              style={{ backgroundColor: "#007d68", color: "#ffffff" }}
             >
-              Shop ✨
+              Shop
             </a>
           </div>
 
@@ -97,15 +97,15 @@ export default function Navbar() {
         {mobileOpen && (
           <div
             className="md:hidden py-4 space-y-1 border-t"
-            style={{ borderColor: "#E8DCF5" }}
+            style={{ borderColor: "#a8e8dc" }}
           >
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="block px-4 py-3 rounded-lg font-semibold transition-colors hover:bg-purple-50"
-                style={{ color: "#2D1B69" }}
+                className="block px-4 py-3 rounded-lg font-semibold transition-colors hover:bg-teal-50"
+                style={{ color: "#006e59" }}
               >
                 {link.label}
               </Link>
@@ -116,9 +116,9 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block px-5 py-2 rounded-full font-bold text-sm shadow"
-                style={{ backgroundColor: "#F4A839", color: "#2D1B69" }}
+                style={{ backgroundColor: "#007d68", color: "#ffffff" }}
               >
-                Shop on Amazon ✨
+                Shop on Amazon
               </a>
             </div>
           </div>

@@ -1,140 +1,50 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { books, AMAZON_STORE_URL } from '@/lib/books';
-import NewsletterSection from '@/components/NewsletterSection';
-import ParentQuotes from '@/components/ParentQuotes';
 import BedtimeToggle from '@/components/BedtimeToggle';
-import TiltNarwhal from '@/components/TiltNarwhal';
 import TouchBook from '@/components/TouchBook';
+import TiltNarwhal from '@/components/TiltNarwhal';
+import NewsletterSection from '@/components/NewsletterSection';
 
-// ── SVG Atoms ──────────────────────────────────────────────────────────────
-
-function StarSVG({ size = 28, color = '#F4A839', pulse = false }: {
-  size?: number; color?: string; pulse?: boolean;
-}) {
-  const [burst, setBurst] = useState(false);
-  const fire = () => { setBurst(true); setTimeout(() => setBurst(false), 500); };
-  return (
-    <svg width={size} height={size} viewBox="0 0 28 28"
-      className={`${pulse ? 'star-pulse' : ''} ${burst ? 'star-burst' : ''} select-none`}
-      style={{ cursor: 'pointer', display: 'block' }}
-      onClick={fire} onTouchStart={(e) => { e.preventDefault(); fire(); }} aria-hidden>
-      <polygon points="14,2 17.1,10.5 26,10.7 19.2,16.5 21.5,25.4 14,20.5 6.5,25.4 8.8,16.5 2,10.7 10.9,10.5" fill={color}/>
-    </svg>
-  );
-}
-
-function Sparkle4({ size = 20, color = '#F4A839', className = '' }: {
-  size?: number; color?: string; className?: string;
+// ── Wave Divider ───────────────────────────────────────────────────────────
+// fromColor = current section bg; toColor = next section bg
+// The SVG wave "cuts" from fromColor into toColor, creating a seamless blend.
+function WaveDivider({ fromColor, toColor, flip = false }: {
+  fromColor: string;
+  toColor: string;
+  flip?: boolean;
 }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 20" className={className} aria-hidden fill={color}>
-      <path d="M10 0 L11.5 8.5 L20 10 L11.5 11.5 L10 20 L8.5 11.5 L0 10 L8.5 8.5 Z"/>
-    </svg>
-  );
-}
-
-function MoonSVG({ size = 52 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 52 52" aria-hidden fill="none">
-      <path d="M32 6 C22 8 15 18 17 29 C19 40 29 46 40 44 C29 49 16 43 11 32 C6 21 13 7 24 4 C27 3 30 4 32 6 Z"
-        fill="#F4DAFF" opacity="0.85"/>
-      <circle cx="38" cy="12" r="2.5" fill="#F4DAFF" opacity="0.4"/>
-      <circle cx="43" cy="22" r="1.5" fill="#F4DAFF" opacity="0.3"/>
-    </svg>
-  );
-}
-
-function CloudSVG({ className = '', style = {} }: { className?: string; style?: React.CSSProperties }) {
-  return (
-    <svg width="220" height="90" viewBox="0 0 220 90" className={className} style={style} aria-hidden>
-      <ellipse cx="110" cy="70" rx="100" ry="32" fill="white" opacity="0.55"/>
-      <ellipse cx="78"  cy="58" rx="52"  ry="30" fill="white" opacity="0.5"/>
-      <ellipse cx="142" cy="56" rx="46"  ry="28" fill="white" opacity="0.52"/>
-      <ellipse cx="110" cy="48" rx="38"  ry="24" fill="white" opacity="0.48"/>
-      <ellipse cx="85"  cy="40" rx="28"  ry="20" fill="white" opacity="0.42"/>
-      <ellipse cx="135" cy="38" rx="24"  ry="18" fill="white" opacity="0.4"/>
-    </svg>
-  );
-}
-
-function RainbowSVG({ className = '' }: { className?: string }) {
-  const [shimmer, setShimmer] = useState(false);
-  const fire = () => { setShimmer(true); setTimeout(() => setShimmer(false), 600); };
-  return (
-    <svg width="240" height="88" viewBox="0 0 240 88"
-      className={`${shimmer ? 'rainbow-shimmer' : ''} select-none ${className}`}
-      style={{ cursor: 'pointer', display: 'block' }}
-      onClick={fire} onTouchStart={(e) => { e.preventDefault(); fire(); }} aria-hidden>
-      <path d="M8,78 Q120,-14 232,78"  stroke="#FF6B9D" strokeWidth="7" strokeLinecap="round" fill="none" opacity="0.7"/>
-      <path d="M14,81 Q120,-4 226,81"  stroke="#F4A839" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.7"/>
-      <path d="M20,83 Q120,5 220,83"   stroke="#FFE066" strokeWidth="5" strokeLinecap="round" fill="none" opacity="0.7"/>
-      <path d="M26,85 Q120,14 214,85"  stroke="#66D9A0" strokeWidth="5" strokeLinecap="round" fill="none" opacity="0.7"/>
-      <path d="M32,86 Q120,22 208,86"  stroke="#4CC9C9" strokeWidth="4" strokeLinecap="round" fill="none" opacity="0.7"/>
-      <path d="M38,87 Q120,30 202,87"  stroke="#9B6FD0" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.7"/>
-    </svg>
-  );
-}
-
-// ── Blob Divider (two-layer organic, zero straight lines) ─────────────────
-// Two overlapping sinusoidal blobs in slightly different shades of the destination
-// color — creates a depth/layered effect matching the original familyfables.org style.
-// NO overflow-hidden on the container — that's what caused the straight line clipping.
-// Extends 150px into the NEXT section via negative bottom. Next section uses
-// paddingTop ≥ 160px and marginTop: -148px to seamlessly overlap.
-function BlobDivider({
-  fill,           // front blob color (destination section primary)
-  fillDeep,       // back blob color (slightly darker/lighter variant for depth)
-}: { fill: string; fillDeep: string }) {
-  const H = 160;
-  return (
-    <div className="absolute left-0 right-0 pointer-events-none"
-      aria-hidden style={{ bottom: -148, zIndex: 10, height: H }}>
-      <svg viewBox={`0 0 1440 ${H}`} xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '100%' }}>
-        {/* Back layer — offset wave in slightly different shade, creates the "no flat line" depth */}
-        <path d={`M0,${H} L0,${H*0.72} Q160,${H*0.38} 320,${H*0.60} Q480,${H*0.82} 640,${H*0.50} Q800,${H*0.18} 960,${H*0.55} Q1120,${H*0.88} 1280,${H*0.58} Q1360,${H*0.42} 1440,${H*0.62} L1440,${H} Z`}
-          fill={fillDeep}/>
-        {/* Front layer — main organic wave, sits above back layer */}
-        <path d={`M0,${H} L0,${H*0.58} Q160,${H*0.22} 320,${H*0.48} Q480,${H*0.72} 640,${H*0.36} Q800,${H*0.02} 960,${H*0.42} Q1120,${H*0.76} 1280,${H*0.44} Q1360,${H*0.28} 1440,${H*0.50} L1440,${H} Z`}
-          fill={fill}/>
+    <div style={{ position: 'relative', height: '80px', overflow: 'hidden', background: fromColor }}>
+      <svg
+        viewBox="0 0 1280 140"
+        preserveAspectRatio="none"
+        style={{
+          position: 'absolute',
+          bottom: flip ? 'auto' : 0,
+          top: flip ? 0 : 'auto',
+          width: '100%',
+          height: '100%',
+          transform: flip ? 'scaleY(-1)' : 'none',
+        }}
+      >
+        <rect width="1280" height="140" fill={fromColor} />
+        <g fill={toColor}>
+          <path d="M0 51.76c36.21-2.25 77.57-3.58 126.42-3.58 320 0 320 57 640 57 271.15 0 312.58-40.91 513.58-53.4V0H0z" fillOpacity=".3"/>
+          <path d="M0 24.31c43.46-5.69 94.56-9.25 158.42-9.25 320 0 320 89.24 640 89.24 256.13 0 307.28-57.16 481.58-80V0H0z" fillOpacity=".5"/>
+          <path d="M0 0v3.4C28.2 1.6 59.4.59 94.42.59c320 0 320 84.3 640 84.3 285 0 316.17-66.85 545.58-81.49V0z"/>
+        </g>
       </svg>
     </div>
   );
 }
 
-// ── Hidden Star Easter Egg ──────────────────────────────────────────────────
-// Tiny star bottom-right of hero — click/tap 3 times to reveal a secret message
-function HiddenStar() {
-  const [count, setCount] = useState(0);
-  const [show, setShow] = useState(false);
-  const msgs = ["You found the first star!", "Two down, one to go...", "✨ You're a true explorer! Check the About page for another secret."];
-  const tap = () => {
-    const next = count + 1;
-    setCount(next);
-    if (next <= 3) { setShow(true); setTimeout(() => setShow(false), 2800); }
-  };
-  return (
-    <div className="absolute bottom-28 right-6 z-20" style={{ cursor: 'pointer' }} onClick={tap} title="...">
-      <svg width="20" height="20" viewBox="0 0 20 20" style={{ opacity: count >= 3 ? 1 : 0.28, transition: 'opacity .4s' }}>
-        <polygon points="10,1 12.9,7 20,7.6 14.5,12.4 16.2,19.5 10,15.8 3.8,19.5 5.5,12.4 0,7.6 7.1,7" fill="#FFE066"/>
-      </svg>
-      {show && (
-        <div className="absolute bottom-8 right-0 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap shadow-xl z-50"
-          style={{ backgroundColor: '#2D0D6B', color: '#FFE066', border: '1px solid #F4A839' }}>
-          {msgs[Math.min(count - 1, 2)]}
-        </div>
-      )}
-    </div>
-  );
-}
+// ── Sparkle Trail ──────────────────────────────────────────────────────────
+import { useState, useEffect } from 'react';
 
-// ── Cursor / Touch Sparkle Trail ───────────────────────────────────────────
 type Spark = { id: number; x: number; y: number; rot: number; size: number; color: string };
-const SPARK_COLORS = ['#F4A839', '#FF6B9D', '#4CC9C9', '#C084FC', '#66D9A0', '#FFE066'];
+const SPARK_COLORS = ['#007d68', '#d9b5e5', '#78087c', '#daf8f2', '#006e59', '#a8e8dc'];
 
 function SparkleTrail() {
   const [sparks, setSparks] = useState<Spark[]>([]);
@@ -181,737 +91,294 @@ function SparkleTrail() {
   );
 }
 
-// ── Interactive Narwhal (uses the REAL logo) ──────────────────────────────
-// Easter egg: tap 7 times total to unlock secret message
-type Bubble = { id: number; x: number; size: number };
-
-function InteractiveNarwhal() {
-  const [jumping, setJumping] = useState(false);
-  const [bubbles, setBubbles] = useState<Bubble[]>([]);
-  const [tapCount, setTapCount] = useState(0);
-  const [secretShown, setSecretShown] = useState(false);
-
-  const interact = () => {
-    if (jumping) return;
-    setJumping(true);
-    const newCount = tapCount + 1;
-    setTapCount(newCount);
-
-    const newBubs: Bubble[] = Array.from({ length: 4 + Math.floor(Math.random() * 3) }, (_, i) => ({
-      id: Date.now() + i,
-      x: 35 + Math.random() * 32,
-      size: 10 + Math.random() * 16,
-    }));
-    setBubbles(prev => [...prev, ...newBubs]);
-    setTimeout(() => setJumping(false), 900);
-    setTimeout(() => setBubbles(prev => prev.filter(b => !newBubs.find(n => n.id === b.id))), 1600);
-
-    // Easter egg at 7 taps
-    if (newCount === 7) {
-      setTimeout(() => { setSecretShown(true); setTimeout(() => setSecretShown(false), 4000); }, 400);
-    }
-  };
-
-  return (
-    <div className="relative inline-block select-none" style={{ cursor: 'pointer' }}
-      onClick={interact} onTouchStart={(e) => { e.preventDefault(); interact(); }}>
-      <div className="absolute -top-9 left-1/2 text-sm font-bold pointer-events-none whitespace-nowrap"
-        style={{ transform: 'translateX(-50%)', color: '#A8E8EC', opacity: 0.85 }}>
-        tap me!
-      </div>
-
-      <Image
-        src="/images/logo-teal.png"
-        alt="Family Fables narwhal mascot"
-        width={340} height={340}
-        style={{
-          maxWidth: '88vw',
-          filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.35))',
-          transition: 'transform 0.18s cubic-bezier(.36,.07,.19,.97)',
-          transform: jumping ? 'translateY(-34px) rotate(-8deg) scale(1.06)' : 'none',
-        }}
-      />
-
-      {/* Secret easter egg toast */}
-      {secretShown && (
-        <div className="absolute -top-20 left-1/2 pointer-events-none z-50"
-          style={{ transform: 'translateX(-50%)', animation: 'fadeInUp 0.4s ease' }}>
-          <div className="px-5 py-3 rounded-2xl text-sm font-bold text-center whitespace-nowrap shadow-2xl"
-            style={{ backgroundColor: '#F4A839', color: '#2D0D6B', border: '3px solid white' }}>
-            You found a secret! The narwhal loves being tickled
-          </div>
-        </div>
-      )}
-
-      {/* Rising bubbles */}
-      {bubbles.map(b => (
-        <div key={b.id} className="absolute pointer-events-none bubble-rise"
-          style={{ left: `${b.x}%`, bottom: '60%', width: b.size, height: b.size }}>
-          <svg viewBox="0 0 20 20" width={b.size} height={b.size} aria-hidden>
-            <circle cx="10" cy="10" r="8" fill="none" stroke="#A8ECEC" strokeWidth="2" opacity="0.8"/>
-            <circle cx="7"  cy="7"  r="2" fill="white" opacity="0.5"/>
-          </svg>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ── Roaming Character (easter egg: a book character wanders across the screen)
-function RoamingCharacter() {
-  const [visible, setVisible] = useState(false);
-  const [position, setPosition] = useState({ x: -120, direction: 1 });
-
-  useEffect(() => {
-    // Appear after 12 seconds, then every 35 seconds
-    const start = setTimeout(() => {
-      triggerRoam();
-    }, 12000);
-    return () => clearTimeout(start);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const triggerRoam = () => {
-    const dir = Math.random() > 0.5 ? 1 : -1;
-    const startX = dir === 1 ? -120 : window.innerWidth + 20;
-    setPosition({ x: startX, direction: dir });
-    setVisible(true);
-    // Animate across
-    const duration = 9000;
-    const startTime = Date.now();
-    const endX = dir === 1 ? window.innerWidth + 120 : -120;
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const currentX = startX + (endX - startX) * progress;
-      setPosition({ x: currentX, direction: dir });
-      if (progress < 1) requestAnimationFrame(animate);
-      else {
-        setVisible(false);
-        setTimeout(triggerRoam, 30000 + Math.random() * 15000);
-      }
-    };
-    requestAnimationFrame(animate);
-  };
-
-  if (!visible) return null;
-
-  // Use Gilroy as the roaming character (index 3 in books)
-  const book = books[3];
-  if (!book?.image) return null;
-
-  return (
-    <div className="fixed pointer-events-none z-[100]"
-      style={{ bottom: 20, left: position.x, transform: `scaleX(${position.direction})` }}>
-      <div className="relative">
-        <Image src={book.image} alt="" width={64} height={80}
-          style={{ borderRadius: 8, boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-            transform: `rotate(${position.direction === 1 ? '8deg' : '-8deg'})` }}
-        />
-        {/* Little legs wobbling underneath */}
-        <div className="absolute -bottom-2 left-1/2 flex gap-1"
-          style={{ transform: 'translateX(-50%)' }}>
-          <div style={{ width: 6, height: 10, backgroundColor: '#F4A839', borderRadius: 3,
-            animation: 'float 0.4s ease-in-out infinite' }}/>
-          <div style={{ width: 6, height: 10, backgroundColor: '#F4A839', borderRadius: 3,
-            animation: 'float 0.4s ease-in-out infinite 0.2s' }}/>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Interactive Bubble (in narwhal section) ────────────────────────────────
-function InteractiveBubble({ left, right, top, size, delay }: {
-  left?: string; right?: string; top: string; size: number; delay: string;
-}) {
-  const [popped, setPopped] = useState(false);
-  const pop = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    if (popped) return;
-    setPopped(true);
-    setTimeout(() => setPopped(false), 500);
-  };
-  return (
-    <div className={`absolute float-${delay} select-none`}
-      style={{ left, right, top, cursor: 'pointer', zIndex: 2, opacity: 0.3 }}
-      onClick={pop} onTouchStart={pop}>
-      <svg width={size} height={size} viewBox="0 0 24 24"
-        className={popped ? 'bubble-pop' : ''}>
-        <circle cx="12" cy="12" r="10" fill="none" stroke="#C084FC" strokeWidth="2.5"/>
-        <circle cx="8"  cy="8"  r="3"  fill="white" opacity="0.4"/>
-      </svg>
-    </div>
-  );
-}
-
-// ── Hero Book (click to reveal) ────────────────────────────────────────────
-function HeroBook({ book, style, animClass }: {
-  book: typeof books[0];
-  style: React.CSSProperties;
-  animClass: string;
-}) {
-  const [open, setOpen] = useState(false);
-  const toggle = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    setOpen(o => !o);
-  };
-  return (
-    <div className={`hero-book-wrap rounded-2xl overflow-hidden shadow-2xl ${animClass}`}
-      style={{ ...style, cursor: 'pointer' }}
-      onClick={toggle} onTouchStart={toggle}>
-      {book.image && (
-        <Image src={book.image} alt={book.title} fill className="object-cover" sizes="220px"/>
-      )}
-      <div className={`book-reveal-overlay ${open ? 'book-reveal-open' : ''}`}>
-        <span className="text-white font-bold text-sm leading-snug block mb-2">{book.title}</span>
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold"
-          style={{ backgroundColor: '#F4A839', color: '#2D0D6B' }}>
-          See this book
-        </span>
-      </div>
-    </div>
-  );
-}
-
-// ── Age badge color helper ─────────────────────────────────────────────────
-function ageBadgeColor(ageRange: string): string {
-  if (ageRange === 'Ages 2–4' || ageRange === 'Ages 2–5') return '#66D9A0';
-  if (ageRange === 'Ages 3–7') return '#4CC9C9';
-  if (ageRange === 'Ages 4–8') return '#9B6FD0';
-  return '#66D9A0';
-}
-
-// ── Interactive Book Card (flip on tap) ───────────────────────────────────
-function InteractiveBookCard({ book }: { book: typeof books[0] }) {
-  const [flipped, setFlipped] = useState(false);
-  const toggle = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    setFlipped(f => !f);
-  };
-  return (
-    <div className="book-card-3d select-none" style={{ height: 380, cursor: 'pointer' }}
-      onClick={toggle} onTouchStart={toggle}>
-      <div className={`book-card-inner ${flipped ? 'book-card-flipped' : ''}`}>
-        {/* Front */}
-        <div className="book-card-face book-card-front rounded-2xl overflow-hidden"
-          style={{ boxShadow: `0 6px 28px ${book.accentColor}28` }}>
-          <div className="relative h-64 flex items-center justify-center"
-            style={{ backgroundColor: `${book.accentColor}18` }}>
-            {book.image && (
-              <Image src={book.image} alt={book.title} fill
-                className="object-contain p-4" sizes="280px"/>
-            )}
-            {book.tag && (
-              <div className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold text-white"
-                style={{ backgroundColor: book.accentColor }}>
-                {book.tag}
-              </div>
-            )}
-            {book.ageRange && (
-              <div className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold"
-                style={{ backgroundColor: ageBadgeColor(book.ageRange), color: '#1C3A2E' }}>
-                {book.ageRange}
-              </div>
-            )}
-            <div className="absolute bottom-2 left-0 right-0 text-center text-xs font-semibold opacity-40"
-              style={{ color: book.accentColor }}>
-              tap to open
-            </div>
-          </div>
-          <div className="p-4 bg-white">
-            <h3 className="font-bold text-base leading-snug" style={{ color: '#2D1B69' }}>{book.title}</h3>
-          </div>
-        </div>
-        {/* Back */}
-        <div className="book-card-face book-card-back rounded-2xl overflow-hidden flex flex-col"
-          style={{ backgroundColor: book.accentColor, boxShadow: `0 6px 28px ${book.accentColor}50` }}>
-          <div className="flex-1 p-6 flex flex-col justify-between">
-            <div>
-              <h3 className="font-bold text-xl text-white mb-3"
-                style={{ fontFamily: 'var(--font-fredoka), cursive' }}>
-                {book.title}
-              </h3>
-              {book.hook && (
-                <p className="text-white/80 italic text-sm mb-3">&ldquo;{book.hook}&rdquo;</p>
-              )}
-              <p className="text-sm leading-relaxed text-white opacity-90">{book.description}</p>
-              {book.perfectFor && (
-                <p className="text-white/60 text-xs mt-3 italic">{book.perfectFor}</p>
-              )}
-            </div>
-            <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="btn-shine mt-4 block text-center py-3 rounded-xl font-bold text-sm transition-all hover:opacity-90"
-              style={{ backgroundColor: 'white', color: book.accentColor }}>
-              Get This Book on Amazon →
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Emergency Dad Joke Button ──────────────────────────────────────────────
-const DAD_JOKES = [
-  { setup: "Why did the book go to the doctor?",           punchline: "It had too many problems." },
-  { setup: "Why can't the narwhal ever be trusted?",       punchline: "Because it always gives you the cold shoulder. (It's a horn. Get it?)" },
-  { setup: "What do you call a sleeping dinosaur?",        punchline: "A dino-snore. You're welcome." },
-  { setup: "Why did the turkey join the band?",            punchline: "He already had the drumsticks." },
-  { setup: "Why don't scientists trust atoms?",            punchline: "Because they make up everything. Just like my kids' bedtime excuses." },
-  { setup: "What do you call a bear with no teeth?",       punchline: "A gummy bear. (Kids lose their minds over this one.)" },
-  { setup: "What do books wear to the beach?",             punchline: "A cover-up." },
-  { setup: "What do you call a fish without eyes?",        punchline: "A fsh. Read it aloud. There you go." },
-  { setup: "Why did the kid bring a ladder to school?",    punchline: "Because they wanted to go to high school." },
-  { setup: "What happens when a frog parks illegally?",    punchline: "It gets toad away." },
-  { setup: "Why do cows wear bells?",                      punchline: "Because their horns don't work." },
-  { setup: "What do you call a pony with a cough?",        punchline: "A little hoarse. (Also me at every parent pickup.)" },
-];
-
-function DadJokeCard() {
-  const [jokeIndex, setJokeIndex] = useState<number | null>(null);
-  const [fading, setFading]       = useState(false);
-
-  const nextJoke = () => {
-    if (fading) return;
-    setFading(true);
-    setTimeout(() => {
-      setJokeIndex(prev => {
-        let next = Math.floor(Math.random() * DAD_JOKES.length);
-        if (next === prev) next = (next + 1) % DAD_JOKES.length;
-        return next;
-      });
-      setFading(false);
-    }, 180);
-  };
-
-  const joke = jokeIndex !== null ? DAD_JOKES[jokeIndex] : null;
-
-  return (
-    <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md select-none"
-      style={{ backgroundColor: '#FFFDF7', border: '2px solid #FF6B9D50' }}>
-      <div className="text-4xl text-center">🚨</div>
-      <h3 className="text-lg font-bold text-center"
-        style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D1B69' }}>
-        Emergency Dad Joke Button
-      </h3>
-
-      <div className="flex-1 min-h-[80px] flex flex-col items-center justify-center text-center"
-        style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.18s ease' }}>
-        {joke ? (
-          <>
-            <p className="text-sm font-semibold mb-2" style={{ color: '#2D1B69' }}>{joke.setup}</p>
-            <p className="text-sm italic" style={{ color: '#FF6B9D' }}>{joke.punchline}</p>
-          </>
-        ) : (
-          <p className="text-sm" style={{ color: '#7B6898' }}>
-            For when bedtime is hard and everyone just needs a groan.
-          </p>
-        )}
-      </div>
-
-      <button onClick={nextJoke}
-        className="btn-shine mt-auto w-full py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
-        style={{ backgroundColor: '#FF6B9D', color: 'white' }}>
-        {joke ? 'Another One! 😂' : 'Hit Me With It 🎯'}
-      </button>
-    </div>
-  );
-}
-
-// ── Mood Filter ────────────────────────────────────────────────────────────
-const MOODS = [
-  { id: 'all',        label: 'All Books 📚', color: '#2D1B69' },
-  { id: 'silly',      label: 'Silly 😂',     color: '#FF6B9D' },
-  { id: 'feel-good',  label: 'Feel Good 💛', color: '#F4A839' },
-  { id: 'bedtime',    label: 'Bedtime 🌙',   color: '#4CC9C9' },
-  { id: 'read-aloud', label: 'Read Aloud 📢', color: '#66D9A0' },
-  { id: 'spooky',     label: 'Spooky 🎃',    color: '#9B6FD0' },
-];
-
-const MOOD_TAGLINES: Record<string, string> = {
-  all:          'From silly to sweet, brave to heartwarming — every book crafted to delight. Tap any cover to open it.',
-  silly:        'Warning: side effects include snorting, floor-rolling, and demanding to read it again immediately. 😂',
-  'feel-good':  'Books that give you the warm fuzzies. 💛 Great for when someone needs a hug but you only have 10 minutes.',
-  bedtime:      'For the exact moment when kids are almost asleep. Almost. 🌙 No guarantees.',
-  'read-aloud': 'Grab a snack. These ones are meant to be performed. 📢 Full voice acting strongly encouraged.',
-  spooky:       'Spooky enough to be fun. Not spooky enough to cause nightmares. 🎃 (Probably.)',
-};
-
-function MoodFilter({ active, onChange }: { active: string; onChange: (id: string) => void }) {
-  return (
-    <div className="flex flex-wrap gap-2.5 justify-center">
-      {MOODS.map(mood => (
-        <button
-          key={mood.id}
-          onClick={() => onChange(mood.id)}
-          className="px-4 py-2 rounded-full font-bold text-sm transition-all duration-200 select-none"
-          style={{
-            backgroundColor: active === mood.id ? mood.color : 'white',
-            color: active === mood.id ? 'white' : mood.color,
-            border: `2px solid ${mood.color}`,
-            transform: active === mood.id ? 'scale(1.08)' : 'scale(1)',
-            boxShadow: active === mood.id ? `0 4px 14px ${mood.color}66` : 'none',
-          }}
-        >
-          {mood.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-// ── Main Page ──────────────────────────────────────────────────────────────
-export default function HomePage() {
-  // Parallax on mouse move — books shift slightly relative to cursor
-  const [px, setPx] = useState(0);
-  const [py, setPy] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
-  const [moodFilter, setMoodFilter] = useState('all');
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-      setPx((e.clientX - cx) / cx * 12);
-      setPy((e.clientY - cy) / cy * 8);
-    };
-    window.addEventListener('mousemove', handler, { passive: true });
-    return () => window.removeEventListener('mousemove', handler);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+// ── Page ──────────────────────────────────────────────────────────────────
+export default function Home() {
+  const ff = "'Concert One', var(--font-concert-one), cursive";
 
   return (
     <>
       <SparkleTrail />
-      <RoamingCharacter />
-      <div style={{ overflowX: 'hidden' }}>
 
-        {/* ─── HERO ────────────────────────────────────────────────────── */}
-        <section className="relative" style={{
-          background: 'linear-gradient(160deg, #E8F8F5 0%, #9ADBD6 40%, #4ECDC4 100%)',
-          minHeight: '92vh', paddingBottom: '110px', position: 'relative', zIndex: 1,
-        }}>
-          {/* Stars with scroll parallax — wrapper for parallax, inner div for float animation */}
-          <div className="absolute top-8 left-8" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
-            <div className="float-slow"><StarSVG size={34} color="#F4A839" pulse /></div>
-          </div>
-          <div className="absolute top-16 right-20 opacity-70" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
-            <div className="float-mid"><MoonSVG size={56} /></div>
-          </div>
-          <div className="absolute top-1/3 left-4 opacity-55" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
-            <div className="float-fast"><Sparkle4 size={22} color="#9B8EC4" /></div>
-          </div>
-          <div className="absolute top-1/2 right-8 opacity-55" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
-            <div className="float-slow"><StarSVG size={24} color="#F4A839" /></div>
-          </div>
-          <div className="absolute top-3/4 left-24 opacity-45" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
-            <div className="float-mid"><Sparkle4 size={18} color="#4ECDC4" /></div>
-          </div>
-          <div className="absolute top-1/4 right-1/3 opacity-35" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
-            <div className="float-fast"><StarSVG size={20} color="#C4B5E8" /></div>
-          </div>
-          <div className="absolute top-6 left-1/3 opacity-12 pointer-events-none"><RainbowSVG /></div>
-          {/* Hidden easter egg: tiny star bottom-right. Tap it 3 times for a surprise hint */}
-          <HiddenStar />
+      {/* ── SECTION 1: HERO ─────────────────────────────────────────── */}
+      <section
+        id="hero"
+        style={{
+          background: '#daf8f2',
+          position: 'relative',
+          overflow: 'hidden',
+          minHeight: '92vh',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {/* Narwhal watermark — large decorative bg element, positioned left */}
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            left: '-6%',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: '52%',
+            maxWidth: '560px',
+            opacity: 0.12,
+            pointerEvents: 'none',
+            zIndex: 0,
+          }}
+        >
+          <Image
+            src="/images/originals/detail-logo-860.png"
+            alt=""
+            width={860}
+            height={860}
+            style={{ width: '100%', height: 'auto' }}
+            priority
+          />
+        </div>
 
-          {/* Hero layout */}
-          <div className="relative max-w-6xl mx-auto px-6 lg:px-8 pt-20 pb-8 flex flex-col lg:flex-row items-center gap-10 min-h-[80vh]">
-
-            {/* Text */}
-            <div className="flex-1 text-center lg:text-left z-10">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6"
-                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D1F5E' }}>
-                Welcome to the<br/>
-                <span style={{ color: '#4ECDC4' }}>Fables Forest</span>
-              </h1>
-              <p className="text-xl leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0 font-semibold" style={{ color: '#1C5A5E' }}>
-                Where every page makes them laugh, wonder, and beg for one more chapter.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link href="/books"
-                  className="btn-shine px-8 py-4 rounded-2xl font-bold text-lg shadow-xl transition-all hover:-translate-y-1"
-                  style={{ backgroundColor: '#4ECDC4', color: '#2D1F5E' }}>
-                  Explore Our Books
-                </Link>
-                <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
-                  className="px-8 py-4 rounded-2xl font-bold text-lg border-2 transition-all hover:-translate-y-1"
-                  style={{ borderColor: '#2D1F5E', color: '#2D1F5E', backgroundColor: 'rgba(255,255,255,0.45)' }}>
-                  Shop on Amazon →
-                </a>
-              </div>
-              <div className="mt-10 flex flex-wrap gap-5 justify-center lg:justify-start text-sm font-semibold"
-                style={{ color: '#1C5A5E' }}>
-                <span className="flex items-center gap-1.5"><StarSVG size={14} color="#1C5A5E"/>11 Books Published</span>
-                <span className="flex items-center gap-1.5"><Sparkle4 size={13} color="#1C5A5E"/>Ages 2–8</span>
-                <span className="flex items-center gap-1.5"><Sparkle4 size={13} color="#1C5A5E"/>Ships Worldwide</span>
-              </div>
-            </div>
-
-            {/* Narwhal — parallax outer, bob animation inner */}
-            <div className="flex-1 flex justify-center items-center relative z-10 pt-8 lg:pt-0">
-              <div style={{ transform: `translateY(${scrollY * 0.3}px)` }}>
-                <div className="narwhal-hero-bob">
-                  <Image
-                    src="/images/logo-teal.png"
-                    alt="Family Fables narwhal mascot"
-                    width={310} height={310}
-                    style={{
-                      maxWidth: '88vw',
-                      filter: 'drop-shadow(0 20px 60px rgba(78,205,196,0.45))',
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Clouds at bottom — scroll parallax, overlapping into books section */}
-          <div className="absolute bottom-20 left-1/4 pointer-events-none"
-            style={{ transform: `translateY(${scrollY * 0.4}px)` }}>
-            <div className="cloud-float"><CloudSVG /></div>
-          </div>
-          <div className="absolute bottom-10 right-1/5 pointer-events-none"
-            style={{ transform: `translateY(${scrollY * 0.4}px)` }}>
-            <div className="cloud-float-2"><CloudSVG /></div>
-          </div>
-
-          {/* Blob into lavender — graduated midpoint teal→lavender */}
-          <BlobDivider fill="#C4B5E8" fillDeep="#A89DD4"/>
-        </section>
-
-        {/* ─── BOOKS GRID (lavender) ── overlap pulls under hero blob ── */}
-        <section className="relative pb-20 px-4" style={{
-          background: 'linear-gradient(160deg, #C4B5E8 0%, #AFA0D8 50%, #9B8EC4 100%)', zIndex: 4, paddingTop: '168px', marginTop: '-148px',
-        }}>
-          <div className="absolute top-10 right-12 float-slow opacity-20"><RainbowSVG /></div>
-          <div className="absolute top-20 left-10 float-mid opacity-15"><StarSVG size={32} color="#7B3FBE"/></div>
-
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-10">
-              <h2 className="text-4xl sm:text-5xl font-bold mb-4"
-                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#3B1A8C' }}>
-                Books Kids Love
-              </h2>
-              <p className="text-base max-w-md mx-auto mb-8" style={{ color: '#5A3A8A' }}>
-                {MOOD_TAGLINES[moodFilter] || MOOD_TAGLINES.all}
-              </p>
-              <MoodFilter active={moodFilter} onChange={setMoodFilter} />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {(moodFilter === 'all'
-                ? books.filter(b => b.image).slice(0, 6)
-                : books.filter(b => b.image && b.moods?.includes(moodFilter))
-              ).map((book, i) => (
-                <div key={book.id} style={{ animation: `mood-book-appear 0.35s ease-out ${i * 0.07}s both` }}>
-                  <TouchBook
-                    title={book.title}
-                    cover={book.image}
-                    ageRange={book.ageRange}
-                    backContent={book.description}
-                    amazonUrl={AMAZON_STORE_URL}
-                    accentColor={book.accentColor}
-                    tag={book.tag}
-                  />
-                </div>
-              ))}
-            </div>
-            {moodFilter === 'all' ? (
-              <div className="text-center mt-12">
-                <Link href="/books"
-                  className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all hover:-translate-y-1"
-                  style={{ backgroundColor: '#5A1FA0', color: '#FFFFFF' }}>
-                  See All 11 Books
-                </Link>
-              </div>
-            ) : (
-              <div className="text-center mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button onClick={() => setMoodFilter('all')}
-                  className="px-6 py-3 rounded-xl font-bold text-sm transition-all hover:opacity-80"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.4)', color: '#2D1B69', border: '2px solid rgba(255,255,255,0.6)' }}>
-                  ← Show All Books
-                </button>
-                <Link href="/books"
-                  className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all hover:-translate-y-1"
-                  style={{ backgroundColor: '#5A1FA0', color: '#FFFFFF' }}>
-                  See All 11 Books
-                </Link>
-              </div>
-            )}
-          </div>
-          {/* Blob into medium purple — graduated midpoint lavender→purple */}
-          <BlobDivider fill="#8F7DB8" fillDeep="#7A6BA8"/>
-        </section>
-
-        {/* ─── PARENT QUOTES ─── */}
-        <ParentQuotes />
-
-        {/* ─── FREE FUN STUFF ─── */}
-        <section className="relative py-20 px-4" style={{
-          background: 'linear-gradient(160deg, #9B8EC4 0%, #8B7CB4 50%, #7B6BA4 100%)', zIndex: 4,
-          paddingTop: '168px', marginTop: '-148px',
-        }}>
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl sm:text-5xl font-bold mb-3"
-                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
-                Free Fun Stuff 🎨
-              </h2>
-              <p className="text-base" style={{ color: '#DDD0FF' }}>
-                Because fun shouldn&apos;t require a credit card. Printables, dad jokes, and chaos — on the house.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Card 1 — Dad Joke Generator */}
-              <DadJokeCard />
-              {/* Card 2 */}
-              <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: 'rgba(255,255,255,0.15)', border: '2px solid rgba(255,255,255,0.25)' }}>
-                <div className="text-4xl text-center">🦃</div>
-                <h3 className="text-lg font-bold text-center" style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
-                  Gilroy&apos;s Confidence Activity Sheet
-                </h3>
-                <p className="text-sm text-center" style={{ color: '#DDD0FF' }}>
-                  What&apos;s YOUR signature gobble? Fill in the blanks.
-                </p>
-                <button disabled
-                  className="mt-auto w-full py-3 rounded-xl font-bold text-sm cursor-not-allowed"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#C4B5E8', border: '2px dashed rgba(255,255,255,0.3)' }}>
-                  Coming Soon!
-                </button>
-              </div>
-              {/* Card 3 */}
-              <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: 'rgba(255,255,255,0.15)', border: '2px solid rgba(255,255,255,0.25)' }}>
-                <div className="text-4xl text-center">🌙</div>
-                <h3 className="text-lg font-bold text-center" style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
-                  Dream Ideas Wish List
-                </h3>
-                <p className="text-sm text-center" style={{ color: '#DDD0FF' }}>
-                  Write down your top 5 dream ideas. Bonus points for the weird ones.
-                </p>
-                <button disabled
-                  className="mt-auto w-full py-3 rounded-xl font-bold text-sm cursor-not-allowed"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#C4B5E8', border: '2px dashed rgba(255,255,255,0.3)' }}>
-                  Coming Soon!
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── NEWSLETTER ─── */}
-        <NewsletterSection />
-
-        {/* ─── NARWHAL (deep purple) ─── overlaps lavender/purple blob ──────── */}
-        <section className="relative pb-36 px-4" style={{
-          background: 'linear-gradient(160deg, #6B4F9E 0%, #5C3F8E 40%, #4A3580 75%, #3A2570 100%)',
-          paddingTop: '168px', marginTop: '-148px', zIndex: 3,
-        }}>
-          <InteractiveBubble left="7%"  top="20%" size={20} delay="slow"/>
-          <InteractiveBubble left="15%" top="63%" size={28} delay="mid"/>
-          <InteractiveBubble right="10%" top="27%" size={22} delay="fast"/>
-          <InteractiveBubble right="4%" top="70%" size={14} delay="slow"/>
-          <InteractiveBubble left="44%" top="13%" size={12} delay="mid"/>
-          <InteractiveBubble left="68%" top="73%" size={18} delay="fast"/>
-
-          <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-12 relative z-10">
-            <div className="flex-1 flex justify-center lg:justify-end">
-              <TiltNarwhal />
-            </div>
-            <div className="flex-1 text-center lg:text-left">
-              <div className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-5"
-                style={{ backgroundColor: '#F4A839', color: '#3B1280' }}>
-                Where Stories Come Alive
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-5"
-                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
-                Every book is a little<br/>
-                <span style={{ color: '#C8EDFF' }}>world to dive into</span>
-              </h2>
-              <p className="text-base leading-relaxed mb-8" style={{ color: '#DDD0FF' }}>
-                Funny, heartwarming, and full of the kind of magic that only happens
-                when you open a book together. Family Fables was built for those moments.
-              </p>
-              <Link href="/books"
-                className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-lg transition-all hover:-translate-y-1"
-                style={{ backgroundColor: '#F4A839', color: '#3B1280' }}>
-                Dive In
-              </Link>
-            </div>
-          </div>
-          {/* Blob into deeper purple for about section */}
-          <BlobDivider fill="#4A3580" fillDeep="#3B2870"/>
-        </section>
-
-        {/* ─── ABOUT (deep royal purple) ─── overlaps narwhal blob ── */}
-        <section className="relative pb-32 px-4 text-center" style={{
-          background: 'linear-gradient(160deg, #4A3580 0%, #3B2870 40%, #2D1F5E 70%, #1E1448 100%)',
-          paddingTop: '168px', marginTop: '-148px', zIndex: 2,
-        }}>
-          <div className="absolute top-20 left-14 float-slow opacity-30"><StarSVG size={36} color="#C084FC"/></div>
-          <div className="absolute top-28 right-16 float-mid opacity-22"><Sparkle4 size={26} color="#F4A839"/></div>
-          <div className="absolute bottom-32 left-20 float-fast opacity-18"><Sparkle4 size={18} color="#C084FC"/></div>
-          <div className="absolute top-1/2 left-6 opacity-8 pointer-events-none"><RainbowSVG/></div>
-
-          {/* NO floating Dream Ideas book here — removed */}
-
-          <div className="max-w-3xl mx-auto relative z-10">
-            <div className="flex justify-center mb-6">
-              <Image src="/images/logo-purple.png" alt="Family Fables"
-                width={90} height={90}
-                style={{ filter: 'drop-shadow(0 4px 16px rgba(45,13,107,0.3))' }}
-              />
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-5"
-              style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
-              Stories Built on a Family Legacy
-            </h2>
-            <p className="text-base leading-relaxed mb-8" style={{ color: '#C4B0EE' }}>
-              Family Fables was inspired by Z.P. Phillips' grandfather — a creative soul
-              who spent his life writing poems and stories that the world never got to read.
-              That legacy of imagination and love is woven into every book we publish.
+        {/* Hero content row */}
+        <div
+          style={{
+            flex: 1,
+            position: 'relative',
+            zIndex: 2,
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: 'clamp(60px, 10vw, 100px) 32px 60px',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '48px',
+            flexWrap: 'wrap',
+          }}
+        >
+          {/* Text side */}
+          <div style={{ flex: '1 1 300px', maxWidth: '580px' }}>
+            <h1
+              style={{
+                fontFamily: ff,
+                fontSize: 'clamp(2.2rem, 5.5vw, 4rem)',
+                lineHeight: 1.1,
+                color: '#007d68',
+                marginBottom: '24px',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              Stories That Make Kids Smile (and Parents Laugh)
+            </h1>
+            <p
+              style={{
+                fontSize: 'clamp(1rem, 2.2vw, 1.25rem)',
+                color: '#006e59',
+                marginBottom: '40px',
+                lineHeight: 1.65,
+                maxWidth: '460px',
+              }}
+            >
+              Award-winning children&apos;s books with heart, humor, and a little bit of weird.
             </p>
-            <Link href="/about"
-              className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-lg transition-all hover:opacity-90"
-              style={{ backgroundColor: '#F4A839', color: '#2D0D6B' }}>
-              Our Story →
-            </Link>
-          </div>
-          {/* Blob into darkest purple */}
-          <BlobDivider fill="#2D1F5E" fillDeep="#1E1448"/>
-        </section>
-
-        {/* ─── SHOP CTA (darkest purple, gold accents) ──────────────────────── */}
-        <section className="relative pb-24 px-4 text-center" style={{
-          background: 'linear-gradient(135deg, #2D1F5E 0%, #1E1448 60%, #140D38 100%)',
-          paddingTop: '168px', marginTop: '-148px', zIndex: 1,
-        }}>
-          <div className="absolute top-16 left-14 float-mid opacity-35"><Sparkle4 size={28} color="#C4B5E8"/></div>
-          <div className="absolute top-20 right-12 float-slow opacity-28"><StarSVG size={26} color="#F4A839"/></div>
-
-          <div className="max-w-2xl mx-auto relative z-10">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4"
-              style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#F4A839' }}>
-              Stop reading about books. Go read one.
-            </h2>
-            <p className="text-lg mb-8" style={{ color: '#C4B5E8' }}>
-              Warning: may cause uncontrollable giggles, requests for sequels, and children who suddenly love bedtime.
-            </p>
-            <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
-              className="btn-shine btn-scale-pulse inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl"
-              style={{ backgroundColor: '#F4A839', color: '#2D1F5E' }}>
-              Shop All Books on Amazon
+            <a
+              href="#books"
+              className="btn-scale-pulse btn-shine"
+              style={{
+                display: 'inline-block',
+                background: '#007d68',
+                color: '#ffffff',
+                padding: '16px 44px',
+                borderRadius: '50px',
+                fontFamily: ff,
+                fontSize: '1.2rem',
+                textDecoration: 'none',
+                letterSpacing: '0.03em',
+                boxShadow: '0 6px 24px rgba(0,125,104,0.35)',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+              }}
+            >
+              See the Books
             </a>
           </div>
-        </section>
 
-      </div>
+          {/* Interactive narwhal mascot */}
+          <div style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <TiltNarwhal />
+          </div>
+        </div>
+
+        {/* Dragon peeking up from bottom-right */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 78,
+            right: 0,
+            width: 'clamp(160px, 24vw, 360px)',
+            zIndex: 3,
+            pointerEvents: 'none',
+          }}
+        >
+          <Image
+            src="/images/originals/poo-poo-dragon-flipped.png"
+            alt="Family Fables dragon character peeking up"
+            width={980}
+            height={630}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        </div>
+
+        {/* Wave: mint → lavender (bleeds into books gradient top) */}
+        <div style={{ position: 'relative', zIndex: 4 }}>
+          <WaveDivider fromColor="#daf8f2" toColor="#d9b5e5" />
+        </div>
+      </section>
+
+      {/* ── SECTION 2: BOOKS GRID ───────────────────────────────────── */}
+      <section
+        id="books"
+        style={{
+          background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
+          marginTop: '-2px',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: '60px 32px 80px',
+          }}
+        >
+          <h2
+            style={{
+              fontFamily: ff,
+              fontSize: 'clamp(2rem, 4.5vw, 3.2rem)',
+              color: '#ffffff',
+              textAlign: 'center',
+              marginBottom: '56px',
+              textShadow: '0 2px 12px rgba(0,0,0,0.2)',
+            }}
+          >
+            The Books
+          </h2>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(225px, 1fr))',
+              gap: '28px',
+            }}
+          >
+            {books.map(book => (
+              <TouchBook
+                key={book.id}
+                title={book.title}
+                cover={book.image}
+                ageRange={book.ageRange}
+                backContent={book.hook}
+                amazonUrl={AMAZON_STORE_URL}
+                accentColor={book.accentColor}
+                tag={book.tag}
+              />
+            ))}
+          </div>
+        </div>
+        {/* Wave: deep purple → mint (bleeds back to mint sections) */}
+        <WaveDivider fromColor="#78087c" toColor="#daf8f2" />
+      </section>
+
+      {/* ── SECTION 3: CHARACTER / ABOUT ────────────────────────────── */}
+      <section
+        style={{
+          background: '#daf8f2',
+          marginTop: '-2px',
+          padding: 'clamp(48px, 8vw, 96px) 32px',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1100px',
+            margin: '0 auto',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '60px',
+            flexWrap: 'wrap',
+          }}
+        >
+          {/* Purple logo as brand visual */}
+          <div
+            style={{
+              flex: '0 0 auto',
+              width: 'clamp(180px, 28vw, 340px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Image
+              src="/images/originals/2020-all-purple-logo.png"
+              alt="Family Fables logo"
+              width={500}
+              height={500}
+              style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 8px 24px rgba(120,8,124,0.18))' }}
+            />
+          </div>
+
+          {/* About text */}
+          <div style={{ flex: '1 1 280px' }}>
+            <h2
+              style={{
+                fontFamily: ff,
+                fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+                color: '#007d68',
+                marginBottom: '20px',
+                lineHeight: 1.2,
+              }}
+            >
+              Made for Real Family Moments
+            </h2>
+            <p
+              style={{
+                fontSize: 'clamp(1rem, 1.8vw, 1.15rem)',
+                color: '#006e59',
+                lineHeight: 1.75,
+                marginBottom: '16px',
+              }}
+            >
+              Family Fables was born out of a simple idea: books should be as fun for the grown-up reading them as for the kid listening. We write stories that are weird, warm, and just a little bit silly — exactly the way bedtime should be.
+            </p>
+            <p
+              style={{
+                fontSize: 'clamp(0.95rem, 1.6vw, 1.1rem)',
+                color: '#007d68',
+                lineHeight: 1.75,
+              }}
+            >
+              Every book is written to be read out loud — with voices, sound effects, and at least one moment where you look up to see if they&apos;re laughing too. (They are.)
+            </p>
+            <a
+              href={AMAZON_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block',
+                marginTop: '28px',
+                background: '#78087c',
+                color: '#ffffff',
+                padding: '14px 36px',
+                borderRadius: '50px',
+                fontFamily: ff,
+                fontSize: '1.05rem',
+                textDecoration: 'none',
+                letterSpacing: '0.03em',
+                boxShadow: '0 4px 18px rgba(120,8,124,0.3)',
+              }}
+            >
+              Browse All Books
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION 4: NEWSLETTER ───────────────────────────────────── */}
+      <NewsletterSection />
+
       <BedtimeToggle />
     </>
   );
 }
-

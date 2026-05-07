@@ -12,7 +12,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <Image src="/images/logo-teal.png" alt="Family Fables" width={36} height={36} />
-              <span className="text-xl" style={{ fontFamily: "var(--font-fredoka), cursive", color: "#F4A839" }}>
+              <span className="text-xl" style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", color: "#daf8f2" }}>
                 Family Fables
               </span>
             </div>

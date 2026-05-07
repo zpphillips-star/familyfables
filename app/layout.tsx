@@ -1,28 +1,14 @@
 import type { Metadata } from "next";
-import { Nunito, Fredoka, Caveat } from "next/font/google";
+import { Concert_One } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 
-const nunito = Nunito({
+const concertOne = Concert_One({
   subsets: ["latin"],
-  variable: "--font-nunito",
-  weight: ["400", "500", "600", "700", "800", "900"],
-  display: "swap",
-});
-
-const fredoka = Fredoka({
-  subsets: ["latin"],
-  variable: "--font-fredoka",
-  weight: ["400", "600"],
-  display: "swap",
-});
-
-const caveat = Caveat({
-  subsets: ["latin"],
-  variable: "--font-caveat",
-  weight: ["400", "600", "700"],
+  weight: "400",
+  variable: "--font-concert-one",
   display: "swap",
 });
 
@@ -67,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${nunito.variable} ${fredoka.variable} ${caveat.variable}`}>
+    <html lang="en" className={concertOne.variable}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bedtimeInitScript }} />
       </head>

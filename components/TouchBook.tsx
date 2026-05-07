@@ -140,7 +140,7 @@ export default function TouchBook({
             <div>
               <h3
                 className="font-bold text-xl text-white mb-3"
-                style={{ fontFamily: 'var(--font-fredoka), cursive' }}
+                style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
               >
                 {title}
               </h3>
