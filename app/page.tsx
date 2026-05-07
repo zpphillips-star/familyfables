@@ -7,41 +7,41 @@ import TouchBook from '@/components/TouchBook';
 import TiltNarwhal from '@/components/TiltNarwhal';
 import NewsletterSection from '@/components/NewsletterSection';
 
-// ── Cloud Divider ──────────────────────────────────────────────────────────
-// Uses the REAL cloud path from familyfables.org's Divi CSS (decoded from base64).
-// fromColor = section above; toColor = section below.
-// Single solid shape — no opacity bands, no visible stripes.
-function CloudDivider({ fromColor, toColor, flip = false }: {
+// ── Multi-Tonal Wave Divider ───────────────────────────────────────────────
+// fromColor on top, toColor rises from bottom in 3 tonal layers.
+// Height matches original Divi site's 30vw — spread out so layers blend, not stripe.
+function MultiTonalDivider({ fromColor, toColor }: {
   fromColor: string;
   toColor: string;
-  flip?: boolean;
 }) {
-  // Cloud path: the bumpy cloud silhouette from the original Divi site
-  const cloudPath = "M1280 66.1c-3.8 0-7.6.3-11.4.8-18.3-32.6-59.6-44.2-92.2-25.9-3.5 2-6.9 4.3-10 6.9-22.7-41.7-74.9-57.2-116.6-34.5-14.2 7.7-25.9 19.3-33.8 33.3-.2.3-.3.6-.5.8-12.2-1.4-23.7 5.9-27.7 17.5-11.9-6.1-25.9-6.3-37.9-.6-21.7-30.4-64-37.5-94.4-15.7-12.1 8.6-21 21-25.4 35.2-10.8-9.3-24.3-15-38.5-16.2-8.1-24.6-34.6-38-59.2-29.9-14.3 4.7-25.5 16-30 30.3-4.3-1.9-8.9-3.2-13.6-3.8-13.6-45.5-61.5-71.4-107-57.8a86.38 86.38 0 0 0-43.2 29.4c-8.7-3.6-18.7-1.8-25.4 4.8-23.1-24.8-61.9-26.2-86.7-3.1-7.1 6.6-12.5 14.8-15.9 24-26.7-10.1-56.9-.4-72.8 23.3-2.6-2.7-5.6-5.1-8.9-6.9-.4-.2-.8-.4-1.2-.7-.6-25.9-22-46.4-47.9-45.8-11.5.3-22.5 4.7-30.9 12.5-16.5-33.5-57.1-47.3-90.6-30.8-21.9 11-36.3 32.7-37.6 57.1-7-2.3-14.5-2.8-21.8-1.6C84.8 47 55.7 40.7 34 54.8c-5.6 3.6-10.3 8.4-13.9 14-6.6-1.7-13.3-2.6-20.1-2.6-.1 0 0 19.8 0 19.8h1280V66.1z";
-
   return (
     <div style={{
       position: 'relative',
-      height: '100px',
+      height: 'clamp(180px, 30vw, 380px)',
       background: fromColor,
-      marginBottom: '-2px',
       flexShrink: 0,
+      overflow: 'hidden',
+      marginBottom: '-2px',
     }}>
       <svg
-        viewBox="0 0 1280 86"
-        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 1280 140"
+        preserveAspectRatio="none"
         xmlns="http://www.w3.org/2000/svg"
-        style={{
-          position: 'absolute',
-          bottom: flip ? 'auto' : 0,
-          top: flip ? 0 : 'auto',
-          left: 0,
-          width: '100%',
-          height: '100%',
-          transform: flip ? 'scaleY(-1)' : 'none',
-        }}
+        style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%' }}
       >
-        <path d={cloudPath} fill={toColor} />
+        {/* 3 gentle hill-curves rising from bottom — widest/faintest first */}
+        <path
+          d="M0,140 L0,90 C200,30 480,20 640,35 C800,50 1080,25 1280,80 L1280,140 Z"
+          fill={toColor} fillOpacity="0.3"
+        />
+        <path
+          d="M0,140 L0,108 C200,55 480,42 640,58 C800,74 1080,48 1280,100 L1280,140 Z"
+          fill={toColor} fillOpacity="0.5"
+        />
+        <path
+          d="M0,140 L0,122 C200,78 480,64 640,78 C800,92 1080,68 1280,116 L1280,140 Z"
+          fill={toColor}
+        />
       </svg>
     </div>
   );
@@ -103,7 +103,7 @@ export default function Home() {
   const ff = "'Concert One', var(--font-concert-one), cursive";
 
   return (
-    <>
+    <div style={{ overflowX: 'hidden' }}>
       <SparkleTrail />
 
       {/* ── SECTION 1: HERO ─────────────────────────────────────────── */}
@@ -112,7 +112,7 @@ export default function Home() {
         style={{
           background: '#daf8f2',
           position: 'relative',
-          overflow: 'hidden',
+          overflow: 'visible',
           minHeight: '92vh',
           display: 'flex',
           flexDirection: 'column',
@@ -231,9 +231,9 @@ export default function Home() {
           />
         </div>
 
-        {/* Cloud: mint → lavender (bleeds into books gradient top) */}
+        {/* Multi-tonal wave: mint → lavender, rises from bottom */}
         <div style={{ position: 'relative', zIndex: 4 }}>
-          <CloudDivider fromColor="#daf8f2" toColor="#d9b5e5" />
+          <MultiTonalDivider fromColor="#daf8f2" toColor="#d9b5e5" />
         </div>
       </section>
 
@@ -285,8 +285,8 @@ export default function Home() {
             ))}
           </div>
         </div>
-        {/* Cloud: deep purple → mint (bleeds back to mint sections) */}
-        <CloudDivider fromColor="#78087c" toColor="#daf8f2" />
+        {/* Multi-tonal wave: deep purple → mint, rises from bottom */}
+        <MultiTonalDivider fromColor="#78087c" toColor="#daf8f2" />
       </section>
 
       {/* ── SECTION 3: CHARACTER / ABOUT ────────────────────────────── */}
@@ -386,6 +386,6 @@ export default function Home() {
       <NewsletterSection />
 
       <BedtimeToggle />
-    </>
+    </div>
   );
 }
