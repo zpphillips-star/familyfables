@@ -121,30 +121,25 @@ function SparkleTrail() {
   );
 }
 
-// ── Interactive Narwhal ────────────────────────────────────────────────────
+// ── Interactive Narwhal (uses the REAL logo) ──────────────────────────────
 type Bubble = { id: number; x: number; size: number };
 
 function InteractiveNarwhal() {
-  const [mood, setMood] = useState<'idle' | 'happy' | 'dive'>('idle');
+  const [jumping, setJumping] = useState(false);
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
 
   const interact = () => {
-    if (mood !== 'idle') return;
-    const next = Math.random() > 0.45 ? 'happy' : 'dive';
-    setMood(next);
-    const newBubs: Bubble[] = Array.from({ length: 3 + Math.floor(Math.random() * 3) }, (_, i) => ({
+    if (jumping) return;
+    setJumping(true);
+    const newBubs: Bubble[] = Array.from({ length: 4 + Math.floor(Math.random() * 3) }, (_, i) => ({
       id: Date.now() + i,
-      x: 40 + Math.random() * 28,
-      size: 8 + Math.random() * 14,
+      x: 35 + Math.random() * 32,
+      size: 10 + Math.random() * 16,
     }));
     setBubbles(prev => [...prev, ...newBubs]);
-    setTimeout(() => setMood('idle'), 900);
-    setTimeout(() => setBubbles(prev => prev.filter(b => !newBubs.find(n => n.id === b.id))), 1500);
+    setTimeout(() => setJumping(false), 900);
+    setTimeout(() => setBubbles(prev => prev.filter(b => !newBubs.find(n => n.id === b.id))), 1600);
   };
-
-  const narwhalTransform =
-    mood === 'happy' ? 'translateY(-30px) rotate(-9deg)' :
-    mood === 'dive'  ? 'translateY(20px)  rotate(13deg)' : 'none';
 
   return (
     <div className="relative inline-block select-none" style={{ cursor: 'pointer' }}
@@ -155,54 +150,23 @@ function InteractiveNarwhal() {
         tap me!
       </div>
 
-      <svg viewBox="0 0 260 160"
-        style={{ width: 340, maxWidth: '88vw',
-          filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.4))',
+      <Image
+        src="/images/logo-teal.png"
+        alt="Family Fables narwhal mascot"
+        width={340}
+        height={340}
+        style={{
+          maxWidth: '88vw',
+          filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.35))',
           transition: 'transform 0.18s cubic-bezier(.36,.07,.19,.97)',
-          transform: narwhalTransform,
+          transform: jumping ? 'translateY(-34px) rotate(-8deg) scale(1.06)' : 'none',
         }}
-        aria-label="Friendly narwhal mascot — tap to say hi!">
-        {/* Horn */}
-        <line x1="60" y1="62" x2="8" y2="14"  stroke="#F4A839" strokeWidth="5.5" strokeLinecap="round"/>
-        <line x1="61" y1="60" x2="12" y2="17" stroke="#E8C060" strokeWidth="2"   strokeLinecap="round"/>
-        <line x1="59" y1="63" x2="11" y2="19" stroke="#FFF0AA" strokeWidth="1"   strokeLinecap="round" opacity="0.5"/>
-        {/* Head */}
-        <ellipse cx="60" cy="76" rx="37" ry="34" fill="#3DBFBF"/>
-        {/* Body */}
-        <ellipse cx="145" cy="90" rx="100" ry="44" fill="#3DBFBF"/>
-        {/* Belly */}
-        <ellipse cx="148" cy="104" rx="74" ry="24" fill="#A8ECEC" opacity="0.65"/>
-        {/* Eye whites */}
-        <circle cx="51" cy="67" r="9" fill="white"/>
-        {/* Pupil — looks happy when in happy mode */}
-        <circle cx="53" cy={mood === 'happy' ? '68' : '67'} r="5.5" fill="#2D1B69"/>
-        <circle cx="55" cy="65" r="1.8" fill="white"/>
-        {/* Happy expression: curved eye + big smile */}
-        {mood === 'happy' && (
-          <path d="M44,67 Q51,59 58,67" stroke="#2D1B69" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-        )}
-        <path d={mood === 'happy' ? 'M42,83 Q53,95 65,83' : 'M44,83 Q52,90 63,83'}
-          stroke="#2D1B69" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-        {/* Blush */}
-        <ellipse cx="45" cy="79" rx="7" ry="4" fill="#F9A8D4" opacity={mood === 'happy' ? 0.7 : 0.35}/>
-        {/* Dorsal fin */}
-        <path d="M155,48 Q165,26 183,45 L155,52 Z" fill="#2AABAB"/>
-        {/* Tail */}
-        <path d="M240,75 Q264,50 268,90 Q264,128 240,105 Z" fill="#2AABAB"/>
-        <path d="M240,75 Q252,90 240,105" stroke="#1A9090" strokeWidth="2" fill="none"/>
-        {/* Flippers */}
-        <path d="M96,118 Q86,142 112,137 Q105,124 96,118 Z"   fill="#2AABAB"/>
-        <path d="M158,120 Q153,143 177,136 Q167,122 158,120 Z" fill="#2AABAB"/>
-        {/* Spots */}
-        <circle cx="118" cy="74" r="4.5" fill="#2AABAB" opacity="0.38"/>
-        <circle cx="148" cy="65" r="3.5" fill="#2AABAB" opacity="0.28"/>
-        <circle cx="174" cy="77" r="5"   fill="#2AABAB" opacity="0.28"/>
-      </svg>
+      />
 
-      {/* Rising bubbles on interact */}
+      {/* Rising bubbles */}
       {bubbles.map(b => (
         <div key={b.id} className="absolute pointer-events-none bubble-rise"
-          style={{ left: `${b.x}%`, bottom: '58%', width: b.size, height: b.size }}>
+          style={{ left: `${b.x}%`, bottom: '60%', width: b.size, height: b.size }}>
           <svg viewBox="0 0 20 20" width={b.size} height={b.size} aria-hidden>
             <circle cx="10" cy="10" r="8" fill="none" stroke="#A8ECEC" strokeWidth="2" opacity="0.8"/>
             <circle cx="7"  cy="7"  r="2" fill="white" opacity="0.5"/>
@@ -365,9 +329,16 @@ export default function HomePage() {
 
             {/* Text */}
             <div className="flex-1 text-center lg:text-left z-10">
-              <div className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-6"
-                style={{ backgroundColor: '#F4A839', color: '#2D1B69' }}>
-                Children's Books for Every Family
+              {/* Real logo in hero */}
+              <div className="flex justify-center lg:justify-start mb-6">
+                <Image
+                  src="/images/logo-teal.png"
+                  alt="Family Fables"
+                  width={100}
+                  height={100}
+                  className="float-slow"
+                  style={{ filter: 'drop-shadow(0 4px 16px rgba(76,201,201,0.5))' }}
+                />
               </div>
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6"
                 style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
@@ -515,9 +486,15 @@ export default function HomePage() {
           </div>
 
           <div className="max-w-3xl mx-auto relative z-10 pt-10">
-            <div className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-5"
-              style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#2D0D6B', border: '1.5px solid rgba(255,255,255,0.35)' }}>
-              About Family Fables
+            {/* Purple logo */}
+            <div className="flex justify-center mb-6">
+              <Image
+                src="/images/logo-purple.png"
+                alt="Family Fables"
+                width={90}
+                height={90}
+                style={{ filter: 'drop-shadow(0 4px 16px rgba(45,13,107,0.3))' }}
+              />
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold mb-5"
               style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D0D6B' }}>
