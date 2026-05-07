@@ -16,7 +16,7 @@ function SectionClouds({ fill }: { fill: string }) {
   return (
     <svg
       viewBox="0 0 1280 86"
-      preserveAspectRatio="xMidYMid slice"
+      preserveAspectRatio="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
         position: 'absolute',
@@ -107,6 +107,7 @@ export default function Home() {
           paddingBottom: '110px',
           display: 'flex',
           flexDirection: 'column',
+          zIndex: 2,
         }}
       >
         {/* Narwhal watermark — large decorative bg element, positioned left */}
@@ -212,8 +213,10 @@ export default function Home() {
         style={{
           background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
           position: 'relative',
-          marginTop: '-2px',
+          marginTop: '-110px',
+          paddingTop: '110px',
           paddingBottom: '110px',
+          zIndex: 1,
         }}
       >
         <div
@@ -264,10 +267,10 @@ export default function Home() {
       <section
         style={{
           background: '#daf8f2',
-          marginTop: '-2px',
-          padding: 'clamp(48px, 8vw, 96px) 32px',
+          marginTop: '-110px',
+          paddingTop: '110px',
           position: 'relative',
-          zIndex: 1,
+          zIndex: 0,
         }}
       >
         <div
