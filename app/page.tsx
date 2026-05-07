@@ -7,45 +7,43 @@ import TouchBook from '@/components/TouchBook';
 import TiltNarwhal from '@/components/TiltNarwhal';
 import NewsletterSection from '@/components/NewsletterSection';
 
-// ── Multi-Tonal Wave Divider ───────────────────────────────────────────────
-// fromColor on top, toColor rises from bottom in 3 tonal layers.
-// Height matches original Divi site's 30vw — spread out so layers blend, not stripe.
-function MultiTonalDivider({ fromColor, toColor }: {
-  fromColor: string;
-  toColor: string;
-}) {
+// ── Section Clouds ─────────────────────────────────────────────────────────
+// Absolutely-positioned inside each section at bottom: 0.
+// NO container = NO straight lines. The section's own bg is what shows above.
+// 3 cloud layers with translateY offsets for multi-tonal depth.
+// fill = the color of the NEXT section (clouds bleed INTO it).
+function SectionClouds({ fill }: { fill: string }) {
+  // Real Divi cloud silhouette path (decoded from familyfables.org CSS)
+  const cloud = "M1280 66.1c-3.8 0-7.6.3-11.4.8-18.3-32.6-59.6-44.2-92.2-25.9-3.5 2-6.9 4.3-10 6.9-22.7-41.7-74.9-57.2-116.6-34.5-14.2 7.7-25.9 19.3-33.8 33.3-.2.3-.3.6-.5.8-12.2-1.4-23.7 5.9-27.7 17.5-11.9-6.1-25.9-6.3-37.9-.6-21.7-30.4-64-37.5-94.4-15.7-12.1 8.6-21 21-25.4 35.2-10.8-9.3-24.3-15-38.5-16.2-8.1-24.6-34.6-38-59.2-29.9-14.3 4.7-25.5 16-30 30.3-4.3-1.9-8.9-3.2-13.6-3.8-13.6-45.5-61.5-71.4-107-57.8a86.38 86.38 0 0 0-43.2 29.4c-8.7-3.6-18.7-1.8-25.4 4.8-23.1-24.8-61.9-26.2-86.7-3.1-7.1 6.6-12.5 14.8-15.9 24-26.7-10.1-56.9-.4-72.8 23.3-2.6-2.7-5.6-5.1-8.9-6.9-.4-.2-.8-.4-1.2-.7-.6-25.9-22-46.4-47.9-45.8-11.5.3-22.5 4.7-30.9 12.5-16.5-33.5-57.1-47.3-90.6-30.8-21.9 11-36.3 32.7-37.6 57.1-7-2.3-14.5-2.8-21.8-1.6C84.8 47 55.7 40.7 34 54.8c-5.6 3.6-10.3 8.4-13.9 14-6.6-1.7-13.3-2.6-20.1-2.6-.1 0 0 19.8 0 19.8h1280V66.1z";
   return (
-    <div style={{
-      position: 'relative',
-      height: 'clamp(180px, 30vw, 380px)',
-      background: fromColor,
-      flexShrink: 0,
-      overflow: 'hidden',
-      marginBottom: '-2px',
-    }}>
-      <svg
-        viewBox="0 0 1280 140"
-        preserveAspectRatio="none"
-        xmlns="http://www.w3.org/2000/svg"
-        style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%' }}
-      >
-        {/* 3 gentle hill-curves rising from bottom — widest/faintest first */}
-        <path
-          d="M0,140 L0,90 C200,30 480,20 640,35 C800,50 1080,25 1280,80 L1280,140 Z"
-          fill={toColor} fillOpacity="0.3"
-        />
-        <path
-          d="M0,140 L0,108 C200,55 480,42 640,58 C800,74 1080,48 1280,100 L1280,140 Z"
-          fill={toColor} fillOpacity="0.5"
-        />
-        <path
-          d="M0,140 L0,122 C200,78 480,64 640,78 C800,92 1080,68 1280,116 L1280,140 Z"
-          fill={toColor}
-        />
-      </svg>
-    </div>
+    <svg
+      viewBox="0 0 1280 106"
+      preserveAspectRatio="xMidYMid slice"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        height: '130px',
+        display: 'block',
+        pointerEvents: 'none',
+      }}
+    >
+      {/* Layer 1: shifted down 20px — lowest, faintest */}
+      <g transform="translate(0,20)">
+        <path d={cloud} fill={fill} fillOpacity="0.35" />
+      </g>
+      {/* Layer 2: shifted down 10px — middle depth */}
+      <g transform="translate(0,10)">
+        <path d={cloud} fill={fill} fillOpacity="0.6" />
+      </g>
+      {/* Layer 3: at natural position — solid, highest */}
+      <path d={cloud} fill={fill} />
+    </svg>
   );
 }
+
 
 // ── Sparkle Trail ──────────────────────────────────────────────────────────
 import { useState, useEffect } from 'react';
@@ -114,6 +112,7 @@ export default function Home() {
           position: 'relative',
           overflow: 'visible',
           minHeight: '92vh',
+          paddingBottom: '140px',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -211,14 +210,14 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Dragon peeking up from bottom-right */}
+        {/* Dragon sits above the clouds — zIndex 4 so it is in front */}
         <div
           style={{
             position: 'absolute',
-            bottom: 78,
+            bottom: 110,
             right: 0,
             width: 'clamp(160px, 24vw, 360px)',
-            zIndex: 3,
+            zIndex: 4,
             pointerEvents: 'none',
           }}
         >
@@ -231,10 +230,8 @@ export default function Home() {
           />
         </div>
 
-        {/* Multi-tonal wave: mint → lavender, rises from bottom */}
-        <div style={{ position: 'relative', zIndex: 4 }}>
-          <MultiTonalDivider fromColor="#daf8f2" toColor="#d9b5e5" />
-        </div>
+        {/* Clouds at bottom of hero — no wrapper div, section bg shows above */}
+        <SectionClouds fill="#d9b5e5" />
       </section>
 
       {/* ── SECTION 2: BOOKS GRID ───────────────────────────────────── */}
@@ -242,14 +239,16 @@ export default function Home() {
         id="books"
         style={{
           background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
+          position: 'relative',
           marginTop: '-2px',
+          paddingBottom: '140px',
         }}
       >
         <div
           style={{
             maxWidth: '1200px',
             margin: '0 auto',
-            padding: '60px 32px 80px',
+            padding: '60px 32px 40px',
           }}
         >
           <h2
@@ -285,8 +284,8 @@ export default function Home() {
             ))}
           </div>
         </div>
-        {/* Multi-tonal wave: deep purple → mint, rises from bottom */}
-        <MultiTonalDivider fromColor="#78087c" toColor="#daf8f2" />
+        {/* Clouds at bottom of books — mint clouds over the purple gradient */}
+        <SectionClouds fill="#daf8f2" />
       </section>
 
       {/* ── SECTION 3: CHARACTER / ABOUT ────────────────────────────── */}
