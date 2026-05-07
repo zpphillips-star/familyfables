@@ -553,7 +553,7 @@ export default function HomePage() {
         </section>
 
         {/* ─── NARWHAL (medium purple) ─── overlaps lavender blob ─────────── */}
-        <section className="relative pb-36 px-4 overflow-hidden" style={{
+        <section className="relative pb-36 px-4" style={{
           background: 'linear-gradient(160deg, #9B6CD4 0%, #7B3FBE 40%, #5A1FA0 75%, #3B1280 100%)',
           paddingTop: '168px', marginTop: '-148px', zIndex: 3,
         }}>
