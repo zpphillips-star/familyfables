@@ -330,6 +330,31 @@ export default function Home() {
                 Loved by thousands of families
               </span>
             </div>
+
+            {/* Value-prop chips */}
+            <div style={{ marginTop: '24px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              {[
+                { icon: '🎨', label: 'Free Kids Activities' },
+                { icon: '📖', label: 'Read-Aloud Friendly' },
+                { icon: '😂', label: 'Parents Love Them Too' },
+              ].map(({ icon, label }) => (
+                <div key={label} style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: 'rgba(0,125,104,0.1)',
+                  border: '1.5px solid rgba(0,125,104,0.25)',
+                  color: '#006e59',
+                  padding: '6px 14px',
+                  borderRadius: '50px',
+                  fontFamily: ff,
+                  fontSize: '0.82rem',
+                  letterSpacing: '0.02em',
+                }}>
+                  <span>{icon}</span> {label}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -395,6 +420,7 @@ export default function Home() {
 
       {/* ── SECTION 3: CHARACTER / ABOUT ────────────────────────────── */}
       <section
+        id="about"
         style={{
           background: '#daf8f2',
           marginTop: '-384px',
