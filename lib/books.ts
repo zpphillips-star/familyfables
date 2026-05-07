@@ -15,7 +15,7 @@ export const books: Book[] = [
     id: "poo-poo-face",
     title: "What's Your Poo Poo Face",
     description:
-      "Going number two on the potty isn't always easy! A little boy and his dad scour the earth to uncover a remedy to poo poo problems, discovering that even teachers, firefighters, unicorns, and dragons make a PooPoo face when it's time to go.",
+      "Spoiler: EVERYONE makes the face. Even unicorns. Even dragons. Even your teacher (especially your teacher). A little boy and his dad go on a heroic quest to uncover the one expression that unites all living things — and yes, it's exactly what you think. Perfect for: fans of Dragons Love Tacos, We Don't Eat Our Classmates.",
     image: "/images/books/poo-poo-face.png",
     tag: "Fan Favorite",
     featured: true,
@@ -25,7 +25,7 @@ export const books: Book[] = [
     id: "dream-ideas",
     title: "Dream Ideas",
     description:
-      "There are so many things out there to dream about when you fall asleep each night. Here are some of our favorites, and in song form!",
+      "Warning: may cause extremely vivid dreams about ice cream, rocket ships, and talking animals. This bedtime singalong is the sneakiest way to get kids excited about sleep — set to a tune so catchy it'll be stuck in your head until Thursday. Perfect for: fans of Llama Llama Red Pajama, Goodnight Moon.",
     image: "/images/books/dream-ideas.png",
     tag: "Bedtime Read",
     accentColor: "#5B9BD5",
@@ -34,7 +34,7 @@ export const books: Book[] = [
     id: "amber-dragon-keeper",
     title: "Amber The Dragon Keeper",
     description:
-      "Amber is a little girl who lives the same life as every other child her age, but when she enters a magical and mystical land she becomes someone far more.",
+      "She thought she was just a regular kid. The dragons had other plans. When Amber stumbles into a magical land, she discovers a destiny that's way cooler than anything on her schedule — and way more responsibility than she signed up for. Perfect for: fans of Where the Wild Things Are, The Bad Guys.",
     image: "/images/books/amber-dragon-keeper.jpg",
     tag: "Adventure",
     accentColor: "#E86BB5",
@@ -43,7 +43,7 @@ export const books: Book[] = [
     id: "gilroys-gobble",
     title: "Gilroy's Gobble",
     description:
-      "Gilroy the turkey works with his barnyard pals to try and figure out what his turkey call should sound like, in this tale about building confidence and self-esteem.",
+      "Everyone said 'gobble.' Gilroy had... different ideas. This sweet turkey and his barnyard crew are on a mission to find Gilroy's signature sound — and what they discover is that the best voice is the one that's truly yours. Perfect for: fans of Pete the Cat, Elephant & Piggie.",
     image: "/images/books/gilroys-gobble.png",
     tag: "Feel-Good",
     accentColor: "#F4A839",
@@ -52,7 +52,7 @@ export const books: Book[] = [
     id: "finding-hampton",
     title: "Finding Hampton",
     description:
-      "What on EARTH could a rhino want for her birthday!!! Follow Hampton on his quest to find the most perfect birthday gift for his best rhino friend!",
+      "What do you get a rhino who has everything? One very stressed hippo friend, that's what. Hampton is on a mission to find the most perfect birthday gift ever — which turns out to be a whole lot harder (and funnier) than it sounds. Perfect for: fans of Dragons Love Tacos, Elephant & Piggie.",
     image: "/images/books/finding-hampton.jpg",
     tag: "Heartwarming",
     accentColor: "#5CB85C",
@@ -61,7 +61,7 @@ export const books: Book[] = [
     id: "lumpiest-pumpkin",
     title: "The Lumpiest Pumpkin",
     description:
-      "In this tale about a girl on her quest to win a carving contest, she stumbles upon an unsuspecting pumpkin and learns an important lesson about inner beauty.",
+      "The other pumpkins were round, smooth, and competition-ready. This one was... personality-forward. When a girl picks the lumpiest pumpkin in the patch for a carving contest, she learns that the most beautiful things are the ones nobody else wanted. Perfect for: fans of The Day the Crayons Quit, Pete the Cat.",
     image: "/images/books/lumpiest-pumpkin.png",
     tag: "Seasonal",
     accentColor: "#E07B39",
@@ -70,7 +70,7 @@ export const books: Book[] = [
     id: "one-tom-turkey",
     title: "One Tom Turkey",
     description:
-      'An instant Thanksgiving classic! One Tom Turkey follows the tune of "Wheels on the Bus" as it sings you through some of the best Thanksgiving traditions.',
+      "Sung to the tune of 'Wheels on the Bus' — except now Thanksgiving is permanently stuck in your head. You're welcome. One Tom Turkey takes the whole family through the greatest holiday traditions in a singalong kids will demand every single November. Perfect for: fans of We Don't Eat Our Classmates, Llama Llama Red Pajama.",
     image: "/images/books/one-tom-turkey.png",
     tag: "Holiday",
     accentColor: "#C06B39",
@@ -79,7 +79,7 @@ export const books: Book[] = [
     id: "ollie-come-home",
     title: "Ollie Come Home",
     description:
-      "Ollie is an indoor cat with a loving family and an adventurous spirit. Join him as he discovers his favorite place of all when he experiences the outdoors for the first time.",
+      "Ollie had a warm bed, a loving family, and absolutely zero business going outside. He went outside anyway. This indoor cat's very first adventure is full of wonder, a little fear, and the kind of homecoming that reminds you exactly where you belong. Perfect for: fans of Where the Wild Things Are, Pete the Cat.",
     image: "/images/books/ollie-come-home.png",
     tag: "Adventure",
     accentColor: "#5CB85C",
@@ -88,7 +88,7 @@ export const books: Book[] = [
     id: "what-a-doodle-do",
     title: "What-a-Doodle-Do",
     description:
-      "Doodle-Do is a very busy rooster. Let him guide you and your family through the hustle and bustle of his daily life! Perfect for sharing out loud with your little ones.",
+      "One very loud rooster. One very packed day. Zero chill. Doodle-Do is here to walk your family through the glorious chaos of daily life in a read-aloud so fun you'll have to do all the voices. Yes, all of them. Don't fight it. Perfect for: fans of Dragons Love Tacos, Dog Man.",
     image: "/images/books/what-a-doodle-do.jpg",
     tag: "Read Aloud",
     accentColor: "#E86BB5",
@@ -97,7 +97,7 @@ export const books: Book[] = [
     id: "shut-in-button",
     title: "The Shut-In Button",
     description:
-      "Buttons fall off jackets all the time, but how often do they pop off on purpose? Follow a baby button who avoids adventure to stay as pristine and new as the day he was born.",
+      "This button had ONE job and absolutely refused to do it. Most buttons pop off by accident. This one popped off on purpose — because adventure is overrated and staying pristine is a lifestyle. Honestly? Kind of inspiring. A story about comfort zones, tiny acts of bravery, and buttons. Perfect for: fans of The Day the Crayons Quit, Elephant & Piggie.",
     image: "/images/books/shut-in-button.png",
     tag: "Life Lessons",
     accentColor: "#5B9BD5",
@@ -106,10 +106,9 @@ export const books: Book[] = [
     id: "frog-a-dog",
     title: "Frog a Dog",
     description:
-      "Despite her canine upbringing, Bailey has always longed to live the frog life. Read along as we unveil how Halloween brings her closer to her dream.",
+      "Bailey was a dog. Inside, she was definitely a frog. Her family considered this a phase. Halloween was about to prove everyone wrong in spectacular fashion. A joyful story about being exactly who you are — green, leapy tendencies and all. Perfect for: fans of We Don't Eat Our Classmates, Pete the Cat.",
     image: "/images/books/frog-a-dog.png",
     tag: "Halloween",
     accentColor: "#9B6FD0",
   },
 ];
-
