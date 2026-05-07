@@ -48,6 +48,9 @@ export default function BedtimeToggle() {
 
   useEffect(() => {
     const isDark = document.documentElement.getAttribute('data-mode') === 'bedtime';
+    if (isDark) {
+      document.documentElement.setAttribute('data-bedtime', 'true');
+    }
     setBedtime(isDark);
   }, []);
 
@@ -93,7 +96,17 @@ export default function BedtimeToggle() {
         aria-label={bedtime ? 'Switch to day mode' : 'Switch to bedtime mode'}
         title={bedtime ? 'Rise and shine!' : 'Bedtime mode'}
       >
-        {bedtime ? <SunIcon /> : <MoonIcon />}
+        <span
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'transform 0.4s ease',
+            transform: bedtime ? 'rotate(180deg)' : 'rotate(0deg)',
+          }}
+        >
+          {bedtime ? <SunIcon /> : <MoonIcon />}
+        </span>
       </button>
     </>
   );

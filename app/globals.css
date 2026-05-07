@@ -35,11 +35,11 @@
 }
 
 /* ── Page transitions ────────────────────────────────────────────── */
-@keyframes page-enter {
-  from { opacity: 0; transform: translateY(18px); }
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.page-enter { animation: page-enter 0.45s cubic-bezier(.4,0,.2,1) both; }
+.page-enter { animation: pageFadeIn 0.4s ease-out; }
 
 /* ── Float animations ─────────────────────────────────────────────── */
 @keyframes float {
@@ -57,6 +57,20 @@
   60%       { transform: translateY(-10px) rotate(1.5deg); }
 }
 .hero-bob { animation: hero-bob 5.5s ease-in-out infinite; }
+
+/* Narwhal hero page-level bob (translateY only, no rotation — friendly with parallax wrapper) */
+@keyframes narwhal-hero-bob {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+.narwhal-hero-bob { animation: narwhal-hero-bob 3s ease-in-out infinite; }
+
+/* ── CTA button scale pulse ───────────────────────────────────────── */
+@keyframes btn-scale-pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+.btn-scale-pulse { animation: btn-scale-pulse 2s ease-in-out infinite; }
 
 /* Narwhal wiggle on tap */
 @keyframes narwhal-wiggle {

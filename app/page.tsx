@@ -6,6 +6,9 @@ import Link from 'next/link';
 import { books, AMAZON_STORE_URL } from '@/lib/books';
 import NewsletterSection from '@/components/NewsletterSection';
 import ParentQuotes from '@/components/ParentQuotes';
+import BedtimeToggle from '@/components/BedtimeToggle';
+import TiltNarwhal from '@/components/TiltNarwhal';
+import TouchBook from '@/components/TouchBook';
 
 // ── SVG Atoms ──────────────────────────────────────────────────────────────
 
@@ -41,6 +44,19 @@ function MoonSVG({ size = 52 }: { size?: number }) {
         fill="#F4DAFF" opacity="0.85"/>
       <circle cx="38" cy="12" r="2.5" fill="#F4DAFF" opacity="0.4"/>
       <circle cx="43" cy="22" r="1.5" fill="#F4DAFF" opacity="0.3"/>
+    </svg>
+  );
+}
+
+function CloudSVG({ className = '', style = {} }: { className?: string; style?: React.CSSProperties }) {
+  return (
+    <svg width="220" height="90" viewBox="0 0 220 90" className={className} style={style} aria-hidden>
+      <ellipse cx="110" cy="70" rx="100" ry="32" fill="white" opacity="0.55"/>
+      <ellipse cx="78"  cy="58" rx="52"  ry="30" fill="white" opacity="0.5"/>
+      <ellipse cx="142" cy="56" rx="46"  ry="28" fill="white" opacity="0.52"/>
+      <ellipse cx="110" cy="48" rx="38"  ry="24" fill="white" opacity="0.48"/>
+      <ellipse cx="85"  cy="40" rx="28"  ry="20" fill="white" opacity="0.42"/>
+      <ellipse cx="135" cy="38" rx="24"  ry="18" fill="white" opacity="0.4"/>
     </svg>
   );
 }
@@ -551,6 +567,7 @@ export default function HomePage() {
   // Parallax on mouse move — books shift slightly relative to cursor
   const [px, setPx] = useState(0);
   const [py, setPy] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
   const [moodFilter, setMoodFilter] = useState('all');
 
   useEffect(() => {
@@ -563,6 +580,12 @@ export default function HomePage() {
     return () => window.removeEventListener('mousemove', handler);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <SparkleTrail />
@@ -571,16 +594,29 @@ export default function HomePage() {
 
         {/* ─── HERO ────────────────────────────────────────────────────── */}
         <section className="relative" style={{
-          background: 'linear-gradient(160deg, #B2EDE8 0%, #72C8C2 30%, #3DA8AA 65%, #1E7878 100%)',
-          minHeight: '92vh', paddingBottom: '110px',
+          background: 'linear-gradient(160deg, #E8F8F5 0%, #9ADBD6 40%, #4ECDC4 100%)',
+          minHeight: '92vh', paddingBottom: '110px', position: 'relative', zIndex: 1,
         }}>
-          {/* SVG decorations — all clickable */}
-          <div className="absolute top-8 left-8 float-slow">            <StarSVG size={34} color="#F4A839" pulse /></div>
-          <div className="absolute top-14 right-20 float-mid opacity-70"><MoonSVG size={56} /></div>
-          <div className="absolute top-1/3 left-4 float-fast opacity-50">  <Sparkle4 size={22} color="#C084FC" /></div>
-          <div className="absolute top-1/2 right-8 float-slow opacity-55"><StarSVG size={24} color="#F4A839" /></div>
-          <div className="absolute top-3/4 left-24 float-mid opacity-40"> <Sparkle4 size={18} color="#FF6B9D" /></div>
-          <div className="absolute top-6 left-1/3 opacity-15 pointer-events-none"><RainbowSVG /></div>
+          {/* Stars with scroll parallax — wrapper for parallax, inner div for float animation */}
+          <div className="absolute top-8 left-8" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
+            <div className="float-slow"><StarSVG size={34} color="#F4A839" pulse /></div>
+          </div>
+          <div className="absolute top-16 right-20 opacity-70" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
+            <div className="float-mid"><MoonSVG size={56} /></div>
+          </div>
+          <div className="absolute top-1/3 left-4 opacity-55" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
+            <div className="float-fast"><Sparkle4 size={22} color="#9B8EC4" /></div>
+          </div>
+          <div className="absolute top-1/2 right-8 opacity-55" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
+            <div className="float-slow"><StarSVG size={24} color="#F4A839" /></div>
+          </div>
+          <div className="absolute top-3/4 left-24 opacity-45" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
+            <div className="float-mid"><Sparkle4 size={18} color="#4ECDC4" /></div>
+          </div>
+          <div className="absolute top-1/4 right-1/3 opacity-35" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
+            <div className="float-fast"><StarSVG size={20} color="#C4B5E8" /></div>
+          </div>
+          <div className="absolute top-6 left-1/3 opacity-12 pointer-events-none"><RainbowSVG /></div>
           {/* Hidden easter egg: tiny star bottom-right. Tap it 3 times for a surprise hint */}
           <HiddenStar />
 
@@ -589,34 +625,23 @@ export default function HomePage() {
 
             {/* Text */}
             <div className="flex-1 text-center lg:text-left z-10">
-              <div className="flex justify-center lg:justify-start mb-6">
-                <Image src="/images/logo-teal.png" alt="Family Fables"
-                  width={100} height={100} className="float-slow"
-                  style={{ filter: 'drop-shadow(0 4px 16px rgba(76,201,201,0.5))' }}
-                />
-              </div>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-4"
-                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
-                Books That Make<br/>
-                <span style={{ color: '#F4A839' }}>Bedtime</span> Worth<br/>
-                <span style={{ color: '#2D0D6B' }}>Fighting About</span>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D1F5E' }}>
+                Welcome to the<br/>
+                <span style={{ color: '#4ECDC4' }}>Fables Forest</span>
               </h1>
-              <p className="text-base leading-snug mb-3 max-w-xl mx-auto lg:mx-0 italic font-semibold" style={{ color: '#A8E8EC' }}>
-                (The good kind of fighting. Mostly.)
-              </p>
-              <p className="text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0" style={{ color: '#1C5A5E' }}>
-                Joyful, whimsical children's books that warm little hearts
-                and create lasting family memories — one story at a time.
+              <p className="text-xl leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0 font-semibold" style={{ color: '#1C5A5E' }}>
+                Where every page makes them laugh, wonder, and beg for one more chapter.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/books"
                   className="btn-shine px-8 py-4 rounded-2xl font-bold text-lg shadow-xl transition-all hover:-translate-y-1"
-                  style={{ backgroundColor: '#F4A839', color: '#2D1B69' }}>
+                  style={{ backgroundColor: '#4ECDC4', color: '#2D1F5E' }}>
                   Explore Our Books
                 </Link>
                 <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
                   className="px-8 py-4 rounded-2xl font-bold text-lg border-2 transition-all hover:-translate-y-1"
-                  style={{ borderColor: 'rgba(255,255,255,0.7)', color: '#FFFFFF', backgroundColor: 'rgba(255,255,255,0.15)' }}>
+                  style={{ borderColor: '#2D1F5E', color: '#2D1F5E', backgroundColor: 'rgba(255,255,255,0.45)' }}>
                   Shop on Amazon →
                 </a>
               </div>
@@ -628,34 +653,41 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Books with parallax */}
-            <div className="flex-1 flex justify-center items-end relative z-10" style={{ minHeight: 440 }}>
-              <HeroBook book={books[2]} animClass="float-slow" style={{
-                width: 158, height: 206, zIndex: 1, opacity: 0.88,
-                transform: `rotate(-16deg) translate(calc(-112px + ${px * -1.2}px), calc(18px + ${py * 0.8}px))`,
-              }}/>
-              <HeroBook book={books[4]} animClass="float-mid" style={{
-                width: 154, height: 202, zIndex: 1, opacity: 0.85,
-                transform: `rotate(15deg) translate(calc(112px + ${px * 1.2}px), calc(14px + ${py * 0.6}px))`,
-              }}/>
-              <HeroBook book={books[5]} animClass="float-fast" style={{
-                width: 138, height: 182, zIndex: 0, opacity: 0.52,
-                transform: `rotate(-4deg) translate(calc(54px + ${px * 0.7}px), calc(-76px + ${py * -0.5}px))`,
-              }}/>
-              <HeroBook book={books[0]} animClass="float-slow" style={{
-                width: 224, height: 292, zIndex: 20, marginBottom: -60,
-                boxShadow: '0 30px 80px rgba(0,0,0,0.5), 0 0 40px rgba(244,168,57,0.35)',
-                transform: `translate(${px * -0.4}px, ${py * -0.3}px)`,
-              }}/>
+            {/* Narwhal — parallax outer, bob animation inner */}
+            <div className="flex-1 flex justify-center items-center relative z-10 pt-8 lg:pt-0">
+              <div style={{ transform: `translateY(${scrollY * 0.3}px)` }}>
+                <div className="narwhal-hero-bob">
+                  <Image
+                    src="/images/logo-teal.png"
+                    alt="Family Fables narwhal mascot"
+                    width={310} height={310}
+                    style={{
+                      maxWidth: '88vw',
+                      filter: 'drop-shadow(0 20px 60px rgba(78,205,196,0.45))',
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
-          {/* Blob into light lavender — two lavender tones, no straight line */}
-          <BlobDivider fill="#DDD4FF" fillDeep="#C8B5F5"/>
+
+          {/* Clouds at bottom — scroll parallax, overlapping into books section */}
+          <div className="absolute bottom-20 left-1/4 pointer-events-none"
+            style={{ transform: `translateY(${scrollY * 0.4}px)` }}>
+            <div className="cloud-float"><CloudSVG /></div>
+          </div>
+          <div className="absolute bottom-10 right-1/5 pointer-events-none"
+            style={{ transform: `translateY(${scrollY * 0.4}px)` }}>
+            <div className="cloud-float-2"><CloudSVG /></div>
+          </div>
+
+          {/* Blob into lavender — graduated midpoint teal→lavender */}
+          <BlobDivider fill="#C4B5E8" fillDeep="#A89DD4"/>
         </section>
 
-        {/* ─── BOOKS GRID (light lavender) ── overlap pulls under hero blob ── */}
+        {/* ─── BOOKS GRID (lavender) ── overlap pulls under hero blob ── */}
         <section className="relative pb-20 px-4" style={{
-          background: 'linear-gradient(160deg, #DDD4FF 0%, #C8B5F5 50%, #B8A0EE 100%)', zIndex: 4, paddingTop: '168px', marginTop: '-148px',
+          background: 'linear-gradient(160deg, #C4B5E8 0%, #AFA0D8 50%, #9B8EC4 100%)', zIndex: 4, paddingTop: '168px', marginTop: '-148px',
         }}>
           <div className="absolute top-10 right-12 float-slow opacity-20"><RainbowSVG /></div>
           <div className="absolute top-20 left-10 float-mid opacity-15"><StarSVG size={32} color="#7B3FBE"/></div>
@@ -677,7 +709,15 @@ export default function HomePage() {
                 : books.filter(b => b.image && b.moods?.includes(moodFilter))
               ).map((book, i) => (
                 <div key={book.id} style={{ animation: `mood-book-appear 0.35s ease-out ${i * 0.07}s both` }}>
-                  <InteractiveBookCard book={book}/>
+                  <TouchBook
+                    title={book.title}
+                    cover={book.image}
+                    ageRange={book.ageRange}
+                    backContent={book.description}
+                    amazonUrl={AMAZON_STORE_URL}
+                    accentColor={book.accentColor}
+                    tag={book.tag}
+                  />
                 </div>
               ))}
             </div>
@@ -704,22 +744,25 @@ export default function HomePage() {
               </div>
             )}
           </div>
-          {/* Blob into medium purple — two purple tones for depth */}
-          <BlobDivider fill="#8B5CC8" fillDeep="#6B3AAB"/>
+          {/* Blob into medium purple — graduated midpoint lavender→purple */}
+          <BlobDivider fill="#8F7DB8" fillDeep="#7A6BA8"/>
         </section>
 
         {/* ─── PARENT QUOTES ─── */}
         <ParentQuotes />
 
         {/* ─── FREE FUN STUFF ─── */}
-        <section className="relative py-20 px-4" style={{ backgroundColor: '#FDF8F2', zIndex: 4 }}>
+        <section className="relative py-20 px-4" style={{
+          background: 'linear-gradient(160deg, #9B8EC4 0%, #8B7CB4 50%, #7B6BA4 100%)', zIndex: 4,
+          paddingTop: '168px', marginTop: '-148px',
+        }}>
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-4xl sm:text-5xl font-bold mb-3"
-                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#6B3FA0' }}>
+                style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
                 Free Fun Stuff 🎨
               </h2>
-              <p className="text-base" style={{ color: '#7B6898' }}>
+              <p className="text-base" style={{ color: '#DDD0FF' }}>
                 Because fun shouldn&apos;t require a credit card. Printables, dad jokes, and chaos — on the house.
               </p>
             </div>
@@ -727,32 +770,32 @@ export default function HomePage() {
               {/* Card 1 — Dad Joke Generator */}
               <DadJokeCard />
               {/* Card 2 */}
-              <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: '#FFFDF7', border: '2px solid #F4A83940' }}>
+              <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: 'rgba(255,255,255,0.15)', border: '2px solid rgba(255,255,255,0.25)' }}>
                 <div className="text-4xl text-center">🦃</div>
-                <h3 className="text-lg font-bold text-center" style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D1B69' }}>
+                <h3 className="text-lg font-bold text-center" style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
                   Gilroy&apos;s Confidence Activity Sheet
                 </h3>
-                <p className="text-sm text-center" style={{ color: '#7B6898' }}>
+                <p className="text-sm text-center" style={{ color: '#DDD0FF' }}>
                   What&apos;s YOUR signature gobble? Fill in the blanks.
                 </p>
                 <button disabled
                   className="mt-auto w-full py-3 rounded-xl font-bold text-sm cursor-not-allowed"
-                  style={{ backgroundColor: '#FDF8F2', color: '#B8A4D0', border: '2px dashed #C8B4E8' }}>
+                  style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#C4B5E8', border: '2px dashed rgba(255,255,255,0.3)' }}>
                   Coming Soon!
                 </button>
               </div>
               {/* Card 3 */}
-              <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: '#FFFDF7', border: '2px solid #F4A83940' }}>
+              <div className="rounded-3xl p-6 flex flex-col gap-4 shadow-md" style={{ backgroundColor: 'rgba(255,255,255,0.15)', border: '2px solid rgba(255,255,255,0.25)' }}>
                 <div className="text-4xl text-center">🌙</div>
-                <h3 className="text-lg font-bold text-center" style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#2D1B69' }}>
+                <h3 className="text-lg font-bold text-center" style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#FFFFFF' }}>
                   Dream Ideas Wish List
                 </h3>
-                <p className="text-sm text-center" style={{ color: '#7B6898' }}>
+                <p className="text-sm text-center" style={{ color: '#DDD0FF' }}>
                   Write down your top 5 dream ideas. Bonus points for the weird ones.
                 </p>
                 <button disabled
                   className="mt-auto w-full py-3 rounded-xl font-bold text-sm cursor-not-allowed"
-                  style={{ backgroundColor: '#FDF8F2', color: '#B8A4D0', border: '2px dashed #C8B4E8' }}>
+                  style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#C4B5E8', border: '2px dashed rgba(255,255,255,0.3)' }}>
                   Coming Soon!
                 </button>
               </div>
@@ -763,9 +806,9 @@ export default function HomePage() {
         {/* ─── NEWSLETTER ─── */}
         <NewsletterSection />
 
-        {/* ─── NARWHAL (medium purple) ─── overlaps lavender blob ─────────── */}
+        {/* ─── NARWHAL (deep purple) ─── overlaps lavender/purple blob ──────── */}
         <section className="relative pb-36 px-4" style={{
-          background: 'linear-gradient(160deg, #9B6CD4 0%, #7B3FBE 40%, #5A1FA0 75%, #3B1280 100%)',
+          background: 'linear-gradient(160deg, #6B4F9E 0%, #5C3F8E 40%, #4A3580 75%, #3A2570 100%)',
           paddingTop: '168px', marginTop: '-148px', zIndex: 3,
         }}>
           <InteractiveBubble left="7%"  top="20%" size={20} delay="slow"/>
@@ -777,7 +820,7 @@ export default function HomePage() {
 
           <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-12 relative z-10">
             <div className="flex-1 flex justify-center lg:justify-end">
-              <InteractiveNarwhal/>
+              <TiltNarwhal />
             </div>
             <div className="flex-1 text-center lg:text-left">
               <div className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-5"
@@ -800,13 +843,13 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          {/* Blob into deep purple — rich deep tones for depth */}
-          <BlobDivider fill="#2D0D6B" fillDeep="#1C0A4F"/>
+          {/* Blob into deeper purple for about section */}
+          <BlobDivider fill="#4A3580" fillDeep="#3B2870"/>
         </section>
 
-        {/* ─── ABOUT (deep royal purple) ─── overlaps medium purple blob ── */}
+        {/* ─── ABOUT (deep royal purple) ─── overlaps narwhal blob ── */}
         <section className="relative pb-32 px-4 text-center" style={{
-          background: 'linear-gradient(160deg, #2D0D6B 0%, #1E0850 40%, #140638 70%, #0C0428 100%)',
+          background: 'linear-gradient(160deg, #4A3580 0%, #3B2870 40%, #2D1F5E 70%, #1E1448 100%)',
           paddingTop: '168px', marginTop: '-148px', zIndex: 2,
         }}>
           <div className="absolute top-20 left-14 float-slow opacity-30"><StarSVG size={36} color="#C084FC"/></div>
@@ -838,35 +881,36 @@ export default function HomePage() {
               Our Story →
             </Link>
           </div>
-          {/* Blob into deepest purple — near-black for the final section */}
-          <BlobDivider fill="#120430" fillDeep="#0A0220"/>
+          {/* Blob into darkest purple */}
+          <BlobDivider fill="#2D1F5E" fillDeep="#1E1448"/>
         </section>
 
-        {/* ─── SHOP CTA (deepest purple, gold accents) ──────────────────────── */}
+        {/* ─── SHOP CTA (darkest purple, gold accents) ──────────────────────── */}
         <section className="relative pb-24 px-4 text-center" style={{
-          background: 'linear-gradient(135deg, #120430 0%, #0A0220 60%, #060110 100%)',
+          background: 'linear-gradient(135deg, #2D1F5E 0%, #1E1448 60%, #140D38 100%)',
           paddingTop: '168px', marginTop: '-148px', zIndex: 1,
         }}>
-          <div className="absolute top-16 left-14 float-mid opacity-35"><Sparkle4 size={28} color="#C084FC"/></div>
+          <div className="absolute top-16 left-14 float-mid opacity-35"><Sparkle4 size={28} color="#C4B5E8"/></div>
           <div className="absolute top-20 right-12 float-slow opacity-28"><StarSVG size={26} color="#F4A839"/></div>
 
           <div className="max-w-2xl mx-auto relative z-10">
             <h2 className="text-4xl sm:text-5xl font-bold mb-4"
               style={{ fontFamily: 'var(--font-fredoka), cursive', color: '#F4A839' }}>
-              Ready to Start Reading?
+              Stop reading about books. Go read one.
             </h2>
-            <p className="text-lg mb-8" style={{ color: '#C4B0EE' }}>
-              All 11 books on Amazon — Prime shipping, no assembly required, and approximately zero splinters. Great for birthdays, holidays, or just because Tuesday deserves a story.
+            <p className="text-lg mb-8" style={{ color: '#C4B5E8' }}>
+              Warning: may cause uncontrollable giggles, requests for sequels, and children who suddenly love bedtime.
             </p>
             <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer"
-              className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl transition-all hover:-translate-y-1"
-              style={{ backgroundColor: '#F4A839', color: '#0C0428' }}>
+              className="btn-shine btn-scale-pulse inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl"
+              style={{ backgroundColor: '#F4A839', color: '#2D1F5E' }}>
               Shop All Books on Amazon
             </a>
           </div>
         </section>
 
       </div>
+      <BedtimeToggle />
     </>
   );
 }
