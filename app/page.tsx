@@ -45,7 +45,7 @@ function SectionClouds({ fill, midFill, backFill }: { fill: string; midFill?: st
       )}
       {/* FRONT — 240px CSS, ry=200 peaks reach 160px above bottom (2nd tallest) */}
       <svg viewBox="0 0 1440 300" preserveAspectRatio="none"
-        style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${Math.round(totalH * 0.71)}px`, display: 'block' }}>
+        style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${Math.round(totalH * 0.71) + 2}px`, display: 'block' }}>
         <path d={frontPath} fill={fill} />
       </svg>
     </div>
@@ -228,8 +228,8 @@ export default function Home() {
         style={{
           background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
           position: 'relative',
-          marginTop: '-340px',
-          paddingTop: '340px',
+          marginTop: '-344px',
+          paddingTop: '344px',
           paddingBottom: '340px',
           zIndex: 1,
         }}
@@ -282,8 +282,8 @@ export default function Home() {
       <section
         style={{
           background: '#daf8f2',
-          marginTop: '-340px',
-          paddingTop: '340px',
+          marginTop: '-344px',
+          paddingTop: '344px',
           position: 'relative',
           zIndex: 0,
         }}
