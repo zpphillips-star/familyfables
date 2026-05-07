@@ -20,12 +20,12 @@ function SectionClouds({ fill, midFill, backFill }: { fill: string; midFill?: st
   const totalH = has3 ? 340 : 130;   // wrapper height = back layer height
 
   // viewBox "0 0 1440 300" for all. Hill peaks = 300 - ry (exact).
-  // Front: 3 hills, rx=240, ry=200  → peaks at y=100, hills 200px tall
-  const frontPath = "M 0 300 A 240 200 0 0 1 480 300 A 240 200 0 0 1 960 300 A 240 200 0 0 1 1440 300 L 1440 300 Z";
-  // Mid: 4 hills, rx=180, ry=140 — shifted 90px right so peaks fall between front peaks
-  const midPath   = "M -90 300 A 180 140 0 0 1 270 300 A 180 140 0 0 1 630 300 A 180 140 0 0 1 990 300 A 180 140 0 0 1 1350 300 A 180 140 0 0 1 1530 300 L 1440 300 Z";
-  // Back: 5 hills, rx=144, ry=170 — shifted 45px right, tallest CSS so they poke above
-  const backPath  = "M -45 300 A 144 170 0 0 1 243 300 A 144 170 0 0 1 531 300 A 144 170 0 0 1 819 300 A 144 170 0 0 1 1107 300 A 144 170 0 0 1 1395 300 L 1440 300 Z";
+  // Front: 2 huge hills, rx=360, ry=280 → peaks at y=20, hills 224px from bottom
+  const frontPath = "M 0 300 A 360 280 0 0 1 720 300 A 360 280 0 0 1 1440 300 L 1440 300 Z";
+  // Mid: 3 hills, rx=240, ry=170 — phase-shifted 144px right, mid-height
+  const midPath   = "M -144 300 A 240 170 0 0 1 336 300 A 240 170 0 0 1 816 300 A 240 170 0 0 1 1296 300 L 1440 300 Z";
+  // Back: 3 hills, rx=240, ry=200 — shifted 120px right, slightly taller CSS so they peek
+  const backPath  = "M -120 300 A 240 200 0 0 1 360 300 A 240 200 0 0 1 840 300 A 240 200 0 0 1 1320 300 L 1440 300 Z";
 
   return (
     <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH}px`, pointerEvents: 'none', zIndex: 2 }}>
