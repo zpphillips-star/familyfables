@@ -13,33 +13,35 @@ import NewsletterSection from '@/components/NewsletterSection';
 // Overlapping ellipses of varied sizes = organic bumpy cloud silhouette.
 // Back layer (tallest CSS height) peeks above front layer for depth effect.
 function SectionClouds({ fill, backFill }: { fill: string; backFill?: string }) {
-  const totalH = backFill ? 280 : 130;
-  const vb = 200; // viewBox height; ellipse centers sit at cy=200
+  const totalH = backFill ? 320 : 140;
+  const vb = 220; // viewBox height; ellipse centers sit at cy=220
 
-  // Front clouds — 7 overlapping ellipses, larger ry, organic sizes
+  // Front clouds — dramatic size variation: huge puffs, tiny puffs, medium
+  // ry range 65–200 so the big ones loom and the small ones sit daintily
   const front = [
-    { cx:   20, rx: 140, ry: 140 },
-    { cx:  230, rx: 162, ry: 148 },
-    { cx:  445, rx: 132, ry: 122 },
-    { cx:  668, rx: 188, ry: 158 },
-    { cx:  908, rx: 156, ry: 138 },
-    { cx: 1128, rx: 172, ry: 150 },
-    { cx: 1390, rx: 148, ry: 132 },
+    { cx:   30, rx: 155, ry: 175 },  // big — left anchor
+    { cx:  270, rx:  88, ry:  70 },  // tiny — small puff
+    { cx:  430, rx: 195, ry: 200 },  // HUGE — dominant center-left cloud
+    { cx:  680, rx: 105, ry:  85 },  // small-medium
+    { cx:  860, rx: 230, ry: 190 },  // HUGE — dominant center-right cloud
+    { cx: 1080, rx:  80, ry:  65 },  // tiny — gap filler
+    { cx: 1230, rx: 185, ry: 168 },  // large
+    { cx: 1430, rx: 110, ry:  95 },  // medium — right edge
   ];
 
-  // Back clouds — phase-shifted between front bumps, smaller ry
-  // but tallest CSS so their peaks poke above the front layer
+  // Back clouds — also varied, phase-shifted to fill gaps between front
+  // tallest CSS height so their peaks poke above front layer for depth
   const back = [
-    { cx:  125, rx: 128, ry: 118 },
-    { cx:  338, rx: 142, ry: 125 },
-    { cx:  556, rx: 118, ry: 108 },
-    { cx:  778, rx: 158, ry: 128 },
-    { cx: 1016, rx: 132, ry: 116 },
-    { cx: 1248, rx: 148, ry: 126 },
-    { cx: 1460, rx: 120, ry: 106 },
+    { cx:  140, rx: 170, ry: 155 },  // large — peeks in left gap
+    { cx:  360, rx: 130, ry: 118 },  // medium
+    { cx:  570, rx: 200, ry: 180 },  // HUGE back cloud (visible in gap between front big ones)
+    { cx:  780, rx:  95, ry:  80 },  // small
+    { cx:  970, rx: 175, ry: 158 },  // large — fills center-right gap
+    { cx: 1155, rx: 120, ry: 105 },  // medium
+    { cx: 1340, rx: 160, ry: 148 },  // large — right anchor
   ];
 
-  const frontH = Math.round(totalH * 0.78) + 2;
+  const frontH = Math.round(totalH * 0.80) + 2;
 
   return (
     <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH}px`, pointerEvents: 'none', zIndex: 2 }}>
@@ -48,14 +50,14 @@ function SectionClouds({ fill, backFill }: { fill: string; backFill?: string }) 
         <svg viewBox={`0 0 1440 ${vb}`} preserveAspectRatio="none"
           style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${totalH}px`, display: 'block' }}>
           {back.map((c, i) => <ellipse key={i} cx={c.cx} cy={vb} rx={c.rx} ry={c.ry} fill={backFill} />)}
-          <rect x="0" y={vb - 4} width="1440" height="8" fill={backFill} />
+          <rect x="0" y={vb - 2} width="1440" height="6" fill={backFill} />
         </svg>
       )}
       {/* FRONT — shorter CSS height, larger ry → dominant bumpy cloud look */}
       <svg viewBox={`0 0 1440 ${vb}`} preserveAspectRatio="none"
         style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${frontH}px`, display: 'block' }}>
         {front.map((c, i) => <ellipse key={i} cx={c.cx} cy={vb} rx={c.rx} ry={c.ry} fill={fill} />)}
-        <rect x="0" y={vb - 4} width="1440" height="8" fill={fill} />
+        <rect x="0" y={vb - 2} width="1440" height="6" fill={fill} />
       </svg>
     </div>
   );
@@ -124,11 +126,11 @@ export default function Home() {
       <section
         id="hero"
         style={{
-          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 280px), #d9b5e5 100%)',
+          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 320px), #d9b5e5 100%)',
           position: 'relative',
           overflow: 'visible',
           minHeight: '92vh',
-          paddingBottom: '280px',
+          paddingBottom: '320px',
           display: 'flex',
           flexDirection: 'column',
           zIndex: 2,
@@ -237,9 +239,9 @@ export default function Home() {
         style={{
           background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
           position: 'relative',
-          marginTop: '-284px',
-          paddingTop: '284px',
-          paddingBottom: '280px',
+          marginTop: '-324px',
+          paddingTop: '324px',
+          paddingBottom: '320px',
           zIndex: 1,
         }}
       >
@@ -291,8 +293,8 @@ export default function Home() {
       <section
         style={{
           background: '#daf8f2',
-          marginTop: '-284px',
-          paddingTop: '284px',
+          marginTop: '-324px',
+          paddingTop: '324px',
           position: 'relative',
           zIndex: 0,
         }}
