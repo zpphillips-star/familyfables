@@ -7,46 +7,55 @@ import TouchBook from '@/components/TouchBook';
 import TiltNarwhal from '@/components/TiltNarwhal';
 import NewsletterSection from '@/components/NewsletterSection';
 
-// ── Section Hills ──────────────────────────────────────────────────────────
-// Three-layer rounded-hill transition matching the original familyfables.org style.
-// Uses ELLIPTICAL ARCS (not bezier) so hill height = exact ry value — no math guessing.
-// Arc: A rx ry 0 0 1 x y  (sweep=1 = clockwise = arcs UPWARD from baseline)
-// fill       = front hills (next section color)  — 3 large hills, 200px ry
-// midFill    = middle hills  — 4 medium hills, 140px ry, phase-shifted
-// backFill   = back hills    — 5 small hills, 170px ry, tallest CSS layer
-// Stacking: back SVG tallest → back peaks poke highest despite smaller hills
-function SectionClouds({ fill, midFill, backFill }: { fill: string; midFill?: string; backFill?: string }) {
-  const has3 = midFill && backFill;
-  const totalH = has3 ? 340 : 130;   // wrapper height = back layer height
+// ── Section Clouds ──────────────────────────────────────────────────────────
+// Real cloud look: multiple overlapping ellipses at the bottom of each section.
+// All ellipses have cy = viewBox height (200) so only their top halves show.
+// Overlapping ellipses of varied sizes = organic bumpy cloud silhouette.
+// Back layer (tallest CSS height) peeks above front layer for depth effect.
+function SectionClouds({ fill, backFill }: { fill: string; backFill?: string }) {
+  const totalH = backFill ? 280 : 130;
+  const vb = 200; // viewBox height; ellipse centers sit at cy=200
 
-  // viewBox "0 0 1440 300" for all. Hill peaks = 300 - ry (exact).
-  // Front: 2 huge hills, rx=360, ry=280 → peaks at y=20, hills 224px from bottom
-  const frontPath = "M 0 300 A 360 280 0 0 1 720 300 A 360 280 0 0 1 1440 300 L 1440 300 Z";
-  // Mid: 3 hills, rx=240, ry=170 — phase-shifted 144px right, mid-height
-  const midPath   = "M -144 300 A 240 170 0 0 1 336 300 A 240 170 0 0 1 816 300 A 240 170 0 0 1 1296 300 L 1440 300 Z";
-  // Back: 3 hills, rx=240, ry=200 — shifted 120px right, slightly taller CSS so they peek
-  const backPath  = "M -120 300 A 240 200 0 0 1 360 300 A 240 200 0 0 1 840 300 A 240 200 0 0 1 1320 300 L 1440 300 Z";
+  // Front clouds — 7 overlapping ellipses, larger ry, organic sizes
+  const front = [
+    { cx:   20, rx: 140, ry: 140 },
+    { cx:  230, rx: 162, ry: 148 },
+    { cx:  445, rx: 132, ry: 122 },
+    { cx:  668, rx: 188, ry: 158 },
+    { cx:  908, rx: 156, ry: 138 },
+    { cx: 1128, rx: 172, ry: 150 },
+    { cx: 1390, rx: 148, ry: 132 },
+  ];
+
+  // Back clouds — phase-shifted between front bumps, smaller ry
+  // but tallest CSS so their peaks poke above the front layer
+  const back = [
+    { cx:  125, rx: 128, ry: 118 },
+    { cx:  338, rx: 142, ry: 125 },
+    { cx:  556, rx: 118, ry: 108 },
+    { cx:  778, rx: 158, ry: 128 },
+    { cx: 1016, rx: 132, ry: 116 },
+    { cx: 1248, rx: 148, ry: 126 },
+    { cx: 1460, rx: 120, ry: 106 },
+  ];
+
+  const frontH = Math.round(totalH * 0.78) + 2;
 
   return (
     <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH}px`, pointerEvents: 'none', zIndex: 2 }}>
-      {/* BACK — tallest CSS (340px) so ry=170 peaks poke 193px above bottom */}
+      {/* BACK — full totalH so its peaks poke above the front layer */}
       {backFill && (
-        <svg viewBox="0 0 1440 300" preserveAspectRatio="none"
-          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH}px`, display: 'block' }}>
-          <path d={backPath} fill={backFill} />
+        <svg viewBox={`0 0 1440 ${vb}`} preserveAspectRatio="none"
+          style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${totalH}px`, display: 'block' }}>
+          {back.map((c, i) => <ellipse key={i} cx={c.cx} cy={vb} rx={c.rx} ry={c.ry} fill={backFill} />)}
+          <rect x="0" y={vb - 4} width="1440" height="8" fill={backFill} />
         </svg>
       )}
-      {/* MID — 290px CSS, ry=140 peaks reach 135px above bottom */}
-      {midFill && (
-        <svg viewBox="0 0 1440 300" preserveAspectRatio="none"
-          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${Math.round(totalH * 0.85)}px`, display: 'block' }}>
-          <path d={midPath} fill={midFill} />
-        </svg>
-      )}
-      {/* FRONT — 240px CSS, ry=200 peaks reach 160px above bottom (2nd tallest) */}
-      <svg viewBox="0 0 1440 300" preserveAspectRatio="none"
-        style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${Math.round(totalH * 0.71) + 2}px`, display: 'block' }}>
-        <path d={frontPath} fill={fill} />
+      {/* FRONT — shorter CSS height, larger ry → dominant bumpy cloud look */}
+      <svg viewBox={`0 0 1440 ${vb}`} preserveAspectRatio="none"
+        style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${frontH}px`, display: 'block' }}>
+        {front.map((c, i) => <ellipse key={i} cx={c.cx} cy={vb} rx={c.rx} ry={c.ry} fill={fill} />)}
+        <rect x="0" y={vb - 4} width="1440" height="8" fill={fill} />
       </svg>
     </div>
   );
@@ -115,11 +124,11 @@ export default function Home() {
       <section
         id="hero"
         style={{
-          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 340px), #d9b5e5 100%)',
+          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 280px), #d9b5e5 100%)',
           position: 'relative',
           overflow: 'visible',
           minHeight: '92vh',
-          paddingBottom: '340px',
+          paddingBottom: '280px',
           display: 'flex',
           flexDirection: 'column',
           zIndex: 2,
@@ -218,8 +227,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Hills at bottom of hero — 3 layers into the books section lavender */}
-        <SectionClouds fill="#d9b5e5" midFill="#e0c6ee" backFill="#ecddf5" />
+        {/* Clouds at bottom of hero — lavender front + lighter lavender back */}
+        <SectionClouds fill="#d9b5e5" backFill="#e8d0f2" />
       </section>
 
       {/* ── SECTION 2: BOOKS GRID ───────────────────────────────────── */}
@@ -228,9 +237,9 @@ export default function Home() {
         style={{
           background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
           position: 'relative',
-          marginTop: '-344px',
-          paddingTop: '344px',
-          paddingBottom: '340px',
+          marginTop: '-284px',
+          paddingTop: '284px',
+          paddingBottom: '280px',
           zIndex: 1,
         }}
       >
@@ -274,16 +283,16 @@ export default function Home() {
             ))}
           </div>
         </div>
-        {/* Hills at bottom of books — 3 layers into the mint about section */}
-        <SectionClouds fill="#daf8f2" midFill="#c8f0ea" backFill="#d9b5e5" />
+        {/* Clouds at bottom of books — mint front + lavender back */}
+        <SectionClouds fill="#daf8f2" backFill="#d9b5e5" />
       </section>
 
       {/* ── SECTION 3: CHARACTER / ABOUT ────────────────────────────── */}
       <section
         style={{
           background: '#daf8f2',
-          marginTop: '-344px',
-          paddingTop: '344px',
+          marginTop: '-284px',
+          paddingTop: '284px',
           position: 'relative',
           zIndex: 0,
         }}
@@ -302,7 +311,7 @@ export default function Home() {
           <div
             style={{
               flex: '0 0 auto',
-              width: 'clamp(180px, 28vw, 340px)',
+              width: 'clamp(180px, 28vw, 280px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
