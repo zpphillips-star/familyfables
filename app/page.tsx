@@ -7,42 +7,45 @@ import TouchBook from '@/components/TouchBook';
 import TiltNarwhal from '@/components/TiltNarwhal';
 import NewsletterSection from '@/components/NewsletterSection';
 
-// ── Section Clouds ─────────────────────────────────────────────────────────
-// Two-layer cloud divider. Front layer uses the real Divi cloud path.
-// Back layer uses a MIRRORED + taller version of the path so bumps land in
-// completely different horizontal positions — looks like a distinct cloud row.
-function SectionClouds({ fill, backFill }: { fill: string; backFill?: string }) {
-  // Divi cloud path — viewBox 0 0 1280 86, base at y≈66
-  const cloud = "M1280 66.1c-3.8 0-7.6.3-11.4.8-18.3-32.6-59.6-44.2-92.2-25.9-3.5 2-6.9 4.3-10 6.9-22.7-41.7-74.9-57.2-116.6-34.5-14.2 7.7-25.9 19.3-33.8 33.3-.2.3-.3.6-.5.8-12.2-1.4-23.7 5.9-27.7 17.5-11.9-6.1-25.9-6.3-37.9-.6-21.7-30.4-64-37.5-94.4-15.7-12.1 8.6-21 21-25.4 35.2-10.8-9.3-24.3-15-38.5-16.2-8.1-24.6-34.6-38-59.2-29.9-14.3 4.7-25.5 16-30 30.3-4.3-1.9-8.9-3.2-13.6-3.8-13.6-45.5-61.5-71.4-107-57.8a86.38 86.38 0 0 0-43.2 29.4c-8.7-3.6-18.7-1.8-25.4 4.8-23.1-24.8-61.9-26.2-86.7-3.1-7.1 6.6-12.5 14.8-15.9 24-26.7-10.1-56.9-.4-72.8 23.3-2.6-2.7-5.6-5.1-8.9-6.9-.4-.2-.8-.4-1.2-.7-.6-25.9-22-46.4-47.9-45.8-11.5.3-22.5 4.7-30.9 12.5-16.5-33.5-57.1-47.3-90.6-30.8-21.9 11-36.3 32.7-37.6 57.1-7-2.3-14.5-2.8-21.8-1.6C84.8 47 55.7 40.7 34 54.8c-5.6 3.6-10.3 8.4-13.9 14-6.6-1.7-13.3-2.6-20.1-2.6-.1 0 0 19.8 0 19.8h1280V66.1z";
-  const height = backFill ? 160 : 110;
-  const frontH = backFill ? height * 0.70 : height;
+// ── Section Hills ──────────────────────────────────────────────────────────
+// Three-layer rounded-hill transition, matching the original familyfables.org style.
+// Large circular arcs rise from the bottom — no thin cloud band, no straight lines.
+// fill        = foreground hill color (= next section's color)
+// midFill     = middle hill color (lighter tone of fill)
+// backFill    = back hill color (lightest tone, peeks highest)
+// All three SVG layers share viewBox "0 0 1440 400", stacked bottom-aligned.
+// Each layer is progressively shorter in CSS height → back peaks highest visually.
+function SectionClouds({ fill, midFill, backFill }: { fill: string; midFill?: string; backFill?: string }) {
+  const has3 = midFill && backFill;
+  const totalH = has3 ? 300 : 130;
+
+  // Back layer — 6 smaller hills (shortest, peeks highest because SVG is tallest)
+  const backPath  = "M0 400 Q120 230 240 400 Q360 230 480 400 Q600 230 720 400 Q840 230 960 400 Q1080 230 1200 400 Q1320 230 1440 400 L1440 400 Z";
+  // Mid layer — 4 medium hills, offset phase from back, moderately tall
+  const midPath   = "M-180 400 Q60 140 300 400 Q540 140 780 400 Q1020 140 1260 400 Q1500 140 1620 400 L1440 400 Z";
+  // Front layer — 3 large hills, tallest bumps, fills screen convincingly
+  const frontPath = "M-240 400 Q240 50 720 400 Q960 50 1440 400 Q1680 50 1920 400 L1440 400 Z";
+
   return (
-    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${height}px`, pointerEvents: 'none', zIndex: 2 }}>
-      {/* BACK layer — horizontally mirrored (scale(-1,1)) so bumps land in totally
-          different positions from the front layer. Also taller so they peek above. */}
+    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH}px`, pointerEvents: 'none', zIndex: 2 }}>
+      {/* BACK — tallest SVG so back hills poke highest */}
       {backFill && (
-        <svg
-          viewBox="0 0 1280 86"
-          preserveAspectRatio="none"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${height}px`, display: 'block' }}
-        >
-          <rect x="0" y="63" width="1280" height="23" fill={backFill} />
-          {/* Mirror the path horizontally inside the viewBox */}
-          <g transform="scale(-1,1) translate(-1280,0)">
-            <path d={cloud} fill={backFill} />
-          </g>
+        <svg viewBox="0 0 1440 400" preserveAspectRatio="none"
+          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH}px`, display: 'block' }}>
+          <path d={backPath} fill={backFill} />
         </svg>
       )}
-      {/* FRONT layer — normal cloud, shorter so back bumps peek above it */}
-      <svg
-        viewBox="0 0 1280 86"
-        preserveAspectRatio="none"
-        xmlns="http://www.w3.org/2000/svg"
-        style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${frontH}px`, display: 'block' }}
-      >
-        <rect x="0" y="63" width="1280" height="23" fill={fill} />
-        <path d={cloud} fill={fill} />
+      {/* MID — slightly shorter */}
+      {midFill && (
+        <svg viewBox="0 0 1440 400" preserveAspectRatio="none"
+          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH * 0.85}px`, display: 'block' }}>
+          <path d={midPath} fill={midFill} />
+        </svg>
+      )}
+      {/* FRONT — shortest SVG (but largest hills) — covers base fully */}
+      <svg viewBox="0 0 1440 400" preserveAspectRatio="none"
+        style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH * 0.70}px`, display: 'block' }}>
+        <path d={frontPath} fill={fill} />
       </svg>
     </div>
   );
@@ -111,11 +114,11 @@ export default function Home() {
       <section
         id="hero"
         style={{
-          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 160px), #d9b5e5 100%)',
+          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 300px), #d9b5e5 100%)',
           position: 'relative',
           overflow: 'visible',
           minHeight: '92vh',
-          paddingBottom: '160px',
+          paddingBottom: '300px',
           display: 'flex',
           flexDirection: 'column',
           zIndex: 2,
@@ -214,8 +217,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Clouds at bottom of hero — lavender front + light lavender back for depth */}
-        <SectionClouds fill="#d9b5e5" backFill="#e8cef0" />
+        {/* Hills at bottom of hero — 3 layers into the books section lavender */}
+        <SectionClouds fill="#d9b5e5" midFill="#e0c6ee" backFill="#ecddf5" />
       </section>
 
       {/* ── SECTION 2: BOOKS GRID ───────────────────────────────────── */}
@@ -224,9 +227,9 @@ export default function Home() {
         style={{
           background: 'linear-gradient(172deg, #d9b5e5 0%, #78087c 100%)',
           position: 'relative',
-          marginTop: '-160px',
-          paddingTop: '160px',
-          paddingBottom: '160px',
+          marginTop: '-300px',
+          paddingTop: '300px',
+          paddingBottom: '300px',
           zIndex: 1,
         }}
       >
@@ -270,16 +273,16 @@ export default function Home() {
             ))}
           </div>
         </div>
-        {/* Clouds at bottom of books — mint front + light purple back for depth */}
-        <SectionClouds fill="#daf8f2" backFill="#d9b5e5" />
+        {/* Hills at bottom of books — 3 layers into the mint about section */}
+        <SectionClouds fill="#daf8f2" midFill="#c8f0ea" backFill="#d9b5e5" />
       </section>
 
       {/* ── SECTION 3: CHARACTER / ABOUT ────────────────────────────── */}
       <section
         style={{
           background: '#daf8f2',
-          marginTop: '-160px',
-          paddingTop: '160px',
+          marginTop: '-300px',
+          paddingTop: '300px',
           position: 'relative',
           zIndex: 0,
         }}
