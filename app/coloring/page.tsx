@@ -38,8 +38,8 @@ export default function ColoringPage() {
             🎨 Free Printables
           </div>
           <h1
-            className="text-5xl md:text-6xl font-display mb-4 leading-tight"
-            style={{ color: '#2D1B69', fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
+            className="font-display mb-4 leading-tight"
+            style={{ color: '#2D1B69', fontSize: 'clamp(3rem, 7vw, 6rem)' }}
           >
             Color Amber&apos;s World! 🐉
           </h1>

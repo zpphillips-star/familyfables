@@ -38,9 +38,9 @@ export default function AboutPage() {
             🌿 Our Story
           </div>
           <h1
-            className="text-5xl sm:text-6xl font-bold text-white mb-4"
+            className="font-display text-white mb-4"
             style={{
-              fontFamily: "var(--font-concert-one), 'Concert One', cursive",
+              fontSize: 'clamp(3rem, 7vw, 6rem)',
             }}
           >
             A Legacy of Love &amp; Stories

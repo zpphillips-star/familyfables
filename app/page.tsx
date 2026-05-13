@@ -137,13 +137,14 @@ export default function Home() {
             </div>
 
             <h1
+              className="font-display"
               style={{
                 fontFamily: ff,
-                fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+                fontSize: 'clamp(3.5rem, 8vw, 7rem)',
                 lineHeight: 1.08,
                 color: '#007d68',
                 marginBottom: '20px',
-                letterSpacing: '-0.01em',
+                letterSpacing: '0.02em',
               }}
             >
               Books That Make Kids Giggle & Parents Cheer
@@ -267,9 +268,10 @@ export default function Home() {
           }}
         >
           <h2
+            className="font-display"
             style={{
               fontFamily: ff,
-              fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
+              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
               color: '#ffffff',
               textAlign: 'center',
               marginBottom: '56px',

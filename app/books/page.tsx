@@ -40,9 +40,9 @@ export default function BooksPage() {
           📚 Full Catalog
         </div>
         <h1
-          className="text-5xl sm:text-6xl font-bold mb-4"
+          className="font-display mb-4"
           style={{
-            fontFamily: "var(--font-concert-one), 'Concert One', cursive",
+            fontSize: 'clamp(3rem, 7vw, 6rem)',
             color: "#2D1B69",
           }}
         >
