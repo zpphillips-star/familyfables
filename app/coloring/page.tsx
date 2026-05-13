@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const pages = [
-  { num: 3,  file: 'page03-300dpi.png', label: 'Page 3'  },
   { num: 4,  file: 'page04-300dpi.png', label: 'Page 4'  },
   { num: 5,  file: 'page05-300dpi.png', label: 'Page 5'  },
   { num: 6,  file: 'page06-300dpi.png', label: 'Page 6'  },
