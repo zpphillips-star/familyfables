@@ -42,7 +42,7 @@ export default function BooksPage() {
         <h1
           className="text-5xl sm:text-6xl font-bold mb-4"
           style={{
-            fontFamily: "var(--font-fredoka), '\''Fredoka One'\'', cursive",
+            fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
             color: "#2D1B69",
           }}
         >
@@ -118,7 +118,7 @@ export default function BooksPage() {
                   <h2
                     className="text-4xl font-bold text-white mb-4"
                     style={{
-                      fontFamily: "var(--font-fredoka), '\''Fredoka One'\'', cursive",
+                      fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
                     }}
                   >
                     The Immortal Firefly
@@ -133,7 +133,7 @@ export default function BooksPage() {
                     href={AMAZON_STORE_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-shine inline-block px-7 py-3 rounded-xl font-bold transition-all hover:scale-105"
+                    className="btn-shine inline-block px-7 py-3 rounded-xl font-bold transition-all hover:scale-105 active:scale-95"
                     style={{ backgroundColor: "#F4A839", color: "#2D1B69" }}
                   >
                     Find on Amazon →
@@ -155,7 +155,7 @@ export default function BooksPage() {
           <h2
             className="text-3xl font-bold mb-4"
             style={{
-              fontFamily: "var(--font-fredoka), '\''Fredoka One'\'', cursive",
+              fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
               color: "#2D1B69",
             }}
           >
@@ -169,7 +169,7 @@ export default function BooksPage() {
             href={AMAZON_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+            className="btn-shine inline-block px-10 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 active:scale-95"
             style={{ backgroundColor: "#6B3FA0", color: "white" }}
           >
             Visit Our Amazon Store 📚

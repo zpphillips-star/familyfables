@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { AMAZON_STORE_URL } from "@/lib/books";
 import type { Metadata } from "next";
 import HiddenAboutSecret from "@/components/HiddenAboutSecret";
@@ -40,7 +40,7 @@ export default function AboutPage() {
           <h1
             className="text-5xl sm:text-6xl font-bold text-white mb-4"
             style={{
-              fontFamily: "var(--font-fredoka), '\''Fredoka One'\'', cursive",
+              fontFamily: "var(--font-catamaran), 'Catamaran', cursive",
             }}
           >
             A Legacy of Love &amp; Stories
@@ -69,7 +69,7 @@ export default function AboutPage() {
                 <h2
                   className="text-2xl font-bold mb-2"
                   style={{
-                    fontFamily: "var(--font-fredoka), cursive",
+                    fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
                     color: "#2D1B69",
                   }}
                 >
@@ -107,7 +107,7 @@ export default function AboutPage() {
                 <h2
                   className="text-3xl sm:text-4xl font-bold mb-4"
                   style={{
-                    fontFamily: "var(--font-fredoka), '\''Fredoka One'\'', cursive",
+                    fontFamily: "var(--font-catamaran), 'Catamaran', cursive",
                     color: "#2D1B69",
                   }}
                 >
@@ -175,7 +175,7 @@ export default function AboutPage() {
               <h2
                 className="text-3xl sm:text-4xl font-bold"
                 style={{
-                  fontFamily: "var(--font-fredoka), '\''Fredoka One'\'', cursive",
+                  fontFamily: "var(--font-catamaran), 'Catamaran', cursive",
                   color: "#2D1B69",
                 }}
               >
@@ -215,7 +215,7 @@ export default function AboutPage() {
                 <h3
                   className="text-xl font-bold mb-3"
                   style={{
-                    fontFamily: "var(--font-fredoka), cursive",
+                    fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
                     color: "#2D1B69",
                   }}
                 >
@@ -251,7 +251,7 @@ export default function AboutPage() {
                 <h3
                   className="text-2xl font-bold text-white mb-2"
                   style={{
-                    fontFamily: "var(--font-fredoka), cursive",
+                    fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
                   }}
                 >
                   Z.P. Phillips
@@ -284,7 +284,7 @@ export default function AboutPage() {
           <h2
             className="text-3xl sm:text-4xl font-bold mb-4"
             style={{
-              fontFamily: "var(--font-fredoka), '\''Fredoka One'\'', cursive",
+              fontFamily: "var(--font-catamaran), 'Catamaran', cursive",
               color: "#2D1B69",
             }}
           >
@@ -358,7 +358,7 @@ export default function AboutPage() {
           <h2
             className="text-3xl font-bold mb-4"
             style={{
-              fontFamily: "var(--font-fredoka), 'Fredoka One', cursive",
+              fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
               color: "#2D1B69",
             }}
           >
@@ -370,7 +370,7 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/books"
-              className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-white shadow-lg hover:shadow-xl transition-all"
+              className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-white shadow-lg hover:shadow-xl transition-all active:scale-95"
               style={{ backgroundColor: "#6B3FA0" }}
             >
               Browse Our Books →
@@ -379,7 +379,7 @@ export default function AboutPage() {
               href={AMAZON_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-8 py-3.5 rounded-xl font-bold border-2 transition-all hover:bg-yellow-50"
+              className="inline-block px-8 py-3.5 rounded-xl font-bold border-2 transition-all hover:bg-yellow-50 active:scale-95"
               style={{ borderColor: "#F4A839", color: "#6B3FA0" }}
             >
               Shop on Amazon ✨

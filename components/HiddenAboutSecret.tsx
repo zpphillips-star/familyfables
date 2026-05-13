@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 
@@ -116,7 +116,7 @@ export default function HiddenAboutSecret() {
             </div>
 
             <h3 style={{
-              fontFamily: 'var(--font-fredoka), "Fredoka One", cursive',
+              fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
               color: '#F4A839',
               fontSize: '28px',
               marginBottom: '4px',

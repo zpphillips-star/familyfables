@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Concert_One } from "next/font/google";
+import { Concert_One, Catamaran, Open_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -9,6 +9,20 @@ const concertOne = Concert_One({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-concert-one",
+  display: "swap",
+});
+
+const catamaran = Catamaran({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800", "900"],
+  variable: "--font-catamaran",
+  display: "swap",
+});
+
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-open-sans",
   display: "swap",
 });
 
@@ -53,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={concertOne.variable}>
+    <html lang="en" className={`${concertOne.variable} ${catamaran.variable} ${openSans.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bedtimeInitScript }} />
       </head>

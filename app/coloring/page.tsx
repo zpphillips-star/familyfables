@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Image from 'next/image';
@@ -39,7 +39,7 @@ export default function ColoringPage() {
           </div>
           <h1
             className="text-5xl md:text-6xl font-display mb-4 leading-tight"
-            style={{ color: '#2D1B69', fontFamily: "var(--font-fredoka), 'Fredoka One', cursive" }}
+            style={{ color: '#2D1B69', fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}
           >
             Color Amber&apos;s World! 🐉
           </h1>
@@ -111,8 +111,8 @@ export default function ColoringPage() {
                   <a
                     href={src}
                     download={`amber-dragon-keeper-${p.label.toLowerCase().replace(' ', '-')}.png`}
-                    className="btn-shine flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-transform hover:scale-105"
-                    style={{ backgroundColor: '#6B3FA0', color: 'white' }}
+                    className="btn-shine flex items-center gap-1 px-3 rounded-full text-xs font-bold transition-transform hover:scale-105 active:scale-95"
+                    style={{ backgroundColor: '#6B3FA0', color: 'white', minHeight: '48px' }}
                   >
                     ⬇ Print
                   </a>
@@ -128,7 +128,7 @@ export default function ColoringPage() {
           <div className="text-4xl mb-3">🖨️</div>
           <h2
             className="text-2xl font-display mb-2"
-            style={{ color: '#2D1B69', fontFamily: "var(--font-fredoka), 'Fredoka One', cursive" }}
+            style={{ color: '#2D1B69', fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}
           >
             Printing Tips
           </h2>
@@ -146,7 +146,7 @@ export default function ColoringPage() {
           </p>
           <Link
             href="/books"
-            className="btn-shine inline-block px-8 py-3 rounded-full font-bold text-sm shadow-md transition-transform hover:scale-105"
+            className="btn-shine inline-block px-8 py-3 rounded-full font-bold text-sm shadow-md transition-transform hover:scale-105 active:scale-95"
             style={{ backgroundColor: '#F4A839', color: '#2D1B69' }}
           >
             See All Our Books ✨
@@ -173,14 +173,18 @@ export default function ColoringPage() {
               className="w-full h-auto"
             />
             <div className="p-4 flex justify-between items-center">
-              <span className="text-sm font-semibold" style={{ color: '#7B6898' }}>
-                Tap outside to close
-              </span>
+              <button
+                className="text-sm font-semibold px-4 py-3 rounded-lg transition-colors hover:bg-gray-100 active:scale-95"
+                style={{ color: '#7B6898' }}
+                onClick={() => setLightbox(null)}
+              >
+                ✕ Close
+              </button>
               <a
                 href={lightbox}
                 download
-                className="btn-shine px-5 py-2 rounded-full text-sm font-bold"
-                style={{ backgroundColor: '#6B3FA0', color: 'white' }}
+                className="btn-shine px-5 py-3 rounded-full text-sm font-bold active:scale-95 transition-transform"
+                style={{ backgroundColor: '#6B3FA0', color: 'white', minHeight: '48px', display: 'inline-flex', alignItems: 'center' }}
               >
                 ⬇ Download Full Size
               </a>

@@ -221,6 +221,7 @@ export default function Home() {
             gap: '32px',
             flexWrap: 'wrap',
           }}
+          className="hero-content-row"
         >
           {/* Narwhal — the star of the show, goes first (left on desktop, top on mobile) */}
           <div style={{
@@ -230,8 +231,9 @@ export default function Home() {
             alignItems: 'center',
             justifyContent: 'center',
             order: 0,
+            maxWidth: '90vw',
           }}>
-            <TiltNarwhal size={520} />
+            <TiltNarwhal size={460} />
           </div>
 
           {/* Text side */}
@@ -257,7 +259,7 @@ export default function Home() {
             <h1
               style={{
                 fontFamily: ff,
-                fontSize: 'clamp(2rem, 5vw, 3.6rem)',
+                fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
                 lineHeight: 1.08,
                 color: '#007d68',
                 marginBottom: '20px',
@@ -281,7 +283,7 @@ export default function Home() {
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
               <a
                 href="#books"
-                className="btn-scale-pulse btn-shine"
+                className="btn-scale-pulse btn-shine active:scale-95 transition-transform"
                 style={{
                   display: 'inline-block',
                   background: CTA_ORANGE,
@@ -387,7 +389,7 @@ export default function Home() {
           <h2
             style={{
               fontFamily: ff,
-              fontSize: 'clamp(2rem, 4.5vw, 3.2rem)',
+              fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
               color: '#ffffff',
               textAlign: 'center',
               marginBottom: '56px',
@@ -399,7 +401,7 @@ export default function Home() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(225px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(225px, calc(50vw - 20px)), 1fr))',
               gap: '28px',
             }}
           >
@@ -510,6 +512,7 @@ export default function Home() {
                 letterSpacing: '0.04em',
                 boxShadow: `0 4px 18px ${CTA_ORANGE_SHADOW}`,
               }}
+              className="active:scale-95 transition-transform"
             >
               Browse All Books →
             </a>

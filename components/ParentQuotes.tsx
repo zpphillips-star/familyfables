@@ -118,7 +118,7 @@ export default function ParentQuotes() {
           <h2
             className="text-3xl sm:text-4xl font-bold mb-2"
             style={{
-              fontFamily: 'var(--font-fredoka), cursive',
+              fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
               color: '#3B1A8C',
             }}
           >
