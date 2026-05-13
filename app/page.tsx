@@ -219,103 +219,84 @@ export default function Home() {
         style={{
           background: '#dcf9f3',
           position: 'relative',
-          overflow: 'visible',
-          paddingBottom: '360px',
+          overflow: 'hidden',
+          paddingBottom: '200px',
           zIndex: 2,
         }}
       >
-        {/* Hero inner — narwhal left, text right, overlapping */}
+        {/* Hero: narwhal top-center, text below — works on all screen sizes */}
         <div
           style={{
-            maxWidth: '1100px',
+            maxWidth: '900px',
             margin: '0 auto',
-            padding: '40px 32px 0',
+            padding: '40px 24px 0',
+            textAlign: 'center',
             display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-            position: 'relative',
-            minHeight: '520px',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          {/* Narwhal — large, anchored bottom-left */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: '50%',
-              transform: 'translateX(-140%)',
-              zIndex: 3,
-              lineHeight: 0,
-            }}
-          >
-            <TiltNarwhal size={420} />
+          {/* Narwhal — large and centered */}
+          <div style={{ marginBottom: '-20px', zIndex: 3, position: 'relative' }}>
+            <TiltNarwhal size={340} />
           </div>
 
-          {/* Text block — right side, overlapping narwhal */}
-          <div
+          {/* "FAMILY FABLES" — white Concert One with teal outline */}
+          <h1
             style={{
+              fontFamily: ff,
+              fontSize: 'clamp(3.5rem, 14vw, 110px)',
+              color: '#ffffff',
+              textShadow: '4px 4px 0px #009380, 3px 3px 0px #009380, -1px -1px 0px #007060',
+              lineHeight: 1.0,
+              marginBottom: '12px',
+              letterSpacing: '0.02em',
               position: 'relative',
               zIndex: 4,
-              textAlign: 'center',
-              marginLeft: 'auto',
-              paddingBottom: '60px',
-              maxWidth: '600px',
             }}
           >
-            {/* "FAMILY FABLES" — white Concert One with teal outline shadow */}
-            <h1
-              style={{
-                fontFamily: ff,
-                fontSize: 'clamp(4rem, 11vw, 110px)',
-                color: '#ffffff',
-                textShadow: '5px 5px 0px #009380, 4px 4px 0px #009380, 3px 3px 0px #007060, -1px -1px 0px #009380',
-                lineHeight: 0.95,
-                marginBottom: '16px',
-                letterSpacing: '0.02em',
-              }}
-            >
-              Family Fables
-            </h1>
+            Family Fables
+          </h1>
 
-            {/* "Welcome To Our Bookstore" — dark teal Catamaran bold */}
-            <h2
-              style={{
-                fontFamily: `'Catamaran', var(--font-catamaran), sans-serif`,
-                fontSize: 'clamp(1.4rem, 3.5vw, 2.2rem)',
-                color: '#005a4a',
-                fontWeight: 800,
-                marginBottom: '36px',
-                lineHeight: 1.2,
-              }}
-            >
-              Welcome To Our Bookstore
-            </h2>
+          {/* "Welcome To Our Bookstore" */}
+          <h2
+            style={{
+              fontFamily: `'Catamaran', var(--font-catamaran), sans-serif`,
+              fontSize: 'clamp(1.3rem, 4vw, 2rem)',
+              color: '#005a4a',
+              fontWeight: 800,
+              marginBottom: '32px',
+              lineHeight: 1.2,
+            }}
+          >
+            Welcome To Our Bookstore
+          </h2>
 
-            {/* SHOP NOW button */}
-            <a
-              href="/books"
-              className="btn-shine btn-scale-pulse"
-              style={{
-                display: 'inline-block',
-                background: ORANGE,
-                color: '#ffffff',
-                padding: '16px 52px',
-                borderRadius: '4px',
-                fontFamily: ff,
-                fontSize: '1.15rem',
-                textDecoration: 'none',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                boxShadow: '0 4px 20px rgba(255,156,26,0.45)',
-              }}
-            >
-              Shop Now 🛒
-            </a>
-          </div>
+          {/* SHOP NOW */}
+          <a
+            href="/books"
+            className="btn-shine btn-scale-pulse"
+            style={{
+              display: 'inline-block',
+              background: ORANGE,
+              color: '#ffffff',
+              padding: '16px 52px',
+              borderRadius: '4px',
+              fontFamily: ff,
+              fontSize: '1.15rem',
+              textDecoration: 'none',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              boxShadow: '0 4px 20px rgba(255,156,26,0.45)',
+              marginBottom: '20px',
+            }}
+          >
+            Shop Now 🛒
+          </a>
         </div>
 
-        {/* Cloud divider → lavender (Now Available section below) */}
-        <CloudDivider fill="#d9b7e5" fillBack="#e2c8f0" />
+        {/* Cloud divider — real fluffy clouds into lavender section */}
+        <CloudDivider fill="#d9b7e5" fillBack="#e2c8f0" height={160} />
       </section>
 
       {/* ── SECTION 2: NOW AVAILABLE ────────────────────────────────── */}

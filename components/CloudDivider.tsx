@@ -75,7 +75,7 @@ export default function CloudDivider({
       {/* Back layer — taller, slightly lighter, creates cloud depth */}
       <svg
         viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
+        preserveAspectRatio="xMidYMax slice"
         style={{ ...svgBase, height: `${height}px` }}
         aria-hidden="true"
       >
@@ -84,7 +84,7 @@ export default function CloudDivider({
       {/* Front layer — main foreground clouds, 70% height so back peaks show above */}
       <svg
         viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
+        preserveAspectRatio="xMidYMax slice"
         style={{ ...svgBase, height: `${frontH}px` }}
         aria-hidden="true"
       >
