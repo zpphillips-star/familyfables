@@ -8,6 +8,7 @@ import { AMAZON_STORE_URL } from "@/lib/books";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/books", label: "Books" },
+  { href: "/coloring", label: "🎨 Coloring" },
   { href: "/about", label: "About" },
 ];
 
