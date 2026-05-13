@@ -5,7 +5,6 @@ import { books, AMAZON_STORE_URL } from '@/lib/books';
 import BedtimeToggle from '@/components/BedtimeToggle';
 import TouchBook from '@/components/TouchBook';
 import TiltNarwhal from '@/components/TiltNarwhal';
-import NewsletterSection from '@/components/NewsletterSection';
 import CloudDivider from '@/components/CloudDivider';
 import WaveDivider from '@/components/WaveDivider';
 
@@ -13,7 +12,7 @@ import WaveDivider from '@/components/WaveDivider';
 import { useState, useEffect } from 'react';
 
 type Spark = { id: number; x: number; y: number; rot: number; size: number; color: string };
-const SPARK_COLORS = ['#007d68', '#d9b5e5', '#78087c', '#daf8f2', '#006e59', '#a8e8dc'];
+const SPARK_COLORS = ['#009380', '#d9b7e5', '#78087c', '#dcf9f3', '#006e59', '#a8e8dc'];
 
 function SparkleTrail() {
   const [sparks, setSparks] = useState<Spark[]>([]);
@@ -60,13 +59,155 @@ function SparkleTrail() {
   );
 }
 
+// ── Subscribe Section ──────────────────────────────────────────────────────
+function SubscribeSection() {
+  const ff = "'Concert One', var(--font-concert-one), cursive";
+  const [submitted, setSubmitted] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName]   = useState('');
+  const [email, setEmail]         = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) setSubmitted(true);
+  };
+
+  return (
+    <section
+      id="subscribe"
+      style={{
+        background: 'linear-gradient(135deg, #78087c 0%, #a935a6 100%)',
+        position: 'relative',
+        paddingTop: '420px',
+        paddingBottom: '80px',
+        marginTop: '-380px',
+        zIndex: 0,
+      }}
+    >
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '0 32px', textAlign: 'center' }}>
+        <h2
+          style={{
+            fontFamily: ff,
+            fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+            color: '#ffffff',
+            marginBottom: '8px',
+            lineHeight: 1.1,
+          }}
+        >
+          Subscribe
+        </h2>
+        <h2
+          style={{
+            fontFamily: ff,
+            fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)',
+            color: '#dbdbdb',
+            marginBottom: '40px',
+            lineHeight: 1.2,
+          }}
+        >
+          For Updates and Giveaways
+        </h2>
+
+        {submitted ? (
+          <div style={{ padding: '32px', background: 'rgba(255,255,255,0.15)', borderRadius: '12px' }}>
+            <h2 style={{ fontFamily: ff, color: '#ffffff', fontSize: '1.8rem' }}>Success!</h2>
+            <p style={{ color: '#dcf9f3', marginTop: '8px' }}>You&apos;re in the family now — watch your inbox!</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+              <input
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+                style={{
+                  padding: '14px 18px',
+                  borderRadius: '6px',
+                  border: '2px solid rgba(255,255,255,0.3)',
+                  background: 'rgba(255,255,255,0.12)',
+                  color: '#ffffff',
+                  fontFamily: "'Open Sans', sans-serif",
+                  fontSize: '1rem',
+                  outline: 'none',
+                  width: '100%',
+                }}
+              />
+              <input
+                type="text"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
+                style={{
+                  padding: '14px 18px',
+                  borderRadius: '6px',
+                  border: '2px solid rgba(255,255,255,0.3)',
+                  background: 'rgba(255,255,255,0.12)',
+                  color: '#ffffff',
+                  fontFamily: "'Open Sans', sans-serif",
+                  fontSize: '1rem',
+                  outline: 'none',
+                  width: '100%',
+                }}
+              />
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '12px' }}>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                required
+                onChange={e => setEmail(e.target.value)}
+                style={{
+                  padding: '14px 18px',
+                  borderRadius: '6px',
+                  border: '2px solid rgba(255,255,255,0.3)',
+                  background: 'rgba(255,255,255,0.12)',
+                  color: '#ffffff',
+                  fontFamily: "'Open Sans', sans-serif",
+                  fontSize: '1rem',
+                  outline: 'none',
+                  width: '100%',
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  padding: '14px 28px',
+                  background: '#ff9c1a',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontFamily: ff,
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  letterSpacing: '0.04em',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Subscribe
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </section>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────
-// Bright orange CTA — used across all buttons
-const CTA_ORANGE = '#F7941D';
-const CTA_ORANGE_SHADOW = 'rgba(247,148,29,0.45)';
+const ORANGE = '#ff9c1a';
 
 export default function Home() {
   const ff = "'Concert One', var(--font-concert-one), cursive";
+
+  // Featured book — "What's Your Poo Poo Face" (Now Available)
+  const featuredBook = books.find(b => b.id === 'poo-poo-face')!;
+
+  // Best Sellers grid — Dream Ideas, Amber, Finding Hampton
+  const bestSellers = books.filter(b =>
+    ['dream-ideas', 'amber-dragon-keeper', 'finding-hampton'].includes(b.id)
+  );
 
   return (
     <div style={{ overflowX: 'hidden' }}>
@@ -76,222 +217,252 @@ export default function Home() {
       <section
         id="hero"
         style={{
-          background: 'linear-gradient(to bottom, #daf8f2 calc(100% - 380px), #d9b5e5 100%)',
+          background: '#dcf9f3',
           position: 'relative',
           overflow: 'visible',
-          minHeight: '92vh',
-          paddingBottom: '380px',
+          minHeight: '85vh',
+          paddingBottom: '400px',
           display: 'flex',
           flexDirection: 'column',
+          alignItems: 'center',
           zIndex: 2,
         }}
       >
-        {/* Hero content row */}
         <div
           style={{
             flex: 1,
-            position: 'relative',
-            zIndex: 2,
-            maxWidth: '1200px',
+            maxWidth: '900px',
             margin: '0 auto',
-            padding: 'clamp(48px, 8vw, 88px) 32px 60px',
+            padding: 'clamp(48px, 8vw, 80px) 32px 60px',
             width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '32px',
-            flexWrap: 'wrap',
-          }}
-          className="hero-content-row"
-        >
-          {/* Narwhal — the star of the show, goes first (left on desktop, top on mobile) */}
-          <div style={{
-            flex: '0 0 auto',
+            textAlign: 'center',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            order: 0,
-            maxWidth: '90vw',
-            position: 'relative',
-            zIndex: 2,
-            marginBottom: '-40px',
-          }}>
-            <TiltNarwhal size={460} />
+          }}
+        >
+          {/* Narwhal mascot — tap-interactive, centered */}
+          <div style={{ marginBottom: '16px' }}>
+            <TiltNarwhal size={220} />
           </div>
 
-          {/* Text side */}
-          <div style={{ flex: '1 1 280px', maxWidth: '520px', order: 1 }}>
-            {/* Fun badge */}
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: CTA_ORANGE,
-              color: '#fff',
-              padding: '6px 18px',
-              borderRadius: '50px',
+          {/* "Family Fables" — main display heading, Concert One, teal */}
+          <h2
+            className="font-display"
+            style={{
               fontFamily: ff,
-              fontSize: '0.9rem',
-              letterSpacing: '0.05em',
-              marginBottom: '20px',
-              boxShadow: `0 4px 14px ${CTA_ORANGE_SHADOW}`,
-            }}>
-              ✨ Bedtime just got better
-            </div>
+              fontSize: 'clamp(3rem, 8vw, 64px)',
+              color: '#009380',
+              marginBottom: '12px',
+              lineHeight: 1.05,
+              letterSpacing: '0.01em',
+            }}
+          >
+            Family Fables
+          </h2>
 
-            <h1
-              className="font-display"
-              style={{
-                fontFamily: ff,
-                fontSize: 'clamp(2.8rem, 5.5vw, 5rem)',
-                lineHeight: 1.1,
-                color: 'white',
-                marginBottom: '20px',
-                letterSpacing: '0.02em',
-                textShadow: '3px 3px 0px #007d68, -1px -1px 0px #005a4a, 0 0 0 #007d68',
-              }}
-            >
-              Books That Make Kids Giggle & Parents Cheer
-            </h1>
-            <p
-              style={{
-                fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-                color: '#006e59',
-                marginBottom: '36px',
-                lineHeight: 1.65,
-                maxWidth: '420px',
-              }}
-            >
-              Weird. Warm. Wonderful. The books kids demand at bedtime — every single night.
-            </p>
+          {/* "Welcome To Our Bookstore" — H1, teal, bold */}
+          <h1
+            style={{
+              fontFamily: ff,
+              fontSize: 'clamp(1.25rem, 3vw, 2rem)',
+              color: '#007d68',
+              marginBottom: '36px',
+              lineHeight: 1.3,
+              fontWeight: 'bold',
+            }}
+          >
+            Welcome To Our Bookstore
+          </h1>
 
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
-              <a
-                href="#books"
-                className="btn-scale-pulse btn-shine active:scale-95 transition-transform"
-                style={{
-                  display: 'inline-block',
-                  background: CTA_ORANGE,
-                  color: '#ffffff',
-                  padding: '16px 40px',
-                  borderRadius: '50px',
-                  fontFamily: ff,
-                  fontSize: '1.15rem',
-                  textDecoration: 'none',
-                  letterSpacing: '0.04em',
-                  boxShadow: `0 6px 24px ${CTA_ORANGE_SHADOW}`,
-                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                }}
-              >
-                See the Books →
-              </a>
-              <a
-                href="#about"
-                style={{
-                  fontFamily: ff,
-                  fontSize: '1rem',
-                  color: '#007d68',
-                  textDecoration: 'none',
-                  opacity: 0.8,
-                  letterSpacing: '0.02em',
-                }}
-              >
-                Our story ↓
-              </a>
-            </div>
-
-            {/* Social proof */}
-            <div style={{
-              marginTop: '32px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              flexWrap: 'wrap',
-            }}>
-              <div style={{ display: 'flex' }}>
-                {['⭐','⭐','⭐','⭐','⭐'].map((s,i) => (
-                  <span key={i} style={{ fontSize: '1rem' }}>{s}</span>
-                ))}
-              </div>
-              <span style={{ fontFamily: ff, fontSize: '0.88rem', color: '#007d68', opacity: 0.85 }}>
-                Loved by thousands of families
-              </span>
-            </div>
-
-            {/* Value-prop chips */}
-            <div style={{ marginTop: '24px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              {[
-                { icon: '🎨', label: 'Free Kids Activities', href: '/activities' },
-                { icon: '📖', label: 'Read-Aloud Friendly', href: null },
-                { icon: '😂', label: 'Parents Love Them Too', href: null },
-              ].map(({ icon, label, href }) => {
-                const style = {
-                  display: 'inline-flex' as const,
-                  alignItems: 'center' as const,
-                  gap: '6px',
-                  background: 'rgba(0,125,104,0.1)',
-                  border: '1.5px solid rgba(0,125,104,0.25)',
-                  color: '#006e59',
-                  padding: '6px 14px',
-                  borderRadius: '50px',
-                  fontFamily: ff,
-                  fontSize: '0.82rem',
-                  letterSpacing: '0.02em',
-                  textDecoration: 'none',
-                  cursor: href ? 'pointer' : 'default',
-                };
-                return href
-                  ? <a key={label} href={href} style={style}><span>{icon}</span> {label}</a>
-                  : <div key={label} style={style}><span>{icon}</span> {label}</div>;
-              })}
-            </div>
-          </div>
+          {/* Shop Now — orange CTA button */}
+          <a
+            href="/books"
+            className="btn-shine btn-scale-pulse"
+            style={{
+              display: 'inline-block',
+              background: ORANGE,
+              color: '#ffffff',
+              padding: '14px 48px',
+              borderRadius: '4px',
+              fontFamily: ff,
+              fontSize: '1.1rem',
+              textDecoration: 'none',
+              letterSpacing: '0.06em',
+              boxShadow: '0 4px 16px rgba(255,156,26,0.4)',
+              textTransform: 'uppercase',
+            }}
+          >
+            Shop Now
+          </a>
         </div>
 
-        {/* Clouds at bottom of hero → lavender matches books section bg */}
-        <CloudDivider fill="#d9b5e5" fillBack="#e8d0f2" />
+        {/* Cloud divider → lavender (Now Available section below) */}
+        <CloudDivider fill="#d9b7e5" fillBack="#e2c8f0" />
       </section>
 
-      {/* ── SECTION 2: BOOKS GRID ───────────────────────────────────── */}
+      {/* ── SECTION 2: NOW AVAILABLE ────────────────────────────────── */}
       <section
-        id="books"
+        id="now-available"
         style={{
-          background: 'linear-gradient(to bottom, #d9b5e5 0px, #d9b5e5 384px, #78087c 100%)',
+          background: '#d9b7e5',
           position: 'relative',
-          marginTop: '-384px',
-          paddingTop: '384px',
-          paddingBottom: '380px',
+          marginTop: '-400px',
+          paddingTop: '400px',
+          paddingBottom: '400px',
           zIndex: 1,
         }}
       >
         <div
           style={{
-            maxWidth: '1200px',
+            maxWidth: '1100px',
             margin: '0 auto',
-            padding: '60px 32px 40px',
+            padding: '40px 32px 40px',
+          }}
+        >
+          {/* Section heading */}
+          <h2
+            className="font-display"
+            style={{
+              fontFamily: ff,
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              color: '#78087c',
+              textAlign: 'center',
+              marginBottom: '48px',
+              lineHeight: 1.1,
+            }}
+          >
+            Now Available
+          </h2>
+
+          {/* Featured book layout: title image left, cover right */}
+          <div
+            style={{
+              display: 'flex',
+              gap: '48px',
+              alignItems: 'flex-start',
+              flexWrap: 'wrap',
+            }}
+          >
+            {/* Left: title + description + button */}
+            <div style={{ flex: '2 1 340px' }}>
+              {/* Poo Poo Face title text image */}
+              <div style={{ marginBottom: '24px' }}>
+                <Image
+                  src="/images/wp/deep-purple-poo-poo-face-title.png"
+                  alt="What's Your Poo Poo Face"
+                  width={910}
+                  height={93}
+                  style={{ width: '100%', maxWidth: '600px', height: 'auto' }}
+                  priority
+                />
+              </div>
+
+              <p
+                style={{
+                  fontSize: 'clamp(1rem, 1.8vw, 1.1rem)',
+                  color: '#3a0245',
+                  lineHeight: 1.75,
+                  marginBottom: '28px',
+                  maxWidth: '560px',
+                }}
+              >
+                {featuredBook.description.split(' Perfect for:')[0]}
+              </p>
+
+              <a
+                href="https://www.amazon.com/dp/1951173163/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  background: ORANGE,
+                  color: '#ffffff',
+                  padding: '12px 36px',
+                  borderRadius: '4px',
+                  fontFamily: ff,
+                  fontSize: '1rem',
+                  textDecoration: 'none',
+                  letterSpacing: '0.05em',
+                  boxShadow: '0 3px 12px rgba(255,156,26,0.35)',
+                }}
+                className="btn-shine"
+              >
+                Amazon
+              </a>
+            </div>
+
+            {/* Right: book cover */}
+            <div
+              style={{
+                flex: '1 1 200px',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <Image
+                src="/images/wp/whats-your-poopoo-face-400.png"
+                alt="What's Your Poo Poo Face cover"
+                width={400}
+                height={400}
+                style={{
+                  width: 'clamp(160px, 28vw, 300px)',
+                  height: 'auto',
+                  borderRadius: '8px',
+                  boxShadow: '4px 6px 24px rgba(0,0,0,0.2)',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Wave divider → mint (Best Sellers below) */}
+        <WaveDivider fill="#dcf9f3" />
+      </section>
+
+      {/* ── SECTION 3: BEST SELLERS ─────────────────────────────────── */}
+      <section
+        id="books"
+        style={{
+          background: '#dcf9f3',
+          position: 'relative',
+          marginTop: '-400px',
+          paddingTop: '400px',
+          paddingBottom: '400px',
+          zIndex: 0,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1100px',
+            margin: '0 auto',
+            padding: '40px 32px 40px',
           }}
         >
           <h2
             className="font-display"
             style={{
               fontFamily: ff,
-              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-              color: '#ffffff',
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              color: '#78087c',
               textAlign: 'center',
-              marginBottom: '56px',
-              textShadow: '0 2px 12px rgba(0,0,0,0.2)',
+              marginBottom: '48px',
+              lineHeight: 1.1,
             }}
           >
-            The Books
+            Best Sellers
           </h2>
+
+          {/* 3-column best sellers using TouchBook */}
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(225px, calc(50vw - 20px)), 1fr))',
-              gap: '28px',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, calc(100vw - 64px)), 1fr))',
+              gap: '32px',
+              marginBottom: '48px',
             }}
           >
-            {books.map(book => (
+            {bestSellers.map(book => (
               <TouchBook
                 key={book.id}
                 title={book.title}
@@ -304,110 +475,160 @@ export default function Home() {
               />
             ))}
           </div>
+
+          {/* "See All Books" link to full grid */}
+          <div style={{ textAlign: 'center', marginTop: '16px' }}>
+            <a
+              href="/books"
+              style={{
+                display: 'inline-block',
+                background: ORANGE,
+                color: '#ffffff',
+                padding: '14px 40px',
+                borderRadius: '4px',
+                fontFamily: ff,
+                fontSize: '1rem',
+                textDecoration: 'none',
+                letterSpacing: '0.05em',
+                boxShadow: '0 3px 12px rgba(255,156,26,0.35)',
+              }}
+              className="btn-shine"
+            >
+              See All Books
+            </a>
+          </div>
         </div>
-        {/* Wave at bottom of books → mint matches about section bg */}
-        <WaveDivider fill="#daf8f2" />
+
+        {/* Cloud divider → lavender (About section below) */}
+        <CloudDivider fill="#d9b7e5" fillBack="#e2c8f0" />
       </section>
 
-      {/* ── SECTION 3: CHARACTER / ABOUT ────────────────────────────── */}
+      {/* ── SECTION 4: FIND OUT MORE / OR SHOP ONLINE ───────────────── */}
       <section
         id="about"
         style={{
-          background: '#e8d5f0',
-          marginTop: '-384px',
-          paddingTop: '384px',
+          background: '#d9b7e5',
           position: 'relative',
-          zIndex: 0,
+          marginTop: '-400px',
+          paddingTop: '400px',
+          paddingBottom: '80px',
+          zIndex: -1,
         }}
       >
         <div
           style={{
-            maxWidth: '1100px',
+            maxWidth: '800px',
             margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '60px',
-            flexWrap: 'wrap',
+            padding: '40px 32px 60px',
+            textAlign: 'center',
           }}
         >
-          {/* Purple logo as brand visual */}
-          <div
+          <h2
+            className="font-display"
             style={{
-              flex: '0 0 auto',
-              width: 'clamp(180px, 28vw, 280px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              fontFamily: ff,
+              fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+              color: '#78087c',
+              marginBottom: '12px',
+              lineHeight: 1.1,
             }}
           >
-            <Image
-              src="/images/originals/2020-all-purple-logo.png"
-              alt="Family Fables logo"
-              width={500}
-              height={500}
-              style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 8px 24px rgba(120,8,124,0.18))' }}
-            />
-          </div>
+            find out more about us
+          </h2>
 
-          {/* About text */}
-          <div style={{ flex: '1 1 280px' }}>
-            <h2
-              style={{
-                fontFamily: ff,
-                fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-                color: '#78087c',
-                marginBottom: '20px',
-                lineHeight: 1.2,
-              }}
-            >
-              Made for Real Family Moments
-            </h2>
-            <p
-              style={{
-                fontSize: 'clamp(1rem, 1.8vw, 1.15rem)',
-                color: '#4a0260',
-                lineHeight: 1.75,
-                marginBottom: '16px',
-              }}
-            >
-              Family Fables was born out of a simple idea: books should be as fun for the grown-up reading them as for the kid listening. We write stories that are weird, warm, and just a little bit silly — exactly the way bedtime should be.
-            </p>
-            <p
-              style={{
-                fontSize: 'clamp(0.95rem, 1.6vw, 1.1rem)',
-                color: '#78087c',
-                lineHeight: 1.75,
-              }}
-            >
-              Every book is written to be read out loud — with voices, sound effects, and at least one moment where you look up to see if they&apos;re laughing too. (They are.)
-            </p>
-            <a
-              href={AMAZON_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-block',
-                marginTop: '28px',
-                background: CTA_ORANGE,
-                color: '#ffffff',
-                padding: '14px 36px',
-                borderRadius: '50px',
-                fontFamily: ff,
-                fontSize: '1.05rem',
-                textDecoration: 'none',
-                letterSpacing: '0.04em',
-                boxShadow: `0 4px 18px ${CTA_ORANGE_SHADOW}`,
-              }}
-              className="active:scale-95 transition-transform"
-            >
-              Browse All Books →
-            </a>
+          <h2
+            className="font-display"
+            style={{
+              fontFamily: ff,
+              fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
+              color: '#006e59',
+              marginBottom: '36px',
+              lineHeight: 1.1,
+            }}
+          >
+            Or Shop Online
+          </h2>
+
+          <a
+            href="/books"
+            style={{
+              display: 'inline-block',
+              background: ORANGE,
+              color: '#ffffff',
+              padding: '14px 44px',
+              borderRadius: '4px',
+              fontFamily: ff,
+              fontSize: '1rem',
+              textDecoration: 'none',
+              letterSpacing: '0.05em',
+              boxShadow: '0 3px 12px rgba(255,156,26,0.35)',
+              marginBottom: '40px',
+            }}
+            className="btn-shine"
+          >
+            Browse The Shop
+          </a>
+
+          {/* Social media links */}
+          <div
+            style={{
+              display: 'flex',
+              gap: '20px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              marginTop: '8px',
+            }}
+          >
+            {[
+              { name: 'Facebook', url: 'https://www.facebook.com/familyfables/', color: '#1877f2' },
+              { name: 'Instagram', url: 'https://www.instagram.com/familyfables/', color: '#e1306c' },
+              { name: 'X / Twitter', url: 'https://twitter.com/familyfables', color: '#000000' },
+            ].map(({ name, url, color }) => (
+              <a
+                key={name}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: 'rgba(255,255,255,0.7)',
+                  color: color,
+                  padding: '10px 22px',
+                  borderRadius: '6px',
+                  fontFamily: ff,
+                  fontSize: '0.9rem',
+                  textDecoration: 'none',
+                  letterSpacing: '0.03em',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                  border: `2px solid ${color}22`,
+                  transition: 'transform 0.15s ease',
+                }}
+                className="active:scale-95"
+              >
+                Follow
+                <span
+                  style={{
+                    fontFamily: "'Open Sans', sans-serif",
+                    fontWeight: 700,
+                    fontSize: '0.82rem',
+                  }}
+                >
+                  {name}
+                </span>
+              </a>
+            ))}
           </div>
         </div>
+
+        {/* Wave divider → purple subscribe bg */}
+        <WaveDivider fill="#78087c" />
       </section>
 
-      {/* ── SECTION 4: NEWSLETTER ───────────────────────────────────── */}
-      <NewsletterSection />
+      {/* ── SECTION 5: SUBSCRIBE ────────────────────────────────────── */}
+      <SubscribeSection />
 
       <BedtimeToggle />
     </div>

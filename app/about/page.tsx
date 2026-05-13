@@ -12,48 +12,58 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div>
-      {/* ─── HEADER ─────────────────────────────────────────── */}
+      {/* ─── HEADER — matches WP aboutus page ──────────────── */}
       <section
         className="py-20 px-4 text-center relative overflow-hidden"
         style={{
-          background:
-            "linear-gradient(135deg, #2D1B69 0%, #4A2875 40%, #6B3FA0 100%)",
-          minHeight: "40vh",
+          background: "#dcf9f3",
+          minHeight: "35vh",
           display: "flex",
           alignItems: "center",
         }}
       >
         <div className="max-w-3xl mx-auto w-full">
-          <div className="absolute top-8 right-12 text-4xl opacity-30 float-slow pointer-events-none" aria-hidden>
-            🌟
-          </div>
-          <div className="absolute bottom-8 left-12 text-3xl opacity-30 float-mid pointer-events-none" aria-hidden>
-            ✨
-          </div>
-
-          <div
-            className="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-6"
-            style={{ backgroundColor: "#F4A839", color: "#2D1B69" }}
-          >
-            🌿 Our Story
-          </div>
-          <h1
-            className="font-display text-white mb-4"
+          <h2
+            className="font-display"
             style={{
-              fontSize: 'clamp(3rem, 7vw, 6rem)',
+              fontFamily: "var(--font-concert-one), 'Concert One', cursive",
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              color: "#009380",
+              marginBottom: "12px",
+              lineHeight: 1.1,
             }}
           >
-            A Legacy of Love &amp; Stories
+            About US
+          </h2>
+          <h1
+            style={{
+              fontFamily: "var(--font-concert-one), 'Concert One', cursive",
+              fontSize: "clamp(2rem, 5vw, 3.5rem)",
+              color: "#78087c",
+              marginBottom: "12px",
+              fontWeight: "bold",
+              lineHeight: 1.1,
+            }}
+          >
+            Family Run,
+            <br />
+            Lots Of Fun
           </h1>
-          <p className="text-lg" style={{ color: "#C8B4E8" }}>
-            How one boy from Brooklyn inspired a children&apos;s book company that
-            brings joy to families everywhere.
+          <p
+            className="text-lg"
+            style={{
+              color: "#006e59",
+              fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+            }}
+          >
+            Our story: how one boy from Brooklyn inspired a children&apos;s book company
+            that brings joy to families everywhere.
           </p>
         </div>
       </section>
 
       {/* ─── VICTOR PLOTKIN STORY ───────────────────────────── */}
-      <section className="py-20 px-4" style={{ backgroundColor: "#FFF8F0" }}>
+      <section className="py-20 px-4" style={{ backgroundColor: "#dcf9f3" }}>
         <div className="max-w-4xl mx-auto">
           {/* Intro */}
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start mb-16">
@@ -278,7 +288,7 @@ export default function AboutPage() {
       {/* ─── BOOK TIMELINE ──────────────────────────────────── */}
       <section
         className="py-16 px-4"
-        style={{ backgroundColor: "#F0EBF8" }}
+        style={{ backgroundColor: "#d9b7e5" }}
       >
         <div className="max-w-3xl mx-auto text-center">
           <h2
@@ -351,7 +361,7 @@ export default function AboutPage() {
       {/* ─── CTA ────────────────────────────────────────────── */}
       <section
         className="py-16 px-4 text-center"
-        style={{ backgroundColor: "#FFF8F0" }}
+        style={{ backgroundColor: "#dcf9f3" }}
       >
         <div className="max-w-xl mx-auto">
           <div className="text-4xl mb-4">📖</div>
@@ -370,19 +380,19 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/books"
-              className="btn-shine inline-block px-8 py-3.5 rounded-xl font-bold text-white shadow-lg hover:shadow-xl transition-all active:scale-95"
-              style={{ backgroundColor: "#6B3FA0" }}
+              className="btn-shine inline-block px-8 py-3.5 font-bold text-white shadow-lg hover:shadow-xl transition-all active:scale-95"
+              style={{ backgroundColor: "#ff9c1a", borderRadius: "4px" }}
             >
-              Browse Our Books →
+              Browse Our Books
             </Link>
             <a
               href={AMAZON_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-8 py-3.5 rounded-xl font-bold border-2 transition-all hover:bg-yellow-50 active:scale-95"
-              style={{ borderColor: "#F4A839", color: "#6B3FA0" }}
+              className="btn-shine inline-block px-8 py-3.5 font-bold text-white shadow transition-all active:scale-95"
+              style={{ backgroundColor: "#009380", borderRadius: "4px" }}
             >
-              Shop on Amazon ✨
+              Shop on Amazon
             </a>
           </div>
         </div>

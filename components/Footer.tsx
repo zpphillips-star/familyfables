@@ -4,69 +4,123 @@ import { AMAZON_STORE_URL } from "@/lib/books";
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: "#2D1B69", color: "#E8DCF5" }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+    <footer>
+      {/* Main footer area — mint bg, teal text (matches WP #main-footer) */}
+      <div style={{ backgroundColor: "#dcf9f3", color: "#009380" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Image src="/images/logo-teal.png" alt="Family Fables" width={36} height={36} />
-              <span className="text-xl" style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", color: "#daf8f2" }}>
-                Family Fables
-              </span>
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Image src="/images/logo-teal.png" alt="Family Fables" width={36} height={36} />
+                <span
+                  className="text-xl"
+                  style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", color: "#009380" }}
+                >
+                  Family Fables
+                </span>
+              </div>
+              <p className="text-sm leading-relaxed" style={{ color: "#009380" }}>
+                Stories that warm little hearts and spark big imaginations.
+              </p>
+              <p className="text-xs mt-3" style={{ color: "#006e59" }}>Founded by Z.P. Phillips</p>
             </div>
-            <p className="text-sm leading-relaxed" style={{ color: "#B8A8D8" }}>
-              Stories that warm little hearts and spark big imaginations.
-              Every book is a new adventure waiting to begin.
-            </p>
-            <p className="text-xs mt-4" style={{ color: "#9B8AC4" }}>Founded by Z.P. Phillips</p>
-          </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-bold text-sm uppercase tracking-widest mb-4" style={{ color: "#F4A839" }}>
-              Explore
-            </h3>
-            <ul className="space-y-2">
-              {[
-                { href: "/", label: "Home" },
-                { href: "/books", label: "Our Books" },
-                { href: "/about", label: "Our Story" },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm transition-colors hover:text-white" style={{ color: "#B8A8D8" }}>
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+            {/* Quick Links */}
+            <div>
+              <h3
+                className="font-bold text-sm uppercase tracking-widest mb-4"
+                style={{ color: "#ff9c1a" }}
+              >
+                Explore
+              </h3>
+              <ul className="space-y-2">
+                {[
+                  { href: "/", label: "home" },
+                  { href: "/books", label: "bookstore" },
+                  { href: "/about", label: "about us" },
+                ].map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm transition-colors hover:text-teal-700"
+                      style={{ color: "#77137a" }}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Shop */}
-          <div>
-            <h3 className="font-bold text-sm uppercase tracking-widest mb-4" style={{ color: "#F4A839" }}>
-              Shop
-            </h3>
-            <p className="text-sm mb-4" style={{ color: "#B8A8D8" }}>All books available on Amazon.</p>
-            <a
-              href={AMAZON_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-5 py-2 rounded-full text-sm font-bold transition-transform hover:scale-105"
-              style={{ backgroundColor: "#F4A839", color: "#2D1B69" }}
-            >
-              Browse All Books
-            </a>
+            {/* Shop */}
+            <div>
+              <h3
+                className="font-bold text-sm uppercase tracking-widest mb-4"
+                style={{ color: "#ff9c1a" }}
+              >
+                Shop
+              </h3>
+              <p className="text-sm mb-4" style={{ color: "#009380" }}>All books available on Amazon.</p>
+              <a
+                href={AMAZON_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-5 py-2 rounded text-sm font-bold transition-transform hover:scale-105"
+                style={{ backgroundColor: "#ff9c1a", color: "#ffffff" }}
+              >
+                Browse All Books
+              </a>
+            </div>
           </div>
         </div>
+      </div>
 
+      {/* Footer nav bar — purple bg (matches WP #et-footer-nav: #a935a6) */}
+      <div style={{ backgroundColor: "#a935a6" }}>
+        <div className="max-w-6xl mx-auto px-4 py-3 flex gap-6 justify-center">
+          {[
+            { href: "/", label: "home" },
+            { href: "/books", label: "bookstore" },
+            { href: "/about", label: "about us" },
+          ].map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm transition-colors hover:opacity-75"
+              style={{ color: "#daf8f2", fontSize: "17px" }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer bottom bar — deep purple (matches WP #footer-bottom: #78087c) */}
+      <div style={{ backgroundColor: "#78087c" }}>
         <div
-          className="mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs"
-          style={{ color: "#9B8AC4" }}
+          className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs"
+          style={{ color: "#ffffff" }}
         >
-          <p>{new Date().getFullYear()} Family Fables. All rights reserved.</p>
-          <p>Making bedtime the best part of the day, one ridiculous story at a time.</p>
+          <p>Copyright {new Date().getFullYear()} | Family Fables LLC</p>
+          <div className="flex gap-3">
+            {[
+              { label: "Facebook", url: "https://www.facebook.com/familyfables/" },
+              { label: "Instagram", url: "https://www.instagram.com/familyfables/" },
+            ].map(({ label, url }) => (
+              <a
+                key={label}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#dcf9f3", fontSize: "13px" }}
+                className="hover:opacity-75 transition-opacity"
+              >
+                {label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

@@ -6,10 +6,9 @@ import { useState } from "react";
 import { AMAZON_STORE_URL } from "@/lib/books";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/books", label: "Books" },
-  { href: "/coloring", label: "🎨 Coloring" },
-  { href: "/about", label: "About" },
+  { href: "/", label: "home" },
+  { href: "/books", label: "bookstore" },
+  { href: "/about", label: "about us" },
 ];
 
 export default function Navbar() {
@@ -18,7 +17,7 @@ export default function Navbar() {
   return (
     <nav
       className="sticky top-0 z-50 shadow-sm"
-      style={{ backgroundColor: "#daf8f2", borderBottom: "2px solid #a8e8dc" }}
+      style={{ backgroundColor: "#dcf9f3", borderBottom: "2px solid #b0e8dc" }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -33,7 +32,7 @@ export default function Navbar() {
             />
             <span
               className="text-xl font-display tracking-wide"
-              style={{ color: "#007d68", fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
+              style={{ color: "#009380", fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
             >
               Family Fables
             </span>
@@ -46,7 +45,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className="font-semibold text-sm transition-colors duration-200 hover:opacity-70"
-                style={{ color: "#006e59" }}
+                style={{ color: "#009380" }}
               >
                 {link.label}
               </Link>
@@ -55,8 +54,8 @@ export default function Navbar() {
               href={AMAZON_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-shine px-5 py-2 rounded-full font-bold text-sm shadow-md transition-transform duration-200 hover:scale-105"
-              style={{ backgroundColor: "#007d68", color: "#ffffff" }}
+              className="btn-shine px-5 py-2 rounded font-bold text-sm shadow-md transition-transform duration-200 hover:scale-105"
+              style={{ backgroundColor: "#ff9c1a", color: "#ffffff" }}
             >
               Shop
             </a>
@@ -98,7 +97,7 @@ export default function Navbar() {
         {mobileOpen && (
           <div
             className="md:hidden py-4 space-y-1 border-t"
-            style={{ borderColor: "#a8e8dc" }}
+            style={{ borderColor: "#b0e8dc" }}
           >
             {navLinks.map((link) => (
               <Link
@@ -106,7 +105,7 @@ export default function Navbar() {
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
                 className="block px-4 py-3 rounded-lg font-semibold transition-colors hover:bg-teal-50"
-                style={{ color: "#006e59" }}
+                style={{ color: "#009380" }}
               >
                 {link.label}
               </Link>
@@ -116,8 +115,8 @@ export default function Navbar() {
                 href={AMAZON_STORE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-5 py-2 rounded-full font-bold text-sm shadow"
-                style={{ backgroundColor: "#007d68", color: "#ffffff" }}
+                className="inline-block px-5 py-2 rounded font-bold text-sm shadow"
+                style={{ backgroundColor: "#ff9c1a", color: "#ffffff" }}
               >
                 Shop on Amazon
               </a>
