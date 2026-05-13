@@ -12,6 +12,7 @@ const pages = [
   { num: 8,  file: 'page08-300dpi.png', label: 'Page 8'  },
   { num: 9,  file: 'page09-300dpi.png', label: 'Page 9'  },
   { num: 10, file: 'page10-300dpi.png', label: 'Page 10' },
+  { num: 11, file: 'page11-300dpi.png', label: 'Page 11' },
 ];
 
 export default function ColoringPage() {
