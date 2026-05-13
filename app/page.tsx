@@ -6,128 +6,8 @@ import BedtimeToggle from '@/components/BedtimeToggle';
 import TouchBook from '@/components/TouchBook';
 import TiltNarwhal from '@/components/TiltNarwhal';
 import NewsletterSection from '@/components/NewsletterSection';
-
-// ── Section Clouds ──────────────────────────────────────────────────────────
-// Two completely different cloud configurations so each transition looks unique.
-// All ellipses: cy = vb (bottom of viewBox) → only top halves visible = cloud bumps.
-// Three CSS-height layers create depth: back tallest (peaks highest), front shortest.
-
-type CloudEllipse = { cx: number; rx: number; ry: number };
-type CloudSet = { back: CloudEllipse[]; mid: CloudEllipse[]; front: CloudEllipse[] };
-
-// VARIANT A — hero → books. Big left-side anchors, small clusters right.
-const CLOUDS_A: CloudSet = {
-  back: [
-    { cx:   60, rx: 195, ry: 200 },
-    { cx:  275, rx: 185, ry: 190 },
-    { cx:  498, rx: 218, ry: 210 },
-    { cx:  738, rx: 175, ry: 182 },
-    { cx:  958, rx: 210, ry: 202 },
-    { cx: 1192, rx: 188, ry: 194 },
-    { cx: 1408, rx: 198, ry: 200 },
-  ],
-  mid: [
-    { cx:   18, rx: 145, ry: 135 },
-    { cx:  188, rx:  85, ry:  72 },  // small
-    { cx:  348, rx: 178, ry: 168 },
-    { cx:  528, rx:  92, ry:  80 },  // small
-    { cx:  698, rx: 188, ry: 175 },
-    { cx:  878, rx:  68, ry:  56 },  // tiny
-    { cx: 1018, rx: 158, ry: 148 },
-    { cx: 1198, rx: 108, ry:  95 },  // medium
-    { cx: 1388, rx: 172, ry: 162 },
-  ],
-  front: [
-    { cx:   18, rx:  72, ry:  58 },  // small
-    { cx:  135, rx: 195, ry: 198 },  // ★ BIG #1
-    { cx:  318, rx:  58, ry:  48 },  // tiny
-    { cx:  428, rx: 122, ry: 108 },  // medium
-    { cx:  572, rx:  65, ry:  54 },  // small
-    { cx:  690, rx: 198, ry: 192 },  // ★ BIG #2
-    { cx:  862, rx:  92, ry:  78 },
-    { cx:  968, rx:  48, ry:  40 },  // tiny
-    { cx: 1065, rx: 138, ry: 125 },  // medium
-    { cx: 1198, rx:  72, ry:  60 },  // small
-    { cx: 1310, rx: 155, ry: 145 },
-    { cx: 1448, rx:  82, ry:  68 },  // small
-  ],
-};
-
-// VARIANT B — books → about. Evenly spread, big ones on FAR left & FAR right.
-const CLOUDS_B: CloudSet = {
-  back: [
-    { cx:  148, rx: 205, ry: 208 },
-    { cx:  378, rx: 192, ry: 196 },
-    { cx:  612, rx: 220, ry: 214 },
-    { cx:  842, rx: 182, ry: 186 },
-    { cx: 1062, rx: 208, ry: 205 },
-    { cx: 1292, rx: 196, ry: 200 },
-    { cx: 1452, rx: 188, ry: 192 },
-  ],
-  mid: [
-    { cx:   58, rx: 102, ry:  90 },  // small
-    { cx:  228, rx: 182, ry: 170 },
-    { cx:  418, rx:  75, ry:  63 },  // tiny
-    { cx:  602, rx: 168, ry: 158 },
-    { cx:  782, rx:  88, ry:  76 },  // small
-    { cx:  962, rx: 180, ry: 170 },
-    { cx: 1122, rx:  62, ry:  53 },  // tiny
-    { cx: 1268, rx: 158, ry: 148 },
-    { cx: 1432, rx:  95, ry:  83 },  // small
-  ],
-  front: [
-    { cx:   32, rx: 192, ry: 195 },  // ★ BIG #1 — far left dominant
-    { cx:  215, rx:  62, ry:  50 },  // tiny
-    { cx:  328, rx: 132, ry: 120 },  // medium
-    { cx:  485, rx:  55, ry:  44 },  // tiny
-    { cx:  602, rx:  85, ry:  72 },  // small
-    { cx:  742, rx:  45, ry:  38 },  // very tiny
-    { cx:  845, rx: 128, ry: 115 },  // medium
-    { cx: 1002, rx:  70, ry:  58 },  // small
-    { cx: 1128, rx: 198, ry: 194 },  // ★ BIG #2 — far right dominant
-    { cx: 1302, rx:  78, ry:  64 },  // small
-    { cx: 1392, rx: 118, ry: 106 },  // medium
-    { cx: 1458, rx:  60, ry:  50 },  // tiny
-  ],
-};
-
-function SectionClouds({ fill, backFill, midFill, variant = 'a' }:
-  { fill: string; backFill?: string; midFill?: string; variant?: 'a' | 'b' }) {
-
-  const clouds = variant === 'b' ? CLOUDS_B : CLOUDS_A;
-  const totalH = backFill ? 380 : 140;
-  const vb = 220;
-  const midH   = Math.round(totalH * 0.84) + 2;
-  const frontH = Math.round(totalH * 0.70) + 2;
-  const resolvedMidFill = midFill ?? fill;
-
-  return (
-    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: `${totalH}px`, pointerEvents: 'none', zIndex: 2 }}>
-      {/* LAYER 1 — BACK: tallest, peaks highest */}
-      {backFill && (
-        <svg viewBox={`0 0 1440 ${vb}`} preserveAspectRatio="none"
-          style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${totalH}px`, display: 'block' }}>
-          {clouds.back.map((c, i) => <ellipse key={i} cx={c.cx} cy={vb} rx={c.rx} ry={c.ry} fill={backFill} />)}
-          <rect x="0" y={vb - 2} width="1440" height="6" fill={backFill} />
-        </svg>
-      )}
-      {/* LAYER 2 — MID: variety, fills volume between back & front */}
-      {backFill && (
-        <svg viewBox={`0 0 1440 ${vb}`} preserveAspectRatio="none"
-          style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${midH}px`, display: 'block' }}>
-          {clouds.mid.map((c, i) => <ellipse key={i} cx={c.cx} cy={vb} rx={c.rx} ry={c.ry} fill={resolvedMidFill} />)}
-          <rect x="0" y={vb - 2} width="1440" height="6" fill={resolvedMidFill} />
-        </svg>
-      )}
-      {/* LAYER 3 — FRONT: shortest CSS but biggest ry — dominant foreground */}
-      <svg viewBox={`0 0 1440 ${vb}`} preserveAspectRatio="none"
-        style={{ position: 'absolute', bottom: -2, left: 0, width: '100%', height: `${frontH}px`, display: 'block' }}>
-        {clouds.front.map((c, i) => <ellipse key={i} cx={c.cx} cy={vb} rx={c.rx} ry={c.ry} fill={fill} />)}
-        <rect x="0" y={vb - 2} width="1440" height="6" fill={fill} />
-      </svg>
-    </div>
-  );
-}
+import CloudDivider from '@/components/CloudDivider';
+import WaveDivider from '@/components/WaveDivider';
 
 // ── Sparkle Trail ──────────────────────────────────────────────────────────
 import { useState, useEffect } from 'react';
@@ -363,8 +243,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Clouds at bottom of hero — lavender front + lighter lavender back */}
-        <SectionClouds fill="#d9b5e5" midFill="#e2c4f0" backFill="#e8d0f2" variant="a" />
+        {/* Clouds at bottom of hero → lavender matches books section bg */}
+        <CloudDivider fill="#d9b5e5" fillBack="#e8d0f2" />
       </section>
 
       {/* ── SECTION 2: BOOKS GRID ───────────────────────────────────── */}
@@ -419,8 +299,8 @@ export default function Home() {
             ))}
           </div>
         </div>
-        {/* Clouds at bottom of books — mint front + lavender back */}
-        <SectionClouds fill="#daf8f2" midFill="#c8eee8" backFill="#d9b5e5" variant="b" />
+        {/* Wave at bottom of books → mint matches about section bg */}
+        <WaveDivider fill="#daf8f2" />
       </section>
 
       {/* ── SECTION 3: CHARACTER / ABOUT ────────────────────────────── */}

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Concert_One, Catamaran, Open_Sans } from "next/font/google";
+import { Concert_One, Open_Sans, Catamaran } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 
+// Concert One — the big puffy display font from familyfables.org (h1-h6, titles)
 const concertOne = Concert_One({
   subsets: ["latin"],
   weight: "400",
@@ -12,20 +13,21 @@ const concertOne = Concert_One({
   display: "swap",
 });
 
+// Open Sans — clean body / paragraph font used on familyfables.org
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-open-sans",
+  display: "swap",
+});
+
+// Catamaran — nav / accent font used on familyfables.org header
 const catamaran = Catamaran({
   subsets: ["latin"],
   weight: ["400", "600", "700", "800", "900"],
   variable: "--font-catamaran",
   display: "swap",
 });
-
-const openSans = Open_Sans({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-open-sans",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: {
     default: "Family Fables \u2014 Children\u2019s Books",
@@ -67,7 +69,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${concertOne.variable} ${catamaran.variable} ${openSans.variable}`}>
+    <html lang="en" className={`${concertOne.variable} ${openSans.variable} ${catamaran.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bedtimeInitScript }} />
       </head>
