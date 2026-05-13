@@ -112,6 +112,9 @@ export default function Home() {
             justifyContent: 'center',
             order: 0,
             maxWidth: '90vw',
+            position: 'relative',
+            zIndex: 2,
+            marginBottom: '-40px',
           }}>
             <TiltNarwhal size={460} />
           </div>
@@ -140,11 +143,12 @@ export default function Home() {
               className="font-display"
               style={{
                 fontFamily: ff,
-                fontSize: 'clamp(3.5rem, 8vw, 7rem)',
-                lineHeight: 1.08,
-                color: '#007d68',
+                fontSize: 'clamp(2.8rem, 5.5vw, 5rem)',
+                lineHeight: 1.1,
+                color: 'white',
                 marginBottom: '20px',
                 letterSpacing: '0.02em',
+                textShadow: '3px 3px 0px #007d68, -1px -1px 0px #005a4a, 0 0 0 #007d68',
               }}
             >
               Books That Make Kids Giggle & Parents Cheer
@@ -309,7 +313,7 @@ export default function Home() {
       <section
         id="about"
         style={{
-          background: '#daf8f2',
+          background: '#e8d5f0',
           marginTop: '-384px',
           paddingTop: '384px',
           position: 'relative',
@@ -351,7 +355,7 @@ export default function Home() {
               style={{
                 fontFamily: ff,
                 fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-                color: '#007d68',
+                color: '#78087c',
                 marginBottom: '20px',
                 lineHeight: 1.2,
               }}
@@ -361,7 +365,7 @@ export default function Home() {
             <p
               style={{
                 fontSize: 'clamp(1rem, 1.8vw, 1.15rem)',
-                color: '#006e59',
+                color: '#4a0260',
                 lineHeight: 1.75,
                 marginBottom: '16px',
               }}
@@ -371,7 +375,7 @@ export default function Home() {
             <p
               style={{
                 fontSize: 'clamp(0.95rem, 1.6vw, 1.1rem)',
-                color: '#007d68',
+                color: '#78087c',
                 lineHeight: 1.75,
               }}
             >

@@ -14,18 +14,18 @@ export default function NewsletterSection() {
   };
 
   return (
-    <section className="py-20 px-4" style={{ backgroundColor: "#daf8f2" }}>
+    <section className="py-20 px-4" style={{ backgroundColor: "#007d68" }}>
       <div className="max-w-2xl mx-auto text-center">
         <h2
           className="text-3xl sm:text-4xl font-bold mb-3"
           style={{
             fontFamily: "var(--font-concert-one), 'Concert One', cursive",
-            color: "#007d68",
+            color: "#ffffff",
           }}
         >
           Get in on the silliness
         </h2>
-        <p className="text-base mb-8" style={{ color: "#006e59" }}>
+        <p className="text-base mb-8" style={{ color: "rgba(255,255,255,0.85)" }}>
           New books, printables, and dad jokes delivered to your inbox. First Friday of every month. Unsubscribe if you hate fun.
         </p>
 
@@ -64,7 +64,7 @@ export default function NewsletterSection() {
           </form>
         )}
 
-        <p className="text-xs mt-4" style={{ color: "#007d68", opacity: 0.7 }}>
+        <p className="text-xs mt-4" style={{ color: "rgba(255,255,255,0.6)" }}>
           No spam. Just wholesome chaos. Unsubscribe anytime (we&apos;ll understand).
         </p>
       </div>
