@@ -46,7 +46,7 @@ export default function ColoringPage() {
             Free coloring pages from <em>Amber the Dragon Keeper</em>
           </p>
           <p className="text-sm" style={{ color: '#7B6898' }}>
-            Print as many copies as you want. Best on standard 8.5×11&quot; paper. Totally free, forever. 💜
+            Print as many copies as you want. Best on standard 8.5×11&quot; paper. Always free. 💜
           </p>
         </div>
 
@@ -134,7 +134,7 @@ export default function ColoringPage() {
           <p className="text-sm max-w-md mx-auto" style={{ color: '#5A4080' }}>
             Download any page and open it with your photo viewer or browser, then print.
             For best results, select <strong>Fit to Page</strong> and use <strong>standard 8.5×11&quot;</strong> paper.
-            These pages are 300 DPI — they&apos;ll look crisp even on a basic home printer. 🌟
+            These pages are 300 DPI — they&apos;ll look crisp on any printer. 🌟
           </p>
         </div>
 
