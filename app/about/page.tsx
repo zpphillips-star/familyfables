@@ -40,7 +40,7 @@ export default function AboutPage() {
           <h1
             className="text-5xl sm:text-6xl font-bold text-white mb-4"
             style={{
-              fontFamily: "var(--font-catamaran), 'Catamaran', cursive",
+              fontFamily: "var(--font-concert-one), 'Concert One', cursive",
             }}
           >
             A Legacy of Love &amp; Stories

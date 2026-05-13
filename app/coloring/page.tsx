@@ -39,7 +39,7 @@ export default function ColoringPage() {
           </div>
           <h1
             className="text-5xl md:text-6xl font-display mb-4 leading-tight"
-            style={{ color: '#2D1B69', fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}
+            style={{ color: '#2D1B69', fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
           >
             Color Amber&apos;s World! 🐉
           </h1>

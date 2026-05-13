@@ -42,7 +42,7 @@ export default function BooksPage() {
         <h1
           className="text-5xl sm:text-6xl font-bold mb-4"
           style={{
-            fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
+            fontFamily: "var(--font-concert-one), 'Concert One', cursive",
             color: "#2D1B69",
           }}
         >
