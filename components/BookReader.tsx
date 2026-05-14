@@ -25,6 +25,7 @@ export default function BookReader({
   const [autoPlay, setAutoPlay] = useState(false);
   const [flipDir, setFlipDir] = useState<"left" | "right" | null>(null);
   const [isFlipping, setIsFlipping] = useState(false);
+  const [leavingPageIdx, setLeavingPageIdx] = useState<number | null>(null);
   const [showControls, setShowControls] = useState(true);
   const [audioSupported, setAudioSupported] = useState(false);
   const [showStartOverlay, setShowStartOverlay] = useState(true);
@@ -149,19 +150,23 @@ export default function BookReader({
     [bookSlug, narration]
   );
 
+  const FLIP_MS = 420;
+
   const goToPage = useCallback(
     (newIdx: number, direction: "left" | "right") => {
       if (isFlipping || newIdx < 0 || newIdx >= totalPages) return;
       stopSpeech();
       setFlipDir(direction);
       setIsFlipping(true);
+      setLeavingPageIdx(currentPage);  // capture current page for exit animation
+      setCurrentPage(newIdx);           // new page enters immediately
       setTimeout(() => {
-        setCurrentPage(newIdx);
         setIsFlipping(false);
         setFlipDir(null);
-      }, 350);
+        setLeavingPageIdx(null);
+      }, FLIP_MS);
     },
-    [isFlipping, totalPages]
+    [isFlipping, totalPages, currentPage]
   );
 
   const nextPage = useCallback(() => {
@@ -304,24 +309,38 @@ export default function BookReader({
         </div>
       )}
 
-      {/* Page image */}
-      <div
-        className={`book-reader__page ${
-          isFlipping
-            ? flipDir === "left"
-              ? "book-reader__page--flip-left"
-              : "book-reader__page--flip-right"
-            : ""
-        }`}
-      >
-        <Image
-          src={imgSrc(currentPage)}
-          alt={`Page ${currentPage + 1} of ${title}`}
-          fill
-          style={{ objectFit: "contain" }}
-          priority={currentPage < 3}
-          sizes="100vw"
-        />
+      {/* Page stage with perspective for 3D flip */}
+      <div className="book-reader__stage">
+        {/* Leaving page: rotates away */}
+        {leavingPageIdx !== null && (
+          <div className={`book-reader__page book-reader__page--leaving-${flipDir}`}>
+            <Image
+              src={imgSrc(leavingPageIdx)}
+              alt=""
+              fill
+              style={{ objectFit: "contain" }}
+              sizes="100vw"
+            />
+          </div>
+        )}
+
+        {/* Current page: rotates in */}
+        <div
+          className={`book-reader__page ${
+            isFlipping && flipDir
+              ? `book-reader__page--entering-${flipDir}`
+              : ""
+          }`}
+        >
+          <Image
+            src={imgSrc(currentPage)}
+            alt={`Page ${currentPage + 1} of ${title}`}
+            fill
+            style={{ objectFit: "contain" }}
+            priority={currentPage < 3}
+            sizes="100vw"
+          />
+        </div>
       </div>
 
       {/* Preload next + prev */}
@@ -453,21 +472,56 @@ export default function BookReader({
           display: none !important;
         }
 
+        .book-reader__stage {
+          position: absolute;
+          inset: 0;
+          perspective: 1800px;
+          perspective-origin: 50% 50%;
+        }
+
         .book-reader__page {
           position: absolute;
           inset: 0;
-          transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                      opacity 0.35s ease;
+          transform-style: preserve-3d;
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
         }
 
-        .book-reader__page--flip-left {
-          transform: translateX(-6%) scale(0.96);
-          opacity: 0;
+        /* ── Leaving page: folds away ── */
+        @keyframes flipOut-left {
+          from { transform: rotateY(0deg) scale(1);    opacity: 1; }
+          to   { transform: rotateY(-88deg) scale(0.9); opacity: 0; }
+        }
+        @keyframes flipOut-right {
+          from { transform: rotateY(0deg) scale(1);   opacity: 1; }
+          to   { transform: rotateY(88deg) scale(0.9); opacity: 0; }
         }
 
-        .book-reader__page--flip-right {
-          transform: translateX(6%) scale(0.96);
-          opacity: 0;
+        /* ── Entering page: unfolds in ── */
+        @keyframes flipIn-left {
+          from { transform: rotateY(88deg) scale(0.9); opacity: 0; }
+          to   { transform: rotateY(0deg) scale(1);   opacity: 1; }
+        }
+        @keyframes flipIn-right {
+          from { transform: rotateY(-88deg) scale(0.9); opacity: 0; }
+          to   { transform: rotateY(0deg) scale(1);    opacity: 1; }
+        }
+
+        .book-reader__page--leaving-left {
+          animation: flipOut-left 0.42s cubic-bezier(0.4, 0, 1, 1) forwards;
+          z-index: 2;
+        }
+        .book-reader__page--leaving-right {
+          animation: flipOut-right 0.42s cubic-bezier(0.4, 0, 1, 1) forwards;
+          z-index: 2;
+        }
+        .book-reader__page--entering-left {
+          animation: flipIn-left 0.42s cubic-bezier(0, 0, 0.6, 1) forwards;
+          z-index: 1;
+        }
+        .book-reader__page--entering-right {
+          animation: flipIn-right 0.42s cubic-bezier(0, 0, 0.6, 1) forwards;
+          z-index: 1;
         }
 
         /* Start overlay */
