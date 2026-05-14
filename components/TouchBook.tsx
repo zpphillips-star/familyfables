@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 
 export interface TouchBookProps {
@@ -11,6 +11,34 @@ export interface TouchBookProps {
   amazonUrl: string;
   accentColor?: string;
   tag?: string;
+}
+
+// Pick the most natural-sounding voice available
+function getBestVoice(): SpeechSynthesisVoice | null {
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return null;
+  // Ranked preference: Apple/Google natural voices first
+  const prefer = [
+    'Samantha',       // iOS — very natural
+    'Karen',          // iOS AU
+    'Tessa',          // macOS
+    'Moira',          // macOS IE
+    'Google US English',
+    'Google UK English Female',
+    'Microsoft Aria',
+    'Microsoft Jenny',
+  ];
+  for (const name of prefer) {
+    const v = voices.find(v => v.name.includes(name));
+    if (v) return v;
+  }
+  // Fall back to first en-US female, then any English
+  return (
+    voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('female')) ||
+    voices.find(v => v.lang === 'en-US') ||
+    voices.find(v => v.lang.startsWith('en')) ||
+    voices[0]
+  );
 }
 
 export default function TouchBook({
@@ -24,12 +52,49 @@ export default function TouchBook({
 }: TouchBookProps) {
   const [flipped, setFlipped] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
   useEffect(() => {
     setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
+
+  // ── TTS ────────────────────────────────────────────────────────────────────
+  const speak = useCallback(() => {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(`${title}. ${backContent}`);
+    utter.rate = 0.88;
+    utter.pitch = 1.05;
+    utter.volume = 1;
+    // Try to assign voice — voices may not be loaded yet, so try after a short delay
+    const tryAssignVoice = () => {
+      const v = getBestVoice();
+      if (v) utter.voice = v;
+    };
+    tryAssignVoice();
+    if (!utter.voice) setTimeout(tryAssignVoice, 120);
+    utter.onstart  = () => setSpeaking(true);
+    utter.onend    = () => setSpeaking(false);
+    utter.onerror  = () => setSpeaking(false);
+    window.speechSynthesis.speak(utter);
+  }, [title, backContent]);
+
+  const stopSpeaking = useCallback(() => {
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    setSpeaking(false);
+  }, []);
+
+  // Auto-read on flip; stop on flip-back
+  useEffect(() => {
+    if (flipped) {
+      speak();
+    } else {
+      stopSpeaking();
+    }
+    return () => { if (!flipped) stopSpeaking(); };
+  }, [flipped]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Desktop: hover to flip ──────────────────────────────────────────────
   const handleMouseEnter = () => {
@@ -144,36 +209,64 @@ export default function TouchBook({
               >
                 {title}
               </h3>
+              {/* Speaking indicator */}
+              {speaking && (
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '6px',
+                  background: 'rgba(0,0,0,0.2)', borderRadius: '999px',
+                  padding: '3px 10px', marginBottom: '10px',
+                  fontSize: '0.72rem', color: 'rgba(255,255,255,0.9)',
+                  fontWeight: 600, letterSpacing: '0.03em',
+                }}>
+                  <span style={{ animation: 'floatBob 0.6s ease-in-out infinite' }}>🔊</span>
+                  Reading aloud…
+                </div>
+              )}
               <p className="text-sm leading-relaxed text-white opacity-90 line-clamp-6">
                 {backContent}
               </p>
             </div>
 
             {/* Amazon stamp/badge */}
-            <a
-              href={amazonUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                display: 'inline-block',
-                alignSelf: 'flex-start',
-                marginTop: '16px',
-                backgroundColor: '#2D0D6B',
-                color: 'white',
-                padding: '8px 16px',
-                borderRadius: '4px',
-                fontWeight: 'bold',
-                fontSize: '14px',
-                transform: 'rotate(-2deg)',
-                textDecoration: 'none',
-                boxShadow: '0 3px 10px rgba(0,0,0,0.35)',
-                border: '2px solid rgba(255,255,255,0.18)',
-                letterSpacing: '0.02em',
-              }}
-            >
-              Read on Amazon →
-            </a>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '16px', flexWrap: 'wrap' }}>
+              <a
+                href={amazonUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  display: 'inline-block',
+                  backgroundColor: '#2D0D6B',
+                  color: 'white',
+                  padding: '8px 16px',
+                  borderRadius: '4px',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  transform: 'rotate(-2deg)',
+                  textDecoration: 'none',
+                  boxShadow: '0 3px 10px rgba(0,0,0,0.35)',
+                  border: '2px solid rgba(255,255,255,0.18)',
+                  letterSpacing: '0.02em',
+                }}
+              >
+                Read on Amazon →
+              </a>
+              {/* Replay / stop TTS button */}
+              <button
+                onClick={(e) => { e.stopPropagation(); speaking ? stopSpeaking() : speak(); }}
+                title={speaking ? 'Stop reading' : 'Read aloud'}
+                style={{
+                  background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.35)',
+                  borderRadius: '50%', width: '38px', height: '38px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', fontSize: '1.1rem', flexShrink: 0,
+                  transition: 'background 0.15s',
+                }}
+                aria-label={speaking ? 'Stop reading' : 'Read aloud'}
+              >
+                {speaking ? '⏹' : '🔊'}
+              </button>
+            </div>
           </div>
         </div>
 
