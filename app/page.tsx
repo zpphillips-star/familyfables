@@ -1024,13 +1024,22 @@ function ZoneDragonTown() {
               <p style={{ fontFamily: FF, color: '#f0d8fa', fontSize: '0.9rem', marginBottom: '8px', lineHeight: 1.2 }}>
                 What&apos;s Your Poo Poo Face?
               </p>
-              <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer" style={{
-                display: 'inline-block', background: '#ff9c1a', color: '#fff',
-                padding: '7px 18px', borderRadius: '10px', textDecoration: 'none',
-                fontFamily: FF, fontSize: '0.85rem',
-              }}>
-                Get on Amazon →
-              </a>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <a href="/read/poo-poo-face" style={{
+                  display: 'inline-block', background: '#7c3aed', color: '#fff',
+                  padding: '7px 18px', borderRadius: '10px', textDecoration: 'none',
+                  fontFamily: FF, fontSize: '0.85rem',
+                }}>
+                  📖 Read It!
+                </a>
+                <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer" style={{
+                  display: 'inline-block', background: '#ff9c1a', color: '#fff',
+                  padding: '7px 18px', borderRadius: '10px', textDecoration: 'none',
+                  fontFamily: FF, fontSize: '0.85rem',
+                }}>
+                  Get on Amazon →
+                </a>
+              </div>
             </div>
           </div>
         </Reveal>
