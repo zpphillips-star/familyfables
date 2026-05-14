@@ -47,7 +47,7 @@ export const books: Book[] = [
     title: "Amber The Dragon Keeper",
     description:
       "She thought she was just a regular kid. The dragons had other plans. When Amber stumbles into a magical land, she discovers a destiny that's way cooler than anything on her schedule — and way more responsibility than she signed up for. Perfect for: fans of Where the Wild Things Are, The Bad Guys.",
-    image: "/images/books/amber-dragon-keeper.jpg",
+    image: "/images/books/amber-dragon-keeper.png",
     tag: "Adventure",
     accentColor: "#E86BB5",
     ageRange: "Ages 4–8",
@@ -73,7 +73,7 @@ export const books: Book[] = [
     title: "Finding Hampton",
     description:
       "What do you get a rhino who has everything? One very stressed hippo friend, that's what. Hampton is on a mission to find the most perfect birthday gift ever — which turns out to be a whole lot harder (and funnier) than it sounds. Perfect for: fans of Dragons Love Tacos, Elephant & Piggie.",
-    image: "/images/books/finding-hampton.jpg",
+    image: "/images/books/finding-hampton.png",
     tag: "Heartwarming",
     accentColor: "#5CB85C",
     ageRange: "Ages 3–7",
@@ -158,5 +158,18 @@ export const books: Book[] = [
     hook: "Bailey was a dog with frog dreams — large, green, lily-pad frog dreams. Halloween is about to settle this once and for all.",
     perfectFor: "Perfect for Halloween, fans of We Don't Eat Our Classmates, and anyone who's ever wanted to be something completely different.",
     moods: ['silly', 'spooky'],
+  },
+  {
+    id: "brian-the-ghost",
+    title: "Brian the Ghost",
+    description:
+      "In the town of St. Germaine, every monster had one job: spook, boo, and scare. Every monster except Brian. While Cleo the mummy and Roman the werewolf were out terrifying the neighborhood, Brian was just... waving. A heartwarming Halloween story about the friendliest ghost around — and why being different is its own kind of magic.",
+    image: "/images/books/brian-the-ghost.jpg",
+    tag: "Halloween",
+    accentColor: "#7B5EA7",
+    ageRange: "Ages 3–7",
+    hook: "All the monsters loved to spook and scare. Brian loved to wave. This is Brian's story.",
+    perfectFor: "Perfect for Halloween, fans of The Bad Guys, and kids who prefer hugs over haunts.",
+    moods: ['feel-good', 'spooky'],
   },
 ];
