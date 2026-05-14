@@ -100,7 +100,7 @@ export default function TiltNarwhal({ size = 340 }: { size?: number }) {
       </div>
 
       <Image
-        src="/images/logo-teal.png"
+        src="/images/logo-detail-860.png"
         alt="Family Fables narwhal mascot"
         width={size}
         height={size}
