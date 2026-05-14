@@ -947,12 +947,13 @@ function ZoneDragonTown() {
             </p>
           </div>
 
-          {/* Action buttons — absolutely anchored bottom-left = tail zone, z-index 8 */}
+          {/* Action buttons — centered horizontally, mid-lower body = above the tail, z-index 8 */}
           <div style={{
             position: 'absolute',
-            bottom: '16px',
-            left: 'clamp(12px, 4vw, 24px)',
-            width: 'clamp(155px, 50%, 240px)',
+            bottom: 'clamp(60px, 18%, 110px)',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 'clamp(240px, 70%, 360px)',
             zIndex: 8,
             display: 'flex', flexDirection: 'column', gap: '10px',
           }}>
