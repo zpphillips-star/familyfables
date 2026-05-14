@@ -20,9 +20,9 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       model: 'tts-1',
-      voice: 'fable',
+      voice: 'shimmer',
       input: text,
-      speed: 0.82,
+      speed: 0.88,
     }),
   });
 
