@@ -389,6 +389,14 @@ h4 { font-size: clamp(1.2rem, 2.5vw, 1.8rem); }
   .ribbon-btn { padding: 12px 28px; font-size: 1rem; }
 }
 
+/* ── Bookshelf — hide scrollbar, allow scrolling ─────────────────────── */
+.shelf-scroll::-webkit-scrollbar { display: none; }
+.shelf-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* ── Campfire inputs — white placeholder on dark bg ─────────────────── */
+.campfire-input::placeholder { color: rgba(255,255,255,0.5); }
+.campfire-input:focus { border-color: rgba(255,156,26,0.6) !important; }
+
 /* ── Storybook World animations ─────────────────────────────────────── */
 @keyframes floatBob {
   0%, 100% { transform: translateY(0px); }
