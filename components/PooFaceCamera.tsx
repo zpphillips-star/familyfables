@@ -132,7 +132,8 @@ export default function PooFaceCamera() {
         return;
       }
       if (data.status === 'FAILED' || data.status === 'ERROR') {
-        setError('AI processing failed. Try again!');
+        const msg = data.errorDetail ? `AI error: ${data.errorDetail.slice(0, 100)}` : 'AI processing failed. Try again!';
+        setError(msg);
         setStage('preview');
         return;
       }
