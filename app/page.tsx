@@ -238,7 +238,7 @@ function ZoneSky() {
         }}
         className={wiggle ? 'narwhal-wiggle' : ''}
       >
-        <TiltNarwhal size={320} />
+        <TiltNarwhal size={420} />
       </div>
 
       {/* Title */}
@@ -258,7 +258,7 @@ function ZoneSky() {
       {/* Subtitle */}
       <p style={{
         fontFamily: CAT, fontWeight: 800,
-        fontSize: 'clamp(1.1rem, 4vw, 1.8rem)',
+        fontSize: 'clamp(1.4rem, 4.5vw, 2.2rem)',
         color: '#005a4a', marginBottom: '36px',
         position: 'relative', zIndex: 3,
         animation: 'fadeSlideUp 0.9s ease-out 0.15s both',
@@ -272,8 +272,8 @@ function ZoneSky() {
         <Link href="/books" style={{
           display: 'inline-block',
           background: '#ff9c1a', color: '#fff',
-          padding: '14px 40px', borderRadius: '999px',
-          fontFamily: FF, fontSize: 'clamp(1rem, 3vw, 1.2rem)',
+          padding: '18px 52px', borderRadius: '999px',
+          fontFamily: FF, fontSize: 'clamp(1.1rem, 3.5vw, 1.45rem)',
           textDecoration: 'none',
           boxShadow: '0 4px 28px rgba(255,156,26,0.5)',
         }}>
@@ -328,10 +328,10 @@ function ZoneAmberMountain() {
         }} aria-hidden>💎</div>
       ))}
 
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2 }}>
+      <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2 }}>
         <Reveal>
           <h2 style={{
-            fontFamily: FF, fontSize: 'clamp(2.4rem, 7vw, 4.5rem)',
+            fontFamily: FF, fontSize: 'clamp(2.8rem, 8vw, 5.5rem)',
             color: '#2a0038', textAlign: 'center', marginBottom: '6px',
             textShadow: '2px 2px 0 rgba(255,255,255,0.2)',
           }}>
@@ -339,7 +339,7 @@ function ZoneAmberMountain() {
           </h2>
           <p style={{
             fontFamily: CAT, fontWeight: 800, textAlign: 'center',
-            color: '#5a0066', fontSize: 'clamp(1rem, 3vw, 1.2rem)',
+            color: '#5a0066', fontSize: 'clamp(1.2rem, 3.5vw, 1.6rem)',
             marginBottom: '40px',
           }}>
             She thought she was just a regular kid…
@@ -371,7 +371,7 @@ function ZoneAmberMountain() {
                   src="/images/originals/Amber-383-height.png"
                   alt="Amber the Dragon Keeper"
                   width={280} height={383}
-                  style={{ width: 'clamp(200px, 30vw, 300px)', height: 'auto', display: 'block' }}
+                  style={{ width: 'clamp(260px, 38vw, 420px)', height: 'auto', display: 'block' }}
                   priority
                 />
               </div>
@@ -400,7 +400,7 @@ function ZoneAmberMountain() {
                 marginBottom: '16px',
               }}
             >
-              <div style={{ fontFamily: FF, fontSize: 'clamp(1.4rem, 4vw, 2rem)', color: '#ffffff', marginBottom: '8px' }}>
+              <div style={{ fontFamily: FF, fontSize: 'clamp(1.6rem, 4.5vw, 2.4rem)', color: '#ffffff', marginBottom: '8px' }}>
                 📖 Amber the Dragon Keeper
               </div>
               <p style={{ fontFamily: OS, color: '#dcf9f3', fontSize: '0.9rem', margin: 0 }}>
@@ -446,12 +446,12 @@ function ZoneAmberMountain() {
         {/* Game */}
         <Reveal delay={150} style={{ marginTop: '64px', textAlign: 'center' }}>
           <h3 style={{
-            fontFamily: FF, fontSize: 'clamp(1.8rem, 5vw, 2.8rem)',
+            fontFamily: FF, fontSize: 'clamp(2rem, 5.5vw, 3.2rem)',
             color: '#2a0038', marginBottom: '8px',
           }}>
             Play Crystal Rush 💎
           </h3>
-          <p style={{ fontFamily: OS, color: '#5a0066', marginBottom: '24px', fontSize: '0.95rem' }}>
+          <p style={{ fontFamily: OS, color: '#5a0066', marginBottom: '24px', fontSize: 'clamp(1rem, 2.5vw, 1.2rem)' }}>
             Catch the falling crystals — Amber needs your help!
           </p>
           <AmberGame />
@@ -518,10 +518,10 @@ function ZoneDragonTown() {
         </svg>
       </div>
 
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2 }}>
+      <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2 }}>
         <Reveal>
           <h2 style={{
-            fontFamily: FF, fontSize: 'clamp(2.2rem, 6vw, 4rem)',
+            fontFamily: FF, fontSize: 'clamp(2.6rem, 7vw, 5rem)',
             color: '#ffffff', textAlign: 'center', marginBottom: '48px',
             textShadow: '3px 3px 0 rgba(0,0,0,0.2)',
           }}>
@@ -561,7 +561,7 @@ function ZoneDragonTown() {
                   <Image
                     src="/images/originals/poo-poo-dragon-flipped.png"
                     alt="Poo Poo Dragon" width={260} height={260}
-                    style={{ width: 'clamp(160px, 26vw, 260px)', height: 'auto', display: 'block' }}
+                    style={{ width: 'clamp(200px, 32vw, 320px)', height: 'auto', display: 'block' }}
                   />
                 </div>
               </div>
@@ -636,7 +636,7 @@ function ZoneDragonTown() {
           <Reveal delay={200} style={{ flex: '1 1 280px', maxWidth: '500px' }}>
             <h3 style={{
               fontFamily: FF, color: '#f0d8fa',
-              fontSize: 'clamp(1.3rem, 3.5vw, 1.9rem)',
+              fontSize: 'clamp(1.6rem, 4vw, 2.4rem)',
               marginBottom: '16px', textAlign: 'center',
             }}>
               What&apos;s Your Face? 🤣
@@ -718,17 +718,17 @@ function ZoneBookshelf() {
         </svg>
       </div>
 
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2 }}>
+      <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2 }}>
         <Reveal>
           <h2 style={{
-            fontFamily: FF, fontSize: 'clamp(2rem, 5.5vw, 3.5rem)',
+            fontFamily: FF, fontSize: 'clamp(2.4rem, 6vw, 4.2rem)',
             color: '#6b3a00', textAlign: 'center', marginBottom: '6px',
           }}>
             The Underground Bookshelf 📚
           </h2>
           <p style={{
             fontFamily: CAT, fontWeight: 800, textAlign: 'center',
-            color: '#78087c', fontSize: '1rem', marginBottom: '32px',
+            color: '#78087c', fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', marginBottom: '32px',
           }}>
             What kind of book night are you having?
           </p>
@@ -738,11 +738,11 @@ function ZoneBookshelf() {
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '36px' }}>
             {MOODS.map(m => (
               <button key={m.key} onClick={() => setActiveMood(m.key)} style={{
-                padding: '10px 22px', borderRadius: '999px', cursor: 'pointer',
+                padding: '12px 26px', borderRadius: '999px', cursor: 'pointer',
                 border: `2.5px solid ${activeMood === m.key ? '#009380' : 'rgba(0,147,128,0.35)'}`,
                 background: activeMood === m.key ? '#009380' : 'rgba(255,255,255,0.82)',
                 color: activeMood === m.key ? 'white' : '#005a4a',
-                fontFamily: FF, fontSize: '0.95rem',
+                fontFamily: FF, fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
                 transition: 'all 0.2s ease', minHeight: '48px',
                 boxShadow: activeMood === m.key ? '0 4px 16px rgba(0,147,128,0.3)' : 'none',
                 transform: activeMood === m.key ? 'scale(1.05)' : 'scale(1)',
@@ -772,7 +772,7 @@ function ZoneBookshelf() {
             WebkitOverflowScrolling: 'touch' as 'touch',
           }}>
             {filtered.map(book => (
-              <div key={book.id} style={{ flex: '0 0 260px', scrollSnapAlign: 'start' }}>
+              <div key={book.id} style={{ flex: '0 0 300px', scrollSnapAlign: 'start' }}>
                 <TouchBook
                   title={book.title}
                   cover={book.image}
@@ -798,8 +798,8 @@ function ZoneBookshelf() {
         <Reveal delay={150} style={{ textAlign: 'center', marginTop: '40px' }}>
           <Link href="/books" style={{
             display: 'inline-block', background: '#ff9c1a', color: '#fff',
-            padding: '14px 44px', borderRadius: '10px', textDecoration: 'none',
-            fontFamily: FF, fontSize: '1rem',
+            padding: '16px 52px', borderRadius: '10px', textDecoration: 'none',
+            fontFamily: FF, fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
             boxShadow: '0 4px 20px rgba(255,156,26,0.4)',
           }}>
             See All Books →
@@ -839,12 +839,12 @@ function ZoneColoringMeadow() {
         </svg>
       </div>
 
-      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2, textAlign: 'center' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2, textAlign: 'center' }}>
         <Reveal>
-          <h2 style={{ fontFamily: FF, fontSize: 'clamp(2rem, 5.5vw, 3.5rem)', color: '#006e59', marginBottom: '8px' }}>
+          <h2 style={{ fontFamily: FF, fontSize: 'clamp(2.4rem, 6vw, 4.2rem)', color: '#006e59', marginBottom: '8px' }}>
             Color Amber&apos;s World 🎨
           </h2>
-          <p style={{ fontFamily: CAT, fontWeight: 800, color: '#005a4a', fontSize: '1rem', marginBottom: '48px' }}>
+          <p style={{ fontFamily: CAT, fontWeight: 800, color: '#005a4a', fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', marginBottom: '48px' }}>
             Free printable coloring pages — straight from the storybook
           </p>
         </Reveal>
@@ -869,7 +869,7 @@ function ZoneColoringMeadow() {
                   ? '0 24px 60px rgba(0,90,74,0.35)'
                   : '0 6px 28px rgba(0,90,74,0.18)',
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',
-                maxWidth: '180px', cursor: 'pointer', outline: 'none',
+                maxWidth: '240px', cursor: 'pointer', outline: 'none',
                 transition: 'all 0.3s cubic-bezier(.175,.885,.32,1.275)',
               }}
             >
@@ -877,17 +877,17 @@ function ZoneColoringMeadow() {
                 src={p.src} alt={p.label} width={160} height={200}
                 style={{ width: '100%', height: 'auto', borderRadius: '6px' }}
               />
-              <p style={{ fontFamily: FF, color: '#005a4a', fontSize: '0.78rem', textAlign: 'center', margin: 0 }}>
+              <p style={{ fontFamily: FF, color: '#005a4a', fontSize: '0.95rem', textAlign: 'center', margin: 0 }}>
                 {p.label}
               </p>
               <a
                 href={p.src} download
                 onClick={e => e.stopPropagation()}
                 style={{
-                  background: '#009380', color: 'white', padding: '6px 16px',
+                  background: '#009380', color: 'white', padding: '10px 20px',
                   borderRadius: '999px', textDecoration: 'none', fontFamily: FF,
-                  fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: '4px',
-                  minHeight: '32px',
+                  fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '4px',
+                  minHeight: '40px',
                 }}
               >
                 ⬇ Download
@@ -899,8 +899,8 @@ function ZoneColoringMeadow() {
         <Reveal delay={100}>
           <Link href="/coloring" style={{
             display: 'inline-block', background: '#ff9c1a', color: '#fff',
-            padding: '14px 44px', borderRadius: '10px', textDecoration: 'none',
-            fontFamily: FF, fontSize: '1rem',
+            padding: '16px 52px', borderRadius: '10px', textDecoration: 'none',
+            fontFamily: FF, fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
             boxShadow: '0 4px 20px rgba(255,156,26,0.4)',
           }}>
             All Coloring Pages →
@@ -1014,7 +1014,7 @@ function ZoneCampfire() {
         <Reveal>
           <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🪵</div>
           <h2 style={{
-            fontFamily: FF, fontSize: 'clamp(2rem, 5.5vw, 3.2rem)',
+            fontFamily: FF, fontSize: 'clamp(2.4rem, 6vw, 4rem)',
             color: '#ffffff', marginBottom: '8px', lineHeight: 1.05,
             textShadow: '2px 2px 0 rgba(0,0,0,0.2)',
           }}>
@@ -1022,7 +1022,7 @@ function ZoneCampfire() {
           </h2>
           <p style={{
             fontFamily: CAT, fontWeight: 800, color: '#d9b7e5',
-            fontSize: '1.1rem', marginBottom: '36px', lineHeight: 1.5,
+            fontSize: 'clamp(1.2rem, 3vw, 1.5rem)', marginBottom: '36px', lineHeight: 1.5,
           }}>
             Join the Family — new releases, giveaways &amp; stories in your inbox
           </p>
