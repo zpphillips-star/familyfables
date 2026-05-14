@@ -351,8 +351,8 @@ const ZONES = [
     img: null,
     label: "Amber's Mountain",
     hint: 'Play Crystal Rush',
-    bg: 'linear-gradient(160deg, #b078d8 0%, #7030a0 100%)',
-    border: '#c090e0',
+    bg: '#9040c0',
+    border: '#b068d8',
   },
   {
     id: 'dragon',
@@ -360,8 +360,8 @@ const ZONES = [
     img: null,
     label: "Dragon's Town",
     hint: 'Make your Poo Poo Face',
-    bg: 'linear-gradient(160deg, #a030b0 0%, #4a0058 100%)',
-    border: '#c050d0',
+    bg: '#7020a0',
+    border: '#a040c0',
   },
   {
     id: 'books',
@@ -369,8 +369,8 @@ const ZONES = [
     img: null,
     label: 'The Bookshelf',
     hint: 'Find your next read',
-    bg: 'linear-gradient(160deg, #ffcc55 0%, #e07800 100%)',
-    border: '#ffaa30',
+    bg: '#f59c1a',
+    border: '#ffc040',
   },
   {
     id: 'coloring',
@@ -378,8 +378,8 @@ const ZONES = [
     img: null,
     label: 'Coloring Meadow',
     hint: 'Free printable pages',
-    bg: 'linear-gradient(160deg, #50d8b8 0%, #007060 100%)',
-    border: '#20c090',
+    bg: '#28b090',
+    border: '#40d8b0',
   },
   {
     id: 'campfire',
@@ -387,8 +387,8 @@ const ZONES = [
     img: null,
     label: 'The Campfire',
     hint: 'Join the family',
-    bg: 'linear-gradient(160deg, #9020a0 0%, #1e0028 100%)',
-    border: '#b040c8',
+    bg: '#7010a0',
+    border: '#a030c0',
   },
 ];
 
@@ -429,17 +429,15 @@ function AdventureMap() {
               overflow: 'hidden',
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
               minWidth: '108px', maxWidth: '124px',
-              boxShadow: '0 4px 14px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.12)',
-              transition: 'transform 0.18s cubic-bezier(.175,.885,.32,1.275), box-shadow 0.18s ease',
+              boxShadow: 'none',
+              transition: 'transform 0.18s cubic-bezier(.175,.885,.32,1.275)',
               animation: `popIn 0.45s ease-out ${i * 90}ms both`,
             }}
             onMouseEnter={e => {
               (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.08) translateY(-4px)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 14px 36px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2)';
             }}
             onMouseLeave={e => {
               (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 18px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.15)';
             }}
           >
             {/* Illustration */}
