@@ -257,22 +257,27 @@ function IconDragon() {
 function IconBooks() {
   return (
     <svg viewBox="0 0 64 64" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Bottom book - teal */}
-      <rect x="8" y="42" width="48" height="14" rx="3" fill="#009380"/>
-      <rect x="8" y="42" width="7" height="14" rx="2" fill="#007060"/>
-      <line x1="20" y1="45" x2="50" y2="45" stroke="white" strokeWidth="1.5" opacity="0.4"/>
-      <line x1="20" y1="50" x2="44" y2="50" stroke="white" strokeWidth="1.5" opacity="0.3"/>
-      {/* Middle book - orange, slightly askew */}
-      <rect x="10" y="27" width="42" height="13" rx="3" fill="#ff9c1a" transform="rotate(-2 10 27)"/>
-      <rect x="10" y="27" width="7" height="13" rx="2" fill="#e07800" transform="rotate(-2 10 27)"/>
-      <line x1="22" y1="30" x2="46" y2="29" stroke="white" strokeWidth="1.5" opacity="0.4"/>
-      {/* Top book - purple */}
-      <rect x="12" y="13" width="38" height="13" rx="3" fill="#78087c" transform="rotate(1.5 12 13)"/>
-      <rect x="12" y="13" width="7" height="13" rx="2" fill="#5a0060" transform="rotate(1.5 12 13)"/>
-      <line x1="24" y1="17" x2="44" y2="17" stroke="white" strokeWidth="1.5" opacity="0.4"/>
-      {/* Bookmark ribbon */}
-      <rect x="44" y="8" width="5" height="20" rx="1" fill="#ff9c1a"/>
-      <polygon points="44,28 46.5,24 49,28" fill="#e07800"/>
+      {/* Book 1 - red, left, slight tilt */}
+      <rect x="8" y="18" width="12" height="38" rx="3" fill="#e03060" transform="rotate(-4 14 37)"/>
+      <rect x="8" y="18" width="4" height="38" rx="2" fill="#b01040" transform="rotate(-4 14 37)"/>
+      <rect x="9" y="20" width="10" height="3" rx="1" fill="white" opacity="0.35" transform="rotate(-4 14 21)"/>
+      {/* Book 2 - purple, center */}
+      <rect x="24" y="14" width="13" height="42" rx="3" fill="#7030a0"/>
+      <rect x="24" y="14" width="4.5" height="42" rx="2" fill="#5a1080"/>
+      <rect x="25" y="16" width="11" height="3" rx="1" fill="white" opacity="0.35"/>
+      <rect x="25" y="22" width="8" height="2" rx="1" fill="white" opacity="0.25"/>
+      {/* Book 3 - orange, right, slight tilt */}
+      <rect x="40" y="16" width="13" height="40" rx="3" fill="#ff9c1a" transform="rotate(3 46 36)"/>
+      <rect x="40" y="16" width="4.5" height="40" rx="2" fill="#d07000" transform="rotate(3 46 36)"/>
+      <rect x="41" y="18" width="11" height="3" rx="1" fill="white" opacity="0.35" transform="rotate(3 46 19)"/>
+      {/* Shelf line */}
+      <rect x="4" y="55" width="56" height="5" rx="2.5" fill="#5a2800" opacity="0.5"/>
+      {/* Sparkle above */}
+      <circle cx="32" cy="7" r="2" fill="#ffe066"/>
+      <line x1="32" y1="3" x2="32" y2="5" stroke="#ffe066" strokeWidth="1.5" strokeLinecap="round"/>
+      <line x1="32" y1="9" x2="32" y2="11" stroke="#ffe066" strokeWidth="1.5" strokeLinecap="round"/>
+      <line x1="28" y1="7" x2="30" y2="7" stroke="#ffe066" strokeWidth="1.5" strokeLinecap="round"/>
+      <line x1="34" y1="7" x2="36" y2="7" stroke="#ffe066" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   );
 }
@@ -280,18 +285,29 @@ function IconBooks() {
 function IconColoring() {
   return (
     <svg viewBox="0 0 64 64" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Pencil body */}
-      <rect x="28" y="8" width="12" height="38" rx="2" fill="#ffcc44" transform="rotate(15 34 27)"/>
-      <rect x="28" y="8" width="12" height="8" rx="2" fill="#e8a820" transform="rotate(15 34 27)"/>
-      {/* Pencil tip */}
-      <polygon points="34,46 30,56 38,56" fill="#f0c090" transform="rotate(15 34 51)"/>
-      <polygon points="34,52 31.5,56 36.5,56" fill="#cc6633" transform="rotate(15 34 54)"/>
-      {/* Eraser */}
-      <rect x="28" y="8" width="12" height="5" rx="2" fill="#ffaabb" transform="rotate(15 34 10.5)"/>
-      {/* Color swatches / strokes in background */}
-      <ellipse cx="14" cy="48" rx="10" ry="5" fill="#009380" opacity="0.7" transform="rotate(-20 14 48)"/>
-      <ellipse cx="50" cy="46" rx="10" ry="5" fill="#d9b7e5" opacity="0.8" transform="rotate(20 50 46)"/>
-      <ellipse cx="10" cy="22" rx="7" ry="3.5" fill="#ff9c1a" opacity="0.65" transform="rotate(-30 10 22)"/>
+      {/* Big crayon - center, angled */}
+      <rect x="27" y="10" width="11" height="34" rx="3" fill="#ffcc44" transform="rotate(12 32 27)"/>
+      <rect x="27" y="10" width="11" height="9" rx="3" fill="#e8a820" transform="rotate(12 32 14)"/>
+      <rect x="27" y="10" width="11" height="4" rx="2" fill="#ffaabb" transform="rotate(12 32 12)"/>
+      {/* Tip */}
+      <polygon points="32,44 28.5,54 35.5,54" fill="#f0c080" transform="rotate(12 32 49)"/>
+      <polygon points="32,50 29.5,54 34.5,54" fill="#dd7733" transform="rotate(12 32 52)"/>
+      {/* Flower left */}
+      <circle cx="10" cy="46" r="5" fill="#ff6090" opacity="0.9"/>
+      <circle cx="10" cy="46" r="2.5" fill="#ffe066"/>
+      <circle cx="10" cy="40" r="3.5" fill="#ff6090" opacity="0.7"/>
+      <circle cx="5" cy="44" r="3" fill="#ff80a0" opacity="0.7"/>
+      <circle cx="15" cy="43" r="3" fill="#ff80a0" opacity="0.7"/>
+      {/* Flower right - teal */}
+      <circle cx="52" cy="44" r="4.5" fill="#20c8a0" opacity="0.9"/>
+      <circle cx="52" cy="44" r="2.2" fill="#ffe066"/>
+      <circle cx="52" cy="38" r="3" fill="#20c8a0" opacity="0.7"/>
+      <circle cx="47" cy="42" r="3" fill="#30d8b0" opacity="0.7"/>
+      <circle cx="57" cy="42" r="3" fill="#30d8b0" opacity="0.7"/>
+      {/* Color dots */}
+      <circle cx="8" cy="20" r="3" fill="#e03060" opacity="0.75"/>
+      <circle cx="54" cy="22" r="3" fill="#7030a0" opacity="0.75"/>
+      <circle cx="14" cy="30" r="2" fill="#ff9c1a" opacity="0.7"/>
     </svg>
   );
 }
@@ -300,22 +316,29 @@ function IconCampfire() {
   return (
     <svg viewBox="0 0 64 64" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
       {/* Stars */}
-      <circle cx="10" cy="12" r="1.5" fill="white" opacity="0.8"/>
-      <circle cx="54" cy="8" r="1.2" fill="white" opacity="0.7"/>
-      <circle cx="48" cy="20" r="1" fill="white" opacity="0.6"/>
-      <circle cx="16" cy="22" r="1" fill="white" opacity="0.5"/>
-      {/* Log base */}
-      <ellipse cx="32" cy="52" rx="20" ry="5" fill="#3a1a00" opacity="0.6"/>
-      <line x1="14" y1="50" x2="50" y2="54" stroke="#5a2800" strokeWidth="5" strokeLinecap="round"/>
-      <line x1="18" y1="54" x2="46" y2="50" stroke="#4a2000" strokeWidth="4" strokeLinecap="round"/>
-      {/* Flames - outer */}
-      <path d="M32,48 Q20,38 24,26 Q26,18 32,14 Q38,18 40,26 Q44,38 32,48Z" fill="#ff5500"/>
-      {/* Flames - mid */}
-      <path d="M32,48 Q22,40 26,30 Q28,22 32,18 Q36,22 38,30 Q42,40 32,48Z" fill="#ff8c00"/>
-      {/* Flames - inner */}
-      <path d="M32,46 Q25,38 28,32 Q30,26 32,24 Q34,26 36,32 Q39,38 32,46Z" fill="#ffcc00"/>
+      <circle cx="8" cy="10" r="1.8" fill="white" opacity="0.85"/>
+      <circle cx="55" cy="8" r="1.4" fill="white" opacity="0.75"/>
+      <circle cx="50" cy="18" r="1.1" fill="white" opacity="0.6"/>
+      <circle cx="14" cy="20" r="1" fill="white" opacity="0.55"/>
+      {/* Little moon */}
+      <path d="M56,14 Q60,18 56,22 Q62,18 56,14Z" fill="white" opacity="0.7"/>
+      {/* Crossed logs */}
+      <line x1="14" y1="58" x2="42" y2="48" stroke="#5a2800" strokeWidth="6" strokeLinecap="round"/>
+      <line x1="50" y1="58" x2="22" y2="48" stroke="#4a2000" strokeWidth="5" strokeLinecap="round"/>
+      {/* Flame outer */}
+      <path d="M32,50 Q18,40 22,26 Q25,16 32,12 Q39,16 42,26 Q46,40 32,50Z" fill="#ff5500"/>
+      {/* Flame mid */}
+      <path d="M32,50 Q21,41 25,29 Q28,20 32,16 Q36,20 39,29 Q43,41 32,50Z" fill="#ff8c00"/>
+      {/* Flame inner */}
+      <path d="M32,48 Q24,40 27,32 Q29,25 32,22 Q35,25 37,32 Q40,40 32,48Z" fill="#ffcc00"/>
       {/* Flame core */}
-      <path d="M32,44 Q28,38 30,34 Q31,30 32,28 Q33,30 34,34 Q36,38 32,44Z" fill="#fff8c0"/>
+      <path d="M32,46 Q27,39 29,34 Q31,29 32,27 Q33,29 35,34 Q37,39 32,46Z" fill="#fff0a0"/>
+      {/* Cute face on flame */}
+      <circle cx="28" cy="36" r="2" fill="#ff5500"/>
+      <circle cx="36" cy="36" r="2" fill="#ff5500"/>
+      <circle cx="28" cy="36" r="1" fill="#1a0000"/>
+      <circle cx="36" cy="36" r="1" fill="#1a0000"/>
+      <path d="M27,41 Q32,45 37,41" stroke="#cc4400" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
     </svg>
   );
 }
