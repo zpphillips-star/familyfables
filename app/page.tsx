@@ -342,8 +342,8 @@ const ZONES = [
   },
   {
     id: 'books',
-    icon: null,
-    img: '/images/zones/bookshelf.png',
+    icon: <IconBooks />,
+    img: null,
     label: 'The Bookshelf',
     hint: 'Find your next read',
     bg: 'linear-gradient(160deg, #ffcc55 0%, #e07800 100%)',
@@ -351,8 +351,8 @@ const ZONES = [
   },
   {
     id: 'coloring',
-    icon: null,
-    img: '/images/zones/coloring-meadow.png',
+    icon: <IconColoring />,
+    img: null,
     label: 'Coloring Meadow',
     hint: 'Free printable pages',
     bg: 'linear-gradient(160deg, #50d8b8 0%, #007060 100%)',
@@ -360,8 +360,8 @@ const ZONES = [
   },
   {
     id: 'campfire',
-    icon: null,
-    img: '/images/zones/campfire.png',
+    icon: <IconCampfire />,
+    img: null,
     label: 'The Campfire',
     hint: 'Join the family',
     bg: 'linear-gradient(160deg, #9020a0 0%, #1e0028 100%)',
@@ -403,9 +403,10 @@ function AdventureMap() {
               borderRadius: '18px',
               padding: '16px 14px 12px',
               cursor: 'pointer', outline: 'none',
+              overflow: 'hidden',
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
               minWidth: '108px', maxWidth: '124px',
-              boxShadow: '0 4px 18px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.15)',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.12)',
               transition: 'transform 0.18s cubic-bezier(.175,.885,.32,1.275), box-shadow 0.18s ease',
               animation: `popIn 0.45s ease-out ${i * 90}ms both`,
             }}
@@ -422,7 +423,6 @@ function AdventureMap() {
             <div style={{
               width: 54, height: 54,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))',
             }}>
               {z.img ? (
                 // eslint-disable-next-line @next/next/no-img-element
