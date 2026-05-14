@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'No image data received' }, { status: 400 });
   }
 
-  const FAL_KEY = process.env.FAL_API_KEY;
+  const FAL_KEY = process.env.FAL_API_KEY || 'ad7875c7-51ef-40ab-a760-6363ce38a850:c04c7d353048e834f1bd5fbb32477df5';
   if (!FAL_KEY) {
     return NextResponse.json({ error: 'API key not configured' }, { status: 500 });
   }
@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
   const requestId = req.nextUrl.searchParams.get('id');
   if (!requestId) return NextResponse.json({ error: 'Missing id' }, { status: 400 });
 
-  const FAL_KEY = process.env.FAL_API_KEY;
+  const FAL_KEY = process.env.FAL_API_KEY || 'ad7875c7-51ef-40ab-a760-6363ce38a850:c04c7d353048e834f1bd5fbb32477df5';
   if (!FAL_KEY) return NextResponse.json({ status: 'ERROR' }, { status: 500 });
 
   try {
