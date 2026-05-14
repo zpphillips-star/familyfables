@@ -95,57 +95,55 @@ export default function BookReader({
       // Try MP3 first
       const mp3Path = `/audio/reader/${bookSlug}/page-${pageNum(pageIdx)}.mp3`;
       const audio = new Audio(mp3Path);
+      audio.preload = "auto";
       audioRef.current = audio;
 
-      audio.onloadeddata = () => {
-        setIsReading(true);
-        audio.play();
-        audio.onended = () => {
-          setIsReading(false);
-          onEnd?.();
-        };
-        audio.onerror = null;
-      };
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsReading(true);
+            audio.onended = () => {
+              setIsReading(false);
+              onEnd?.();
+            };
+          })
+          .catch(() => {
+            // MP3 failed (404 or blocked) — fall back to Web Speech API
+            if (!synthRef.current) {
+              onEnd?.();
+              return;
+            }
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.88;
+            utterance.pitch = 1.1;
+            utterance.volume = 1;
 
-      audio.onerror = () => {
-        // Fallback: Web Speech API
-        if (!synthRef.current) {
-          onEnd?.();
-          return;
-        }
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.88;
-        utterance.pitch = 1.1;
-        utterance.volume = 1;
+            const voices = synthRef.current.getVoices();
+            const preferred = voices.find(
+              (v) =>
+                v.name.toLowerCase().includes("samantha") ||
+                v.name.toLowerCase().includes("karen") ||
+                v.name.toLowerCase().includes("zira") ||
+                v.name.toLowerCase().includes("female") ||
+                (v.lang.startsWith("en") && v.name.toLowerCase().includes("google"))
+            );
+            if (preferred) utterance.voice = preferred;
 
-        // Prefer a friendly female voice
-        const voices = synthRef.current.getVoices();
-        const preferred = voices.find(
-          (v) =>
-            v.name.toLowerCase().includes("samantha") ||
-            v.name.toLowerCase().includes("karen") ||
-            v.name.toLowerCase().includes("zira") ||
-            v.name.toLowerCase().includes("female") ||
-            (v.lang.startsWith("en") && v.name.toLowerCase().includes("google"))
-        );
-        if (preferred) utterance.voice = preferred;
+            utteranceRef.current = utterance;
+            utterance.onstart = () => setIsReading(true);
+            utterance.onend = () => {
+              setIsReading(false);
+              onEnd?.();
+            };
+            utterance.onerror = () => {
+              setIsReading(false);
+              onEnd?.();
+            };
 
-        utteranceRef.current = utterance;
-        utterance.onstart = () => setIsReading(true);
-        utterance.onend = () => {
-          setIsReading(false);
-          onEnd?.();
-        };
-        utterance.onerror = () => {
-          setIsReading(false);
-          onEnd?.();
-        };
-
-        synthRef.current.speak(utterance);
-      };
-
-      // Trigger load
-      audio.load();
+            synthRef.current.speak(utterance);
+          });
+      }
     },
     [bookSlug, narration]
   );

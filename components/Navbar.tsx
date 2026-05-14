@@ -24,11 +24,11 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <Image
-              src="/images/logo-teal.png"
+              src="/images/logo-detail-860.png"
               alt="Family Fables"
-              width={44}
-              height={44}
-              className="group-hover:scale-110 transition-transform duration-200 rounded-full"
+              width={52}
+              height={52}
+              className="group-hover:scale-110 transition-transform duration-200"
             />
             <span
               className="text-xl font-display tracking-wide"
