@@ -13,33 +13,7 @@ export interface TouchBookProps {
   tag?: string;
 }
 
-// Pick the most natural-sounding voice available
-function getBestVoice(): SpeechSynthesisVoice | null {
-  const voices = window.speechSynthesis.getVoices();
-  if (!voices.length) return null;
-  // Ranked preference: Apple/Google natural voices first
-  const prefer = [
-    'Samantha',       // iOS — very natural
-    'Karen',          // iOS AU
-    'Tessa',          // macOS
-    'Moira',          // macOS IE
-    'Google US English',
-    'Google UK English Female',
-    'Microsoft Aria',
-    'Microsoft Jenny',
-  ];
-  for (const name of prefer) {
-    const v = voices.find(v => v.name.includes(name));
-    if (v) return v;
-  }
-  // Fall back to first en-US female, then any English
-  return (
-    voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('female')) ||
-    voices.find(v => v.lang === 'en-US') ||
-    voices.find(v => v.lang.startsWith('en')) ||
-    voices[0]
-  );
-}
+type TtsStatus = 'idle' | 'loading' | 'playing';
 
 export default function TouchBook({
   title,
@@ -52,48 +26,63 @@ export default function TouchBook({
 }: TouchBookProps) {
   const [flipped, setFlipped] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
+  const [ttsStatus, setTtsStatus] = useState<TtsStatus>('idle');
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
     setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
 
-  // ── TTS ────────────────────────────────────────────────────────────────────
-  const speak = useCallback(() => {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(`${title}. ${backContent}`);
-    utter.rate = 0.88;
-    utter.pitch = 1.05;
-    utter.volume = 1;
-    // Try to assign voice — voices may not be loaded yet, so try after a short delay
-    const tryAssignVoice = () => {
-      const v = getBestVoice();
-      if (v) utter.voice = v;
-    };
-    tryAssignVoice();
-    if (!utter.voice) setTimeout(tryAssignVoice, 120);
-    utter.onstart  = () => setSpeaking(true);
-    utter.onend    = () => setSpeaking(false);
-    utter.onerror  = () => setSpeaking(false);
-    window.speechSynthesis.speak(utter);
-  }, [title, backContent]);
-
-  const stopSpeaking = useCallback(() => {
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    setSpeaking(false);
+  // ── OpenAI TTS ─────────────────────────────────────────────────────────────
+  const stopAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current = null;
+    }
+    if (audioUrlRef.current) {
+      URL.revokeObjectURL(audioUrlRef.current);
+      audioUrlRef.current = null;
+    }
+    setTtsStatus('idle');
   }, []);
+
+  const playTTS = useCallback(async () => {
+    stopAudio();
+    setTtsStatus('loading');
+    try {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: `${title}. ${backContent}` }),
+      });
+      if (!res.ok) throw new Error(`TTS API error ${res.status}`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      audioUrlRef.current = url;
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      audio.onended  = () => setTtsStatus('idle');
+      audio.onerror  = () => setTtsStatus('idle');
+      audio.onplaying = () => setTtsStatus('playing');
+      setTtsStatus('playing');
+      audio.play().catch(() => setTtsStatus('idle'));
+    } catch {
+      setTtsStatus('idle');
+    }
+  }, [title, backContent, stopAudio]);
 
   // Auto-read on flip; stop on flip-back
   useEffect(() => {
     if (flipped) {
-      speak();
+      playTTS();
     } else {
-      stopSpeaking();
+      stopAudio();
     }
-    return () => { if (!flipped) stopSpeaking(); };
+    return () => stopAudio();
   }, [flipped]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Desktop: hover to flip ──────────────────────────────────────────────
@@ -209,8 +198,8 @@ export default function TouchBook({
               >
                 {title}
               </h3>
-              {/* Speaking indicator */}
-              {speaking && (
+              {/* TTS status indicator */}
+              {ttsStatus !== 'idle' && (
                 <div style={{
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
                   background: 'rgba(0,0,0,0.2)', borderRadius: '999px',
@@ -219,7 +208,7 @@ export default function TouchBook({
                   fontWeight: 600, letterSpacing: '0.03em',
                 }}>
                   <span style={{ animation: 'floatBob 0.6s ease-in-out infinite' }}>🔊</span>
-                  Reading aloud…
+                  {ttsStatus === 'loading' ? 'Loading…' : 'Reading aloud…'}
                 </div>
               )}
               <p className="text-sm leading-relaxed text-white opacity-90 line-clamp-6">
@@ -253,8 +242,8 @@ export default function TouchBook({
               </a>
               {/* Replay / stop TTS button */}
               <button
-                onClick={(e) => { e.stopPropagation(); speaking ? stopSpeaking() : speak(); }}
-                title={speaking ? 'Stop reading' : 'Read aloud'}
+                onClick={(e) => { e.stopPropagation(); ttsStatus !== 'idle' ? stopAudio() : playTTS(); }}
+                title={ttsStatus !== 'idle' ? 'Stop reading' : 'Read aloud'}
                 style={{
                   background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.35)',
                   borderRadius: '50%', width: '38px', height: '38px',
@@ -262,9 +251,9 @@ export default function TouchBook({
                   cursor: 'pointer', fontSize: '1.1rem', flexShrink: 0,
                   transition: 'background 0.15s',
                 }}
-                aria-label={speaking ? 'Stop reading' : 'Read aloud'}
+                aria-label={ttsStatus !== 'idle' ? 'Stop reading' : 'Read aloud'}
               >
-                {speaking ? '⏹' : '🔊'}
+                {ttsStatus === 'loading' ? '⏳' : ttsStatus === 'playing' ? '⏹' : '🔊'}
               </button>
             </div>
           </div>
