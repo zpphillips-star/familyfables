@@ -8,26 +8,42 @@ const FAL_MODEL = 'fal-ai/face-to-sticker';
 const PROMPT = "funny cartoon emoji character, children's book illustration style, big round eyes, silly goofy grin, colorful and whimsical, sticker art";
 const NEG_PROMPT = "realistic, photograph, nsfw, text, watermark, blurry";
 
-// Upload image to fal.ai CDN storage — better than sending base64 inline
+// Upload image to fal.ai CDN storage — presigned URL flow
 async function uploadImageToFal(base64: string): Promise<string | null> {
   try {
     const buffer = Buffer.from(base64, 'base64');
-    const formData = new FormData();
-    formData.append('file', new Blob([buffer], { type: 'image/jpeg' }), 'face.jpg');
 
-    const res = await fetch('https://rest.alpha.fal.ai/storage/upload', {
+    // Step 1: initiate upload to get presigned URL
+    const initRes = await fetch('https://rest.alpha.fal.ai/storage/upload/initiate', {
       method: 'POST',
-      headers: { 'Authorization': `Key ${FAL_KEY}` },
-      body: formData,
+      headers: {
+        'Authorization': `Key ${FAL_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content_type: 'image/jpeg', file_name: 'face.jpg' }),
     });
 
-    if (!res.ok) {
-      console.warn('[poo-face] storage upload failed:', res.status, await res.text().catch(() => ''));
+    if (!initRes.ok) {
+      console.warn('[poo-face] storage initiate failed:', initRes.status);
       return null;
     }
 
-    const data = await res.json();
-    return (data.url || data.file_url || null) as string | null;
+    const { file_url, upload_url } = await initRes.json();
+
+    // Step 2: PUT the image bytes to the presigned URL
+    const uploadRes = await fetch(upload_url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'image/jpeg' },
+      body: buffer,
+    });
+
+    if (!uploadRes.ok) {
+      console.warn('[poo-face] storage PUT failed:', uploadRes.status);
+      return null;
+    }
+
+    console.log('[poo-face] uploaded to fal CDN:', file_url.slice(0, 60));
+    return file_url as string;
   } catch (e) {
     console.warn('[poo-face] storage upload error:', e);
     return null;
