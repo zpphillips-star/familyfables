@@ -388,3 +388,39 @@ h4 { font-size: clamp(1.2rem, 2.5vw, 1.8rem); }
   .book-card-3d { cursor: default; }
   .ribbon-btn { padding: 12px 28px; font-size: 1rem; }
 }
+
+/* ── Storybook World animations ─────────────────────────────────────── */
+@keyframes floatBob {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-16px); }
+}
+@keyframes crystalPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.15); }
+}
+@keyframes popIn {
+  0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+  70%  { transform: scale(1.2) rotate(3deg);  opacity: 1; }
+  100% { transform: scale(1)  rotate(0deg);   opacity: 1; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 1;   }
+}
+@keyframes driftCloud {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(40px); }
+}
+@keyframes fireFlicker {
+  0%, 100% { transform: scaleY(1)    scaleX(1);    }
+  33%       { transform: scaleY(1.1) scaleX(0.95); }
+  66%       { transform: scaleY(0.95) scaleX(1.05); }
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes mood-book-appear {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
