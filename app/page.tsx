@@ -512,22 +512,26 @@ function ZoneSky() {
         </div>
       ))}
 
-      {/* Narwhal — tap to wiggle */}
+      {/* Narwhal — absolute left, slightly lower, behind title */}
       <div
         onClick={tapNarwhal}
         role="button" tabIndex={0} aria-label="Tap the narwhal!"
         onKeyDown={e => e.key === 'Enter' && tapNarwhal()}
         style={{
+          position: 'absolute',
+          left: 'clamp(-100px, -6vw, -30px)',
+          top: '50%',
+          transform: 'translateY(-58%)',
+          zIndex: 2,
           animation: wiggle ? undefined : 'floatBob 4s ease-in-out infinite',
-          marginBottom: '16px', position: 'relative', zIndex: 3,
           cursor: 'pointer', outline: 'none',
         }}
         className={wiggle ? 'narwhal-wiggle' : ''}
       >
-        <TiltNarwhal size={420} />
+        <TiltNarwhal size={480} />
       </div>
 
-      {/* Title */}
+      {/* Title — z-index 3 so it overlaps narwhal */}
       <h1 style={{
         fontFamily: FF,
         fontSize: 'clamp(3.5rem, 14vw, 9rem)',
@@ -537,6 +541,7 @@ function ZoneSky() {
         position: 'relative', zIndex: 3,
         animation: 'fadeSlideUp 0.8s ease-out both',
         textAlign: 'center', letterSpacing: '-0.01em',
+        paddingLeft: 'clamp(60px, 16vw, 180px)',
       }}>
         Family Fables
       </h1>
@@ -549,12 +554,17 @@ function ZoneSky() {
         position: 'relative', zIndex: 3,
         animation: 'fadeSlideUp 0.9s ease-out 0.15s both',
         textAlign: 'center',
+        paddingLeft: 'clamp(40px, 12vw, 140px)',
       }}>
         Where every story is an adventure ✨
       </p>
 
       {/* CTA */}
-      <div style={{ position: 'relative', zIndex: 3, animation: 'fadeSlideUp 1s ease-out 0.3s both' }}>
+      <div style={{
+        position: 'relative', zIndex: 3,
+        animation: 'fadeSlideUp 1s ease-out 0.3s both',
+        paddingLeft: 'clamp(40px, 12vw, 140px)',
+      }}>
         <Link href="/books" style={{
           display: 'inline-block',
           background: '#ff9c1a', color: '#fff',
