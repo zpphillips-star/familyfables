@@ -10,6 +10,7 @@ import CloudDivider from '@/components/CloudDivider';
 import WaveDivider from '@/components/WaveDivider';
 import AmberGame from '@/components/AmberGame';
 import PooFaceQuiz from '@/components/PooFaceQuiz';
+import PooFaceCamera from '@/components/PooFaceCamera';
 
 // ── Sparkle Trail ─────────────────────────────────────────────────────────
 type Spark = { id: number; x: number; y: number; rot: number; size: number; color: string };
@@ -591,6 +592,11 @@ function PooDragonSection() {
             }}
           />
         </div>
+      </div>
+
+      {/* AI Camera Feature */}
+      <div style={{ background: 'rgba(255,255,255,0.4)', borderRadius: '24px', padding: '32px', margin: '40px auto', maxWidth: '540px', position: 'relative', zIndex: 1 }}>
+        <PooFaceCamera />
       </div>
 
       <CloudDivider fill="#78087c" fillBack="#5a0660" height={240} />
