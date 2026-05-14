@@ -177,47 +177,169 @@ function BlobDivider({ fill }: { fill: string }) {
   );
 }
 
+// ── Adventure map zone illustrations ─────────────────────────────────────────
+function IconAmber() {
+  return (
+    <svg viewBox="0 0 64 64" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Mountain */}
+      <polygon points="32,8 6,54 58,54" fill="#7b3fa0" opacity="0.9"/>
+      <polygon points="32,8 20,28 44,28" fill="#a060c8" opacity="0.7"/>
+      {/* Snow cap */}
+      <polygon points="32,8 24,24 40,24" fill="white" opacity="0.85"/>
+      {/* Crystals on mountain */}
+      <polygon points="14,54 17,42 20,54" fill="#d9b7e5"/>
+      <polygon points="44,54 47,40 50,54" fill="#c090d8"/>
+      <polygon points="29,54 32,44 35,54" fill="#b070cc"/>
+      {/* Dragon silhouette flying */}
+      <ellipse cx="50" cy="18" rx="6" ry="3.5" fill="#ff9c1a" opacity="0.95"/>
+      <polygon points="44,18 40,14 42,20" fill="#ff9c1a" opacity="0.95"/>
+      <polygon points="56,15 60,12 58,19" fill="#ff9c1a" opacity="0.85"/>
+      {/* Dragon eye */}
+      <circle cx="52" cy="17" r="1.2" fill="white"/>
+      <circle cx="52.3" cy="17" r="0.6" fill="#2a0038"/>
+    </svg>
+  );
+}
+
+function IconDragon() {
+  return (
+    <svg viewBox="0 0 64 64" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Body */}
+      <ellipse cx="32" cy="36" rx="18" ry="16" fill="#7b4a00"/>
+      <ellipse cx="32" cy="33" rx="17" ry="15" fill="#8b5a10"/>
+      {/* Highlight */}
+      <ellipse cx="28" cy="28" rx="8" ry="6" fill="#a06820" opacity="0.5"/>
+      {/* Eyes */}
+      <circle cx="24" cy="30" r="5" fill="white"/>
+      <circle cx="40" cy="30" r="5" fill="white"/>
+      <circle cx="25" cy="30" r="3" fill="#1a0800"/>
+      <circle cx="41" cy="30" r="3" fill="#1a0800"/>
+      <circle cx="26" cy="29" r="1" fill="white"/>
+      <circle cx="42" cy="29" r="1" fill="white"/>
+      {/* Smile */}
+      <path d="M22,42 Q32,50 42,42" stroke="#5a2800" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+      {/* Swirl top */}
+      <path d="M32,18 Q28,10 32,7 Q36,4 38,10" stroke="#8b5a10" strokeWidth="3" strokeLinecap="round" fill="none"/>
+      <circle cx="38" cy="10" r="3.5" fill="#8b5a10"/>
+      {/* Blush */}
+      <ellipse cx="18" cy="37" rx="4" ry="2.5" fill="#e07040" opacity="0.45"/>
+      <ellipse cx="46" cy="37" rx="4" ry="2.5" fill="#e07040" opacity="0.45"/>
+    </svg>
+  );
+}
+
+function IconBooks() {
+  return (
+    <svg viewBox="0 0 64 64" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Bottom book - teal */}
+      <rect x="8" y="42" width="48" height="14" rx="3" fill="#009380"/>
+      <rect x="8" y="42" width="7" height="14" rx="2" fill="#007060"/>
+      <line x1="20" y1="45" x2="50" y2="45" stroke="white" strokeWidth="1.5" opacity="0.4"/>
+      <line x1="20" y1="50" x2="44" y2="50" stroke="white" strokeWidth="1.5" opacity="0.3"/>
+      {/* Middle book - orange, slightly askew */}
+      <rect x="10" y="27" width="42" height="13" rx="3" fill="#ff9c1a" transform="rotate(-2 10 27)"/>
+      <rect x="10" y="27" width="7" height="13" rx="2" fill="#e07800" transform="rotate(-2 10 27)"/>
+      <line x1="22" y1="30" x2="46" y2="29" stroke="white" strokeWidth="1.5" opacity="0.4"/>
+      {/* Top book - purple */}
+      <rect x="12" y="13" width="38" height="13" rx="3" fill="#78087c" transform="rotate(1.5 12 13)"/>
+      <rect x="12" y="13" width="7" height="13" rx="2" fill="#5a0060" transform="rotate(1.5 12 13)"/>
+      <line x1="24" y1="17" x2="44" y2="17" stroke="white" strokeWidth="1.5" opacity="0.4"/>
+      {/* Bookmark ribbon */}
+      <rect x="44" y="8" width="5" height="20" rx="1" fill="#ff9c1a"/>
+      <polygon points="44,28 46.5,24 49,28" fill="#e07800"/>
+    </svg>
+  );
+}
+
+function IconColoring() {
+  return (
+    <svg viewBox="0 0 64 64" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Pencil body */}
+      <rect x="28" y="8" width="12" height="38" rx="2" fill="#ffcc44" transform="rotate(15 34 27)"/>
+      <rect x="28" y="8" width="12" height="8" rx="2" fill="#e8a820" transform="rotate(15 34 27)"/>
+      {/* Pencil tip */}
+      <polygon points="34,46 30,56 38,56" fill="#f0c090" transform="rotate(15 34 51)"/>
+      <polygon points="34,52 31.5,56 36.5,56" fill="#cc6633" transform="rotate(15 34 54)"/>
+      {/* Eraser */}
+      <rect x="28" y="8" width="12" height="5" rx="2" fill="#ffaabb" transform="rotate(15 34 10.5)"/>
+      {/* Color swatches / strokes in background */}
+      <ellipse cx="14" cy="48" rx="10" ry="5" fill="#009380" opacity="0.7" transform="rotate(-20 14 48)"/>
+      <ellipse cx="50" cy="46" rx="10" ry="5" fill="#d9b7e5" opacity="0.8" transform="rotate(20 50 46)"/>
+      <ellipse cx="10" cy="22" rx="7" ry="3.5" fill="#ff9c1a" opacity="0.65" transform="rotate(-30 10 22)"/>
+    </svg>
+  );
+}
+
+function IconCampfire() {
+  return (
+    <svg viewBox="0 0 64 64" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Stars */}
+      <circle cx="10" cy="12" r="1.5" fill="white" opacity="0.8"/>
+      <circle cx="54" cy="8" r="1.2" fill="white" opacity="0.7"/>
+      <circle cx="48" cy="20" r="1" fill="white" opacity="0.6"/>
+      <circle cx="16" cy="22" r="1" fill="white" opacity="0.5"/>
+      {/* Log base */}
+      <ellipse cx="32" cy="52" rx="20" ry="5" fill="#3a1a00" opacity="0.6"/>
+      <line x1="14" y1="50" x2="50" y2="54" stroke="#5a2800" strokeWidth="5" strokeLinecap="round"/>
+      <line x1="18" y1="54" x2="46" y2="50" stroke="#4a2000" strokeWidth="4" strokeLinecap="round"/>
+      {/* Flames - outer */}
+      <path d="M32,48 Q20,38 24,26 Q26,18 32,14 Q38,18 40,26 Q44,38 32,48Z" fill="#ff5500"/>
+      {/* Flames - mid */}
+      <path d="M32,48 Q22,40 26,30 Q28,22 32,18 Q36,22 38,30 Q42,40 32,48Z" fill="#ff8c00"/>
+      {/* Flames - inner */}
+      <path d="M32,46 Q25,38 28,32 Q30,26 32,24 Q34,26 36,32 Q39,38 32,46Z" fill="#ffcc00"/>
+      {/* Flame core */}
+      <path d="M32,44 Q28,38 30,34 Q31,30 32,28 Q33,30 34,34 Q36,38 32,44Z" fill="#fff8c0"/>
+    </svg>
+  );
+}
+
 // ── ADVENTURE MAP strip ───────────────────────────────────────────────────────
 const ZONES = [
   {
     id: 'amber',
-    emoji: '🐉',
+    icon: <IconAmber />,
     label: "Amber's Mountain",
     hint: 'Play Crystal Rush',
-    bg: 'linear-gradient(135deg, #d9b7e5, #a070c0)',
+    bg: 'linear-gradient(160deg, #b078d8 0%, #7030a0 100%)',
     border: '#c090e0',
+    glow: 'rgba(160,80,220,0.45)',
   },
   {
     id: 'dragon',
-    emoji: '💩',
+    icon: <IconDragon />,
     label: "Dragon's Town",
     hint: 'Make your Poo Poo Face',
-    bg: 'linear-gradient(135deg, #9030a0, #5a0060)',
-    border: '#b050c8',
+    bg: 'linear-gradient(160deg, #a030b0 0%, #4a0058 100%)',
+    border: '#c050d0',
+    glow: 'rgba(160,40,180,0.45)',
   },
   {
     id: 'books',
-    emoji: '📚',
+    icon: <IconBooks />,
     label: 'The Bookshelf',
     hint: 'Find your next read',
-    bg: 'linear-gradient(135deg, #ffd480, #ff9c1a)',
-    border: '#ffb040',
+    bg: 'linear-gradient(160deg, #ffcc55 0%, #e07800 100%)',
+    border: '#ffaa30',
+    glow: 'rgba(255,160,0,0.45)',
   },
   {
     id: 'coloring',
-    emoji: '🎨',
+    icon: <IconColoring />,
     label: 'Coloring Meadow',
     hint: 'Free printable pages',
-    bg: 'linear-gradient(135deg, #a8f0df, #009380)',
-    border: '#00b899',
+    bg: 'linear-gradient(160deg, #50d8b8 0%, #007060 100%)',
+    border: '#20c090',
+    glow: 'rgba(0,180,140,0.45)',
   },
   {
     id: 'campfire',
-    emoji: '🔥',
+    icon: <IconCampfire />,
     label: 'The Campfire',
     hint: 'Join the family',
-    bg: 'linear-gradient(135deg, #78087c, #2a0032)',
-    border: '#a030b0',
+    bg: 'linear-gradient(160deg, #9020a0 0%, #1e0028 100%)',
+    border: '#b040c8',
+    glow: 'rgba(120,0,160,0.45)',
   },
 ];
 
@@ -228,24 +350,19 @@ function AdventureMap() {
   };
 
   return (
-    <div style={{
-      position: 'relative', zIndex: 4, width: '100%',
-      padding: '0 16px 0',
-    }}>
-      {/* Header label */}
+    <div style={{ position: 'relative', zIndex: 4, width: '100%', padding: '0 16px' }}>
       <p style={{
         fontFamily: CAT, fontWeight: 800, textAlign: 'center',
-        color: '#005a4a', fontSize: 'clamp(0.85rem, 2vw, 1rem)',
-        letterSpacing: '0.12em', textTransform: 'uppercase',
-        marginBottom: '12px', opacity: 0.75,
+        color: '#004a3a', fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+        letterSpacing: '0.14em', textTransform: 'uppercase',
+        marginBottom: '14px', opacity: 0.65,
       }}>
-        ✦ Your Adventure Awaits ✦
+        Your Adventure Awaits
       </p>
 
-      {/* Scrollable strip */}
       <div style={{
-        display: 'flex', gap: '12px', overflowX: 'auto',
-        scrollSnapType: 'x mandatory', paddingBottom: '8px',
+        display: 'flex', gap: '10px', overflowX: 'auto',
+        scrollSnapType: 'x mandatory', paddingBottom: '6px',
         WebkitOverflowScrolling: 'touch' as 'touch',
         justifyContent: 'center', flexWrap: 'wrap',
       }} className="shelf-scroll">
@@ -256,36 +373,42 @@ function AdventureMap() {
             style={{
               flex: '0 0 auto', scrollSnapAlign: 'start',
               background: z.bg,
-              border: `2.5px solid ${z.border}`,
-              borderRadius: '20px',
-              padding: '14px 18px',
+              border: `2px solid ${z.border}`,
+              borderRadius: '18px',
+              padding: '16px 14px 12px',
               cursor: 'pointer', outline: 'none',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
-              minWidth: '110px', maxWidth: '130px',
-              boxShadow: '0 4px 18px rgba(0,0,0,0.18)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
+              minWidth: '108px', maxWidth: '124px',
+              boxShadow: `0 5px 20px ${z.glow}, 0 2px 6px rgba(0,0,0,0.15)`,
               transition: 'transform 0.18s cubic-bezier(.175,.885,.32,1.275), box-shadow 0.18s ease',
-              // stagger fade-in via CSS animation
-              animation: `popIn 0.45s ease-out ${i * 80}ms both`,
+              animation: `popIn 0.45s ease-out ${i * 90}ms both`,
             }}
             onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.09) translateY(-3px)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 10px 32px rgba(0,0,0,0.28)';
+              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.08) translateY(-4px)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 14px 36px ${z.glow}, 0 4px 12px rgba(0,0,0,0.2)`;
             }}
             onMouseLeave={e => {
               (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 18px rgba(0,0,0,0.18)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 5px 20px ${z.glow}, 0 2px 6px rgba(0,0,0,0.15)`;
             }}
           >
-            <span style={{ fontSize: 'clamp(1.8rem, 5vw, 2.4rem)', lineHeight: 1 }}>{z.emoji}</span>
+            {/* Illustration */}
+            <div style={{
+              width: 54, height: 54,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))',
+            }}>
+              {z.icon}
+            </div>
             <span style={{
               fontFamily: FF, color: '#ffffff',
-              fontSize: 'clamp(0.75rem, 2vw, 0.9rem)',
+              fontSize: 'clamp(0.72rem, 2vw, 0.88rem)',
               textAlign: 'center', lineHeight: 1.2,
-              textShadow: '0 1px 4px rgba(0,0,0,0.35)',
+              textShadow: '0 1px 5px rgba(0,0,0,0.4)',
             }}>{z.label}</span>
             <span style={{
-              fontFamily: OS, color: 'rgba(255,255,255,0.82)',
-              fontSize: 'clamp(0.62rem, 1.5vw, 0.72rem)',
+              fontFamily: OS, color: 'rgba(255,255,255,0.78)',
+              fontSize: 'clamp(0.6rem, 1.4vw, 0.7rem)',
               textAlign: 'center', lineHeight: 1.2,
             }}>{z.hint}</span>
           </button>
@@ -294,7 +417,6 @@ function AdventureMap() {
     </div>
   );
 }
-
 
 function ZoneSky() {
   const [pulsed, setPulsed] = useState<number | null>(null);
