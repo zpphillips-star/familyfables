@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { books, AMAZON_STORE_URL } from '@/lib/books';
 import BedtimeToggle from '@/components/BedtimeToggle';
@@ -7,10 +8,10 @@ import TouchBook from '@/components/TouchBook';
 import TiltNarwhal from '@/components/TiltNarwhal';
 import CloudDivider from '@/components/CloudDivider';
 import WaveDivider from '@/components/WaveDivider';
+import AmberGame from '@/components/AmberGame';
+import PooFaceQuiz from '@/components/PooFaceQuiz';
 
-// ── Sparkle Trail ──────────────────────────────────────────────────────────
-import { useState, useEffect } from 'react';
-
+// ── Sparkle Trail ─────────────────────────────────────────────────────────
 type Spark = { id: number; x: number; y: number; rot: number; size: number; color: string };
 const SPARK_COLORS = ['#009380', '#d9b7e5', '#78087c', '#dcf9f3', '#006e59', '#a8e8dc'];
 
@@ -59,410 +60,114 @@ function SparkleTrail() {
   );
 }
 
-// ── Subscribe Section ──────────────────────────────────────────────────────
-function SubscribeSection() {
-  const ff = "'Concert One', var(--font-concert-one), cursive";
-  const [submitted, setSubmitted] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName]   = useState('');
-  const [email, setEmail]         = useState('');
+// ── Mood filter ───────────────────────────────────────────────────────────
+type MoodKey = 'all' | 'laugh' | 'bedtime' | 'adventure' | 'heartfelt';
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) setSubmitted(true);
-  };
+const MOODS: { key: MoodKey; label: string }[] = [
+  { key: 'all', label: '✨ All' },
+  { key: 'laugh', label: '😂 Laugh' },
+  { key: 'bedtime', label: '🌙 Bedtime' },
+  { key: 'adventure', label: '🐉 Adventure' },
+  { key: 'heartfelt', label: '🥹 Heartfelt' },
+];
+
+function bookMatchesMood(book: (typeof books)[number], mood: MoodKey): boolean {
+  if (mood === 'all') return true;
+  if (mood === 'laugh') return book.moods?.some(m => ['silly', 'read-aloud', 'spooky'].includes(m)) ?? false;
+  if (mood === 'bedtime') return book.moods?.includes('bedtime') ?? false;
+  if (mood === 'adventure') return ['amber-dragon-keeper', 'ollie-come-home', 'frog-a-dog', 'finding-hampton'].includes(book.id);
+  if (mood === 'heartfelt') return book.moods?.includes('feel-good') ?? false;
+  return false;
+}
+
+function MoodBooksSection() {
+  const [activeMood, setActiveMood] = useState<MoodKey>('all');
+  const ff = "'Concert One', var(--font-concert-one), cursive";
+  const filtered = books.filter(b => bookMatchesMood(b, activeMood));
 
   return (
     <section
-      id="subscribe"
+      id="books"
       style={{
-        background: 'linear-gradient(135deg, #78087c 0%, #a935a6 100%)',
+        background: '#d9b7e5',
         position: 'relative',
-        paddingTop: '420px',
-        paddingBottom: '80px',
-        marginTop: '-380px',
-        zIndex: 0,
+        marginTop: '-320px',
+        paddingTop: '360px',
+        paddingBottom: '380px',
+        zIndex: 1,
+        overflow: 'hidden',
       }}
     >
-      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '0 32px', textAlign: 'center' }}>
-        <h2
-          style={{
-            fontFamily: ff,
-            fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
-            color: '#ffffff',
-            marginBottom: '8px',
-            lineHeight: 1.1,
-          }}
-        >
-          Subscribe
+      {/* Background blobs */}
+      <div style={{
+        position: 'absolute', top: '10%', left: '-8%',
+        width: '55vmax', height: '55vmax',
+        background: 'radial-gradient(circle, rgba(120,8,124,0.12) 0%, transparent 70%)',
+        borderRadius: '50%', pointerEvents: 'none',
+      }} />
+
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
+        <h2 style={{
+          fontFamily: ff,
+          fontSize: 'clamp(2.4rem, 6vw, 4.5rem)',
+          color: '#78087c',
+          textAlign: 'center',
+          marginBottom: '12px',
+          lineHeight: 1.0,
+        }}>
+          Find Your Story
         </h2>
-        <h2
-          style={{
-            fontFamily: ff,
-            fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)',
-            color: '#dbdbdb',
-            marginBottom: '40px',
-            lineHeight: 1.2,
-          }}
-        >
-          For Updates and Giveaways
-        </h2>
+        <p style={{
+          textAlign: 'center',
+          fontFamily: "'Catamaran', var(--font-catamaran), sans-serif",
+          fontWeight: 800,
+          fontSize: '1.1rem',
+          color: '#3a0245',
+          marginBottom: '32px',
+        }}>
+          What kind of book night are you having?
+        </p>
 
-        {submitted ? (
-          <div style={{ padding: '32px', background: 'rgba(255,255,255,0.15)', borderRadius: '12px' }}>
-            <h2 style={{ fontFamily: ff, color: '#ffffff', fontSize: '1.8rem' }}>Success!</h2>
-            <p style={{ color: '#dcf9f3', marginTop: '8px' }}>You&apos;re in the family now — watch your inbox!</p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-              <input
-                type="text"
-                placeholder="First Name"
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
-                style={{
-                  padding: '14px 18px',
-                  borderRadius: '6px',
-                  border: '2px solid rgba(255,255,255,0.3)',
-                  background: 'rgba(255,255,255,0.12)',
-                  color: '#ffffff',
-                  fontFamily: "'Open Sans', sans-serif",
-                  fontSize: '1rem',
-                  outline: 'none',
-                  width: '100%',
-                }}
-              />
-              <input
-                type="text"
-                placeholder="Last Name"
-                value={lastName}
-                onChange={e => setLastName(e.target.value)}
-                style={{
-                  padding: '14px 18px',
-                  borderRadius: '6px',
-                  border: '2px solid rgba(255,255,255,0.3)',
-                  background: 'rgba(255,255,255,0.12)',
-                  color: '#ffffff',
-                  fontFamily: "'Open Sans', sans-serif",
-                  fontSize: '1rem',
-                  outline: 'none',
-                  width: '100%',
-                }}
-              />
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '12px' }}>
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                required
-                onChange={e => setEmail(e.target.value)}
-                style={{
-                  padding: '14px 18px',
-                  borderRadius: '6px',
-                  border: '2px solid rgba(255,255,255,0.3)',
-                  background: 'rgba(255,255,255,0.12)',
-                  color: '#ffffff',
-                  fontFamily: "'Open Sans', sans-serif",
-                  fontSize: '1rem',
-                  outline: 'none',
-                  width: '100%',
-                }}
-              />
-              <button
-                type="submit"
-                style={{
-                  padding: '14px 28px',
-                  background: '#ff9c1a',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontFamily: ff,
-                  fontSize: '1rem',
-                  cursor: 'pointer',
-                  letterSpacing: '0.04em',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Subscribe
-              </button>
-            </div>
-          </form>
-        )}
-      </div>
-    </section>
-  );
-}
-
-// ── Page ──────────────────────────────────────────────────────────────────
-const ORANGE = '#ff9c1a';
-
-export default function Home() {
-  const ff = "'Concert One', var(--font-concert-one), cursive";
-
-  // Featured book — "What's Your Poo Poo Face" (Now Available)
-  const featuredBook = books.find(b => b.id === 'poo-poo-face')!;
-
-  // Best Sellers grid — Dream Ideas, Amber, Finding Hampton
-  const bestSellers = books.filter(b =>
-    ['dream-ideas', 'amber-dragon-keeper', 'finding-hampton'].includes(b.id)
-  );
-
-  return (
-    <div style={{ overflowX: 'hidden' }}>
-      <SparkleTrail />
-
-      {/* ── SECTION 1: HERO ─────────────────────────────────────────── */}
-      <section
-        id="hero"
-        style={{
-          background: '#dcf9f3',
-          position: 'relative',
-          overflow: 'hidden',
-          paddingBottom: '200px',
-          zIndex: 2,
-        }}
-      >
-        {/* Hero: narwhal top-center, text below — works on all screen sizes */}
-        <div
-          style={{
-            maxWidth: '900px',
-            margin: '0 auto',
-            padding: '40px 24px 0',
-            textAlign: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          {/* Narwhal — large and centered */}
-          <div style={{ marginBottom: '-20px', zIndex: 3, position: 'relative' }}>
-            <TiltNarwhal size={340} />
-          </div>
-
-          {/* "FAMILY FABLES" — white Concert One with teal outline */}
-          <h1
-            style={{
-              fontFamily: ff,
-              fontSize: 'clamp(3.5rem, 14vw, 110px)',
-              color: '#ffffff',
-              textShadow: '4px 4px 0px #009380, 3px 3px 0px #009380, -1px -1px 0px #007060',
-              lineHeight: 1.0,
-              marginBottom: '12px',
-              letterSpacing: '0.02em',
-              position: 'relative',
-              zIndex: 4,
-            }}
-          >
-            Family Fables
-          </h1>
-
-          {/* "Welcome To Our Bookstore" */}
-          <h2
-            style={{
-              fontFamily: `'Catamaran', var(--font-catamaran), sans-serif`,
-              fontSize: 'clamp(1.3rem, 4vw, 2rem)',
-              color: '#005a4a',
-              fontWeight: 800,
-              marginBottom: '32px',
-              lineHeight: 1.2,
-            }}
-          >
-            Welcome To Our Bookstore
-          </h2>
-
-          {/* SHOP NOW */}
-          <a
-            href="/books"
-            className="btn-shine btn-scale-pulse"
-            style={{
-              display: 'inline-block',
-              background: ORANGE,
-              color: '#ffffff',
-              padding: '16px 52px',
-              borderRadius: '4px',
-              fontFamily: ff,
-              fontSize: '1.15rem',
-              textDecoration: 'none',
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              boxShadow: '0 4px 20px rgba(255,156,26,0.45)',
-              marginBottom: '20px',
-            }}
-          >
-            Shop Now 🛒
-          </a>
-        </div>
-
-        {/* Cloud divider — real fluffy clouds into lavender section */}
-        <CloudDivider fill="#d9b7e5" fillBack="#e2c8f0" height={160} />
-      </section>
-
-      {/* ── SECTION 2: NOW AVAILABLE ────────────────────────────────── */}
-      <section
-        id="now-available"
-        style={{
-          background: '#d9b7e5',
-          position: 'relative',
-          marginTop: '-400px',
-          paddingTop: '400px',
-          paddingBottom: '400px',
-          zIndex: 1,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1100px',
-            margin: '0 auto',
-            padding: '40px 32px 40px',
-          }}
-        >
-          {/* Section heading — big like WordPress */}
-          <h2
-            style={{
-              fontFamily: ff,
-              fontSize: 'clamp(3.5rem, 9vw, 7rem)',
-              color: '#78087c',
-              textAlign: 'center',
-              marginBottom: '48px',
-              lineHeight: 1.0,
-              letterSpacing: '0.02em',
-            }}
-          >
-            Now Available
-          </h2>
-
-          {/* Featured book layout: title image left, cover right */}
-          <div
-            style={{
-              display: 'flex',
-              gap: '48px',
-              alignItems: 'flex-start',
-              flexWrap: 'wrap',
-            }}
-          >
-            {/* Left: title + description + button */}
-            <div style={{ flex: '2 1 340px' }}>
-              {/* Poo Poo Face title text image */}
-              <div style={{ marginBottom: '24px' }}>
-                <Image
-                  src="/images/wp/deep-purple-poo-poo-face-title.png"
-                  alt="What's Your Poo Poo Face"
-                  width={910}
-                  height={93}
-                  style={{ width: '100%', maxWidth: '600px', height: 'auto' }}
-                  priority
-                />
-              </div>
-
-              <p
-                style={{
-                  fontSize: 'clamp(1rem, 1.8vw, 1.1rem)',
-                  color: '#3a0245',
-                  lineHeight: 1.75,
-                  marginBottom: '28px',
-                  maxWidth: '560px',
-                }}
-              >
-                {featuredBook.description.split(' Perfect for:')[0]}
-              </p>
-
-              <a
-                href="https://www.amazon.com/dp/1951173163/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-block',
-                  background: ORANGE,
-                  color: '#ffffff',
-                  padding: '12px 36px',
-                  borderRadius: '4px',
-                  fontFamily: ff,
-                  fontSize: '1rem',
-                  textDecoration: 'none',
-                  letterSpacing: '0.05em',
-                  boxShadow: '0 3px 12px rgba(255,156,26,0.35)',
-                }}
-                className="btn-shine"
-              >
-                Amazon
-              </a>
-            </div>
-
-            {/* Right: book cover */}
-            <div
+        {/* Mood filter pills */}
+        <div style={{
+          display: 'flex',
+          gap: '10px',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          marginBottom: '44px',
+        }}>
+          {MOODS.map(m => (
+            <button
+              key={m.key}
+              onClick={() => setActiveMood(m.key)}
               style={{
-                flex: '1 1 200px',
-                display: 'flex',
-                justifyContent: 'center',
+                padding: '10px 22px',
+                borderRadius: '999px',
+                border: `2px solid ${activeMood === m.key ? '#78087c' : 'rgba(120,8,124,0.35)'}`,
+                background: activeMood === m.key ? '#78087c' : 'rgba(255,255,255,0.55)',
+                color: activeMood === m.key ? '#ffffff' : '#3a0245',
+                fontFamily: ff,
+                fontSize: '0.95rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                minHeight: '48px',
+                letterSpacing: '0.02em',
               }}
             >
-              <Image
-                src="/images/wp/whats-your-poopoo-face-400.png"
-                alt="What's Your Poo Poo Face cover"
-                width={400}
-                height={400}
-                style={{
-                  width: 'clamp(160px, 28vw, 300px)',
-                  height: 'auto',
-                  borderRadius: '8px',
-                  boxShadow: '4px 6px 24px rgba(0,0,0,0.2)',
-                }}
-              />
-            </div>
-          </div>
+              {m.label}
+            </button>
+          ))}
         </div>
 
-        {/* Wave divider → mint (Best Sellers below) */}
-        <WaveDivider fill="#dcf9f3" />
-      </section>
-
-      {/* ── SECTION 3: BEST SELLERS ─────────────────────────────────── */}
-      <section
-        id="books"
-        style={{
-          background: '#dcf9f3',
-          position: 'relative',
-          marginTop: '-400px',
-          paddingTop: '400px',
-          paddingBottom: '400px',
-          zIndex: 0,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1100px',
-            margin: '0 auto',
-            padding: '40px 32px 40px',
-          }}
-        >
-          <h2
-            className="font-display"
-            style={{
-              fontFamily: ff,
-              fontSize: 'clamp(2rem, 4vw, 3rem)',
-              color: '#78087c',
-              textAlign: 'center',
-              marginBottom: '48px',
-              lineHeight: 1.1,
-            }}
-          >
-            Best Sellers
-          </h2>
-
-          {/* 3-column best sellers using TouchBook */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, calc(100vw - 64px)), 1fr))',
-              gap: '32px',
-              marginBottom: '48px',
-            }}
-          >
-            {bestSellers.map(book => (
+        {/* Book grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(260px, calc(100vw - 48px)), 1fr))',
+          gap: '28px',
+        }}>
+          {filtered.map(book => (
+            <div key={book.id} style={{ animation: 'mood-book-appear 0.3s ease' }}>
               <TouchBook
-                key={book.id}
                 title={book.title}
                 cover={book.image}
                 ageRange={book.ageRange}
@@ -471,165 +176,849 @@ export default function Home() {
                 accentColor={book.accentColor}
                 tag={book.tag}
               />
-            ))}
-          </div>
-
-          {/* "See All Books" link to full grid */}
-          <div style={{ textAlign: 'center', marginTop: '16px' }}>
-            <a
-              href="/books"
-              style={{
-                display: 'inline-block',
-                background: ORANGE,
-                color: '#ffffff',
-                padding: '14px 40px',
-                borderRadius: '4px',
-                fontFamily: ff,
-                fontSize: '1rem',
-                textDecoration: 'none',
-                letterSpacing: '0.05em',
-                boxShadow: '0 3px 12px rgba(255,156,26,0.35)',
-              }}
-              className="btn-shine"
-            >
-              See All Books
-            </a>
-          </div>
+            </div>
+          ))}
         </div>
 
-        {/* Cloud divider → lavender (About section below) */}
-        <CloudDivider fill="#d9b7e5" fillBack="#e2c8f0" />
-      </section>
+        {filtered.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '48px', color: '#78087c', fontFamily: ff, fontSize: '1.2rem' }}>
+            No books in that mood yet — check back soon! 🌟
+          </div>
+        )}
 
-      {/* ── SECTION 4: FIND OUT MORE / OR SHOP ONLINE ───────────────── */}
-      <section
-        id="about"
-        style={{
-          background: '#d9b7e5',
-          position: 'relative',
-          marginTop: '-400px',
-          paddingTop: '400px',
-          paddingBottom: '80px',
-          zIndex: -1,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '800px',
-            margin: '0 auto',
-            padding: '40px 32px 60px',
-            textAlign: 'center',
-          }}
-        >
-          <h2
-            className="font-display"
-            style={{
-              fontFamily: ff,
-              fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-              color: '#78087c',
-              marginBottom: '12px',
-              lineHeight: 1.1,
-            }}
-          >
-            find out more about us
-          </h2>
-
-          <h2
-            className="font-display"
-            style={{
-              fontFamily: ff,
-              fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
-              color: '#006e59',
-              marginBottom: '36px',
-              lineHeight: 1.1,
-            }}
-          >
-            Or Shop Online
-          </h2>
-
-          <a
-            href="/books"
-            style={{
-              display: 'inline-block',
-              background: ORANGE,
-              color: '#ffffff',
-              padding: '14px 44px',
-              borderRadius: '4px',
-              fontFamily: ff,
-              fontSize: '1rem',
-              textDecoration: 'none',
-              letterSpacing: '0.05em',
-              boxShadow: '0 3px 12px rgba(255,156,26,0.35)',
-              marginBottom: '40px',
-            }}
-            className="btn-shine"
-          >
-            Browse The Shop
+        <div style={{ textAlign: 'center', marginTop: '48px' }}>
+          <a href="/books" style={{
+            display: 'inline-block',
+            background: '#ff9c1a',
+            color: '#ffffff',
+            padding: '15px 52px',
+            borderRadius: '6px',
+            fontFamily: ff,
+            fontSize: '1.05rem',
+            textDecoration: 'none',
+            letterSpacing: '0.05em',
+            boxShadow: '0 4px 18px rgba(255,156,26,0.4)',
+          }} className="btn-shine">
+            See All Books 📚
           </a>
-
-          {/* Social media links */}
-          <div
-            style={{
-              display: 'flex',
-              gap: '20px',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              marginTop: '8px',
-            }}
-          >
-            {[
-              { name: 'Facebook', url: 'https://www.facebook.com/familyfables/', color: '#1877f2' },
-              { name: 'Instagram', url: 'https://www.instagram.com/familyfables/', color: '#e1306c' },
-              { name: 'X / Twitter', url: 'https://twitter.com/familyfables', color: '#000000' },
-            ].map(({ name, url, color }) => (
-              <a
-                key={name}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  background: 'rgba(255,255,255,0.7)',
-                  color: color,
-                  padding: '10px 22px',
-                  borderRadius: '6px',
-                  fontFamily: ff,
-                  fontSize: '0.9rem',
-                  textDecoration: 'none',
-                  letterSpacing: '0.03em',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                  border: `2px solid ${color}22`,
-                  transition: 'transform 0.15s ease',
-                }}
-                className="active:scale-95"
-              >
-                Follow
-                <span
-                  style={{
-                    fontFamily: "'Open Sans', sans-serif",
-                    fontWeight: 700,
-                    fontSize: '0.82rem',
-                  }}
-                >
-                  {name}
-                </span>
-              </a>
-            ))}
-          </div>
         </div>
+      </div>
 
-        {/* Wave divider → purple subscribe bg */}
-        <WaveDivider fill="#78087c" />
-      </section>
-
-      {/* ── SECTION 5: SUBSCRIBE ────────────────────────────────────── */}
-      <SubscribeSection />
-
-      <BedtimeToggle />
-    </div>
+      <WaveDivider fill="#dcf9f3" />
+    </section>
   );
 }
 
+// ── Amber Character Section ────────────────────────────────────────────────
+function AmberCharacterSection() {
+  const [bouncing, setBouncing] = useState(false);
+  const ff = "'Concert One', var(--font-concert-one), cursive";
+
+  const handleAmberClick = () => {
+    if (bouncing) return;
+    setBouncing(true);
+    setTimeout(() => setBouncing(false), 700);
+  };
+
+  return (
+    <section
+      id="amber"
+      style={{
+        background: '#dcf9f3',
+        position: 'relative',
+        marginTop: '-380px',
+        paddingTop: '400px',
+        paddingBottom: '340px',
+        overflow: 'hidden',
+        zIndex: 0,
+      }}
+    >
+      {/* Organic blob background */}
+      <div style={{
+        position: 'absolute', top: '5%', right: '-5%',
+        width: '65vmax', height: '65vmax',
+        background: 'radial-gradient(ellipse, rgba(217,183,229,0.5) 0%, rgba(217,183,229,0.1) 55%, transparent 75%)',
+        borderRadius: '60% 40% 55% 45% / 45% 55% 40% 60%',
+        pointerEvents: 'none',
+        transform: 'rotate(-15deg)',
+      }} />
+      <div style={{
+        position: 'absolute', bottom: '10%', left: '-8%',
+        width: '40vmax', height: '40vmax',
+        background: 'radial-gradient(circle, rgba(0,147,128,0.12) 0%, transparent 65%)',
+        borderRadius: '50%', pointerEvents: 'none',
+      }} />
+
+      <div style={{
+        maxWidth: '1100px',
+        margin: '0 auto',
+        padding: '0 32px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '56px',
+        flexWrap: 'wrap',
+        position: 'relative',
+        zIndex: 1,
+      }}>
+        {/* Amber image — interactive */}
+        <div
+          onClick={handleAmberClick}
+          onKeyDown={e => e.key === 'Enter' && handleAmberClick()}
+          tabIndex={0}
+          role="button"
+          aria-label="Tap Amber to make her dance"
+          style={{
+            flex: '0 0 auto',
+            cursor: 'pointer',
+            outline: 'none',
+            position: 'relative',
+          }}
+        >
+          <Image
+            src="/images/wp/amber-the-dragon-keeper.jpg"
+            alt="Amber the Dragon Keeper book cover"
+            width={320}
+            height={400}
+            style={{
+              width: 'clamp(200px, 30vw, 320px)',
+              height: 'auto',
+              borderRadius: '20px',
+              boxShadow: '0 20px 60px rgba(0,90,74,0.25)',
+              transform: bouncing
+                ? 'scale(1.08) rotate(-4deg)'
+                : 'scale(1) rotate(-2deg)',
+              transition: 'transform 0.15s cubic-bezier(.36,.07,.19,.97)',
+              display: 'block',
+            }}
+          />
+          <div style={{
+            position: 'absolute',
+            bottom: '-12px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            fontSize: '0.72rem',
+            fontFamily: "'Open Sans', sans-serif",
+            fontWeight: 700,
+            color: '#009380',
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            opacity: 0.7,
+            whiteSpace: 'nowrap',
+          }}>
+            tap me!
+          </div>
+        </div>
+
+        {/* Text */}
+        <div style={{ flex: '1 1 280px', position: 'relative', zIndex: 2 }}>
+          <div style={{
+            fontFamily: "'Catamaran', var(--font-catamaran), sans-serif",
+            fontWeight: 800,
+            fontSize: '0.9rem',
+            color: '#009380',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            marginBottom: '10px',
+          }}>
+            Featured Character
+          </div>
+          <h2 style={{
+            fontFamily: ff,
+            fontSize: 'clamp(2.8rem, 6vw, 4.5rem)',
+            color: '#005a4a',
+            lineHeight: 1.0,
+            marginBottom: '20px',
+          }}>
+            Meet Amber
+          </h2>
+          <p style={{
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '1.05rem',
+            lineHeight: 1.8,
+            color: '#1a3a30',
+            marginBottom: '32px',
+            maxWidth: '420px',
+          }}>
+            She thought she was just a regular kid — until the dragons chose her.
+            Now Amber must protect a secret world of magical creatures, keep her
+            grades up, and figure out why the biggest dragon of all keeps following her home.
+          </p>
+          <a
+            href="https://www.amazon.com/stores/page/1DEB841F-05B8-46B0-A42E-55B618C36B12"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: '#009380',
+              color: '#ffffff',
+              padding: '14px 36px',
+              borderRadius: '8px',
+              fontFamily: ff,
+              fontSize: '1.05rem',
+              textDecoration: 'none',
+              letterSpacing: '0.04em',
+              boxShadow: '0 4px 20px rgba(0,147,128,0.35)',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+            }}
+            className="btn-shine"
+          >
+            Her Book →
+          </a>
+        </div>
+      </div>
+
+      <CloudDivider fill="#005a4a" fillBack="#004a3a" height={220} />
+    </section>
+  );
+}
+
+// ── Amber Game Section ─────────────────────────────────────────────────────
+function AmberGameSection() {
+  const ff = "'Concert One', var(--font-concert-one), cursive";
+
+  return (
+    <section
+      id="amber-game"
+      style={{
+        background: 'linear-gradient(180deg, #005a4a 0%, #003a32 100%)',
+        position: 'relative',
+        marginTop: '-220px',
+        paddingTop: '260px',
+        paddingBottom: '380px',
+        overflow: 'hidden',
+        zIndex: 0,
+      }}
+    >
+      {/* Floating crystals decoration */}
+      {['10%', '85%', '50%'].map((left, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          left,
+          top: `${20 + i * 25}%`,
+          fontSize: '2rem',
+          opacity: 0.15,
+          animation: `float ${4 + i}s ease-in-out infinite ${i * 0.8}s`,
+          pointerEvents: 'none',
+        }}>
+          💎
+        </div>
+      ))}
+
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
+        <h2 style={{
+          fontFamily: ff,
+          fontSize: 'clamp(2rem, 5vw, 3.2rem)',
+          color: '#dcf9f3',
+          marginBottom: '12px',
+          lineHeight: 1.1,
+        }}>
+          Amber&apos;s Crystal Rush
+        </h2>
+        <p style={{
+          fontFamily: "'Open Sans', sans-serif",
+          fontSize: '1rem',
+          color: 'rgba(220,249,243,0.75)',
+          marginBottom: '36px',
+          lineHeight: 1.6,
+        }}>
+          Amber needs your help! Catch the falling crystals before they hit the ground.
+        </p>
+
+        <AmberGame />
+      </div>
+
+      <WaveDivider fill="#d9b7e5" />
+    </section>
+  );
+}
+
+// ── Poo Poo Face Dragon Section ────────────────────────────────────────────
+function PooDragonSection() {
+  const [faceEmoji, setFaceEmoji] = useState<string | null>(null);
+  const [faceKey, setFaceKey] = useState(0);
+  const ff = "'Concert One', var(--font-concert-one), cursive";
+  const FACES = ['😤', '😂', '😳', '🤨', '😱', '🥱', '😈', '🤩', '😭', '🤔', '😬', '🥹'];
+
+  const handleDragonTap = () => {
+    const f = FACES[Math.floor(Math.random() * FACES.length)];
+    setFaceEmoji(f);
+    setFaceKey(k => k + 1);
+    setTimeout(() => setFaceEmoji(null), 2000);
+  };
+
+  return (
+    <section
+      id="poo-dragon"
+      style={{
+        background: 'linear-gradient(160deg, #d9b7e5 0%, #e8ccf5 60%, #f0d8fa 100%)',
+        position: 'relative',
+        marginTop: '-380px',
+        paddingTop: '400px',
+        paddingBottom: '340px',
+        overflow: 'hidden',
+        zIndex: 0,
+      }}
+    >
+      {/* Background blobs */}
+      <div style={{
+        position: 'absolute', bottom: '5%', right: '-6%',
+        width: '50vmax', height: '50vmax',
+        background: 'radial-gradient(circle, rgba(120,8,124,0.15) 0%, transparent 65%)',
+        borderRadius: '50%', pointerEvents: 'none',
+      }} />
+
+      <div style={{
+        maxWidth: '1100px',
+        margin: '0 auto',
+        padding: '0 32px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '56px',
+        flexWrap: 'wrap-reverse',
+        position: 'relative',
+        zIndex: 1,
+      }}>
+        {/* Text */}
+        <div style={{ flex: '1 1 280px' }}>
+          <div style={{
+            fontFamily: "'Catamaran', var(--font-catamaran), sans-serif",
+            fontWeight: 800,
+            fontSize: '0.9rem',
+            color: '#78087c',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            marginBottom: '10px',
+          }}>
+            Fan Favorite
+          </div>
+          <h2 style={{
+            fontFamily: ff,
+            fontSize: 'clamp(2.4rem, 5.5vw, 4rem)',
+            color: '#3a0245',
+            lineHeight: 1.05,
+            marginBottom: '20px',
+          }}>
+            The Dragon<br />Who Makes Faces
+          </h2>
+          <p style={{
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '1.05rem',
+            lineHeight: 1.8,
+            color: '#3a0245',
+            marginBottom: '24px',
+            maxWidth: '420px',
+          }}>
+            Spoiler: EVERYONE makes the face. Even unicorns. Even dragons.
+            Even your teacher — <em>especially</em> your teacher. A laugh-out-loud
+            mirror moment that turns bathtime into showtime.
+          </p>
+          <p style={{
+            fontFamily: ff,
+            fontSize: '1rem',
+            color: '#78087c',
+            marginBottom: '28px',
+          }}>
+            👆 Tap the dragon to see its face!
+          </p>
+          <a
+            href="https://www.amazon.com/dp/1951173163/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-block',
+              background: '#ff9c1a',
+              color: '#ffffff',
+              padding: '14px 36px',
+              borderRadius: '8px',
+              fontFamily: ff,
+              fontSize: '1.05rem',
+              textDecoration: 'none',
+              letterSpacing: '0.04em',
+              boxShadow: '0 4px 20px rgba(255,156,26,0.4)',
+            }}
+            className="btn-shine"
+          >
+            Get the Book →
+          </a>
+        </div>
+
+        {/* Dragon image — interactive */}
+        <div
+          onClick={handleDragonTap}
+          onKeyDown={e => e.key === 'Enter' && handleDragonTap()}
+          tabIndex={0}
+          role="button"
+          aria-label="Tap the dragon to see a funny face"
+          style={{
+            flex: '0 0 auto',
+            cursor: 'pointer',
+            outline: 'none',
+            position: 'relative',
+          }}
+        >
+          {faceEmoji && (
+            <div
+              key={faceKey}
+              style={{
+                position: 'absolute',
+                top: '-60px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                fontSize: '3.5rem',
+                animation: 'bubble-rise-anim 1.8s ease-out forwards',
+                pointerEvents: 'none',
+                zIndex: 10,
+              }}
+            >
+              {faceEmoji}
+            </div>
+          )}
+          <Image
+            src="/images/wp/whats-your-poopoo-face-400.png"
+            alt="What's Your Poo Poo Face book cover"
+            width={360}
+            height={360}
+            style={{
+              width: 'clamp(200px, 32vw, 340px)',
+              height: 'auto',
+              borderRadius: '20px',
+              boxShadow: '0 20px 60px rgba(120,8,124,0.25)',
+              transform: 'rotate(3deg)',
+              display: 'block',
+              transition: 'transform 0.15s ease',
+            }}
+          />
+        </div>
+      </div>
+
+      <CloudDivider fill="#78087c" fillBack="#5a0660" height={240} />
+    </section>
+  );
+}
+
+// ── Poo Face Quiz Section ─────────────────────────────────────────────────
+function QuizSection() {
+  const ff = "'Concert One', var(--font-concert-one), cursive";
+
+  return (
+    <section
+      id="quiz"
+      style={{
+        background: 'linear-gradient(180deg, #78087c 0%, #5a0660 100%)',
+        position: 'relative',
+        marginTop: '-240px',
+        paddingTop: '280px',
+        paddingBottom: '380px',
+        overflow: 'hidden',
+        zIndex: 0,
+      }}
+    >
+      <div style={{ maxWidth: '580px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
+        <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🤣</div>
+        <h2 style={{
+          fontFamily: ff,
+          fontSize: 'clamp(2rem, 5vw, 3.2rem)',
+          color: '#ffffff',
+          marginBottom: '10px',
+          lineHeight: 1.1,
+        }}>
+          What&apos;s Your Poo Poo Face?
+        </h2>
+        <p style={{
+          fontFamily: "'Open Sans', sans-serif",
+          fontSize: '1rem',
+          color: 'rgba(255,255,255,0.75)',
+          marginBottom: '36px',
+          lineHeight: 1.6,
+        }}>
+          4 questions. Life&apos;s most important moments. One result that defines you forever.
+        </p>
+
+        <PooFaceQuiz />
+      </div>
+
+      <WaveDivider fill="#dcf9f3" />
+    </section>
+  );
+}
+
+// ── Coloring Pages Teaser ─────────────────────────────────────────────────
+function ColoringTeaser() {
+  const ff = "'Concert One', var(--font-concert-one), cursive";
+  const placeholders = [
+    { color: '#dcf9f3', border: '#009380', icon: '🐉', label: "Amber's Dragon" },
+    { color: '#f3e0ff', border: '#78087c', icon: '🌸', label: 'Fantasy Garden' },
+    { color: '#fff3dc', border: '#ff9c1a', icon: '✨', label: 'Magic Crystals' },
+  ];
+
+  return (
+    <section
+      id="coloring"
+      style={{
+        background: 'linear-gradient(160deg, #dcf9f3 0%, #eef8f5 100%)',
+        position: 'relative',
+        marginTop: '-380px',
+        paddingTop: '420px',
+        paddingBottom: '100px',
+        overflow: 'hidden',
+        zIndex: 0,
+      }}
+    >
+      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 32px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '48px', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 280px' }}>
+            <div style={{
+              fontFamily: "'Catamaran', var(--font-catamaran), sans-serif",
+              fontWeight: 800,
+              fontSize: '0.9rem',
+              color: '#009380',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              marginBottom: '10px',
+            }}>
+              Free Activity
+            </div>
+            <h2 style={{
+              fontFamily: ff,
+              fontSize: 'clamp(2.2rem, 5vw, 3.5rem)',
+              color: '#005a4a',
+              lineHeight: 1.05,
+              marginBottom: '16px',
+            }}>
+              Color Amber&apos;s World
+            </h2>
+            <p style={{
+              fontFamily: "'Open Sans', sans-serif",
+              fontSize: '1rem',
+              lineHeight: 1.75,
+              color: '#1a3a30',
+              marginBottom: '28px',
+              maxWidth: '380px',
+            }}>
+              Free printable coloring pages straight from the Family Fables universe.
+              Dragons, crystals, narwhals — bring them to life with your own colors.
+            </p>
+            <a href="/coloring" style={{
+              display: 'inline-block',
+              background: '#ff9c1a',
+              color: '#ffffff',
+              padding: '14px 36px',
+              borderRadius: '8px',
+              fontFamily: ff,
+              fontSize: '1rem',
+              textDecoration: 'none',
+              letterSpacing: '0.04em',
+              boxShadow: '0 4px 16px rgba(255,156,26,0.35)',
+            }} className="btn-shine">
+              Color Amber&apos;s World →
+            </a>
+          </div>
+
+          {/* Placeholder coloring page thumbnails */}
+          <div style={{ display: 'flex', gap: '16px', flex: '0 0 auto', flexWrap: 'wrap' }}>
+            {placeholders.map((p, i) => (
+              <div key={i} style={{
+                width: '120px',
+                height: '150px',
+                background: p.color,
+                border: `3px dashed ${p.border}`,
+                borderRadius: '12px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                transform: `rotate(${[-2, 1, -1][i]}deg)`,
+                boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+              }}>
+                <div style={{ fontSize: '2.8rem' }}>{p.icon}</div>
+                <div style={{
+                  fontFamily: ff,
+                  fontSize: '0.7rem',
+                  color: p.border,
+                  textAlign: 'center',
+                  lineHeight: 1.3,
+                  padding: '0 8px',
+                }}>
+                  {p.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Newsletter Section ────────────────────────────────────────────────────
+function NewsletterSection() {
+  const [submitted, setSubmitted] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [email, setEmail] = useState('');
+  const ff = "'Concert One', var(--font-concert-one), cursive";
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) setSubmitted(true);
+  };
+
+  const inputStyle: React.CSSProperties = {
+    padding: '15px 20px',
+    borderRadius: '10px',
+    border: '2px solid rgba(255,255,255,0.25)',
+    background: 'rgba(255,255,255,0.14)',
+    color: '#ffffff',
+    fontFamily: "'Open Sans', sans-serif",
+    fontSize: '1rem',
+    outline: 'none',
+    width: '100%',
+  };
+
+  return (
+    <section
+      id="subscribe"
+      style={{
+        background: 'linear-gradient(135deg, #78087c 0%, #a935a6 50%, #5a0660 100%)',
+        position: 'relative',
+        paddingTop: '80px',
+        paddingBottom: '100px',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Decorative blobs */}
+      <div style={{
+        position: 'absolute', top: '-20%', left: '-8%',
+        width: '45vmax', height: '45vmax',
+        background: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%)',
+        borderRadius: '50%', pointerEvents: 'none',
+      }} />
+      <div style={{
+        position: 'absolute', bottom: '-10%', right: '-6%',
+        width: '40vmax', height: '40vmax',
+        background: 'radial-gradient(circle, rgba(220,249,243,0.08) 0%, transparent 60%)',
+        borderRadius: '50%', pointerEvents: 'none',
+      }} />
+
+      <div style={{
+        maxWidth: '620px',
+        margin: '0 auto',
+        padding: '0 32px',
+        textAlign: 'center',
+        position: 'relative',
+        zIndex: 1,
+      }}>
+        <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>🌟</div>
+        <h2 style={{
+          fontFamily: ff,
+          fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+          color: '#ffffff',
+          marginBottom: '8px',
+          lineHeight: 1.0,
+        }}>
+          Join the Family
+        </h2>
+        <p style={{
+          fontFamily: "'Catamaran', var(--font-catamaran), sans-serif",
+          fontWeight: 800,
+          fontSize: '1.1rem',
+          color: 'rgba(255,255,255,0.8)',
+          marginBottom: '40px',
+        }}>
+          New releases, giveaways, and magic delivered to your inbox
+        </p>
+
+        {submitted ? (
+          <div style={{
+            padding: '40px 32px',
+            background: 'rgba(255,255,255,0.12)',
+            borderRadius: '20px',
+            border: '2px solid rgba(255,255,255,0.2)',
+          }}>
+            <div style={{ fontSize: '3rem', marginBottom: '12px' }}>🎉</div>
+            <h3 style={{ fontFamily: ff, color: '#ffffff', fontSize: '2rem', marginBottom: '8px' }}>
+              You&apos;re in!
+            </h3>
+            <p style={{ color: '#dcf9f3', fontSize: '1rem', lineHeight: 1.6 }}>
+              Welcome to the Family Fables family — watch your inbox for magic!
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <input
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+                style={{ ...inputStyle, flex: '1 1 160px' }}
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                required
+                onChange={e => setEmail(e.target.value)}
+                style={{ ...inputStyle, flex: '2 1 220px' }}
+              />
+            </div>
+            <button
+              type="submit"
+              style={{
+                padding: '16px 32px',
+                background: '#ff9c1a',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '10px',
+                fontFamily: ff,
+                fontSize: '1.15rem',
+                cursor: 'pointer',
+                letterSpacing: '0.05em',
+                boxShadow: '0 4px 20px rgba(255,156,26,0.5)',
+                minHeight: '54px',
+              }}
+            >
+              Subscribe — It&apos;s Free! ✨
+            </button>
+          </form>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ── Home Page ─────────────────────────────────────────────────────────────
+export default function Home() {
+  const ff = "'Concert One', var(--font-concert-one), cursive";
+
+  return (
+    <div style={{ overflowX: 'hidden' }}>
+      <SparkleTrail />
+      <BedtimeToggle />
+
+      {/* ── SECTION 1: HERO ────────────────────────────────────────── */}
+      <section
+        id="hero"
+        style={{
+          background: '#dcf9f3',
+          position: 'relative',
+          minHeight: '100svh',
+          overflow: 'hidden',
+          paddingBottom: '340px',
+          zIndex: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        {/* Decorative background circles */}
+        <div style={{
+          position: 'absolute', top: '-10%', right: '-5%',
+          width: '50vmax', height: '50vmax',
+          background: 'radial-gradient(circle, rgba(0,147,128,0.12) 0%, transparent 65%)',
+          borderRadius: '50%', pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: '20%', left: '-8%',
+          width: '35vmax', height: '35vmax',
+          background: 'radial-gradient(circle, rgba(217,183,229,0.45) 0%, transparent 65%)',
+          borderRadius: '50%', pointerEvents: 'none',
+        }} />
+
+        <div style={{
+          maxWidth: '800px',
+          width: '100%',
+          padding: '48px 24px 0',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          position: 'relative',
+          zIndex: 3,
+          flex: 1,
+          justifyContent: 'center',
+        }}>
+          {/* Narwhal */}
+          <div className="narwhal-hero-bob" style={{ marginBottom: '-16px', position: 'relative', zIndex: 4 }}>
+            <TiltNarwhal size={380} />
+          </div>
+
+          {/* Title */}
+          <h1
+            style={{
+              fontFamily: ff,
+              fontSize: 'clamp(3.2rem, 13vw, 100px)',
+              color: '#ffffff',
+              textShadow: '4px 4px 0px #009380, 3px 3px 0px #009380, -1px -1px 0px #007060',
+              lineHeight: 0.95,
+              marginBottom: '14px',
+              letterSpacing: '0.01em',
+              position: 'relative',
+              zIndex: 4,
+            }}
+          >
+            Family Fables
+          </h1>
+
+          {/* Subtitle */}
+          <h2 style={{
+            fontFamily: "'Catamaran', var(--font-catamaran), sans-serif",
+            fontWeight: 800,
+            fontSize: 'clamp(1.1rem, 3.5vw, 1.6rem)',
+            color: '#005a4a',
+            marginBottom: '36px',
+            lineHeight: 1.3,
+          }}>
+            Books that spark wonder, laughter &amp; bedtime magic
+          </h2>
+
+          {/* CTA */}
+          <a
+            href="/books"
+            className="btn-shine cta-pulse"
+            style={{
+              display: 'inline-block',
+              background: '#ff9c1a',
+              color: '#ffffff',
+              padding: '18px 64px',
+              borderRadius: '6px',
+              fontFamily: ff,
+              fontSize: '1.2rem',
+              textDecoration: 'none',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              boxShadow: '0 6px 28px rgba(255,156,26,0.5)',
+            }}
+          >
+            Shop Now 🛒
+          </a>
+        </div>
+
+        <CloudDivider fill="#d9b7e5" fillBack="#e2c8f0" height={340} />
+      </section>
+
+      {/* ── SECTION 2: BOOK DISCOVERY ───────────────────────────────── */}
+      <MoodBooksSection />
+
+      {/* ── SECTION 3: AMBER CHARACTER ──────────────────────────────── */}
+      <AmberCharacterSection />
+
+      {/* ── SECTION 4: AMBER GAME ──────────────────────────────────── */}
+      <AmberGameSection />
+
+      {/* ── SECTION 5: POO POO DRAGON ───────────────────────────────── */}
+      <PooDragonSection />
+
+      {/* ── SECTION 6: POO POO FACE QUIZ ────────────────────────────── */}
+      <QuizSection />
+
+      {/* ── SECTION 7: COLORING PAGES ───────────────────────────────── */}
+      <ColoringTeaser />
+
+      {/* ── SECTION 8: NEWSLETTER ────────────────────────────────────── */}
+      <NewsletterSection />
+    </div>
+  );
+}
