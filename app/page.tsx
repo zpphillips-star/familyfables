@@ -730,6 +730,7 @@ function ZoneDragonTown() {
   const [dragonEmoji, setDragonEmoji] = useState<string | null>(null);
   const [emojiKey, setEmojiKey] = useState(0);
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [quizOpen, setQuizOpen] = useState(false);
   const FACES = ['😤','😂','😳','😬','🤨','😈','🤩','😭','🤔','🥹','😝','🤯'];
 
   const tapDragon = () => {
@@ -743,7 +744,8 @@ function ZoneDragonTown() {
     <section id="dragon" style={{
       background: 'linear-gradient(180deg, #160025 0%, #2e0045 25%, #52006a 60%, #78087c 100%)',
       position: 'relative', minHeight: '100vh', overflow: 'hidden',
-      paddingTop: '80px', paddingBottom: '260px',
+      paddingTop: '80px', paddingBottom: '240px',
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
     }}>
 
       {/* Stars */}
@@ -766,313 +768,239 @@ function ZoneDragonTown() {
         pointerEvents: 'none',
       }}/>
 
-      {/* Back city layer — distant, darker */}
+      {/* Back city */}
       <div aria-hidden="true" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, pointerEvents: 'none' }}>
-        <svg viewBox="0 0 1440 360" preserveAspectRatio="xMidYMax meet"
-          style={{ display: 'block', width: '100%', height: 'clamp(220px, 30vw, 360px)' }}>
-          {/* Ground */}
-          <rect x="0" y="300" width="1440" height="60" fill="#2a0040"/>
-          {/* Far buildings */}
-          <rect x="0"   y="160" width="80"  height="200" fill="#3a0052"/>
-          <rect x="90"  y="120" width="100" height="240" fill="#350048"/>
-          <rect x="200" y="155" width="65"  height="205" fill="#3e0058"/>
-          <rect x="275" y="100" width="110" height="260" fill="#330046"/>
-          <rect x="395" y="145" width="70"  height="215" fill="#400060"/>
-          <rect x="475" y="110" width="95"  height="250" fill="#360050"/>
-          <rect x="580" y="130" width="80"  height="230" fill="#3c0055"/>
-          <rect x="670" y="90"  width="120" height="270" fill="#310044"/>
-          <rect x="800" y="140" width="75"  height="220" fill="#3f005a"/>
-          <rect x="885" y="115" width="90"  height="245" fill="#350050"/>
-          <rect x="985" y="150" width="70"  height="210" fill="#3a0054"/>
-          <rect x="1065" y="95" width="115" height="265" fill="#320046"/>
-          <rect x="1190" y="130" width="85" height="230" fill="#3d0055"/>
-          <rect x="1285" y="105" width="100" height="255" fill="#360050"/>
-          <rect x="1395" y="155" width="45" height="205" fill="#3c0058"/>
-          {/* Dim far windows */}
-          {[90,275,475,670,1065,1285].flatMap((bx, bi) => [
-            [bx+12, 140],[bx+35, 140],[bx+12, 170],[bx+35, 170],[bx+12, 200],[bx+35, 200],
-          ].map(([wx,wy], wi) => (
-            <rect key={`bw${bi}${wi}`} x={wx} y={wy} width="14" height="10" rx="2" fill="#ffd060" opacity="0.18"/>
-          )))}
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax meet"
+          style={{ display: 'block', width: '100%', height: 'clamp(200px, 28vw, 320px)' }}>
+          <rect x="0" y="270" width="1440" height="50" fill="#2a0040"/>
+          {[0,90,200,310,430,545,660,775,890,1000,1110,1220,1340].map((bx, i) => (
+            <rect key={i} x={bx} y={80 + (i%4)*30} width={70+(i%3)*20} height={240-(i%4)*30} fill={`hsl(280,${50+i%10}%,${14+i%6}%)`} rx="2"/>
+          ))}
+          {[90,310,545,775,1000,1220].flatMap((bx, bi) =>
+            [[bx+8,110],[bx+28,110],[bx+8,140],[bx+28,140],[bx+8,170],[bx+28,170]].map(([wx,wy],wi) => (
+              <rect key={`${bi}${wi}`} x={wx} y={wy} width="13" height="9" rx="2" fill="#ffd060" opacity="0.2"/>
+            ))
+          )}
         </svg>
       </div>
 
-      {/* Front city layer — closer, more detail, glowing windows */}
+      {/* Front city with street */}
       <div aria-hidden="true" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, pointerEvents: 'none' }}>
-        <svg viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax meet"
-          style={{ display: 'block', width: '100%', height: 'clamp(180px, 26vw, 300px)' }}>
-          {/* Street */}
-          <rect x="0" y="248" width="1440" height="52" fill="#3d0055"/>
-          <rect x="0" y="248" width="1440" height="4"  fill="#5a0080" opacity="0.5"/>
-          {/* Sidewalk line */}
-          <rect x="0" y="252" width="1440" height="6" fill="#4a0068" opacity="0.6"/>
-
-          {/* Building L1 — tall tower */}
-          <rect x="0"   y="40"  width="100" height="210" fill="#580082" rx="3"/>
-          <rect x="25"  y="40"  width="50"  height="10"  fill="#6e009a"/>
-          <rect x="38"  y="30"  width="24"  height="18"  fill="#6000a0" rx="2"/>
-          {[65,100,135,170,205].flatMap((wy, ri) => [10,38,66].map((wx, ci) => (
-            <rect key={`l1${ri}${ci}`} x={wx} y={wy} width="16" height="12" rx="2"
-              fill="#ffd060" opacity={0.55 + ci * 0.08}/>
-          )))}
-
-          {/* Building L2 — medium */}
-          <rect x="110" y="100" width="90"  height="150" fill="#4e0072" rx="3"/>
-          <rect x="128" y="100" width="54"  height="10"  fill="#620088"/>
-          {[118,148,178,208].flatMap((wy, ri) => [116,140,164,188].map((wx, ci) => (
-            <rect key={`l2${ri}${ci}`} x={wx} y={wy} width="14" height="10" rx="2"
-              fill="#ffb830" opacity={0.5 + ci * 0.07}/>
-          )))}
-
-          {/* Building L3 — wide squat */}
-          <rect x="210" y="140" width="130" height="110" fill="#550078" rx="3"/>
-          <rect x="228" y="140" width="94"  height="9"   fill="#680094"/>
-          {[155,178,205,228].flatMap((wy, ri) => [218,248,278,308,338].map((wx, ci) => (
-            <rect key={`l3${ri}${ci}`} x={wx} y={wy} width="13" height="9" rx="2"
-              fill="#ffd060" opacity={0.48 + ci * 0.05}/>
-          )))}
-
+        <svg viewBox="0 0 1440 280" preserveAspectRatio="xMidYMax meet"
+          style={{ display: 'block', width: '100%', height: 'clamp(180px, 24vw, 280px)' }}>
+          <rect x="0" y="240" width="1440" height="40" fill="#3d0055"/>
+          <rect x="0" y="240" width="1440" height="5" fill="#5a0080" opacity="0.6"/>
+          {/* Buildings L */}
+          <rect x="0"   y="50"  width="95"  height="190" fill="#560080" rx="2"/>
+          <rect x="105" y="95"  width="80"  height="145" fill="#4a0068" rx="2"/>
+          <rect x="195" y="130" width="120" height="110" fill="#52007a" rx="2"/>
+          {[0,105,195].flatMap((bx,bi) => [60,90,120,150,180].flatMap((wy,ri) =>
+            [bx+10,bx+32,bx+54].map((wx,ci) =>
+              wx < bx + (bi===2?110:bi===1?70:85) ? (
+                <rect key={`lb${bi}${ri}${ci}`} x={wx} y={wy} width="14" height="10" rx="2" fill="#ffd060" opacity={0.5+ci*0.07}/>
+              ) : null
+            )
+          ))}
           {/* Street lamp L */}
-          <rect x="355" y="192" width="5" height="56" fill="#7a10a0"/>
-          <rect x="344" y="192" width="27" height="5" rx="2" fill="#7a10a0"/>
-          <circle cx="344" cy="192" r="10" fill="#ffd060" opacity="0.85"/>
-          <circle cx="344" cy="192" r="18" fill="#ffd060" opacity="0.2"/>
-
-          {/* Building R1 — mirror tall tower */}
-          <rect x="1340" y="45"  width="100" height="205" fill="#580082" rx="3"/>
-          <rect x="1365" y="45"  width="50"  height="10"  fill="#6e009a"/>
-          <rect x="1378" y="34"  width="24"  height="18"  fill="#6000a0" rx="2"/>
-          {[68,103,138,173,208].flatMap((wy, ri) => [1348,1376,1404].map((wx, ci) => (
-            <rect key={`r1${ri}${ci}`} x={wx} y={wy} width="16" height="12" rx="2"
-              fill="#ffd060" opacity={0.55 + ci * 0.08}/>
-          )))}
-
-          {/* Building R2 */}
-          <rect x="1240" y="105" width="90"  height="145" fill="#4e0072" rx="3"/>
-          <rect x="1258" y="105" width="54"  height="9"   fill="#620088"/>
-          {[120,150,180,210].flatMap((wy, ri) => [1246,1270,1294,1318].map((wx, ci) => (
-            <rect key={`r2${ri}${ci}`} x={wx} y={wy} width="14" height="10" rx="2"
-              fill="#ffb830" opacity={0.5 + ci * 0.07}/>
-          )))}
-
-          {/* Building R3 — wide squat */}
-          <rect x="1100" y="145" width="130" height="105" fill="#550078" rx="3"/>
-          <rect x="1118" y="145" width="94"  height="9"   fill="#680094"/>
-          {[160,182,207,228].flatMap((wy, ri) => [1108,1138,1168,1198].map((wx, ci) => (
-            <rect key={`r3${ri}${ci}`} x={wx} y={wy} width="13" height="9" rx="2"
-              fill="#ffd060" opacity={0.48 + ci * 0.05}/>
-          )))}
-
+          <rect x="330" y="192" width="5" height="48" fill="#7010a0"/>
+          <rect x="319" y="192" width="27" height="5" rx="2" fill="#7010a0"/>
+          <circle cx="319" cy="192" r="9" fill="#ffd060" opacity="0.9"/>
+          <circle cx="319" cy="192" r="16" fill="#ffd060" opacity="0.18"/>
+          {/* Buildings R */}
+          <rect x="1345" y="50"  width="95"  height="190" fill="#560080" rx="2"/>
+          <rect x="1255" y="95"  width="80"  height="145" fill="#4a0068" rx="2"/>
+          <rect x="1125" y="130" width="120" height="110" fill="#52007a" rx="2"/>
+          {[1345,1255,1125].flatMap((bx,bi) => [60,90,120,150,180].flatMap((wy,ri) =>
+            [bx+10,bx+32,bx+54].map((wx,ci) =>
+              wx < bx + (bi===2?110:bi===1?70:85) ? (
+                <rect key={`rb${bi}${ri}${ci}`} x={wx} y={wy} width="14" height="10" rx="2" fill="#ffd060" opacity={0.5+ci*0.07}/>
+              ) : null
+            )
+          ))}
           {/* Street lamp R */}
-          <rect x="1080" y="192" width="5" height="56" fill="#7a10a0"/>
-          <rect x="1069" y="192" width="27" height="5" rx="2" fill="#7a10a0"/>
-          <circle cx="1096" cy="192" r="10" fill="#ffd060" opacity="0.85"/>
-          <circle cx="1096" cy="192" r="18" fill="#ffd060" opacity="0.2"/>
+          <rect x="1096" y="192" width="5" height="48" fill="#7010a0"/>
+          <rect x="1096" y="192" width="27" height="5" rx="2" fill="#7010a0"/>
+          <circle cx="1123" cy="192" r="9" fill="#ffd060" opacity="0.9"/>
+          <circle cx="1123" cy="192" r="16" fill="#ffd060" opacity="0.18"/>
         </svg>
       </div>
 
-      {/* ── Content ───────────────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2 }}>
+      {/* ── Content — stacked like hero, dragon overlapping into activities ── */}
+      <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '700px', padding: '0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+
         <Reveal>
           <h2 style={{
-            fontFamily: FF, fontSize: 'clamp(2.6rem, 7vw, 5rem)',
-            color: '#ffffff', textAlign: 'center', marginBottom: '48px',
-            textShadow: '3px 3px 0 rgba(0,0,0,0.3)',
+            fontFamily: FF, fontSize: 'clamp(2.6rem, 8vw, 5rem)',
+            color: '#ffffff', textAlign: 'center', marginBottom: '0',
+            textShadow: '3px 3px 0 rgba(0,0,0,0.35)',
           }}>
             The Dragon&apos;s Town
           </h2>
         </Reveal>
 
-        {/* Three storefronts on the same street */}
-        <div style={{
-          display: 'flex', gap: '24px', flexWrap: 'wrap',
-          alignItems: 'flex-end', justifyContent: 'center',
-        }}>
-
-          {/* ── DRAGON CORNER ── */}
-          <Reveal delay={80}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              {/* Speech bubble */}
-              <div style={{ position: 'relative', marginBottom: '8px' }}>
-                {dragonEmoji && (
-                  <div key={emojiKey} style={{
-                    position: 'absolute', top: '-96px', left: '50%', transform: 'translateX(-50%)',
-                    zIndex: 10, pointerEvents: 'none',
-                    animation: 'popIn 0.35s cubic-bezier(.175,.885,.32,1.275) both',
-                  }}>
-                    <div style={{
-                      background: 'white', borderRadius: '50%', width: '80px', height: '80px',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '3rem', boxShadow: '0 6px 24px rgba(0,0,0,0.3)',
-                    }}>{dragonEmoji}</div>
-                    {/* Bubble tail */}
-                    <div style={{
-                      position: 'absolute', bottom: '-10px', left: '50%', transform: 'translateX(-50%)',
-                      width: 0, height: 0,
-                      borderLeft: '8px solid transparent', borderRight: '8px solid transparent',
-                      borderTop: '12px solid white',
-                    }}/>
-                  </div>
-                )}
-                <div
-                  onClick={tapDragon}
-                  role="button" tabIndex={0} aria-label="Tap the dragon for a silly face"
-                  onKeyDown={e => e.key === 'Enter' && tapDragon()}
-                  style={{
-                    cursor: 'pointer', outline: 'none',
-                    animation: 'floatBob 5s ease-in-out infinite 0.3s',
-                    filter: 'drop-shadow(0 6px 30px rgba(180,0,200,0.5))',
-                  }}
-                >
-                  <Image
-                    src="/images/originals/poo-poo-dragon-flipped.png"
-                    alt="Poo Poo Dragon" width={260} height={260}
-                    style={{ width: 'clamp(180px, 28vw, 280px)', height: 'auto', display: 'block' }}
-                  />
-                </div>
-              </div>
-              <p style={{
-                fontFamily: FF, color: '#f0d8fa', fontSize: '0.88rem',
-                background: 'rgba(0,0,0,0.35)', padding: '6px 18px', borderRadius: '999px',
-                border: '1px solid rgba(255,200,255,0.2)',
+        {/* Dragon — large and central, overlaps down into the activity area */}
+        <Reveal delay={80} style={{ position: 'relative', marginBottom: '-40px', zIndex: 4 }}>
+          <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {dragonEmoji && (
+              <div key={emojiKey} style={{
+                position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)',
+                zIndex: 10, pointerEvents: 'none',
+                animation: 'popIn 0.35s cubic-bezier(.175,.885,.32,1.275) both',
               }}>
-                👆 Tap the dragon!
-              </p>
-            </div>
-          </Reveal>
-
-          {/* ── PHOTO BOOTH STOREFRONT ── */}
-          <Reveal delay={160}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', width: 'clamp(200px, 28vw, 270px)' }}>
-              {/* Storefront sign board */}
-              <div style={{
-                background: 'linear-gradient(90deg, #e07000, #ff9c1a, #ffb840, #ff9c1a, #e07000)',
-                borderRadius: '12px 12px 0 0',
-                padding: '8px 16px', textAlign: 'center',
-                fontFamily: FF, color: 'white', fontSize: '0.9rem', letterSpacing: '0.06em',
-                boxShadow: '0 -3px 16px rgba(255,156,26,0.45)',
-                textShadow: '1px 1px 4px rgba(0,0,0,0.4)',
-              }}>
-                ✦ PHOTO BOOTH ✦
-              </div>
-              {/* Storefront body */}
-              <div
-                onClick={() => setCameraOpen(true)}
-                role="button" tabIndex={0} aria-label="Make your Poo Poo Face with the camera"
-                onKeyDown={e => e.key === 'Enter' && setCameraOpen(true)}
-                style={{
-                  cursor: 'pointer', outline: 'none',
-                  background: 'linear-gradient(160deg, #5a0080, #420060)',
-                  border: '3px solid rgba(255,180,50,0.45)',
-                  borderTop: 'none', borderRadius: '0 0 12px 12px',
-                  padding: '24px 16px',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px',
-                  transition: 'filter 0.15s',
-                  boxShadow: 'inset 0 -8px 24px rgba(0,0,0,0.3)',
-                }}
-              >
-                {/* Mirror frame */}
                 <div style={{
-                  width: '120px', height: '148px', borderRadius: '50%',
-                  background: 'linear-gradient(160deg, #1e0030, #3a005a)',
-                  border: '5px solid',
-                  borderColor: 'rgba(255,210,80,0.8)',
+                  background: 'white', borderRadius: '50%', width: '76px', height: '76px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  position: 'relative', overflow: 'hidden',
-                  boxShadow: '0 0 0 2px rgba(255,255,255,0.08), inset 0 4px 24px rgba(0,0,0,0.6), 0 0 24px rgba(255,180,30,0.3)',
-                }}>
-                  {/* Mirror shine */}
-                  <div style={{
-                    position: 'absolute', top: '12%', left: '18%',
-                    width: '22%', height: '48%', borderRadius: '50%',
-                    background: 'rgba(255,255,255,0.13)', transform: 'rotate(-20deg)',
-                  }}/>
-                  {/* Mirror icon */}
-                  <svg width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
-                    <circle cx="28" cy="28" r="22" fill="#5a0080" opacity="0.6"/>
-                    <ellipse cx="21" cy="24" rx="4" ry="4.5" fill="#ffd060"/>
-                    <ellipse cx="35" cy="24" rx="4" ry="4.5" fill="#ffd060"/>
-                    <path d="M17 33 Q22 40 28 37 Q34 40 39 33" stroke="#ff9c1a" strokeWidth="3" fill="none" strokeLinecap="round"/>
-                    <circle cx="21" cy="24" r="1.8" fill="#3a0050"/>
-                    <circle cx="35" cy="24" r="1.8" fill="#3a0050"/>
-                  </svg>
+                  fontSize: '2.8rem', boxShadow: '0 6px 24px rgba(0,0,0,0.3)',
+                }}>{dragonEmoji}</div>
+                <div style={{
+                  position: 'absolute', bottom: '-10px', left: '50%', transform: 'translateX(-50%)',
+                  width: 0, height: 0,
+                  borderLeft: '8px solid transparent', borderRight: '8px solid transparent',
+                  borderTop: '12px solid white',
+                }}/>
+              </div>
+            )}
+            <div
+              onClick={tapDragon}
+              role="button" tabIndex={0} aria-label="Tap the dragon for a silly face"
+              onKeyDown={e => e.key === 'Enter' && tapDragon()}
+              style={{
+                cursor: 'pointer', outline: 'none',
+                animation: 'floatBob 5s ease-in-out infinite 0.3s',
+                filter: 'drop-shadow(0 6px 40px rgba(200,0,220,0.45))',
+              }}
+            >
+              <Image
+                src="/images/originals/poo-poo-dragon-flipped.png"
+                alt="Poo Poo Dragon" width={300} height={300}
+                style={{ width: 'clamp(220px, 40vw, 340px)', height: 'auto', display: 'block' }}
+              />
+            </div>
+            <p style={{
+              fontFamily: FF, color: '#f0d8fa', fontSize: '0.9rem',
+              background: 'rgba(0,0,0,0.35)', padding: '6px 18px', borderRadius: '999px',
+              border: '1px solid rgba(255,200,255,0.2)', marginTop: '8px',
+            }}>
+              👆 Tap the dragon!
+            </p>
+          </div>
+        </Reveal>
+
+        {/* Activities — unified card that the dragon overlaps into from above */}
+        <Reveal delay={180} style={{ width: '100%' }}>
+          <div style={{
+            background: 'linear-gradient(160deg, rgba(80,0,110,0.96), rgba(45,0,65,0.98))',
+            borderRadius: '28px',
+            border: '2px solid rgba(200,120,240,0.25)',
+            padding: 'clamp(40px,7vw,60px) clamp(20px,5vw,36px) clamp(24px,4vw,36px)',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
+          }}>
+            {/* Photo Booth button */}
+            <div
+              onClick={() => setCameraOpen(true)}
+              role="button" tabIndex={0} aria-label="Make your Poo Poo Face with the camera"
+              onKeyDown={e => e.key === 'Enter' && setCameraOpen(true)}
+              style={{
+                cursor: 'pointer', outline: 'none', marginBottom: '16px',
+                background: 'linear-gradient(135deg, #ff9c1a, #ffb840)',
+                borderRadius: '18px', padding: '18px 24px',
+                display: 'flex', alignItems: 'center', gap: '16px',
+                boxShadow: '0 6px 28px rgba(255,156,26,0.45)',
+                transition: 'transform 0.15s, box-shadow 0.15s',
+                border: '2px solid rgba(255,220,100,0.5)',
+              }}
+            >
+              {/* Mirror icon */}
+              <div style={{
+                width: '54px', height: '66px', borderRadius: '50%', flexShrink: 0,
+                background: 'linear-gradient(160deg, #2a0040, #500070)',
+                border: '3px solid rgba(255,220,80,0.8)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: 'inset 0 3px 12px rgba(0,0,0,0.5)',
+              }}>
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                  <ellipse cx="10" cy="12" rx="2.5" ry="2.8" fill="#ffd060"/>
+                  <ellipse cx="18" cy="12" rx="2.5" ry="2.8" fill="#ffd060"/>
+                  <path d="M8 18 Q11 22 14 20 Q17 22 20 18" stroke="#ff9c1a" strokeWidth="2" fill="none" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontFamily: FF, color: '#3a0050', fontSize: 'clamp(1.2rem, 4vw, 1.5rem)', lineHeight: 1.1 }}>
+                  Make Your Poo Poo Face!
                 </div>
-                <span style={{
-                  fontFamily: FF, color: '#ffd4fa', fontSize: '1rem',
-                  textAlign: 'center', lineHeight: 1.25,
-                  textShadow: '1px 1px 6px rgba(0,0,0,0.5)',
-                }}>
-                  Make Your<br/>Poo Poo Face!
-                </span>
+                <div style={{ fontFamily: OS, color: '#5a0070', fontSize: '0.82rem', marginTop: '3px' }}>
+                  AI turns your face into a cartoon character
+                </div>
               </div>
             </div>
-          </Reveal>
 
-          {/* ── TOWN HALL QUIZ STOREFRONT ── */}
-          <Reveal delay={240} style={{ flex: '1 1 280px', maxWidth: '460px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
-              {/* Storefront sign */}
+            {/* Divider */}
+            <div style={{ textAlign: 'center', margin: '4px 0 12px', fontFamily: CAT, fontWeight: 800, color: 'rgba(200,150,220,0.5)', fontSize: '0.8rem', letterSpacing: '0.1em' }}>— or —</div>
+
+            {/* Quiz toggle */}
+            <div
+              onClick={() => setQuizOpen(o => !o)}
+              role="button" tabIndex={0} aria-label="Take the What's Your Face quiz"
+              onKeyDown={e => e.key === 'Enter' && setQuizOpen(o => !o)}
+              style={{
+                cursor: 'pointer', outline: 'none', marginBottom: quizOpen ? '16px' : '0',
+                background: 'linear-gradient(135deg, rgba(120,8,124,0.8), rgba(90,0,110,0.9))',
+                borderRadius: '18px', padding: '18px 24px',
+                display: 'flex', alignItems: 'center', gap: '16px',
+                boxShadow: '0 4px 20px rgba(120,8,124,0.35)',
+                transition: 'all 0.2s',
+                border: '2px solid rgba(200,120,240,0.3)',
+              }}
+            >
               <div style={{
-                background: 'linear-gradient(90deg, #5a006a, #78087c, #9010a0, #78087c, #5a006a)',
-                borderRadius: '12px 12px 0 0',
-                padding: '8px 16px', textAlign: 'center',
-                fontFamily: FF, color: 'white', fontSize: '0.9rem', letterSpacing: '0.06em',
-                boxShadow: '0 -3px 14px rgba(120,8,124,0.45)',
-                textShadow: '1px 1px 4px rgba(0,0,0,0.4)',
-              }}>
-                ✦ TOWN HALL QUIZ ✦
+                width: '54px', height: '54px', borderRadius: '50%', flexShrink: 0,
+                background: 'linear-gradient(135deg, #ffd060, #ff9c1a)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '1.6rem',
+              }}>🤣</div>
+              <div>
+                <div style={{ fontFamily: FF, color: '#f0d8fa', fontSize: 'clamp(1.2rem, 4vw, 1.5rem)', lineHeight: 1.1 }}>
+                  What&apos;s Your Poo Poo Face?
+                </div>
+                <div style={{ fontFamily: OS, color: 'rgba(220,180,240,0.8)', fontSize: '0.82rem', marginTop: '3px' }}>
+                  {quizOpen ? 'tap to close ↑' : '4-question personality quiz ↓'}
+                </div>
               </div>
-              {/* Storefront body */}
-              <div style={{
-                background: 'linear-gradient(160deg, #420060, #300048)',
-                border: '3px solid rgba(200,120,220,0.3)',
-                borderTop: 'none', borderRadius: '0 0 12px 12px',
-                padding: '20px', textAlign: 'center',
-                boxShadow: 'inset 0 -8px 24px rgba(0,0,0,0.3)',
-              }}>
-                <h3 style={{
-                  fontFamily: FF, color: '#f0d8fa',
-                  fontSize: 'clamp(1.4rem, 3.5vw, 2rem)',
-                  marginBottom: '16px',
-                }}>
-                  What&apos;s Your Face?
-                </h3>
+            </div>
+
+            {/* Quiz — expands in place */}
+            {quizOpen && (
+              <div style={{ animation: 'popIn 0.3s ease-out both' }}>
                 <PooFaceQuiz />
               </div>
+            )}
 
-              {/* Book card — same storefront language */}
-              <div style={{
-                marginTop: '16px',
-                background: 'linear-gradient(160deg, #4a0068, #320050)',
-                borderRadius: '12px',
-                border: '2px solid rgba(200,120,220,0.25)',
-                padding: '14px 16px',
-                display: 'flex', gap: '14px', alignItems: 'center',
-              }}>
-                <Image
-                  src="/images/wp/whats-your-poopoo-face-400.png"
-                  alt="What's Your Poo Poo Face" width={120} height={120}
-                  style={{ width: '76px', height: 'auto', borderRadius: '8px', flexShrink: 0,
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
-                  }}
-                />
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontFamily: FF, color: '#fff', fontSize: '0.92rem', marginBottom: '10px', lineHeight: 1.2 }}>
-                    What&apos;s Your Poo Poo Face?
-                  </p>
-                  <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer" style={{
-                    display: 'inline-block', background: '#ff9c1a', color: '#fff',
-                    padding: '7px 18px', borderRadius: '8px', textDecoration: 'none',
-                    fontFamily: FF, fontSize: '0.85rem',
-                    boxShadow: '0 3px 12px rgba(255,156,26,0.4)',
-                  }}>
-                    Get on Amazon →
-                  </a>
-                </div>
+            {/* Book buy strip */}
+            <div style={{
+              marginTop: '20px', paddingTop: '20px',
+              borderTop: '1px solid rgba(200,120,240,0.18)',
+              display: 'flex', gap: '14px', alignItems: 'center',
+            }}>
+              <Image
+                src="/images/wp/whats-your-poopoo-face-400.png"
+                alt="What's Your Poo Poo Face" width={100} height={100}
+                style={{ width: '64px', height: 'auto', borderRadius: '8px', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.4)' }}
+              />
+              <div style={{ flex: 1 }}>
+                <p style={{ fontFamily: FF, color: '#f0d8fa', fontSize: '0.9rem', marginBottom: '8px', lineHeight: 1.2 }}>
+                  What&apos;s Your Poo Poo Face?
+                </p>
+                <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer" style={{
+                  display: 'inline-block', background: '#ff9c1a', color: '#fff',
+                  padding: '7px 18px', borderRadius: '10px', textDecoration: 'none',
+                  fontFamily: FF, fontSize: '0.85rem', boxShadow: '0 3px 12px rgba(255,156,26,0.4)',
+                }}>
+                  Get on Amazon →
+                </a>
               </div>
             </div>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </div>
 
       {/* Camera modal */}
