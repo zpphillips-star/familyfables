@@ -177,7 +177,125 @@ function BlobDivider({ fill }: { fill: string }) {
   );
 }
 
-// ── ZONE 1: THE SKY ───────────────────────────────────────────────────────────
+// ── ADVENTURE MAP strip ───────────────────────────────────────────────────────
+const ZONES = [
+  {
+    id: 'amber',
+    emoji: '🐉',
+    label: "Amber's Mountain",
+    hint: 'Play Crystal Rush',
+    bg: 'linear-gradient(135deg, #d9b7e5, #a070c0)',
+    border: '#c090e0',
+  },
+  {
+    id: 'dragon',
+    emoji: '💩',
+    label: "Dragon's Town",
+    hint: 'Make your Poo Poo Face',
+    bg: 'linear-gradient(135deg, #9030a0, #5a0060)',
+    border: '#b050c8',
+  },
+  {
+    id: 'books',
+    emoji: '📚',
+    label: 'The Bookshelf',
+    hint: 'Find your next read',
+    bg: 'linear-gradient(135deg, #ffd480, #ff9c1a)',
+    border: '#ffb040',
+  },
+  {
+    id: 'coloring',
+    emoji: '🎨',
+    label: 'Coloring Meadow',
+    hint: 'Free printable pages',
+    bg: 'linear-gradient(135deg, #a8f0df, #009380)',
+    border: '#00b899',
+  },
+  {
+    id: 'campfire',
+    emoji: '🔥',
+    label: 'The Campfire',
+    hint: 'Join the family',
+    bg: 'linear-gradient(135deg, #78087c, #2a0032)',
+    border: '#a030b0',
+  },
+];
+
+function AdventureMap() {
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  return (
+    <div style={{
+      position: 'relative', zIndex: 4, width: '100%',
+      padding: '0 16px 0',
+    }}>
+      {/* Header label */}
+      <p style={{
+        fontFamily: CAT, fontWeight: 800, textAlign: 'center',
+        color: '#005a4a', fontSize: 'clamp(0.85rem, 2vw, 1rem)',
+        letterSpacing: '0.12em', textTransform: 'uppercase',
+        marginBottom: '12px', opacity: 0.75,
+      }}>
+        ✦ Your Adventure Awaits ✦
+      </p>
+
+      {/* Scrollable strip */}
+      <div style={{
+        display: 'flex', gap: '12px', overflowX: 'auto',
+        scrollSnapType: 'x mandatory', paddingBottom: '8px',
+        WebkitOverflowScrolling: 'touch' as 'touch',
+        justifyContent: 'center', flexWrap: 'wrap',
+      }} className="shelf-scroll">
+        {ZONES.map((z, i) => (
+          <button
+            key={z.id}
+            onClick={() => scrollTo(z.id)}
+            style={{
+              flex: '0 0 auto', scrollSnapAlign: 'start',
+              background: z.bg,
+              border: `2.5px solid ${z.border}`,
+              borderRadius: '20px',
+              padding: '14px 18px',
+              cursor: 'pointer', outline: 'none',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
+              minWidth: '110px', maxWidth: '130px',
+              boxShadow: '0 4px 18px rgba(0,0,0,0.18)',
+              transition: 'transform 0.18s cubic-bezier(.175,.885,.32,1.275), box-shadow 0.18s ease',
+              // stagger fade-in via CSS animation
+              animation: `popIn 0.45s ease-out ${i * 80}ms both`,
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.09) translateY(-3px)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 10px 32px rgba(0,0,0,0.28)';
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 18px rgba(0,0,0,0.18)';
+            }}
+          >
+            <span style={{ fontSize: 'clamp(1.8rem, 5vw, 2.4rem)', lineHeight: 1 }}>{z.emoji}</span>
+            <span style={{
+              fontFamily: FF, color: '#ffffff',
+              fontSize: 'clamp(0.75rem, 2vw, 0.9rem)',
+              textAlign: 'center', lineHeight: 1.2,
+              textShadow: '0 1px 4px rgba(0,0,0,0.35)',
+            }}>{z.label}</span>
+            <span style={{
+              fontFamily: OS, color: 'rgba(255,255,255,0.82)',
+              fontSize: 'clamp(0.62rem, 1.5vw, 0.72rem)',
+              textAlign: 'center', lineHeight: 1.2,
+            }}>{z.hint}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
 function ZoneSky() {
   const [pulsed, setPulsed] = useState<number | null>(null);
   const [wiggle, setWiggle] = useState(false);
@@ -281,6 +399,11 @@ function ZoneSky() {
         </Link>
       </div>
 
+      {/* Adventure Map */}
+      <div style={{ position: 'relative', zIndex: 3, width: '100%', maxWidth: '780px', marginTop: '44px', animation: 'fadeSlideUp 1s ease-out 0.5s both' }}>
+        <AdventureMap />
+      </div>
+
       {/* Scroll hint */}
       <div style={{
         position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
@@ -314,7 +437,7 @@ function ZoneAmberMountain() {
   const tapAmber = () => { setFireActive(true); setTimeout(() => setFireActive(false), 700); };
 
   return (
-    <section style={{
+    <section id="amber" style={{
       background: 'linear-gradient(180deg, #d9b7e5 0%, #c5a0d5 60%, #a070c0 100%)',
       position: 'relative', minHeight: '100vh', overflow: 'hidden',
       paddingTop: '60px', paddingBottom: '120px',
@@ -486,7 +609,7 @@ function ZoneDragonTown() {
   };
 
   return (
-    <section style={{
+    <section id="dragon" style={{
       background: 'linear-gradient(180deg, #78087c 0%, #5a0060 55%, #420048 100%)',
       position: 'relative', minHeight: '100vh', overflow: 'hidden',
       paddingTop: '80px', paddingBottom: '120px',
@@ -700,7 +823,7 @@ function ZoneBookshelf() {
   const filtered = books.filter(b => bookMatchesMood(b, activeMood));
 
   return (
-    <section style={{
+    <section id="books" style={{
       background: 'linear-gradient(180deg, #fff3e0 0%, #ffe8b8 50%, #fff0d4 100%)',
       position: 'relative', minHeight: '80vh', overflow: 'hidden',
       paddingTop: '100px', paddingBottom: '120px',
@@ -823,7 +946,7 @@ function ZoneColoringMeadow() {
   const [lifted, setLifted] = useState<number | null>(null);
 
   return (
-    <section style={{
+    <section id="coloring" style={{
       background: 'linear-gradient(180deg, #dcf9f3 0%, #c2f5ea 60%, #a8f0df 100%)',
       position: 'relative', minHeight: '60vh', overflow: 'hidden',
       paddingTop: '100px', paddingBottom: '120px',
@@ -955,7 +1078,7 @@ function ZoneCampfire() {
   };
 
   return (
-    <section style={{
+    <section id="campfire" style={{
       background: 'linear-gradient(180deg, #4a0050 0%, #78087c 28%, #4a0050 65%, #2a0032 100%)',
       position: 'relative', minHeight: '80vh', overflow: 'hidden',
       paddingTop: '120px', paddingBottom: '80px',
