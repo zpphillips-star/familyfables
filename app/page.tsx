@@ -399,70 +399,87 @@ function AdventureMap() {
   };
 
   return (
-    <div style={{ position: 'relative', zIndex: 4, width: '100%', padding: '0 16px' }}>
-      <p style={{
-        fontFamily: CAT, fontWeight: 800, textAlign: 'center',
-        color: '#004a3a', fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
-        letterSpacing: '0.14em', textTransform: 'uppercase',
-        marginBottom: '14px', opacity: 0.65,
-      }}>
-        Your Adventure Awaits
-      </p>
+    <div style={{ position: 'relative', width: '100%', paddingTop: 'clamp(130px, 24vw, 260px)', paddingBottom: '8px' }}>
 
-      <div style={{
-        display: 'flex', gap: '10px', overflowX: 'auto',
-        scrollSnapType: 'x mandatory', paddingBottom: '6px',
-        WebkitOverflowScrolling: 'touch' as 'touch',
-        justifyContent: 'center', flexWrap: 'wrap',
-      }} className="shelf-scroll">
-        {ZONES.map((z, i) => (
-          <button
-            key={z.id}
-            onClick={() => scrollTo(z.id)}
-            style={{
-              flex: '0 0 auto', scrollSnapAlign: 'start',
-              background: z.bg,
-              border: `2px solid ${z.border}`,
-              borderRadius: '18px',
-              padding: '16px 14px 12px',
-              cursor: 'pointer', outline: 'none',
-              overflow: 'hidden',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
-              minWidth: '108px', maxWidth: '124px',
-              boxShadow: 'none',
-              transition: 'transform 0.18s cubic-bezier(.175,.885,.32,1.275)',
-              animation: `popIn 0.45s ease-out ${i * 90}ms both`,
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.08) translateY(-4px)';
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
-            }}
-          >
-            {/* Illustration */}
-            <div style={{
-              width: 54, height: 54,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              {z.img ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={z.img} alt={z.label} style={{ width: 54, height: 54, objectFit: 'cover', borderRadius: '10px' }} />
-              ) : z.icon}
-            </div>
-            <span style={{
-              fontFamily: FF, color: '#ffffff',
-              fontSize: 'clamp(0.72rem, 2vw, 0.88rem)',
-              textAlign: 'center', lineHeight: 1.2,
-              textShadow: '0 1px 5px rgba(0,0,0,0.4)',
-            }}>{z.label}</span>
-            <span style={{
-              fontFamily: OS, color: 'rgba(255,255,255,0.78)',
-              fontSize: 'clamp(0.6rem, 1.4vw, 0.7rem)',
-              textAlign: 'center', lineHeight: 1.2,
-            }}>{z.hint}</span>
-          </button>
-        ))}
+      {/* Giant dragon — body/head upper-right, tail sweeps left over the cards */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/originals/poo-poo-dragon-flipped.png"
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: '-2%',
+          width: 'clamp(300px, 75vw, 720px)',
+          zIndex: 2,
+          pointerEvents: 'none',
+          userSelect: 'none',
+        }}
+      />
+
+      {/* Label + cards — z-index above dragon so they "sit" in front of the tail */}
+      <div style={{ position: 'relative', zIndex: 4, padding: '0 16px' }}>
+        <p style={{
+          fontFamily: CAT, fontWeight: 800, textAlign: 'center',
+          color: '#004a3a', fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+          letterSpacing: '0.14em', textTransform: 'uppercase',
+          marginBottom: '14px', opacity: 0.65,
+        }}>
+          Your Adventure Awaits
+        </p>
+
+        <div style={{
+          display: 'flex', gap: '10px', overflowX: 'auto',
+          scrollSnapType: 'x mandatory', paddingBottom: '6px',
+          WebkitOverflowScrolling: 'touch' as 'touch',
+          justifyContent: 'center', flexWrap: 'wrap',
+        }} className="shelf-scroll">
+          {ZONES.map((z, i) => (
+            <button
+              key={z.id}
+              onClick={() => scrollTo(z.id)}
+              style={{
+                flex: '0 0 auto', scrollSnapAlign: 'start',
+                background: z.bg,
+                border: `2px solid ${z.border}`,
+                borderRadius: '18px',
+                padding: '16px 14px 12px',
+                cursor: 'pointer', outline: 'none',
+                overflow: 'hidden',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
+                minWidth: '108px', maxWidth: '124px',
+                boxShadow: 'none',
+                transition: 'transform 0.18s cubic-bezier(.175,.885,.32,1.275)',
+                animation: `popIn 0.45s ease-out ${i * 90}ms both`,
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.08) translateY(-4px)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+              }}
+            >
+              <div style={{ width: 54, height: 54, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {z.img ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={z.img} alt={z.label} style={{ width: 54, height: 54, objectFit: 'cover', borderRadius: '10px' }} />
+                ) : z.icon}
+              </div>
+              <span style={{
+                fontFamily: FF, color: '#ffffff',
+                fontSize: 'clamp(0.72rem, 2vw, 0.88rem)',
+                textAlign: 'center', lineHeight: 1.2,
+                textShadow: '0 1px 5px rgba(0,0,0,0.4)',
+              }}>{z.label}</span>
+              <span style={{
+                fontFamily: OS, color: 'rgba(255,255,255,0.78)',
+                fontSize: 'clamp(0.6rem, 1.4vw, 0.7rem)',
+                textAlign: 'center', lineHeight: 1.2,
+              }}>{z.hint}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
