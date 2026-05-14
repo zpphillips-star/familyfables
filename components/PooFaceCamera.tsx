@@ -29,16 +29,21 @@ export default function PooFaceCamera() {
 
   const capture = useCallback(() => {
     if (!videoRef.current) return;
+    const video = videoRef.current;
+    // Use fallback dimensions if videoWidth/videoHeight aren't ready
+    const w = video.videoWidth || video.clientWidth || 640;
+    const h = video.videoHeight || video.clientHeight || 480;
     const canvas = document.createElement('canvas');
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
+    canvas.width = w;
+    canvas.height = h;
     const ctx = canvas.getContext('2d')!;
     // Mirror the image (selfie cameras are mirrored)
-    ctx.translate(canvas.width, 0);
+    ctx.translate(w, 0);
     ctx.scale(-1, 1);
-    ctx.drawImage(videoRef.current, 0, 0);
-    const base64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
-    setCapturedImage('data:image/jpeg;base64,' + base64);
+    ctx.drawImage(video, 0, 0, w, h);
+    // Store the full data URL directly (don't split/rejoin)
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    setCapturedImage(dataUrl);
     // Stop camera stream
     streamRef.current?.getTracks().forEach(t => t.stop());
     setStage('preview');
@@ -47,7 +52,8 @@ export default function PooFaceCamera() {
   const transform = async () => {
     setStage('processing');
     try {
-      const base64 = capturedImage.split(',')[1];
+      // capturedImage is a full data URL — extract just the base64 part
+      const base64 = capturedImage.includes(',') ? capturedImage.split(',')[1] : capturedImage;
       const res = await fetch('/api/poo-face', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
