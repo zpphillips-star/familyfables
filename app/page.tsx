@@ -934,22 +934,16 @@ function ZoneDragonTown() {
           </div>
         </Reveal>
 
-        {/* Activities — float above the dragon's tail */}
-        <Reveal delay={180} style={{ width: '100%', position: 'relative', zIndex: 8 }}>
-          <div style={{
-            background: 'linear-gradient(160deg, rgba(80,0,110,0.96), rgba(45,0,65,0.98))',
-            borderRadius: '28px',
-            border: '2px solid rgba(200,120,240,0.25)',
-            padding: 'clamp(160px,22vw,200px) clamp(20px,5vw,36px) clamp(24px,4vw,36px)',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
-          }}>
+        {/* Activities — free-floating over the dragon's tail, no container */}
+        <Reveal delay={180} style={{ width: '100%', position: 'relative', zIndex: 8, padding: '0 clamp(16px,4vw,32px)', marginTop: '-120px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {/* Photo Booth button */}
             <div
               onClick={() => setCameraOpen(true)}
               role="button" tabIndex={0} aria-label="Make your Poo Poo Face with the camera"
               onKeyDown={e => e.key === 'Enter' && setCameraOpen(true)}
               style={{
-                cursor: 'pointer', outline: 'none', marginBottom: '16px',
+                cursor: 'pointer', outline: 'none',
                 background: 'linear-gradient(135deg, #ff9c1a, #ffb840)',
                 borderRadius: '18px', padding: '18px 24px',
                 display: 'flex', alignItems: 'center', gap: '16px',
@@ -1025,8 +1019,7 @@ function ZoneDragonTown() {
 
             {/* Book buy strip */}
             <div style={{
-              marginTop: '20px', paddingTop: '20px',
-              borderTop: '1px solid rgba(200,120,240,0.18)',
+              marginTop: '8px',
               display: 'flex', gap: '14px', alignItems: 'center',
             }}>
               <Image
