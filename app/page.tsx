@@ -870,9 +870,60 @@ function ZoneDragonTown() {
           <circle cx="1123" cy="192" r="16" fill="#ffd060" opacity="0.18"/>
         </svg>
       </div>
+
+      {/* Dragon — part of the section, no box, PNG blends with purple background */}
+      <div
+        onClick={tapDragon}
+        role="button" tabIndex={0} aria-label="Tap the dragon for a silly face"
+        onKeyDown={e => e.key === 'Enter' && tapDragon()}
+        style={{
+          position: 'absolute',
+          top: 'clamp(60px, 8vh, 100px)',
+          right: '-3%',
+          width: 'clamp(280px, 70vw, 560px)',
+          zIndex: 3,
+          cursor: 'pointer', outline: 'none',
+          animation: 'floatBob 5s ease-in-out infinite 0.3s',
+          filter: 'drop-shadow(0 8px 50px rgba(180,0,200,0.4))',
+        }}
+      >
+        {dragonEmoji && (
+          <div key={emojiKey} style={{
+            position: 'absolute', top: '-60px', right: '15%',
+            zIndex: 10, pointerEvents: 'none',
+            animation: 'popIn 0.35s cubic-bezier(.175,.885,.32,1.275) both',
+          }}>
+            <div style={{
+              background: 'white', borderRadius: '50%', width: '72px', height: '72px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '2.6rem', boxShadow: '0 6px 24px rgba(0,0,0,0.3)',
+            }}>{dragonEmoji}</div>
+            <div style={{
+              position: 'absolute', bottom: '-9px', left: '50%', transform: 'translateX(-50%)',
+              width: 0, height: 0,
+              borderLeft: '7px solid transparent', borderRight: '7px solid transparent',
+              borderTop: '10px solid white',
+            }}/>
+          </div>
+        )}
+        <Image
+          src="/images/originals/poo-poo-dragon-flipped.png"
+          alt="Poo Poo Dragon" width={1200} height={772}
+          style={{ width: '100%', height: 'auto', display: 'block' }}
+        />
+        <p style={{
+          position: 'absolute', top: '30%', right: '5%',
+          fontFamily: FF, color: '#f0d8fa', fontSize: '0.85rem',
+          background: 'rgba(0,0,0,0.4)', padding: '5px 16px', borderRadius: '999px',
+          border: '1px solid rgba(255,200,255,0.25)',
+          pointerEvents: 'none', margin: 0,
+        }}>
+          👆 Tap the dragon!
+        </p>
+      </div>
 
-      {/* ── Content — stacked like hero, dragon overlapping into activities ── */}
-      <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '700px', padding: '0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* ── Content column ── */}
+      <div style={{ position: 'relative', zIndex: 8, width: '100%', maxWidth: '700px', padding: '0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
         <Reveal>
           <h2 style={{
@@ -884,81 +935,9 @@ function ZoneDragonTown() {
           </h2>
         </Reveal>
 
-        {/* ── Dragon + Activities: full-bleed scene ─────────────────────────────── */}
-        {/* Dragon fills the ENTIRE container as object-fit:cover background.    */}
-        {/* Left gradient overlay for button readability. No dead space.         */}
-        <div style={{
-          position: 'relative',
-          width: '100%',
-          height: 'clamp(400px, 72vw, 560px)',
-          overflow: 'hidden',
-          marginTop: '4px',
-          borderRadius: '16px',
-        }}>
-
-          {/* Dragon — full-bleed cover, objectPosition to show body & tail */}
-          <div
-            onClick={tapDragon}
-            role="button" tabIndex={0} aria-label="Tap the dragon for a silly face"
-            onKeyDown={e => e.key === 'Enter' && tapDragon()}
-            style={{
-              position: 'absolute', inset: 0,
-              cursor: 'pointer', outline: 'none',
-              zIndex: 2,
-            }}
-          >
-            {dragonEmoji && (
-              <div key={emojiKey} style={{
-                position: 'absolute', top: '8%', right: '8%',
-                zIndex: 10, pointerEvents: 'none',
-                animation: 'popIn 0.35s cubic-bezier(.175,.885,.32,1.275) both',
-              }}>
-                <div style={{
-                  background: 'white', borderRadius: '50%', width: '72px', height: '72px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '2.6rem', boxShadow: '0 6px 24px rgba(0,0,0,0.3)',
-                }}>{dragonEmoji}</div>
-                <div style={{
-                  position: 'absolute', bottom: '-9px', left: '50%', transform: 'translateX(-50%)',
-                  width: 0, height: 0,
-                  borderLeft: '7px solid transparent', borderRight: '7px solid transparent',
-                  borderTop: '10px solid white',
-                }}/>
-              </div>
-            )}
-            <Image
-              src="/images/originals/poo-poo-dragon-flipped.png"
-              alt="Poo Poo Dragon" fill
-              style={{ objectFit: 'cover', objectPosition: '62% center' }}
-              priority
-            />
-            {/* Tap hint near the head (upper-right quadrant) */}
-            <p style={{
-              position: 'absolute', top: '28%', right: '8%',
-              fontFamily: FF, color: '#f0d8fa', fontSize: '0.82rem',
-              background: 'rgba(0,0,0,0.4)', padding: '4px 14px', borderRadius: '999px',
-              border: '1px solid rgba(255,200,255,0.25)',
-              pointerEvents: 'none', margin: 0,
-            }}>
-              👆 Tap the dragon!
-            </p>
-          </div>
-
-          {/* Left-side gradient so buttons are legible against the dragon */}
-          <div style={{
-            position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none',
-            background: 'linear-gradient(to right, rgba(22,0,35,0.82) 38%, rgba(22,0,35,0.45) 60%, transparent 80%)',
-          }} />
-
-          {/* Action buttons — left column, above the tail zone, z-index 8 */}
-          <div style={{
-            position: 'absolute',
-            bottom: 'clamp(50px, 14%, 90px)',
-            left: 'clamp(16px, 5%, 32px)',
-            width: 'clamp(220px, 52%, 320px)',
-            zIndex: 8,
-            display: 'flex', flexDirection: 'column', gap: '10px',
-          }}>
+        {/* ── Activity buttons — normal flow, below title, left-aligned into tail zone ── */}
+        <Reveal delay={160} style={{ alignSelf: 'flex-start', marginTop: 'clamp(55px, 9vw, 85px)', width: 'clamp(220px, 55%, 320px)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
             {/* Photo Booth button */}
             <div
@@ -971,7 +950,6 @@ function ZoneDragonTown() {
                 borderRadius: '16px', padding: '14px 16px',
                 display: 'flex', alignItems: 'center', gap: '12px',
                 border: '2px solid rgba(255,220,100,0.5)',
-                overflow: 'hidden',
               }}
             >
               <div style={{
@@ -1006,7 +984,6 @@ function ZoneDragonTown() {
                 display: 'flex', alignItems: 'center', gap: '12px',
                 transition: 'all 0.2s',
                 border: '2px solid rgba(200,120,240,0.45)',
-                overflow: 'hidden',
               }}
             >
               <div style={{
@@ -1026,7 +1003,7 @@ function ZoneDragonTown() {
             </div>
 
           </div>
-        </div>
+        </Reveal>
 
         {/* Quiz — expands below the dragon, full width */}
         {quizOpen && (
