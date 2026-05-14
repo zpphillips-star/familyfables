@@ -884,161 +884,171 @@ function ZoneDragonTown() {
           </h2>
         </Reveal>
 
-        {/* Dragon — HUGE, absolute in section background, tail sweeps left behind the boxes */}
-        <Reveal delay={80} style={{ position: 'relative', width: '100%', zIndex: 3 }}>
-          <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            {dragonEmoji && (
-              <div key={emojiKey} style={{
-                position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)',
-                zIndex: 10, pointerEvents: 'none',
-                animation: 'popIn 0.35s cubic-bezier(.175,.885,.32,1.275) both',
-              }}>
-                <div style={{
-                  background: 'white', borderRadius: '50%', width: '76px', height: '76px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '2.8rem', boxShadow: '0 6px 24px rgba(0,0,0,0.3)',
-                }}>{dragonEmoji}</div>
-                <div style={{
-                  position: 'absolute', bottom: '-10px', left: '50%', transform: 'translateX(-50%)',
-                  width: 0, height: 0,
-                  borderLeft: '8px solid transparent', borderRight: '8px solid transparent',
-                  borderTop: '12px solid white',
-                }}/>
-              </div>
-            )}
-            <div
-              onClick={tapDragon}
-              role="button" tabIndex={0} aria-label="Tap the dragon for a silly face"
-              onKeyDown={e => e.key === 'Enter' && tapDragon()}
-              style={{
-                cursor: 'pointer', outline: 'none',
-                animation: 'floatBob 5s ease-in-out infinite 0.3s',
-                filter: 'drop-shadow(0 6px 40px rgba(200,0,220,0.45))',
-                marginBottom: '-180px',
-              }}
-            >
-              <Image
-                src="/images/originals/poo-poo-dragon-flipped.png"
-                alt="Poo Poo Dragon" width={700} height={700}
-                style={{ width: 'clamp(420px, 80vw, 700px)', height: 'auto', display: 'block' }}
-              />
-            </div>
-            <p style={{
-              fontFamily: FF, color: '#f0d8fa', fontSize: '0.9rem',
-              background: 'rgba(0,0,0,0.35)', padding: '6px 18px', borderRadius: '999px',
-              border: '1px solid rgba(255,200,255,0.2)', marginTop: '8px',
-              position: 'relative', zIndex: 8,
-            }}>
-              👆 Tap the dragon!
-            </p>
-          </div>
-        </Reveal>
+        {/* ── Dragon + Activities: CSS Grid overlap layout ──────────────────────── */}
+        {/* Dragon spans the full row (right-aligned). Action buttons sit in    */}
+        {/* the left 52% column (the tail zone) with higher z-index.            */}
+        <div style={{ width: '100%', display: 'grid', gridTemplateColumns: '52% 1fr', position: 'relative', marginTop: '8px' }}>
 
-        {/* Activities — free-floating over the dragon's tail, no container */}
-        <Reveal delay={180} style={{ width: '100%', position: 'relative', zIndex: 8, padding: '0 clamp(16px,4vw,32px)', marginTop: '-120px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {/* Photo Booth button */}
-            <div
-              onClick={() => setCameraOpen(true)}
-              role="button" tabIndex={0} aria-label="Make your Poo Poo Face with the camera"
-              onKeyDown={e => e.key === 'Enter' && setCameraOpen(true)}
-              style={{
-                cursor: 'pointer', outline: 'none',
-                background: 'linear-gradient(135deg, #ff9c1a, #ffb840)',
-                borderRadius: '18px', padding: '18px 24px',
-                display: 'flex', alignItems: 'center', gap: '16px',
-                boxShadow: '0 6px 28px rgba(255,156,26,0.45)',
-                transition: 'transform 0.15s, box-shadow 0.15s',
-                border: '2px solid rgba(255,220,100,0.5)',
-              }}
-            >
-              {/* Mirror icon */}
-              <div style={{
-                width: '54px', height: '66px', borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(160deg, #2a0040, #500070)',
-                border: '3px solid rgba(255,220,80,0.8)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: 'inset 0 3px 12px rgba(0,0,0,0.5)',
-              }}>
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-                  <ellipse cx="10" cy="12" rx="2.5" ry="2.8" fill="#ffd060"/>
-                  <ellipse cx="18" cy="12" rx="2.5" ry="2.8" fill="#ffd060"/>
-                  <path d="M8 18 Q11 22 14 20 Q17 22 20 18" stroke="#ff9c1a" strokeWidth="2" fill="none" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <div>
-                <div style={{ fontFamily: FF, color: '#3a0050', fontSize: 'clamp(1.2rem, 4vw, 1.5rem)', lineHeight: 1.1 }}>
-                  Make Your Poo Poo Face!
-                </div>
-                <div style={{ fontFamily: OS, color: '#5a0070', fontSize: '0.82rem', marginTop: '3px' }}>
-                  AI turns your face into a cartoon character
-                </div>
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div style={{ textAlign: 'center', margin: '4px 0 12px', fontFamily: CAT, fontWeight: 800, color: 'rgba(200,150,220,0.5)', fontSize: '0.8rem', letterSpacing: '0.1em' }}>— or —</div>
-
-            {/* Quiz toggle */}
-            <div
-              onClick={() => setQuizOpen(o => !o)}
-              role="button" tabIndex={0} aria-label="Take the What's Your Face quiz"
-              onKeyDown={e => e.key === 'Enter' && setQuizOpen(o => !o)}
-              style={{
-                cursor: 'pointer', outline: 'none', marginBottom: quizOpen ? '16px' : '0',
-                background: 'linear-gradient(135deg, rgba(120,8,124,0.8), rgba(90,0,110,0.9))',
-                borderRadius: '18px', padding: '18px 24px',
-                display: 'flex', alignItems: 'center', gap: '16px',
-                boxShadow: '0 4px 20px rgba(120,8,124,0.35)',
-                transition: 'all 0.2s',
-                border: '2px solid rgba(200,120,240,0.3)',
-              }}
-            >
-              <div style={{
-                width: '54px', height: '54px', borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(135deg, #ffd060, #ff9c1a)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.6rem',
-              }}>🤣</div>
-              <div>
-                <div style={{ fontFamily: FF, color: '#f0d8fa', fontSize: 'clamp(1.2rem, 4vw, 1.5rem)', lineHeight: 1.1 }}>
-                  What&apos;s Your Poo Poo Face?
-                </div>
-                <div style={{ fontFamily: OS, color: 'rgba(220,180,240,0.8)', fontSize: '0.82rem', marginTop: '3px' }}>
-                  {quizOpen ? 'tap to close ↑' : '4-question personality quiz ↓'}
-                </div>
-              </div>
-            </div>
-
-            {/* Quiz — expands in place */}
-            {quizOpen && (
-              <div style={{ animation: 'popIn 0.3s ease-out both' }}>
-                <PooFaceQuiz />
-              </div>
-            )}
-
-            {/* Book buy strip */}
-            <div style={{
-              marginTop: '8px',
-              display: 'flex', gap: '14px', alignItems: 'center',
-            }}>
-              <Image
-                src="/images/wp/whats-your-poopoo-face-400.png"
-                alt="What's Your Poo Poo Face" width={100} height={100}
-                style={{ width: '64px', height: 'auto', borderRadius: '8px', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.4)' }}
-              />
-              <div style={{ flex: 1 }}>
-                <p style={{ fontFamily: FF, color: '#f0d8fa', fontSize: '0.9rem', marginBottom: '8px', lineHeight: 1.2 }}>
-                  What&apos;s Your Poo Poo Face?
-                </p>
-                <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer" style={{
-                  display: 'inline-block', background: '#ff9c1a', color: '#fff',
-                  padding: '7px 18px', borderRadius: '10px', textDecoration: 'none',
-                  fontFamily: FF, fontSize: '0.85rem', boxShadow: '0 3px 12px rgba(255,156,26,0.4)',
+          {/* Dragon — spans full row, right-aligned image, z-index 2 (behind buttons) */}
+          <Reveal delay={80} style={{ gridColumn: '1 / span 2', gridRow: '1', zIndex: 2, position: 'relative' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+              <div
+                onClick={tapDragon}
+                role="button" tabIndex={0} aria-label="Tap the dragon for a silly face"
+                onKeyDown={e => e.key === 'Enter' && tapDragon()}
+                style={{
+                  cursor: 'pointer', outline: 'none',
+                  position: 'relative',
+                  width: 'clamp(260px, 82vw, 560px)',
+                  animation: 'floatBob 5s ease-in-out infinite 0.3s',
+                  filter: 'drop-shadow(0 6px 40px rgba(200,0,220,0.45))',
+                  marginRight: '-3%',
+                }}
+              >
+                {dragonEmoji && (
+                  <div key={emojiKey} style={{
+                    position: 'absolute', top: '-72px', right: '16%',
+                    zIndex: 10, pointerEvents: 'none',
+                    animation: 'popIn 0.35s cubic-bezier(.175,.885,.32,1.275) both',
+                  }}>
+                    <div style={{
+                      background: 'white', borderRadius: '50%', width: '72px', height: '72px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '2.6rem', boxShadow: '0 6px 24px rgba(0,0,0,0.3)',
+                    }}>{dragonEmoji}</div>
+                    <div style={{
+                      position: 'absolute', bottom: '-9px', left: '50%', transform: 'translateX(-50%)',
+                      width: 0, height: 0,
+                      borderLeft: '7px solid transparent', borderRight: '7px solid transparent',
+                      borderTop: '10px solid white',
+                    }}/>
+                  </div>
+                )}
+                <Image
+                  src="/images/originals/poo-poo-dragon-flipped.png"
+                  alt="Poo Poo Dragon" width={1200} height={772}
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+                {/* Tap hint near the dragon's face (right side of image) */}
+                <p style={{
+                  position: 'absolute', bottom: '20%', right: '6%',
+                  fontFamily: FF, color: '#f0d8fa', fontSize: '0.82rem',
+                  background: 'rgba(0,0,0,0.35)', padding: '4px 14px', borderRadius: '999px',
+                  border: '1px solid rgba(255,200,255,0.2)',
+                  pointerEvents: 'none', margin: 0,
                 }}>
-                  Get on Amazon →
-                </a>
+                  👆 Tap the dragon!
+                </p>
               </div>
+            </div>
+          </Reveal>
+
+          {/* Action buttons — left column (tail zone), z-index 8 (floats above tail) */}
+          <Reveal delay={180} style={{
+            gridColumn: '1', gridRow: '1',
+            zIndex: 8, position: 'relative',
+            display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+            paddingLeft: 'clamp(8px, 3vw, 16px)', paddingRight: '8px', paddingBottom: '28px',
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+
+              {/* Photo Booth button */}
+              <div
+                onClick={() => setCameraOpen(true)}
+                role="button" tabIndex={0} aria-label="Make your Poo Poo Face with the camera"
+                onKeyDown={e => e.key === 'Enter' && setCameraOpen(true)}
+                style={{
+                  cursor: 'pointer', outline: 'none',
+                  background: '#ff9c1a',
+                  borderRadius: '16px', padding: '14px 16px',
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  border: '2px solid rgba(255,220,100,0.5)',
+                  overflow: 'hidden',
+                }}
+              >
+                <div style={{
+                  width: '40px', height: '40px', borderRadius: '50%', flexShrink: 0,
+                  background: 'linear-gradient(160deg, #2a0040, #500070)',
+                  border: '2px solid rgba(255,220,80,0.8)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                    <ellipse cx="10" cy="12" rx="2.5" ry="2.8" fill="#ffd060"/>
+                    <ellipse cx="18" cy="12" rx="2.5" ry="2.8" fill="#ffd060"/>
+                    <path d="M8 18 Q11 22 14 20 Q17 22 20 18" stroke="#ff9c1a" strokeWidth="2" fill="none" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <div style={{ fontFamily: FF, color: '#3a0050', fontSize: 'clamp(0.9rem, 3.5vw, 1.15rem)', lineHeight: 1.1 }}>
+                    Make Your<br/>Poo Poo Face!
+                  </div>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div style={{ textAlign: 'center', fontFamily: CAT, fontWeight: 800, color: 'rgba(200,150,220,0.6)', fontSize: '0.75rem', letterSpacing: '0.1em' }}>— or —</div>
+
+              {/* Quiz toggle button */}
+              <div
+                onClick={() => setQuizOpen(o => !o)}
+                role="button" tabIndex={0} aria-label="Take the What's Your Face quiz"
+                onKeyDown={e => e.key === 'Enter' && setQuizOpen(o => !o)}
+                style={{
+                  cursor: 'pointer', outline: 'none',
+                  background: 'rgba(120,8,124,0.85)',
+                  borderRadius: '16px', padding: '14px 16px',
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  transition: 'all 0.2s',
+                  border: '2px solid rgba(200,120,240,0.35)',
+                  overflow: 'hidden',
+                }}
+              >
+                <div style={{
+                  width: '40px', height: '40px', borderRadius: '50%', flexShrink: 0,
+                  background: 'linear-gradient(135deg, #ffd060, #ff9c1a)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.3rem',
+                }}>🤣</div>
+                <div>
+                  <div style={{ fontFamily: FF, color: '#f0d8fa', fontSize: 'clamp(0.9rem, 3.5vw, 1.15rem)', lineHeight: 1.1 }}>
+                    What&apos;s Your<br/>Poo Poo Face?
+                  </div>
+                  <div style={{ fontFamily: OS, color: 'rgba(220,180,240,0.8)', fontSize: '0.72rem', marginTop: '2px' }}>
+                    {quizOpen ? 'tap to close ↑' : 'quiz ↓'}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Quiz — expands below the dragon section, full width */}
+        {quizOpen && (
+          <div style={{ width: '100%', padding: '0 16px', animation: 'popIn 0.3s ease-out both' }}>
+            <PooFaceQuiz />
+          </div>
+        )}
+
+        {/* Book buy strip — full width, below everything */}
+        <Reveal delay={240} style={{ width: '100%', padding: '0 16px', marginTop: '20px' }}>
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+            <Image
+              src="/images/wp/whats-your-poopoo-face-400.png"
+              alt="What's Your Poo Poo Face" width={100} height={100}
+              style={{ width: '64px', height: 'auto', borderRadius: '8px', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.4)' }}
+            />
+            <div style={{ flex: 1 }}>
+              <p style={{ fontFamily: FF, color: '#f0d8fa', fontSize: '0.9rem', marginBottom: '8px', lineHeight: 1.2 }}>
+                What&apos;s Your Poo Poo Face?
+              </p>
+              <a href={AMAZON_STORE_URL} target="_blank" rel="noopener noreferrer" style={{
+                display: 'inline-block', background: '#ff9c1a', color: '#fff',
+                padding: '7px 18px', borderRadius: '10px', textDecoration: 'none',
+                fontFamily: FF, fontSize: '0.85rem',
+              }}>
+                Get on Amazon →
+              </a>
             </div>
           </div>
         </Reveal>
