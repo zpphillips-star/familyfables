@@ -884,36 +884,32 @@ function ZoneDragonTown() {
           </h2>
         </Reveal>
 
-        {/* ── Dragon + Activities: tall fixed-height container ──────────────────── */}
-        {/* Dragon scales to fill the height (clipping wide sides).             */}
-        {/* Buttons are absolutely at the bottom-left = tail zone.              */}
-        {/* Dragon head towers above the buttons at the top.                    */}
+        {/* ── Dragon + Activities: full-bleed scene ─────────────────────────────── */}
+        {/* Dragon fills the ENTIRE container as object-fit:cover background.    */}
+        {/* Left gradient overlay for button readability. No dead space.         */}
         <div style={{
           position: 'relative',
           width: '100%',
-          height: 'clamp(360px, 65vw, 520px)',
+          height: 'clamp(400px, 72vw, 560px)',
           overflow: 'hidden',
-          marginTop: '8px',
+          marginTop: '4px',
+          borderRadius: '16px',
         }}>
 
-          {/* Dragon — height-filling, offset right so head stays visible */}
+          {/* Dragon — full-bleed cover, objectPosition to show body & tail */}
           <div
             onClick={tapDragon}
             role="button" tabIndex={0} aria-label="Tap the dragon for a silly face"
             onKeyDown={e => e.key === 'Enter' && tapDragon()}
             style={{
-              position: 'absolute',
-              top: 0, bottom: 0,
-              right: '-8%',
+              position: 'absolute', inset: 0,
               cursor: 'pointer', outline: 'none',
-              animation: 'floatBob 5s ease-in-out infinite 0.3s',
-              filter: 'drop-shadow(0 6px 60px rgba(180,0,200,0.5))',
               zIndex: 2,
             }}
           >
             {dragonEmoji && (
               <div key={emojiKey} style={{
-                position: 'absolute', top: '8%', right: '12%',
+                position: 'absolute', top: '8%', right: '8%',
                 zIndex: 10, pointerEvents: 'none',
                 animation: 'popIn 0.35s cubic-bezier(.175,.885,.32,1.275) both',
               }}>
@@ -932,12 +928,13 @@ function ZoneDragonTown() {
             )}
             <Image
               src="/images/originals/poo-poo-dragon-flipped.png"
-              alt="Poo Poo Dragon" width={1200} height={772}
-              style={{ height: '100%', width: 'auto', display: 'block' }}
+              alt="Poo Poo Dragon" fill
+              style={{ objectFit: 'cover', objectPosition: '62% center' }}
+              priority
             />
-            {/* Tap hint near the face (right side of image) */}
+            {/* Tap hint near the head (upper-right quadrant) */}
             <p style={{
-              position: 'absolute', bottom: '36%', right: '8%',
+              position: 'absolute', top: '28%', right: '8%',
               fontFamily: FF, color: '#f0d8fa', fontSize: '0.82rem',
               background: 'rgba(0,0,0,0.4)', padding: '4px 14px', borderRadius: '999px',
               border: '1px solid rgba(255,200,255,0.25)',
@@ -947,13 +944,18 @@ function ZoneDragonTown() {
             </p>
           </div>
 
-          {/* Action buttons — centered horizontally, mid-lower body = above the tail, z-index 8 */}
+          {/* Left-side gradient so buttons are legible against the dragon */}
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none',
+            background: 'linear-gradient(to right, rgba(22,0,35,0.82) 38%, rgba(22,0,35,0.45) 60%, transparent 80%)',
+          }} />
+
+          {/* Action buttons — left column, above the tail zone, z-index 8 */}
           <div style={{
             position: 'absolute',
-            bottom: 'clamp(60px, 18%, 110px)',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: 'clamp(240px, 70%, 360px)',
+            bottom: 'clamp(50px, 14%, 90px)',
+            left: 'clamp(16px, 5%, 32px)',
+            width: 'clamp(220px, 52%, 320px)',
             zIndex: 8,
             display: 'flex', flexDirection: 'column', gap: '10px',
           }}>
@@ -966,14 +968,14 @@ function ZoneDragonTown() {
               style={{
                 cursor: 'pointer', outline: 'none',
                 background: '#ff9c1a',
-                borderRadius: '16px', padding: '12px 14px',
-                display: 'flex', alignItems: 'center', gap: '10px',
+                borderRadius: '16px', padding: '14px 16px',
+                display: 'flex', alignItems: 'center', gap: '12px',
                 border: '2px solid rgba(255,220,100,0.5)',
                 overflow: 'hidden',
               }}
             >
               <div style={{
-                width: '36px', height: '36px', borderRadius: '50%', flexShrink: 0,
+                width: '38px', height: '38px', borderRadius: '50%', flexShrink: 0,
                 background: 'linear-gradient(160deg, #2a0040, #500070)',
                 border: '2px solid rgba(255,220,80,0.8)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -984,13 +986,13 @@ function ZoneDragonTown() {
                   <path d="M8 18 Q11 22 14 20 Q17 22 20 18" stroke="#ff9c1a" strokeWidth="2" fill="none" strokeLinecap="round"/>
                 </svg>
               </div>
-              <div style={{ fontFamily: FF, color: '#3a0050', fontSize: 'clamp(0.82rem, 3.2vw, 1.05rem)', lineHeight: 1.1 }}>
+              <div style={{ fontFamily: FF, color: '#3a0050', fontSize: 'clamp(0.9rem, 3.4vw, 1.1rem)', lineHeight: 1.1 }}>
                 Make Your<br/>Poo Poo Face!
               </div>
             </div>
 
             {/* Divider */}
-            <div style={{ textAlign: 'center', fontFamily: CAT, fontWeight: 800, color: 'rgba(200,150,220,0.7)', fontSize: '0.72rem', letterSpacing: '0.08em' }}>— or —</div>
+            <div style={{ textAlign: 'center', fontFamily: CAT, fontWeight: 800, color: 'rgba(230,180,255,0.7)', fontSize: '0.72rem', letterSpacing: '0.08em' }}>— or —</div>
 
             {/* Quiz toggle button */}
             <div
@@ -999,25 +1001,25 @@ function ZoneDragonTown() {
               onKeyDown={e => e.key === 'Enter' && setQuizOpen(o => !o)}
               style={{
                 cursor: 'pointer', outline: 'none',
-                background: 'rgba(110,5,115,0.9)',
-                borderRadius: '16px', padding: '12px 14px',
-                display: 'flex', alignItems: 'center', gap: '10px',
+                background: 'rgba(100,0,110,0.88)',
+                borderRadius: '16px', padding: '14px 16px',
+                display: 'flex', alignItems: 'center', gap: '12px',
                 transition: 'all 0.2s',
-                border: '2px solid rgba(200,120,240,0.4)',
+                border: '2px solid rgba(200,120,240,0.45)',
                 overflow: 'hidden',
               }}
             >
               <div style={{
-                width: '36px', height: '36px', borderRadius: '50%', flexShrink: 0,
+                width: '38px', height: '38px', borderRadius: '50%', flexShrink: 0,
                 background: 'linear-gradient(135deg, #ffd060, #ff9c1a)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.2rem',
+                fontSize: '1.3rem',
               }}>🤣</div>
               <div>
-                <div style={{ fontFamily: FF, color: '#f0d8fa', fontSize: 'clamp(0.82rem, 3.2vw, 1.05rem)', lineHeight: 1.1 }}>
+                <div style={{ fontFamily: FF, color: '#f0d8fa', fontSize: 'clamp(0.9rem, 3.4vw, 1.1rem)', lineHeight: 1.1 }}>
                   What&apos;s Your<br/>Poo Poo Face?
                 </div>
-                <div style={{ fontFamily: OS, color: 'rgba(220,180,240,0.8)', fontSize: '0.68rem', marginTop: '2px' }}>
+                <div style={{ fontFamily: OS, color: 'rgba(220,180,240,0.85)', fontSize: '0.7rem', marginTop: '2px' }}>
                   {quizOpen ? 'tap to close ↑' : 'quiz ↓'}
                 </div>
               </div>
