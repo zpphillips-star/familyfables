@@ -181,22 +181,36 @@ function BlobDivider({ fill }: { fill: string }) {
 function IconAmber() {
   return (
     <svg viewBox="0 0 64 64" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Mountain */}
-      <polygon points="32,8 6,54 58,54" fill="#7b3fa0" opacity="0.9"/>
-      <polygon points="32,8 20,28 44,28" fill="#a060c8" opacity="0.7"/>
+      {/* Sky teal gradient background circle */}
+      <circle cx="32" cy="32" r="30" fill="#4ec9b8" opacity="0.25"/>
+      {/* Back mountain - darker */}
+      <polygon points="32,6 4,56 60,56" fill="#5a2880"/>
+      <polygon points="32,6 18,30 46,30" fill="#7840a8" opacity="0.8"/>
       {/* Snow cap */}
-      <polygon points="32,8 24,24 40,24" fill="white" opacity="0.85"/>
-      {/* Crystals on mountain */}
-      <polygon points="14,54 17,42 20,54" fill="#d9b7e5"/>
-      <polygon points="44,54 47,40 50,54" fill="#c090d8"/>
-      <polygon points="29,54 32,44 35,54" fill="#b070cc"/>
-      {/* Dragon silhouette flying */}
-      <ellipse cx="50" cy="18" rx="6" ry="3.5" fill="#ff9c1a" opacity="0.95"/>
-      <polygon points="44,18 40,14 42,20" fill="#ff9c1a" opacity="0.95"/>
-      <polygon points="56,15 60,12 58,19" fill="#ff9c1a" opacity="0.85"/>
+      <polygon points="32,6 24,22 40,22" fill="white" opacity="0.9"/>
+      {/* Teal crystal spires - left */}
+      <polygon points="12,56 15,40 18,56" fill="#20c8a8"/>
+      <polygon points="18,56 21,44 24,56" fill="#30d8b8"/>
+      {/* Teal crystal spires - right */}
+      <polygon points="40,56 43,42 46,56" fill="#30d8b8"/>
+      <polygon points="46,56 50,38 54,56" fill="#20c8a8"/>
+      {/* Center crystal */}
+      <polygon points="29,56 32,42 35,56" fill="#50e0c8"/>
+      {/* Crystal shimmer dots */}
+      <circle cx="15" cy="42" r="1.2" fill="white" opacity="0.8"/>
+      <circle cx="50" cy="40" r="1" fill="white" opacity="0.7"/>
+      <circle cx="32" cy="44" r="0.9" fill="white" opacity="0.9"/>
+      {/* Amber the dragon - small, warm orange, flying */}
+      <ellipse cx="50" cy="16" rx="7" ry="4" fill="#ff9c1a"/>
+      <polygon points="43,16 38,11 41,18" fill="#ff9c1a"/>
+      <polygon points="57,13 62,9 59,17" fill="#ff8800" opacity="0.9"/>
       {/* Dragon eye */}
-      <circle cx="52" cy="17" r="1.2" fill="white"/>
-      <circle cx="52.3" cy="17" r="0.6" fill="#2a0038"/>
+      <circle cx="52" cy="15" r="1.5" fill="white"/>
+      <circle cx="52.4" cy="15" r="0.8" fill="#2a0038"/>
+      {/* Sparkles */}
+      <circle cx="8" cy="18" r="1.2" fill="white" opacity="0.7"/>
+      <circle cx="56" cy="28" r="1" fill="white" opacity="0.6"/>
+      <circle cx="22" cy="10" r="0.9" fill="#ffe080" opacity="0.9"/>
     </svg>
   );
 }
@@ -204,26 +218,38 @@ function IconAmber() {
 function IconDragon() {
   return (
     <svg viewBox="0 0 64 64" width="54" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Body */}
-      <ellipse cx="32" cy="36" rx="18" ry="16" fill="#7b4a00"/>
-      <ellipse cx="32" cy="33" rx="17" ry="15" fill="#8b5a10"/>
-      {/* Highlight */}
-      <ellipse cx="28" cy="28" rx="8" ry="6" fill="#a06820" opacity="0.5"/>
-      {/* Eyes */}
-      <circle cx="24" cy="30" r="5" fill="white"/>
-      <circle cx="40" cy="30" r="5" fill="white"/>
-      <circle cx="25" cy="30" r="3" fill="#1a0800"/>
-      <circle cx="41" cy="30" r="3" fill="#1a0800"/>
-      <circle cx="26" cy="29" r="1" fill="white"/>
-      <circle cx="42" cy="29" r="1" fill="white"/>
-      {/* Smile */}
-      <path d="M22,42 Q32,50 42,42" stroke="#5a2800" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-      {/* Swirl top */}
-      <path d="M32,18 Q28,10 32,7 Q36,4 38,10" stroke="#8b5a10" strokeWidth="3" strokeLinecap="round" fill="none"/>
-      <circle cx="38" cy="10" r="3.5" fill="#8b5a10"/>
-      {/* Blush */}
-      <ellipse cx="18" cy="37" rx="4" ry="2.5" fill="#e07040" opacity="0.45"/>
-      <ellipse cx="46" cy="37" rx="4" ry="2.5" fill="#e07040" opacity="0.45"/>
+      {/* Swirl / hat top */}
+      <ellipse cx="32" cy="12" rx="7" ry="5" fill="#6b3a00"/>
+      <ellipse cx="34" cy="8" rx="5" ry="4" fill="#7b4a05"/>
+      <ellipse cx="36" cy="5" rx="3.5" ry="3" fill="#8b5a10"/>
+      <circle cx="37" cy="3" r="2" fill="#9a6615"/>
+      {/* Mid layer */}
+      <ellipse cx="32" cy="22" rx="13" ry="9" fill="#7b4a05"/>
+      {/* Main body - pear shaped */}
+      <ellipse cx="32" cy="38" rx="18" ry="19" fill="#8b5a10"/>
+      <ellipse cx="32" cy="36" rx="17" ry="18" fill="#9a6820"/>
+      {/* Sheen highlight */}
+      <ellipse cx="26" cy="28" rx="7" ry="5" fill="#b07828" opacity="0.55"/>
+      {/* Big friendly eyes */}
+      <circle cx="23" cy="34" r="7" fill="white"/>
+      <circle cx="41" cy="34" r="7" fill="white"/>
+      {/* Pupils */}
+      <circle cx="24.5" cy="34.5" r="4.5" fill="#1a0800"/>
+      <circle cx="42.5" cy="34.5" r="4.5" fill="#1a0800"/>
+      {/* Iris shine */}
+      <circle cx="23" cy="32" r="1.5" fill="white"/>
+      <circle cx="41" cy="32" r="1.5" fill="white"/>
+      {/* Tiny extra glint */}
+      <circle cx="26" cy="36" r="0.7" fill="white" opacity="0.6"/>
+      <circle cx="44" cy="36" r="0.7" fill="white" opacity="0.6"/>
+      {/* Happy smile */}
+      <path d="M22,46 Q32,55 42,46" stroke="#5a2800" strokeWidth="2.8" strokeLinecap="round" fill="none"/>
+      {/* Rosy cheeks */}
+      <ellipse cx="15" cy="40" rx="4.5" ry="3" fill="#e06030" opacity="0.38"/>
+      <ellipse cx="49" cy="40" rx="4.5" ry="3" fill="#e06030" opacity="0.38"/>
+      {/* Little arms */}
+      <ellipse cx="10" cy="44" rx="4" ry="3" fill="#8b5a10" transform="rotate(-20 10 44)"/>
+      <ellipse cx="54" cy="44" rx="4" ry="3" fill="#8b5a10" transform="rotate(20 54 44)"/>
     </svg>
   );
 }
@@ -299,47 +325,47 @@ const ZONES = [
   {
     id: 'amber',
     icon: <IconAmber />,
+    img: null,
     label: "Amber's Mountain",
     hint: 'Play Crystal Rush',
     bg: 'linear-gradient(160deg, #b078d8 0%, #7030a0 100%)',
     border: '#c090e0',
-    glow: 'rgba(160,80,220,0.45)',
   },
   {
     id: 'dragon',
     icon: <IconDragon />,
+    img: null,
     label: "Dragon's Town",
     hint: 'Make your Poo Poo Face',
     bg: 'linear-gradient(160deg, #a030b0 0%, #4a0058 100%)',
     border: '#c050d0',
-    glow: 'rgba(160,40,180,0.45)',
   },
   {
     id: 'books',
-    icon: <IconBooks />,
+    icon: null,
+    img: '/images/zones/bookshelf.png',
     label: 'The Bookshelf',
     hint: 'Find your next read',
     bg: 'linear-gradient(160deg, #ffcc55 0%, #e07800 100%)',
     border: '#ffaa30',
-    glow: 'rgba(255,160,0,0.45)',
   },
   {
     id: 'coloring',
-    icon: <IconColoring />,
+    icon: null,
+    img: '/images/zones/coloring-meadow.png',
     label: 'Coloring Meadow',
     hint: 'Free printable pages',
     bg: 'linear-gradient(160deg, #50d8b8 0%, #007060 100%)',
     border: '#20c090',
-    glow: 'rgba(0,180,140,0.45)',
   },
   {
     id: 'campfire',
-    icon: <IconCampfire />,
+    icon: null,
+    img: '/images/zones/campfire.png',
     label: 'The Campfire',
     hint: 'Join the family',
     bg: 'linear-gradient(160deg, #9020a0 0%, #1e0028 100%)',
     border: '#b040c8',
-    glow: 'rgba(120,0,160,0.45)',
   },
 ];
 
@@ -379,17 +405,17 @@ function AdventureMap() {
               cursor: 'pointer', outline: 'none',
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
               minWidth: '108px', maxWidth: '124px',
-              boxShadow: `0 5px 20px ${z.glow}, 0 2px 6px rgba(0,0,0,0.15)`,
+              boxShadow: '0 4px 18px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.15)',
               transition: 'transform 0.18s cubic-bezier(.175,.885,.32,1.275), box-shadow 0.18s ease',
               animation: `popIn 0.45s ease-out ${i * 90}ms both`,
             }}
             onMouseEnter={e => {
               (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.08) translateY(-4px)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 14px 36px ${z.glow}, 0 4px 12px rgba(0,0,0,0.2)`;
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 14px 36px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2)';
             }}
             onMouseLeave={e => {
               (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 5px 20px ${z.glow}, 0 2px 6px rgba(0,0,0,0.15)`;
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 18px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.15)';
             }}
           >
             {/* Illustration */}
@@ -398,7 +424,10 @@ function AdventureMap() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))',
             }}>
-              {z.icon}
+              {z.img ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={z.img} alt={z.label} style={{ width: 54, height: 54, objectFit: 'cover', borderRadius: '10px' }} />
+              ) : z.icon}
             </div>
             <span style={{
               fontFamily: FF, color: '#ffffff',
