@@ -44,7 +44,7 @@ export default function PooFaceCamera() {
     setVideoReady(false);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 640 } },
         audio: false,
       });
       streamRef.current = stream;
@@ -77,8 +77,12 @@ export default function PooFaceCamera() {
   const capture = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
-    const w = video.videoWidth  || video.clientWidth  || 640;
-    const h = video.videoHeight || video.clientHeight || 480;
+    const rawW = video.videoWidth  || video.clientWidth  || 640;
+    const rawH = video.videoHeight || video.clientHeight || 480;
+    // Scale down to max 640px wide to keep base64 small enough for the API
+    const scale = Math.min(1, 640 / rawW);
+    const w = Math.round(rawW * scale);
+    const h = Math.round(rawH * scale);
     if (w === 0 || h === 0) {
       setError('Camera still warming up — try again in a moment.');
       return;
@@ -90,7 +94,7 @@ export default function PooFaceCamera() {
     ctx.translate(w, 0);
     ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0, w, h);
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
     // Quick sanity: a valid image has >1KB of data
     if (dataUrl.length < 1500) {
       setError('Got a blank frame — wait a moment and try again.');
@@ -151,7 +155,8 @@ export default function PooFaceCamera() {
       });
       const data = await res.json();
       if (!res.ok || !data.requestId) {
-        setError(data.error || 'Failed to start. Try again!');
+        const msg = data.error || 'Failed to start. Try again!';
+        setError(msg.length > 120 ? msg.slice(0, 120) + '…' : msg);
         setStage('preview');
         return;
       }
