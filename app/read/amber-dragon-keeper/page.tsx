@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -80,6 +80,8 @@ const PAGES = [
   },
 ];
 
+const FLIP_MS = 600;
+
 // ── Animated dragon sparkle overlay ───────────────────────────────────────
 function DragonSparkle() {
   return (
@@ -113,7 +115,12 @@ function DragonSparkle() {
 export default function AmberReaderPage() {
   const [started, setStarted] = useState(false);
   const [pageIdx, setPageIdx] = useState(0);
-  const [flipping, setFlipping] = useState<'forward' | 'back' | null>(null);
+  // flipState: null = idle, otherwise page is mid-turn
+  const [flipState, setFlipState] = useState<{
+    dir: 'forward' | 'back';
+    fromIdx: number;
+    toIdx: number;
+  } | null>(null);
   const [audioStatus, setAudioStatus] = useState<'idle' | 'loading' | 'playing'>('idle');
   const [autoPlay, setAutoPlay] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -156,25 +163,28 @@ export default function AmberReaderPage() {
   }, [pageIdx, started]); // eslint-disable-line
 
   // ── Page turn ─────────────────────────────────────────────────────────
-  const goNext = useCallback(() => {
-    if (pageIdx >= total - 1 || flipping) return;
+
+  const goNext= useCallback(() => {
+    if (pageIdx >= total - 1 || flipState) return;
     stopAudio();
-    setFlipping('forward');
+    const toIdx = pageIdx + 1;
+    setFlipState({ dir: 'forward', fromIdx: pageIdx, toIdx });
     setTimeout(() => {
-      setPageIdx(i => i + 1);
-      setFlipping(null);
-    }, 380);
-  }, [pageIdx, total, flipping, stopAudio]);
+      setPageIdx(toIdx);
+      setFlipState(null);
+    }, FLIP_MS);
+  }, [pageIdx, total, flipState, stopAudio]);
 
   const goPrev = useCallback(() => {
-    if (pageIdx <= 0 || flipping) return;
+    if (pageIdx <= 0 || flipState) return;
     stopAudio();
-    setFlipping('back');
+    const toIdx = pageIdx - 1;
+    setFlipState({ dir: 'back', fromIdx: pageIdx, toIdx });
     setTimeout(() => {
-      setPageIdx(i => i - 1);
-      setFlipping(null);
-    }, 380);
-  }, [pageIdx, flipping, stopAudio]);
+      setPageIdx(toIdx);
+      setFlipState(null);
+    }, FLIP_MS);
+  }, [pageIdx, flipState, stopAudio]);
 
   // Keyboard nav
   useEffect(() => {
@@ -350,7 +360,7 @@ export default function AmberReaderPage() {
         </span>
       </div>
 
-      {/* Page spread */}
+      {/* Page spread — real page turn */}
       <div
         style={{
           flex: 1,
@@ -359,58 +369,106 @@ export default function AmberReaderPage() {
           justifyContent: 'center',
           position: 'relative',
           cursor: 'pointer',
-          perspective: '1200px',
           padding: '8px',
           minHeight: 0,
+          overflow: 'hidden',
         }}
         onClick={goNext}
       >
-        {/* Page flip container */}
-        <div style={{
-          position: 'relative',
-          maxWidth: '100%',
-          maxHeight: '100%',
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          transformStyle: 'preserve-3d',
-          animation: flipping === 'forward'
-            ? 'flipForward 0.38s ease-in-out'
-            : flipping === 'back'
-              ? 'flipBack 0.38s ease-in-out'
-              : 'none',
-        }}>
-          <Image
-            src={current.img}
-            alt={`Page ${pageIdx + 1}`}
-            width={1800}
-            height={900}
-            priority={pageIdx < 3}
-            style={{
-              maxWidth: '100%',
-              maxHeight: 'calc(100dvh - 160px)',
-              objectFit: 'contain',
-              borderRadius: 8,
-              boxShadow: '0 8px 40px rgba(0,0,0,0.8)',
-            }}
-          />
-          {audioStatus === 'playing' && <DragonSparkle />}
-        </div>
+        {/* ── Shared image style ─────────────────────────────────────── */}
+        {(() => {
+          const imgStyle: CSSProperties = {
+            maxWidth: '100%',
+            maxHeight: 'calc(100dvh - 160px)',
+            objectFit: 'contain',
+            borderRadius: 8,
+            display: 'block',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.8)',
+            userSelect: 'none',
+            pointerEvents: 'none',
+          };
 
-        <style>{`
-          @keyframes flipForward {
-            0%   { transform: rotateY(0deg); opacity: 1; }
-            45%  { transform: rotateY(-90deg); opacity: 0.3; }
-            55%  { transform: rotateY(90deg); opacity: 0.3; }
-            100% { transform: rotateY(0deg); opacity: 1; }
+          if (!flipState) {
+            // ── Static: just show current page ──────────────────────────
+            return (
+              <div style={{ position: 'relative' }}>
+                <Image
+                  src={current.img}
+                  alt={`Page ${pageIdx + 1}`}
+                  width={1800} height={900}
+                  priority={pageIdx < 3}
+                  style={imgStyle}
+                />
+                {audioStatus === 'playing' && <DragonSparkle />}
+              </div>
+            );
           }
-          @keyframes flipBack {
-            0%   { transform: rotateY(0deg); opacity: 1; }
-            45%  { transform: rotateY(90deg); opacity: 0.3; }
-            55%  { transform: rotateY(-90deg); opacity: 0.3; }
-            100% { transform: rotateY(0deg); opacity: 1; }
-          }
-        `}</style>
+
+          // ── Flipping: two-layer page turn ──────────────────────────────
+          const incomingImg = PAGES[flipState.toIdx].img;
+          const outgoingImg = PAGES[flipState.fromIdx].img;
+          const isForward = flipState.dir === 'forward';
+
+          return (
+            <div style={{ position: 'relative', display: 'inline-flex', justifyContent: 'center' }}>
+              {/* Layer 1 (bottom): incoming page */}
+              <Image
+                src={incomingImg}
+                alt={`Page ${flipState.toIdx + 1}`}
+                width={1800} height={900}
+                priority
+                style={{ ...imgStyle, display: 'block' }}
+              />
+
+              {/* Layer 2 (top): outgoing page folding away */}
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                transformStyle: 'preserve-3d',
+                transformOrigin: isForward ? 'left center' : 'right center',
+                animation: isForward
+                  ? `pageTurnForward ${FLIP_MS}ms cubic-bezier(0.645, 0.045, 0.355, 1.000) forwards`
+                  : `pageTurnBack ${FLIP_MS}ms cubic-bezier(0.645, 0.045, 0.355, 1.000) forwards`,
+                perspective: '1800px',
+              }}>
+                <Image
+                  src={outgoingImg}
+                  alt={`Page ${flipState.fromIdx + 1}`}
+                  width={1800} height={900}
+                  style={{ ...imgStyle, width: '100%', height: '100%', objectFit: 'contain' }}
+                />
+                {/* Shadow gradient that darkens as the page folds */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: 8,
+                  background: isForward
+                    ? 'linear-gradient(to left, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.55) 100%)'
+                    : 'linear-gradient(to right, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.55) 100%)',
+                  animation: `pageShadow ${FLIP_MS}ms ease-in forwards`,
+                  pointerEvents: 'none',
+                }} />
+              </div>
+
+              <style>{`
+                @keyframes pageTurnForward {
+                  0%   { transform: perspective(1800px) rotateY(0deg); }
+                  100% { transform: perspective(1800px) rotateY(-180deg); }
+                }
+                @keyframes pageTurnBack {
+                  0%   { transform: perspective(1800px) rotateY(0deg); }
+                  100% { transform: perspective(1800px) rotateY(180deg); }
+                }
+                @keyframes pageShadow {
+                  0%   { opacity: 0; }
+                  40%  { opacity: 1; }
+                  80%  { opacity: 0.6; }
+                  100% { opacity: 0; }
+                }
+              `}</style>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Bottom controls */}
@@ -449,7 +507,15 @@ export default function AmberReaderPage() {
             {PAGES.map((_, i) => (
               <button
                 key={i}
-                onClick={(e) => { e.stopPropagation(); if (i !== pageIdx) { stopAudio(); setFlipping(i > pageIdx ? 'forward' : 'back'); setTimeout(() => { setPageIdx(i); setFlipping(null); }, 380); } }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (i !== pageIdx && !flipState) {
+                    stopAudio();
+                    const dir = i > pageIdx ? 'forward' : 'back';
+                    setFlipState({ dir, fromIdx: pageIdx, toIdx: i });
+                    setTimeout(() => { setPageIdx(i); setFlipState(null); }, 600);
+                  }
+                }}
                 aria-label={`Go to page ${i + 1}`}
                 style={{
                   width: i === pageIdx ? 18 : 8,
