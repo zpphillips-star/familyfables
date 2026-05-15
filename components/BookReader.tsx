@@ -526,45 +526,51 @@ export default function BookReader({
         .book-reader__start-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(10, 10, 10, 0.92);
+          background: rgba(6, 6, 10, 0.94);
           display: flex;
           align-items: center;
           justify-content: center;
           z-index: 100;
-          backdrop-filter: blur(8px);
+          backdrop-filter: blur(12px);
         }
 
         .book-reader__start-card {
           text-align: center;
           padding: 2.5rem 2rem;
-          max-width: 380px;
+          max-width: 360px;
           width: 90%;
         }
 
         .book-reader__start-icon {
-          font-size: 4rem;
-          margin-bottom: 1rem;
-          animation: float 3s ease-in-out infinite;
+          font-size: 5.5rem;
+          margin-bottom: 1.25rem;
+          display: inline-block;
+          animation: float 3.5s ease-in-out infinite;
+          /* soft glow behind only the emoji — the single color pop */
+          filter: drop-shadow(0 0 28px rgba(167, 139, 250, 0.55));
         }
 
         @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-12px) scale(1.04); }
         }
 
         .book-reader__start-card h1 {
           font-family: var(--font-concert-one), sans-serif;
           color: #fff;
-          font-size: 1.6rem;
-          margin: 0 0 0.5rem;
+          font-size: 1.65rem;
+          margin: 0 0 0.4rem;
           line-height: 1.2;
+          letter-spacing: -0.01em;
         }
 
         .book-reader__start-card p {
-          color: rgba(255,255,255,0.6);
-          font-size: 0.9rem;
-          margin: 0 0 2rem;
+          color: rgba(255,255,255,0.4);
+          font-size: 0.85rem;
+          margin: 0 0 2.25rem;
           font-family: var(--font-open-sans), sans-serif;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
         }
 
         .book-reader__start-btn {
@@ -572,27 +578,33 @@ export default function BookReader({
           width: 100%;
           padding: 0.9rem 1.5rem;
           border-radius: 50px;
-          border: none;
           font-family: var(--font-concert-one), sans-serif;
-          font-size: 1.1rem;
+          font-size: 1.05rem;
           cursor: pointer;
-          margin-bottom: 0.75rem;
-          transition: transform 0.15s, box-shadow 0.15s;
-          background: #7c3aed;
-          color: #fff;
+          margin-bottom: 0.7rem;
+          transition: transform 0.15s, opacity 0.15s;
+          /* Primary: clean white — no competing color */
+          background: rgba(255, 255, 255, 0.95);
+          color: #111;
+          border: none;
         }
 
         .book-reader__start-btn:hover {
-          transform: scale(1.03);
-          box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+          transform: scale(1.02);
+          opacity: 0.92;
         }
 
         .book-reader__start-btn--secondary {
-          background: #0ea5e9;
+          background: transparent;
+          color: rgba(255, 255, 255, 0.7);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          font-size: 1rem;
         }
 
         .book-reader__start-btn--secondary:hover {
-          box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
+          border-color: rgba(255, 255, 255, 0.45);
+          color: #fff;
+          opacity: 1;
         }
 
         /* Tap zones */
@@ -688,7 +700,8 @@ export default function BookReader({
         }
 
         .book-reader__btn--active {
-          background: rgba(124, 58, 237, 0.7);
+          background: rgba(255, 255, 255, 0.35);
+          box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
         }
 
         .book-reader__btn--close {
