@@ -389,26 +389,163 @@ const MAP_STOPS: MapStop[] = landDefs.map((l) => ({
 
 // Land-specific decorations
 function LandDecorations({ index }: { index: number }) {
-  if (index === 1) return <Stars count={25} color="rgba(200,180,255,0.7)" />;
-  if (index === 2) return <Stars count={8} color="rgba(255,150,200,0.5)" />;
-  if (index === 5) return <Leaves count={14} />;
-  if (index === 6) return <Pumpkins />;
-  if (index === 12) {
-    return (
-      <>
-        {["👻", "🕸️", "🌙", "⭐", "🦇"].map((e, i) => (
-          <span key={i} aria-hidden="true" style={{
-            position: "absolute",
-            left: `${[6, 88, 22, 76, 50][i]}%`,
-            top: `${[20, 15, 78, 60, 40][i]}%`,
-            fontSize: `${20 + i * 6}px`,
-            opacity: 0.2,
-            animation: `adventureFloat ${3 + i * 0.7}s ease-in-out infinite ${i * 0.4}s`,
-          }}>{e}</span>
-        ))}
-      </>
-    );
-  }
+  // 1. Dream Ideas Land — bedtime, moons, floating stars, drifting clouds
+  if (index === 1) return (
+    <>
+      <Stars count={22} color="rgba(200,180,255,0.65)" />
+      <span aria-hidden="true" style={{position:"absolute",top:"8%",left:"4%",fontSize:34,opacity:0.72,animation:"adventureFloat 4.5s ease-in-out infinite"}}>🌙</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"22%",right:"5%",fontSize:28,opacity:0.62,animation:"adventureFloat 5.5s ease-in-out infinite 1.2s"}}>🌙</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"14%",right:"6%",fontSize:20,opacity:0.55,animation:"twinkle 3s ease-in-out infinite 0.5s"}}>⭐</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"55%",left:"3%",fontSize:16,opacity:0.5,animation:"twinkle 3.8s ease-in-out infinite 1.4s"}}>💫</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"14%",left:"7%",fontSize:22,opacity:0.42,animation:"driftFloat 7s ease-in-out infinite 2s"}}>☁️</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"38%",right:"4%",fontSize:18,opacity:0.4,animation:"driftFloat 6s ease-in-out infinite 0.8s"}}>☁️</span>
+    </>
+  );
+
+  // 2. Dragon Mountain — fire sparks, crystal gems, sword
+  if (index === 2) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"9%",left:"4%",fontSize:30,opacity:0.72,animation:"adventureFloat 3.2s ease-in-out infinite"}}>🔥</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"45%",right:"3%",fontSize:20,opacity:0.6,animation:"adventureFloat 2.8s ease-in-out infinite 0.7s"}}>🔥</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"20%",right:"6%",fontSize:26,opacity:0.7,animation:"adventureFloat 4.5s ease-in-out infinite 0.5s"}}>💎</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"22%",left:"5%",fontSize:22,opacity:0.65,animation:"adventureFloat 5s ease-in-out infinite 1.2s"}}>💎</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"32%",right:"6%",fontSize:28,opacity:0.55,animation:"adventureFloat 6s ease-in-out infinite 0.3s"}}>💎</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"62%",left:"3%",fontSize:16,opacity:0.45,animation:"twinkle 3s ease-in-out infinite 0.8s"}}>✨</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"10%",right:"10%",fontSize:20,opacity:0.5,animation:"adventureFloat 4s ease-in-out infinite 1.8s"}}>⚔️</span>
+    </>
+  );
+
+  // 3. Poo Poo Face Town — silly poop, tiny toilets, rainbow
+  if (index === 3) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"9%",left:"5%",fontSize:30,opacity:0.7,animation:"adventureFloat 3.2s ease-in-out infinite"}}>💩</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"32%",right:"4%",fontSize:24,opacity:0.6,animation:"adventureFloat 4.5s ease-in-out infinite 0.8s"}}>💩</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"18%",right:"4%",fontSize:22,opacity:0.5,animation:"adventureFloat 5s ease-in-out infinite 2s"}}>💩</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"28%",left:"4%",fontSize:32,opacity:0.55,animation:"adventureFloat 5.5s ease-in-out infinite 1s"}}>🌈</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"32%",right:"6%",fontSize:22,opacity:0.65,animation:"adventureFloat 3.5s ease-in-out infinite 0.3s"}}>🚽</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"56%",left:"3%",fontSize:18,opacity:0.48,animation:"adventureFloat 4s ease-in-out infinite 1.6s"}}>🚽</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"16%",right:"9%",fontSize:18,opacity:0.5,animation:"twinkle 2.8s ease-in-out infinite 0.5s"}}>⭐</span>
+    </>
+  );
+
+  // 4. Hampton's Quest Meadow — balloons floating up, confetti, stars
+  if (index === 4) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"7%",left:"5%",fontSize:28,opacity:0.72,animation:"floatUp 4s ease-in-out infinite"}}>🎈</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"14%",right:"6%",fontSize:24,opacity:0.65,animation:"floatUp 5.5s ease-in-out infinite 0.9s"}}>🎈</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"32%",left:"3%",fontSize:20,opacity:0.55,animation:"floatUp 3.8s ease-in-out infinite 1.6s"}}>🎈</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"26%",right:"5%",fontSize:24,opacity:0.6,animation:"adventureFloat 4s ease-in-out infinite 0.4s"}}>🎊</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"14%",left:"6%",fontSize:20,opacity:0.5,animation:"twinkle 3s ease-in-out infinite 1s"}}>⭐</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"52%",right:"3%",fontSize:18,opacity:0.45,animation:"adventureFloat 5s ease-in-out infinite 2s"}}>🎁</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"68%",left:"4%",fontSize:20,opacity:0.5,animation:"twinkle 2.6s ease-in-out infinite 0.4s"}}>✨</span>
+    </>
+  );
+
+  // 5. Gilroy's Harvest Forest — autumn leaves, turkey feathers
+  if (index === 5) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"8%",right:"5%",fontSize:28,opacity:0.7,animation:"leafSpin 4.5s ease-in-out infinite"}}>🍂</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"22%",left:"4%",fontSize:24,opacity:0.62,animation:"leafSpin 5.5s ease-in-out infinite 0.6s"}}>🍁</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"26%",right:"5%",fontSize:22,opacity:0.55,animation:"leafSpin 3.8s ease-in-out infinite 1.2s"}}>🍂</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"44%",right:"3%",fontSize:20,opacity:0.5,animation:"adventureFloat 6s ease-in-out infinite 1.5s"}}>🦃</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"14%",left:"5%",fontSize:22,opacity:0.5,animation:"leafSpin 4.2s ease-in-out infinite 2s"}}>🍁</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"62%",left:"3%",fontSize:16,opacity:0.45,animation:"adventureFloat 5s ease-in-out infinite 0.8s"}}>🍂</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"12%",left:"8%",fontSize:18,opacity:0.42,animation:"leafSpin 3.2s ease-in-out infinite 1.2s"}}>🌿</span>
+    </>
+  );
+
+  // 6. The Lumpiest Pumpkin Patch — pumpkins, autumn leaves, cobwebs
+  if (index === 6) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"9%",left:"5%",fontSize:32,opacity:0.68,animation:"adventureFloat 4.2s ease-in-out infinite"}}>🎃</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"22%",right:"5%",fontSize:26,opacity:0.62,animation:"adventureFloat 5.5s ease-in-out infinite 0.8s"}}>🎃</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"20%",left:"4%",fontSize:20,opacity:0.55,animation:"leafSpin 3.8s ease-in-out infinite 1s"}}>🍂</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"50%",right:"3%",fontSize:18,opacity:0.5,animation:"leafSpin 4.5s ease-in-out infinite 0.5s"}}>🍁</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"4%",right:"3%",fontSize:18,opacity:0.45}}>🕸️</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"4%",left:"2%",fontSize:16,opacity:0.38}}>🕸️</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"66%",left:"3%",fontSize:26,opacity:0.48,animation:"adventureFloat 5.8s ease-in-out infinite 1.8s"}}>🎃</span>
+    </>
+  );
+
+  // 7. Ollie's Cozy Corner — paw prints, yarn balls, cat faces
+  if (index === 7) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"11%",left:"4%",fontSize:26,opacity:0.68,animation:"adventureFloat 4s ease-in-out infinite"}}>🐾</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"36%",right:"5%",fontSize:22,opacity:0.62,animation:"adventureFloat 5.2s ease-in-out infinite 0.7s"}}>🐾</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"58%",left:"3%",fontSize:18,opacity:0.5,animation:"adventureFloat 6s ease-in-out infinite 1.4s"}}>🐾</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"22%",left:"5%",fontSize:30,opacity:0.6,animation:"yarnBounce 2.2s ease-in-out infinite 0.3s"}}>🧶</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"18%",right:"3%",fontSize:18,opacity:0.42,animation:"yarnBounce 2.6s ease-in-out infinite 0.8s"}}>🧶</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"28%",right:"4%",fontSize:24,opacity:0.55,animation:"adventureFloat 3.8s ease-in-out infinite 1s"}}>🐱</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"12%",right:"6%",fontSize:20,opacity:0.48,animation:"adventureFloat 5s ease-in-out infinite 2s"}}>🐱</span>
+    </>
+  );
+
+  // 8. Shut-In Button Land — colorful buttons of different sizes spinning slowly
+  if (index === 8) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"10%",left:"4%",fontSize:28,opacity:0.72,animation:"spinSlow 8s linear infinite"}}>🔵</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"26%",right:"5%",fontSize:22,opacity:0.68,animation:"spinSlow 6s linear infinite 1s"}}>🔴</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"26%",left:"5%",fontSize:30,opacity:0.62,animation:"spinSlow 10s linear infinite 2s"}}>🟡</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"14%",right:"4%",fontSize:24,opacity:0.58,animation:"spinSlow 7s linear infinite 0.5s"}}>🟢</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"50%",right:"3%",fontSize:18,opacity:0.52,animation:"spinSlow 5s linear infinite 1.5s"}}>🔵</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"66%",left:"3%",fontSize:20,opacity:0.48,animation:"spinSlow 9s linear infinite 3s"}}>🔴</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"16%",left:"8%",fontSize:16,opacity:0.42,animation:"adventureFloat 4s ease-in-out infinite 0.7s"}}>🪡</span>
+    </>
+  );
+
+  // 9. Doodle-Do's Barnyard — sunrise, roosters, sunflowers
+  if (index === 9) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"7%",right:"5%",fontSize:34,opacity:0.68,animation:"adventureFloat 5s ease-in-out infinite"}}>☀️</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"26%",left:"4%",fontSize:26,opacity:0.62,animation:"adventureFloat 4.5s ease-in-out infinite 0.8s"}}>🌅</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"26%",right:"5%",fontSize:22,opacity:0.6,animation:"adventureFloat 3.8s ease-in-out infinite 1.2s"}}>🐓</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"50%",right:"3%",fontSize:18,opacity:0.48,animation:"twinkle 3s ease-in-out infinite 0.5s"}}>✨</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"14%",left:"5%",fontSize:24,opacity:0.52,animation:"adventureFloat 6.5s ease-in-out infinite 1.5s"}}>🌾</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"66%",left:"3%",fontSize:20,opacity:0.44,animation:"adventureFloat 4.2s ease-in-out infinite 2s"}}>🌻</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"16%",left:"7%",fontSize:16,opacity:0.42,animation:"twinkle 2.8s ease-in-out infinite 0.3s"}}>⭐</span>
+    </>
+  );
+
+  // 10. Tom Turkey's Harvest Parade — corn, maple leaves, turkey feathers
+  if (index === 10) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"10%",left:"4%",fontSize:28,opacity:0.68,animation:"leafSpin 5.2s ease-in-out infinite"}}>🍁</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"22%",right:"5%",fontSize:26,opacity:0.65,animation:"adventureFloat 4.5s ease-in-out infinite 0.5s"}}>🌽</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"26%",left:"5%",fontSize:22,opacity:0.58,animation:"leafSpin 3.8s ease-in-out infinite 1s"}}>🍁</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"14%",right:"4%",fontSize:24,opacity:0.52,animation:"adventureFloat 5.5s ease-in-out infinite 1.5s"}}>🦃</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"50%",right:"3%",fontSize:20,opacity:0.48,animation:"leafSpin 4.2s ease-in-out infinite 0.8s"}}>🍂</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"66%",left:"3%",fontSize:18,opacity:0.42,animation:"adventureFloat 6s ease-in-out infinite 2s"}}>🌽</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"12%",right:"8%",fontSize:16,opacity:0.4,animation:"leafSpin 3.2s ease-in-out infinite 1.2s"}}>🍁</span>
+    </>
+  );
+
+  // 11. Bailey's Frog Dream — lily pad frogs, water drops, green reeds
+  if (index === 11) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"10%",left:"4%",fontSize:30,opacity:0.68,animation:"adventureFloat 4.2s ease-in-out infinite"}}>🐸</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"28%",right:"4%",fontSize:24,opacity:0.62,animation:"adventureFloat 5.8s ease-in-out infinite 0.9s"}}>🐸</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"28%",right:"5%",fontSize:22,opacity:0.62,animation:"waterDrop 2.8s ease-in-out infinite 0.3s"}}>💧</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"56%",left:"3%",fontSize:18,opacity:0.5,animation:"waterDrop 3.5s ease-in-out infinite 1s"}}>💧</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"18%",left:"5%",fontSize:26,opacity:0.58,animation:"adventureFloat 3.8s ease-in-out infinite 1.2s"}}>🌿</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"12%",right:"6%",fontSize:24,opacity:0.5,animation:"adventureFloat 5.5s ease-in-out infinite 0.6s"}}>🌿</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"18%",right:"3%",fontSize:18,opacity:0.42,animation:"waterDrop 4s ease-in-out infinite 2s"}}>🌊</span>
+    </>
+  );
+
+  // 12. Brian's Haunted House — bobbing ghosts, bats, cobwebs, candles
+  if (index === 12) return (
+    <>
+      <span aria-hidden="true" style={{position:"absolute",top:"11%",left:"5%",fontSize:34,opacity:0.78,animation:"ghostFloat 3.8s ease-in-out infinite"}}>👻</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"40%",right:"6%",fontSize:28,opacity:0.68,animation:"ghostFloat 4.8s ease-in-out infinite 1.1s"}}>👻</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"62%",left:"3%",fontSize:20,opacity:0.55,animation:"ghostFloat 6s ease-in-out infinite 2s"}}>👻</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"20%",right:"4%",fontSize:22,opacity:0.58,animation:"batFly 2.6s ease-in-out infinite"}}>🦇</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"26%",left:"4%",fontSize:20,opacity:0.52,animation:"batFly 3.2s ease-in-out infinite 0.6s"}}>🦇</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"4%",right:"3%",fontSize:18,opacity:0.48}}>🕸️</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"4%",left:"2%",fontSize:16,opacity:0.42}}>🕸️</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"16%",right:"5%",fontSize:20,opacity:0.55,animation:"adventureFloat 5s ease-in-out infinite 1.5s"}}>🕯️</span>
+    </>
+  );
+
   return null;
 }
 
@@ -437,6 +574,45 @@ export default function AdventurelandPage() {
         @keyframes twinkle {
           0%, 100% { opacity: 0.2; transform: scale(0.8); }
           50%       { opacity: 1;   transform: scale(1.3); }
+        }
+        @keyframes floatUp {
+          0%, 100% { transform: translateY(0px) rotate(-3deg); }
+          50%       { transform: translateY(-28px) rotate(3deg); }
+        }
+        @keyframes leafSpin {
+          0%   { transform: rotate(0deg)  translateY(0px); }
+          25%  { transform: rotate(18deg) translateY(-8px); }
+          75%  { transform: rotate(-12deg) translateY(-14px); }
+          100% { transform: rotate(0deg)  translateY(0px); }
+        }
+        @keyframes spinSlow {
+          0%   { transform: rotate(0deg)   scale(1); }
+          50%  { transform: rotate(180deg) scale(1.1); }
+          100% { transform: rotate(360deg) scale(1); }
+        }
+        @keyframes yarnBounce {
+          0%, 100% { transform: translateY(0)    scale(1); }
+          30%       { transform: translateY(-14px) scale(1.1); }
+          60%       { transform: translateY(-5px)  scale(0.95); }
+        }
+        @keyframes ghostFloat {
+          0%, 100% { transform: translateY(0)    rotate(-5deg) scale(1); }
+          50%       { transform: translateY(-22px) rotate(5deg)  scale(1.08); }
+        }
+        @keyframes batFly {
+          0%   { transform: translateX(0)    translateY(0); }
+          25%  { transform: translateX(22px) translateY(-14px); }
+          75%  { transform: translateX(-15px) translateY(-8px); }
+          100% { transform: translateX(0)    translateY(0); }
+        }
+        @keyframes driftFloat {
+          0%, 100% { transform: translateX(0)    translateY(0); }
+          33%       { transform: translateX(18px) translateY(-10px); }
+          66%       { transform: translateX(-12px) translateY(-6px); }
+        }
+        @keyframes waterDrop {
+          0%, 100% { transform: translateY(0)    scale(1);    opacity: 0.5; }
+          50%       { transform: translateY(12px) scale(0.85); opacity: 0.8; }
         }
         .adventure-btn:hover {
           transform: translateY(-2px) scale(1.04) !important;
