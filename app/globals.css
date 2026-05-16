@@ -798,9 +798,20 @@ section     { overflow-x: hidden; }
     padding: 10px 16px !important;
   }
 
-  /* Milestone path markers — hide on mobile (land index shown in text) */
+  /* Milestone path markers — slim & centered on mobile */
   .adventure-milestone-wrap {
-    display: none !important;
+    display: flex !important;
+    width: 32px !important;
+    min-width: 32px !important;
+    flex-shrink: 0 !important;
+  }
+  .adventure-milestone-line {
+    border-left-width: 2px !important;
+  }
+  .adventure-milestone-number {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.7rem !important;
   }
 
   /* Dividers — 40px instead of 100–120px */
