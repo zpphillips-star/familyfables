@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import AdventureLand, { AdventureLandProps } from "@/components/AdventureLand";
+import AdventurePath from "@/components/AdventurePath";
 import MapDrawer, { MapStop } from "@/components/MapDrawer";
 import { AMAZON_STORE_URL } from "@/lib/books";
 
@@ -456,8 +457,17 @@ export default function AdventurelandPage() {
         }
       `}</style>
 
-      {/* ═══ HERO — Welcome to Adventureland ═══════════════════════════════ */}
-      <section
+      {/*
+       * ── Scrolling adventure map wrapper ────────────────────────────────
+       * position:relative lets AdventurePath (position:absolute) fill it.
+       * overflow-x:hidden prevents the path edges causing horizontal scroll.
+       */}
+      <div style={{ position: "relative", overflowX: "hidden" }}>
+        {/* ── The winding golden road behind all content ─────────────── */}
+        <AdventurePath />
+
+        {/* ═══ HERO — Welcome to Adventureland ═══════════════════════ */}
+        <section
         ref={heroRef}
         className="adventure-hero-section"
         style={{
@@ -677,6 +687,8 @@ export default function AdventurelandPage() {
           </a>
         </div>
       </section>
+
+      </div>{/* end adventure-map-wrapper */}
 
       {/* ═══ FLOATING MAP DRAWER ══════════════════════════════════════════════ */}
       <MapDrawer stops={MAP_STOPS} />
