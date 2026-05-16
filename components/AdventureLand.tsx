@@ -197,21 +197,7 @@ export default function AdventureLand({
         }}
         aria-hidden="true"
       >
-        {/* Continuous dotted line — full height of section */}
-        <div
-          className="adventure-milestone-line"
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            left: "50%",
-            width: 0,
-            borderLeft: "3px dotted rgba(255,255,255,0.4)",
-            transform: "translateX(-50%)",
-            zIndex: 0,
-          }}
-        />
-        {/* Numbered circle — sits on top of the line */}
+        {/* Numbered circle — the SVG AdventurePath trails through/under this */}
         <div
           className="adventure-milestone-number"
           style={{

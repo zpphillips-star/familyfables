@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import AdventureLand, { AdventureLandProps } from "@/components/AdventureLand";
+import AdventurePath from "@/components/AdventurePath";
 import MapDrawer, { MapStop } from "@/components/MapDrawer";
 import { AMAZON_STORE_URL } from "@/lib/books";
 
@@ -457,9 +458,12 @@ export default function AdventurelandPage() {
       {/*
        * ── Scrolling adventure map wrapper ────────────────────────────────
        * overflow-x:hidden prevents milestone column edges causing horizontal scroll.
-       * Each AdventureLand now carries its own full-height dotted milestone line.
+       * AdventurePath renders the squiggly SVG trail behind all content.
        */}
       <div style={{ position: "relative", overflowX: "hidden" }}>
+
+        {/* ── Squiggly adventure trail — behind sections, threading through badges ── */}
+        <AdventurePath landCount={12} />
 
         {/* ═══ HERO — Welcome to Adventureland ═══════════════════════ */}
         <section
