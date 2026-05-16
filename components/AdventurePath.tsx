@@ -30,9 +30,8 @@ export default function AdventurePath({ landCount = 12 }: { landCount?: number }
   //  container overflow, but the interesting deviation stays on-screen.
   //
   const d = [
-    // ── Entry: drop straight down the left side to Badge 1 ─────────────
-    `M ${L},50`,
-    `L ${L},${by(1)}`,
+    // ── Start exactly at Badge 1 ────────────────────────────────────────
+    `M ${L},${by(1)}`,
 
     // ── 1 → 2 : BIG SWEEPING RIGHT ARC ─────────────────────────────────
     // Like a parenthesis ")" hugging the right side of the page.

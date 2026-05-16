@@ -203,22 +203,26 @@ export default function AdventureLand({
           style={{
             position: "relative",
             zIndex: 1,
-            width: 44,
+            width: "auto",
+            minWidth: 44,
             height: 44,
-            borderRadius: "50%",
+            borderRadius: 22,
+            padding: "0 10px",
             backgroundColor: accentColor,
             border: "3px solid rgba(255,255,255,0.85)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: 16,
+            fontSize: 11,
             fontWeight: 900,
             color: "#fff",
             boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
             fontFamily: "var(--font-concert-one), 'Concert One', cursive",
+            whiteSpace: "nowrap",
+            letterSpacing: "0.02em",
           }}
         >
-          {index}
+          Land {index}
         </div>
       </div>
 
