@@ -36,10 +36,10 @@ export interface AdventureLandProps {
 }
 
 /**
- * Ribbon divider — sits exactly at the section seam (bottom: 0 of the section,
- * SVG overflows upward into the current section and the fill bleeds into the
- * next section via overflow:visible on the parent section).
- * Both the top edge AND the bottom edge are curved — no straight lines.
+ * Ribbon dividers — positioned at bottom:-80px so they straddle the seam
+ * between two sections (80px into current section, 80px into next).
+ * The seam sits at y=80 in the 160px viewBox.
+ * Both top AND bottom edges are curved — ribbon is ~50-60px thick.
  */
 function HillDivider({ fill }: { fill: string }) {
   return (
@@ -47,36 +47,31 @@ function HillDivider({ fill }: { fill: string }) {
       className="adventure-divider-wrap"
       style={{
         position: "absolute",
-        bottom: 0,
+        bottom: -80,
         left: 0,
         width: "100%",
         height: 160,
         pointerEvents: "none",
         zIndex: 4,
-        overflow: "visible",
       }}
     >
-      {/* viewBox 0 0 1440 160: section seam is at y=80 (midpoint).
-          Top curve dips into current section (y ≈ 20-60).
-          Bottom curve dips into next section (y ≈ 100-145).
-          No path ever touches y=0 or y=160 exactly → both edges stay organic. */}
       <svg
         viewBox="0 0 1440 160"
         preserveAspectRatio="none"
-        style={{ width: "100%", height: "200px", display: "block", position: "absolute", bottom: 0 }}
+        style={{ width: "100%", height: "100%", display: "block" }}
         aria-hidden="true"
       >
-        {/* Shadow/depth layer */}
+        {/* Shadow layer — offset slightly */}
         <path
-          d="M0,45 C180,5 360,75 540,35 C720,0 900,60 1080,25 C1260,0 1380,45 1440,30
-             L1440,115 C1260,150 1080,100 900,135 C720,165 540,110 360,148 C200,175 80,130 0,155 Z"
+          d="M0,48 C200,28 420,65 660,40 C900,18 1150,58 1440,35
+             L1440,98 C1150,118 900,85 660,108 C420,128 200,98 0,115 Z"
           fill={fill}
           fillOpacity="0.35"
         />
-        {/* Main ribbon */}
+        {/* Main ribbon — ~55px thick, centered on seam (y=80) */}
         <path
-          d="M0,58 C200,15 420,88 660,42 C900,0 1150,70 1440,38
-             L1440,128 C1200,165 960,105 720,148 C480,180 240,118 0,148 Z"
+          d="M0,58 C200,38 420,72 660,48 C900,28 1150,68 1440,45
+             L1440,108 C1200,128 960,98 720,120 C480,140 200,110 0,124 Z"
           fill={fill}
         />
       </svg>
@@ -90,30 +85,29 @@ function WaveDivider({ fill }: { fill: string }) {
       className="adventure-divider-wrap"
       style={{
         position: "absolute",
-        bottom: 0,
+        bottom: -80,
         left: 0,
         width: "100%",
         height: 160,
         pointerEvents: "none",
         zIndex: 4,
-        overflow: "visible",
       }}
     >
       <svg
         viewBox="0 0 1440 160"
         preserveAspectRatio="none"
-        style={{ width: "100%", height: "200px", display: "block", position: "absolute", bottom: 0 }}
+        style={{ width: "100%", height: "100%", display: "block" }}
         aria-hidden="true"
       >
         <path
-          d="M0,50 C180,10 360,90 540,45 C720,5 900,80 1080,40 C1260,5 1380,55 1440,35
-             L1440,120 C1260,155 1080,95 900,135 C720,170 540,105 360,150 C180,180 80,125 0,150 Z"
+          d="M0,46 C180,26 360,72 540,44 C720,20 900,66 1080,40 C1260,18 1380,58 1440,40
+             L1440,102 C1260,122 1080,96 900,118 C720,138 540,106 360,130 C180,150 60,120 0,130 Z"
           fill={fill}
           fillOpacity="0.35"
         />
         <path
-          d="M0,62 C240,15 480,100 720,52 C960,8 1200,85 1440,45
-             L1440,135 C1200,170 960,108 720,150 C480,180 240,115 0,158 Z"
+          d="M0,55 C180,32 360,82 540,54 C720,28 900,76 1080,50 C1260,28 1380,68 1440,50
+             L1440,112 C1260,132 1080,106 900,128 C720,148 540,116 360,140 C180,160 60,128 0,140 Z"
           fill={fill}
         />
       </svg>
@@ -127,30 +121,29 @@ function SlopeDivider({ fill }: { fill: string }) {
       className="adventure-divider-wrap"
       style={{
         position: "absolute",
-        bottom: 0,
+        bottom: -80,
         left: 0,
         width: "100%",
         height: 160,
         pointerEvents: "none",
         zIndex: 4,
-        overflow: "visible",
       }}
     >
       <svg
         viewBox="0 0 1440 160"
         preserveAspectRatio="none"
-        style={{ width: "100%", height: "200px", display: "block", position: "absolute", bottom: 0 }}
+        style={{ width: "100%", height: "100%", display: "block" }}
         aria-hidden="true"
       >
         <path
-          d="M0,40 Q240,5 480,55 Q720,100 960,35 Q1200,0 1440,50
-             L1440,120 Q1200,155 960,110 Q720,165 480,120 Q240,80 0,130 Z"
+          d="M0,48 Q360,22 720,55 Q1080,85 1440,42
+             L1440,102 Q1080,140 720,110 Q360,80 0,108 Z"
           fill={fill}
           fillOpacity="0.35"
         />
         <path
-          d="M0,55 Q240,15 480,70 Q720,115 960,50 Q1200,10 1440,65
-             L1440,138 Q1200,165 960,125 Q720,175 480,135 Q240,100 0,148 Z"
+          d="M0,58 Q360,32 720,65 Q1080,95 1440,52
+             L1440,114 Q1080,150 720,120 Q360,90 0,120 Z"
           fill={fill}
         />
       </svg>
@@ -198,7 +191,6 @@ export default function AdventureLand({
         overflow: "visible",
         display: "flex",
         flexDirection: "column",
-        paddingBottom: 120, // space for the ribbon divider overlap
       }}
     >
       {/* ── Milestone marker (continuous dotted path node) ──────────── */}
