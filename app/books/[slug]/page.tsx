@@ -392,14 +392,10 @@ export default async function BookPage({
                 fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
               }}
             >
-              Snuggle up — the full story is ready to read aloud, with every page illustrated just as it appears in the book. 📖✨
+              Snuggle up — the full story is ready to read aloud. Tap a page to hear it read to you, flip through at your own pace, or let it play automatically! 📖✨
             </p>
             <Link
-              href={
-                book.slug === "amber-the-dragon-keeper"
-                  ? "/read/amber-dragon-keeper"
-                  : "/read/poo-poo-face"
-              }
+              href={`/read/${book.id}`}
               className="book-cta-btn"
               style={{
                 display: "inline-flex",
