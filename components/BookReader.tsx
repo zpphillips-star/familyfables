@@ -29,6 +29,7 @@ export default function BookReader({
   const [showControls, setShowControls] = useState(true);
   const [audioSupported, setAudioSupported] = useState(false);
   const [showStartOverlay, setShowStartOverlay] = useState(true);
+  const [mapOpen, setMapOpen] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
@@ -446,6 +447,32 @@ export default function BookReader({
         </div>
       )}
 
+      {/* ── Persistent adventure map nav — always visible on land pages ── */}
+      {!showStartOverlay && (
+        <div style={{ position: 'absolute', bottom: 80, left: 12, zIndex: 30, pointerEvents: 'auto' }}>
+          <button
+            className="book-reader__map-btn"
+            onClick={() => setMapOpen(o => !o)}
+            aria-label="Open adventure map navigation"
+            aria-expanded={mapOpen}
+          >
+            🗺️ Map
+          </button>
+          {mapOpen && (
+            <div className="book-reader__map-overlay" role="navigation" aria-label="Adventure map">
+              <p className="book-reader__map-heading">Adventure Map</p>
+              <a href="/"           className="book-reader__map-link">🏠 Adventure Hub</a>
+              <a href="/#amber"     className="book-reader__map-link">🐉 Amber&apos;s Mountain</a>
+              <a href="/#dragon"    className="book-reader__map-link">🏙️ Dragon&apos;s Town</a>
+              <a href="/#books"     className="book-reader__map-link">📚 The Bookshelf</a>
+              <a href="/#coloring"  className="book-reader__map-link">🎨 Coloring Meadow</a>
+              <a href="/#campfire"  className="book-reader__map-link">🪵 The Campfire</a>
+              <a href="/books"      className="book-reader__map-link" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: 6, paddingTop: 10 }}>🏪 All Books</a>
+            </div>
+          )}
+        </div>
+      )}
+
       <style jsx global>{`
         .book-reader {
           position: fixed;
@@ -764,6 +791,77 @@ export default function BookReader({
         .book-reader__dot--active {
           background: #fff;
           transform: scale(1.35);
+        }
+
+        /* ── Adventure map nav ─────────────────────────────── */
+        .book-reader__map-btn {
+          background: rgba(255,156,26,0.88);
+          border: none;
+          border-radius: 999px;
+          padding: 8px 14px;
+          font-size: 0.82rem;
+          color: #fff;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          font-family: var(--font-concert-one), sans-serif;
+          transition: background 0.2s, transform 0.15s;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+          backdrop-filter: blur(4px);
+          letter-spacing: 0.02em;
+        }
+        .book-reader__map-btn:hover {
+          background: rgba(255,156,26,1);
+          transform: scale(1.06);
+        }
+
+        .book-reader__map-overlay {
+          position: absolute;
+          bottom: 50px;
+          left: 0;
+          background: rgba(10,10,10,0.93);
+          border-radius: 16px;
+          padding: 14px 10px;
+          backdrop-filter: blur(14px);
+          border: 1px solid rgba(255,255,255,0.12);
+          min-width: 210px;
+          animation: popIn 0.22s ease-out both;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        .book-reader__map-heading {
+          color: #ff9c1a;
+          font-family: var(--font-concert-one), sans-serif;
+          font-size: 0.82rem;
+          margin: 0 0 8px;
+          padding: 0 8px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          opacity: 0.9;
+        }
+
+        .book-reader__map-link {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 10px;
+          border-radius: 10px;
+          text-decoration: none;
+          color: rgba(255,255,255,0.92);
+          font-family: var(--font-concert-one), sans-serif;
+          font-size: 0.88rem;
+          transition: background 0.15s;
+          white-space: nowrap;
+        }
+        .book-reader__map-link:hover {
+          background: rgba(255,255,255,0.1);
+          color: #fff;
+        }
+
+        /* ── Improve subtitle contrast in start overlay ────── */
+        .book-reader__start-card p {
+          color: rgba(255,255,255,0.8);
         }
       `}</style>
     </div>

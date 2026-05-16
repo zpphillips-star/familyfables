@@ -1190,6 +1190,7 @@ function ZoneBookshelf() {
                   amazonUrl={AMAZON_STORE_URL}
                   accentColor={book.accentColor}
                   tag={book.tag}
+                  readUrl={book.readUrl}
                 />
               </div>
             ))}
@@ -1202,6 +1203,15 @@ function ZoneBookshelf() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* ── Journey path: dashed trail connecting book 1 → last, all breakpoints ── */}
+        <div aria-hidden style={{
+          display: 'flex', alignItems: 'center', padding: '6px 44px 0',
+        }}>
+          <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#ff9c1a', opacity: 0.65, flexShrink: 0, display: 'block' }} />
+          <div style={{ flex: 1, borderTop: '3px dashed rgba(255,156,26,0.5)' }} />
+          <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#ff9c1a', opacity: 0.65, flexShrink: 0, display: 'block' }} />
         </div>
 
         <Reveal delay={150} style={{ textAlign: 'center', marginTop: '40px' }}>

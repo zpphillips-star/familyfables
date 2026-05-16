@@ -10,6 +10,8 @@ export interface Book {
   hook: string;
   perfectFor: string;
   moods?: string[];
+  /** Path to this book's interactive land / reader page, if one exists. */
+  readUrl?: string;
 }
 
 export const AMAZON_STORE_URL = "https://www.amazon.com/stores/page/1DEB841F-05B8-46B0-A42E-55B618C36B12?ingress=3";
@@ -17,6 +19,7 @@ export const AMAZON_STORE_URL = "https://www.amazon.com/stores/page/1DEB841F-05B
 export const books: Book[] = [
   {
     id: "poo-poo-face",
+    readUrl: "/read/poo-poo-face",
     title: "What's Your Poo Poo Face",
     description:
       "Spoiler: EVERYONE makes the face. Even unicorns. Even dragons. Even your teacher (especially your teacher). A little boy and his dad go on a heroic quest to uncover the one expression that unites all living things — and yes, it's exactly what you think. Perfect for: fans of Dragons Love Tacos, We Don't Eat Our Classmates.",
@@ -44,6 +47,7 @@ export const books: Book[] = [
   },
   {
     id: "amber-dragon-keeper",
+    readUrl: "/read/amber-dragon-keeper",
     title: "Amber The Dragon Keeper",
     description:
       "She thought she was just a regular kid. The dragons had other plans. When Amber stumbles into a magical land, she discovers a destiny that's way cooler than anything on her schedule — and way more responsibility than she signed up for. Perfect for: fans of Where the Wild Things Are, The Bad Guys.",

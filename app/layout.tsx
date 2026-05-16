@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     template: "%s | Family Fables",
   },
   description:
-    "Family Fables publishes joyful, whimsical children\u2019s books that bring families together. Founded by Z.P. Phillips to honor the creative legacy of Victor Plotkin.",
+    "Family Fables publishes joyful, whimsical children\u2019s books that bring families together — stories that warm little hearts and spark big imaginations.",
   keywords: [
     "children\u2019s books",
     "family books",

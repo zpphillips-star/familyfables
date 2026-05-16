@@ -24,7 +24,7 @@ export default function Footer() {
               <p className="text-sm leading-relaxed" style={{ color: "#009380" }}>
                 Stories that warm little hearts and spark big imaginations.
               </p>
-              <p className="text-xs mt-3" style={{ color: "#006e59" }}>Founded by Z.P. Phillips</p>
+
             </div>
 
             {/* Quick Links */}
@@ -62,15 +62,15 @@ export default function Footer() {
               >
                 Shop
               </h3>
-              <p className="text-sm mb-4" style={{ color: "#009380" }}>All books available on Amazon.</p>
+              <p className="text-sm mb-2" style={{ color: "#009380" }}>All books available on Amazon.</p>
               <a
                 href={AMAZON_STORE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-5 py-2 rounded text-sm font-bold transition-transform hover:scale-105"
-                style={{ backgroundColor: "#ff9c1a", color: "#ffffff" }}
+                className="text-sm transition-colors hover:opacity-75"
+                style={{ color: "#006e59", textDecoration: "underline" }}
               >
-                Browse All Books
+                Shop on Amazon →
               </a>
             </div>
           </div>

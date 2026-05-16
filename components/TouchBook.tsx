@@ -11,6 +11,7 @@ export interface TouchBookProps {
   amazonUrl: string;
   accentColor?: string;
   tag?: string;
+  readUrl?: string;
 }
 
 type TtsStatus = 'idle' | 'loading' | 'playing';
@@ -23,6 +24,7 @@ export default function TouchBook({
   amazonUrl,
   accentColor = '#9B6FD0',
   tag,
+  readUrl,
 }: TouchBookProps) {
   const [flipped, setFlipped] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -173,6 +175,30 @@ export default function TouchBook({
             >
               {isTouchDevice ? 'tap or swipe to open' : 'hover to open'}
             </div>
+
+            {/* Read land-page link — only for books with a reader */}
+            {readUrl && (
+              <a
+                href={readUrl}
+                onClick={e => e.stopPropagation()}
+                className="absolute bottom-7 right-2"
+                style={{
+                  background: 'rgba(124,58,237,0.9)',
+                  color: 'white',
+                  padding: '4px 10px',
+                  borderRadius: '8px',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                  zIndex: 5,
+                  display: 'inline-block',
+                  lineHeight: 1.4,
+                }}
+                aria-label={`Read ${title}`}
+              >
+                📖 Read
+              </a>
+            )}
           </div>
 
           <div className="p-4 bg-white">
