@@ -180,50 +180,7 @@ export default function AdventureLand({
        * one unbroken dotted thread from Land 1 to Land 12.
        * Hidden on mobile via globals.css (.adventure-milestone-wrap display:none).
        */}
-      <div
-        className="adventure-milestone-wrap"
-        style={{
-          position: "absolute",
-          top: "clamp(16px, 3vh, 36px)",
-          [isEven ? "right" : "left"]: "clamp(8px, 3vw, 48px)",
-          zIndex: 5,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          pointerEvents: "none",
-          width: "auto",
-        }}
-        aria-hidden="true"
-      >
-        {/* Numbered circle — the SVG AdventurePath trails through/under this */}
-        <div
-          className="adventure-milestone-number"
-          style={{
-            position: "relative",
-            zIndex: 1,
-            width: "auto",
-            minWidth: 44,
-            height: 44,
-            borderRadius: 22,
-            padding: "0 10px",
-            backgroundColor: accentColor,
-            border: "3px solid rgba(255,255,255,0.85)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 11,
-            fontWeight: 900,
-            color: "#fff",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
-            fontFamily: "var(--font-concert-one), 'Concert One', cursive",
-            whiteSpace: "nowrap",
-            letterSpacing: "0.02em",
-          }}
-        >
-          Land {index}
-        </div>
-      </div>
+      {/* Colored badge removed — "Land #" label lives inline with the title */}
 
       {/* ── Decorations ─────────────────────────────────────────────── */}
       {decorations && (
@@ -316,11 +273,12 @@ export default function AdventureLand({
             style={{
               fontSize: "clamp(13px, 1.5vw, 16px)",
               fontWeight: 700,
-              color: "rgba(255,255,255,0.75)",
+              color: textColor,
               textTransform: "uppercase",
               letterSpacing: "0.1em",
               marginBottom: 6,
               fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
+              opacity: 0.85,
             }}
           >
             {emoji} Land {index}
