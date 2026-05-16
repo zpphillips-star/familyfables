@@ -24,6 +24,8 @@ export interface Book {
   gradient: string;
   /** The land name used on the homepage adventure map */
   landName: string;
+  /** Emoji representing this land */
+  landEmoji: string;
   /** 1-based index matching the homepage adventure map order (1–12) */
   landIndex: number;
   /** Whether a full read-aloud experience exists for this book */
@@ -37,7 +39,7 @@ export const AMAZON_STORE_URL = "https://www.amazon.com/stores/page/1DEB841F-05B
 export const books: Book[] = [
   {
     id: "poo-poo-face",
-    slug: "whats-your-poo-poo-face",
+    slug: "whats-your-poo-poo-face", landName: "Poo Poo Face Town", landEmoji: "😂",
     title: "What's Your Poo Poo Face",
     description:
       "Spoiler: EVERYONE makes the face. Even unicorns. Even dragons. Even your teacher (especially your teacher). A little boy and his dad go on a heroic quest to uncover the one expression that unites all living things — and yes, it's exactly what you think. Perfect for: fans of Dragons Love Tacos, We Don't Eat Our Classmates.",
@@ -55,13 +57,12 @@ export const books: Book[] = [
     moods: ['silly'],
     themes: ["😂 Potty Training", "👨‍👧 Parent-Child Bond", "🤣 Laugh-Out-Loud"],
     gradient: "linear-gradient(150deg, #fff3e0 0%, #ffe08a 30%, #ffb3c6 70%, #ff8fab 100%)",
-    landName: "Poo Poo Face Town",
-    landIndex: 3,
+        landIndex: 3,
     hasReadAloud: true,
   },
   {
     id: "dream-ideas",
-    slug: "dream-ideas",
+    slug: "dream-ideas", landName: "Dream Ideas Land", landEmoji: "🌙",
     title: "Dream Ideas",
     description:
       "Warning: may cause extremely vivid dreams about ice cream, rocket ships, and talking animals. This bedtime singalong is the sneakiest way to get kids excited about sleep — set to a tune so catchy it'll be stuck in your head until Thursday. Perfect for: fans of Llama Llama Red Pajama, Goodnight Moon.",
@@ -78,13 +79,12 @@ export const books: Book[] = [
     moods: ['bedtime', 'read-aloud'],
     themes: ["🌙 Bedtime", "🎵 Singalong", "💡 Imagination"],
     gradient: "linear-gradient(160deg, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 100%)",
-    landName: "Dream Ideas Land",
-    landIndex: 1,
+        landIndex: 1,
     hasReadAloud: true,
   },
   {
     id: "amber-dragon-keeper",
-    slug: "amber-the-dragon-keeper",
+    slug: "amber-the-dragon-keeper", landName: "Dragon Mountain", landEmoji: "🐉",
     title: "Amber The Dragon Keeper",
     description:
       "She thought she was just a regular kid. The dragons had other plans. When Amber stumbles into a magical land, she discovers a destiny that's way cooler than anything on her schedule — and way more responsibility than she signed up for. Perfect for: fans of Where the Wild Things Are, The Bad Guys.",
@@ -101,13 +101,12 @@ export const books: Book[] = [
     moods: ['feel-good'],
     themes: ["🐉 Adventure", "✨ Magic", "💪 Courage"],
     gradient: "linear-gradient(155deg, #2d0a3a 0%, #5a1060 30%, #8b1a6b 60%, #c0394a 100%)",
-    landName: "Dragon Mountain",
-    landIndex: 2,
+        landIndex: 2,
     hasReadAloud: true,
   },
   {
     id: "gilroys-gobble",
-    slug: "gilroys-gobble",
+    slug: "gilroys-gobble", landName: "Gilroy's Harvest Forest", landEmoji: "🦃",
     title: "Gilroy's Gobble",
     description:
       "Everyone said 'gobble.' Gilroy had... different ideas. This sweet turkey and his barnyard crew are on a mission to find Gilroy's signature sound — and what they discover is that the best voice is the one that's truly yours. Perfect for: fans of Pete the Cat, Elephant & Piggie.",
@@ -124,13 +123,12 @@ export const books: Book[] = [
     moods: ['feel-good'],
     themes: ["🦃 Confidence", "🎶 Be Yourself", "❤️ Feel-Good"],
     gradient: "linear-gradient(150deg, #fff8e1 0%, #ffcc80 30%, #ffa726 65%, #e65100 100%)",
-    landName: "Gilroy's Harvest Forest",
-    landIndex: 5,
+        landIndex: 5,
     hasReadAloud: true,
   },
   {
     id: "finding-hampton",
-    slug: "finding-hampton",
+    slug: "finding-hampton", landName: "Hampton's Quest Meadow", landEmoji: "🎈",
     title: "Finding Hampton",
     description:
       "What do you get a rhino who has everything? One very stressed hippo friend, that's what. Hampton is on a mission to find the most perfect birthday gift ever — which turns out to be a whole lot harder (and funnier) than it sounds. Perfect for: fans of Dragons Love Tacos, Elephant & Piggie.",
@@ -147,13 +145,12 @@ export const books: Book[] = [
     moods: ['feel-good'],
     themes: ["🎁 Friendship", "💚 Giving", "🤩 Heartwarming"],
     gradient: "linear-gradient(155deg, #e8f5e9 0%, #a5d6a7 30%, #66bb6a 60%, #43a047 100%)",
-    landName: "Hampton's Quest Meadow",
-    landIndex: 4,
+        landIndex: 4,
     hasReadAloud: true,
   },
   {
     id: "lumpiest-pumpkin",
-    slug: "the-lumpiest-pumpkin",
+    slug: "the-lumpiest-pumpkin", landName: "The Lumpiest Pumpkin Patch", landEmoji: "🎃",
     title: "The Lumpiest Pumpkin",
     description:
       "The other pumpkins were round, smooth, and competition-ready. This one was... personality-forward. When a girl picks the lumpiest pumpkin in the patch for a carving contest, she learns that the most beautiful things are the ones nobody else wanted. Perfect for: fans of The Day the Crayons Quit, Pete the Cat.",
@@ -170,13 +167,12 @@ export const books: Book[] = [
     moods: ['feel-good', 'spooky'],
     themes: ["🎃 Halloween", "🌟 Be Yourself", "🍂 Seasonal"],
     gradient: "linear-gradient(155deg, #3e1a00 0%, #6a2a0a 25%, #bf5600 55%, #ff8c00 80%, #ff6b35 100%)",
-    landName: "The Lumpiest Pumpkin Patch",
-    landIndex: 6,
+        landIndex: 6,
     hasReadAloud: false,
   },
   {
     id: "one-tom-turkey",
-    slug: "one-tom-turkey",
+    slug: "one-tom-turkey", landName: "Tom Turkey's Harvest Parade", landEmoji: "🦃",
     title: "One Tom Turkey",
     description:
       "Sung to the tune of 'Wheels on the Bus' — except now Thanksgiving is permanently stuck in your head. You're welcome. One Tom Turkey takes the whole family through the greatest holiday traditions in a singalong kids will demand every single November. Perfect for: fans of We Don't Eat Our Classmates, Llama Llama Red Pajama.",
@@ -193,13 +189,12 @@ export const books: Book[] = [
     moods: ['read-aloud'],
     themes: ["🦃 Thanksgiving", "🎵 Singalong", "🍁 Holiday"],
     gradient: "linear-gradient(150deg, #fff3e8 0%, #ffccaa 30%, #e08040 60%, #c0560a 100%)",
-    landName: "Tom Turkey's Harvest Parade",
-    landIndex: 10,
+        landIndex: 10,
     hasReadAloud: true,
   },
   {
     id: "ollie-come-home",
-    slug: "ollie-come-home",
+    slug: "ollie-come-home", landName: "Ollie's Cozy Corner", landEmoji: "🐱",
     title: "Ollie Come Home",
     description:
       "Ollie had a warm bed, a loving family, and absolutely zero business going outside. He went outside anyway. This indoor cat's very first adventure is full of wonder, a little fear, and the kind of homecoming that reminds you exactly where you belong. Perfect for: fans of Where the Wild Things Are, Pete the Cat.",
@@ -216,13 +211,12 @@ export const books: Book[] = [
     moods: ['feel-good', 'bedtime'],
     themes: ["🐱 Adventure", "🏡 Home & Family", "💚 Heartwarming"],
     gradient: "linear-gradient(155deg, #1a2a1a 0%, #2d4a20 30%, #4a7c3f 60%, #6db85c 100%)",
-    landName: "Ollie's Cozy Corner",
-    landIndex: 7,
+        landIndex: 7,
     hasReadAloud: true,
   },
   {
     id: "what-a-doodle-do",
-    slug: "what-a-doodle-do",
+    slug: "what-a-doodle-do", landName: "Doodle-Do's Barnyard", landEmoji: "🐓",
     title: "What-a-Doodle-Do",
     description:
       "One very loud rooster. One very packed day. Zero chill. Doodle-Do is here to walk your family through the glorious chaos of daily life in a read-aloud so fun you'll have to do all the voices. Yes, all of them. Don't fight it. Perfect for: fans of Dragons Love Tacos, Dog Man.",
@@ -239,13 +233,12 @@ export const books: Book[] = [
     moods: ['silly', 'read-aloud'],
     themes: ["🐓 Read Aloud", "😂 Silly", "🌅 Morning Routine"],
     gradient: "linear-gradient(155deg, #fff9e6 0%, #ffe57f 30%, #ffca28 60%, #ff8f00 100%)",
-    landName: "Doodle-Do's Barnyard",
-    landIndex: 9,
+        landIndex: 9,
     hasReadAloud: true,
   },
   {
     id: "shut-in-button",
-    slug: "the-shut-in-button",
+    slug: "the-shut-in-button", landName: "Shut-In Button Land", landEmoji: "👆",
     title: "The Shut-In Button",
     description:
       "This button had ONE job and absolutely refused to do it. Most buttons pop off by accident. This one popped off on purpose — because adventure is overrated and staying pristine is a lifestyle. Honestly? Kind of inspiring. A story about comfort zones, tiny acts of bravery, and buttons. Perfect for: fans of The Day the Crayons Quit, Elephant & Piggie.",
@@ -262,13 +255,12 @@ export const books: Book[] = [
     moods: ['feel-good'],
     themes: ["💙 Comfort Zone", "🏠 Cozy", "😌 Relatable"],
     gradient: "linear-gradient(150deg, #e3f0ff 0%, #b3d4f5 30%, #7bb8f0 60%, #4a9de0 100%)",
-    landName: "Shut-In Button Land",
-    landIndex: 8,
+        landIndex: 8,
     hasReadAloud: true,
   },
   {
     id: "frog-a-dog",
-    slug: "frog-a-dog",
+    slug: "frog-a-dog", landName: "Bailey's Frog Dream", landEmoji: "🐸",
     title: "Frog a Dog",
     description:
       "Bailey was a dog. Inside, she was definitely a frog. Her family considered this a phase. Halloween was about to prove everyone wrong in spectacular fashion. A joyful story about being exactly who you are — green, leapy tendencies and all. Perfect for: fans of We Don't Eat Our Classmates, Pete the Cat.",
@@ -285,13 +277,12 @@ export const books: Book[] = [
     moods: ['silly', 'spooky'],
     themes: ["🐸 Halloween", "😂 Silly", "🐶 Be Yourself"],
     gradient: "linear-gradient(155deg, #1a1a3a 0%, #2a3a20 30%, #3a6a2a 60%, #4a9b35 100%)",
-    landName: "Bailey's Frog Dream",
-    landIndex: 11,
+        landIndex: 11,
     hasReadAloud: true,
   },
   {
     id: "brian-the-ghost",
-    slug: "brian-the-ghost",
+    slug: "brian-the-ghost", landName: "Brian's Haunted House", landEmoji: "👻",
     title: "Brian the Ghost",
     description:
       "In the town of St. Germaine, every monster had one job: spook, boo, and scare. Every monster except Brian. While Cleo the mummy and Roman the werewolf were out terrifying the neighborhood, Brian was just... waving. A heartwarming Halloween story about the friendliest ghost around — and why being different is its own kind of magic.",
@@ -307,8 +298,7 @@ export const books: Book[] = [
     moods: ['feel-good', 'spooky'],
     themes: ["👻 Halloween", "💜 Kindness", "🤝 Friendship"],
     gradient: "linear-gradient(155deg, #1a0a2a 0%, #2d1260 35%, #4a1a80 65%, #7b5ea7 100%)",
-    landName: "Brian's Haunted House",
-    landIndex: 12,
+        landIndex: 12,
     hasReadAloud: true,
   },
 ];

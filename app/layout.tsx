@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
+import GlobalMapDrawer from "@/components/GlobalMapDrawer";
 
 // Concert One — the big puffy display font from familyfables.org (h1-h6, titles)
 const concertOne = Concert_One({
@@ -75,6 +76,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col">
         <Navbar />
+        <GlobalMapDrawer />
         <main className="flex-1 page-enter">
           <PageTransition>{children}</PageTransition>
         </main>

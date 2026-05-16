@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import AdventureLand, { AdventureLandProps } from "@/components/AdventureLand";
 import AdventurePath from "@/components/AdventurePath";
-import MapDrawer, { MapStop } from "@/components/MapDrawer";
+
 import { AMAZON_STORE_URL } from "@/lib/books";
 
 // ── Scroll indicator ─────────────────────────────────────────────────────────
@@ -379,13 +379,7 @@ const landDefs: LandDef[] = [
 ];
 
 // Map stops for the drawer
-const MAP_STOPS: MapStop[] = landDefs.map((l) => ({
-  id: l.id,
-  index: l.index,
-  emoji: l.emoji,
-  landName: l.landName,
-  accentColor: l.accentColor,
-}));
+
 
 // Land-specific decorations
 function LandDecorations({ index }: { index: number }) {
@@ -845,7 +839,6 @@ export default function AdventurelandPage() {
       </div>{/* end adventure-map-wrapper */}
 
       {/* ═══ FLOATING MAP DRAWER ══════════════════════════════════════════════ */}
-      <MapDrawer stops={MAP_STOPS} />
     </>
   );
 }
