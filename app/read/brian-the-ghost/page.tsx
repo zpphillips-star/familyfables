@@ -1,81 +1,71 @@
 import type { Metadata } from "next";
-import AmberReader, { ReaderPage } from "@/components/AmberReader";
+import BookReader from "@/components/BookReader";
 
 export const metadata: Metadata = {
   title: "Read: Brian the Ghost | Family Fables",
-  description: "Read along with Brian the Ghost — a heartwarming Halloween story about the friendliest ghost in St. Germaine, by Family Fables!",
+  description:
+    "Read along with Brian the Ghost — the friendliest ghost in St. Germaine, by Family Fables!",
 };
 
-const PAGES: ReaderPage[] = [
-  {
-    text: "At night, in the quiet town of St. Germaine… MONSTERS roamed the streets.",
-  },
-  {
-    text: "There was Roman, a WEREWOLF. There was Cleo, a MUMMY. There was Sir Gregor, a GHOUL. And then, there was BRIAN.",
-  },
-  {
-    text: "BRIAN was a perfectly normal, regular, everyday GHOST. Yet, he was very different in one way.",
-  },
-  {
-    text: "While all the other MONSTERS loved to SPOOK! And BOO! And SCARE! Brian did not.",
-  },
-  {
-    text: "Brian just wanted to read BOOKS, and play GAMES, and watch MOVIES. But more than anything, BRIAN wanted a real-life FRIEND.",
-  },
-  {
-    text: "FRIENDS?! You want to be friends with one of them?! Monsters don't make friends — we make friends! While the other monsters teased him, it occurred to Brian that maybe they were onto something…",
-  },
-  {
-    text: "So, he made plans. Instead of HOWLING, HISSING, or HAUNTING… maybe he could try haunting… NICELY.",
-  },
-  {
-    text: "The first night, Brian went to the Bleecker house. Children love clowns… and surprises! So, he turned into a clown and hid in the toy box. Until…",
-  },
-  {
-    text: "It did not go like he thought.",
-  },
-  {
-    text: "Ok, Brian. Haunt nicely. The next night, he went to the Peterson house, where he noticed the children brushing their teeth.",
-  },
-  {
-    text: "\"Ummm...\" It did not go like he thought. \"MAKE SURE TO FLOSS?!\"",
-  },
-  {
-    text: "Brian had one last plan. His BEST plan! So, on the third night, he went to the Smith's, where the family was cozied up in front of the television. \"I just KNOW this will work!\"",
-  },
-  {
-    text: "It did NOT go like he thought.",
-  },
-  {
-    text: "After three long nights, Brian was out of ideas. So, he went back to the place where he reads BOOKS, plays GAMES, and watches MOVIES… ALONE.",
-  },
-  {
-    text: "\"I LOVE your stuff!\"",
-  },
-  {
-    text: "\"Scare me?! I'm sorry! I didn't mean to scare you. You popped up out of nowhere… What did you expec—\"",
-  },
-  {
-    text: "Oh, now I get it… That's when Brian realized: all the haunting nicely wasn't so nice after all. The shouting. The surprising. The loud noises. HE WAS BEING SCARY! And Brian did not want to be scary. He just wanted to be Brian. Perfectly normal, regular, everyday Brian. And he still very much wanted a friend.",
-  },
-  {
-    text: "And just like that, Brian knew he'd finally found what he wanted most — a real-life friend. And he did it just by BEING HIMSELF.\n\n\"I'm Brian by the way. I'm a ghost.\"\n\"I'm Lucy. I'm a human.\"",
-  },
-  {
-    text: "So, the two new friends laughed and played late into the night in the quiet — well, maybe not so quiet — town of St. Germaine.",
-  },
+// Brian the Ghost — 44-page paperback interior
+// Front matter: pages 1–4 (null) | Story: pages 5–37 | Back matter: pages 38–44 (null)
+// Voice: fable (whimsical/spooky-friendly British storyteller)
+
+const narration: (string | null)[] = [
+  null, // 001 — half-title / blank
+  null, // 002 — title page
+  null, // 003 — copyright
+  null, // 004 — dedication
+  "At night, in the quiet town of St. Germaine… MONSTERS roam the streets.", // 005
+  "There was Cleo, a MATERIALISTIC MUMMY.", // 006
+  "And there was Roman, a WISTFUL WEREWOLF.", // 007
+  "There was Sir Gregor, a GHOULISH… well… GHOUL.", // 008
+  "…and then there was Brian.", // 009
+  "Brian was a perfectly normal, everyday, regular GHOST.", // 010
+  "Yet, Brian was different in one VERY BIG way.", // 011
+  "While all the other monsters of St. Germaine loved to SPOOK! And BOO! And SCARE! Brian did not.", // 012
+  "Brian just wanted to read BOOKS and play GAMES and watch MOVIES.", // 013
+  "But, more than anything, Brian wanted a friend.", // 014
+  '"You want to be friends? With one of them?" laughed the others. "Monsters don\'t make friends."', // 015
+  '"We HAUNT them. We HOWL at them. We HISS at them. We never make friends." But Brian wasn\'t listening…', // 016
+  "Something the ghosts said gave him an idea. What if he haunted nicely? Then someone would surely be his friend.", // 017
+  "So, he made plans to begin the next night.", // 018
+  null, // 019 — illustration spread
+  'The first night, Brian went to the Bleecker house. "Children love clowns," he thought. "And surprises!" So, he turned into a clown and hid in the toy box.', // 020
+  null, // 021 — illustration spread right page
+  "It did not go like he thought.", // 022
+  null, // 023 — full spread right page
+  'The second night, he went to the Peterson house where he spied children washing their faces before bed. "Maybe I can be helpful?" thought Brian.', // 024
+  null, // 025 — illustration right page
+  "It did not go like he thought.", // 026
+  null, // 027 — full spread right page
+  'The third night, Brian had an even better idea. He went to the Smith\'s, where the family was gathered in front of the television. "I just know this will work," he reassured himself.', // 028
+  null, // 029 — illustration right page
+  "It did not go like he thought.", // 030
+  null, // 031 — full spread right page
+  'After three long nights, Brian was out of ideas. So, he went back to the place where he read his books and played his games and watched his movies… and he began to cry. "I just wish I had someone to play with…"', // 032
+  null, // 033 — illustration right page
+  '"I like your stuff!" A little girl named Lucy springs up from behind a pile of books. Brian screams in terror.', // 034
+  null, // 035 — full spread right page
+  '"You scared me! Oh, now I get it." Sheepishly, Brian asked, "What are you doing here?" "I\'m kind of… an explorer!" said the girl. And suddenly, Brian had his best idea yet.', // 036
+  '"I have some books about famous explorers. Do you want to see?" The girl beamed, "I\'m Lucy." "I\'m Brian. I\'m a ghost."', // 037
+  "And so, the two friends played and laughed late into the night in the quiet — well, maybe not so quiet — town of St. Germaine.", // 038
+  null, // 039 — back matter
+  null, // 040 — back matter
+  null, // 041 — back matter
+  null, // 042 — back matter
+  null, // 043 — back matter
+  null, // 044 — back matter
 ];
 
 export default function BrianTheGhostReaderPage() {
   return (
-    <AmberReader
+    <BookReader
+      bookSlug="brian-the-ghost"
       title="Brian the Ghost"
-      emoji="👻"
-      coverImg="/images/books/brian-the-ghost.jpg"
-      pages={PAGES}
-      accentColor="#C9A0FF"
-      buttonColor="#6B3FA0"
-      bgColor="#0d0120"
+      totalPages={44}
+      storyPages={[5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 37, 38]}
+      narration={narration}
     />
   );
 }

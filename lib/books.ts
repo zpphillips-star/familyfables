@@ -230,7 +230,7 @@ export const books: Book[] = [
     themes: ["🐓 Read Aloud", "😂 Silly", "🌅 Morning Routine"],
     gradient: "linear-gradient(155deg, #fff9e6 0%, #ffe57f 30%, #ffca28 60%, #ff8f00 100%)",
     landName: "Doodle-Do's Barnyard",
-    hasReadAloud: false,
+    hasReadAloud: true,
   },
   {
     id: "shut-in-button",
@@ -252,7 +252,7 @@ export const books: Book[] = [
     themes: ["💙 Comfort Zone", "🏠 Cozy", "😌 Relatable"],
     gradient: "linear-gradient(150deg, #e3f0ff 0%, #b3d4f5 30%, #7bb8f0 60%, #4a9de0 100%)",
     landName: "Shut-In Button Land",
-    hasReadAloud: false,
+    hasReadAloud: true,
   },
   {
     id: "frog-a-dog",
@@ -274,7 +274,7 @@ export const books: Book[] = [
     themes: ["🐸 Halloween", "😂 Silly", "🐶 Be Yourself"],
     gradient: "linear-gradient(155deg, #1a1a3a 0%, #2a3a20 30%, #3a6a2a 60%, #4a9b35 100%)",
     landName: "Bailey's Frog Dream",
-    hasReadAloud: false,
+    hasReadAloud: true,
   },
   {
     id: "brian-the-ghost",
