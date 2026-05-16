@@ -724,9 +724,7 @@ section     { overflow-x: hidden; }
     padding: 56px 28px 80px !important;
     gap: 28px !important;
   }
-  .adventure-divider-wrap {
-    height: 60px !important;
-  }
+  .adventure-divider-wrap { height: 80px !important; }
 }
 
 /* ── Mobile: full density treatment ─────────────────────────────── */
@@ -811,8 +809,6 @@ section     { overflow-x: hidden; }
     font-size: 0.7rem !important;
   }
 
-  /* Dividers — 40px instead of 100–120px */
-  .adventure-divider-wrap {
-    height: 40px !important;
-  }
+  /* Dividers — compact on small mobile */
+    .adventure-divider-wrap { height: 60px !important; }
 }
