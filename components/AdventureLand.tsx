@@ -184,16 +184,15 @@ export default function AdventureLand({
         className="adventure-milestone-wrap"
         style={{
           position: "absolute",
-          top: 0,
-          bottom: 0,
+          top: "clamp(16px, 3vh, 36px)",
           [isEven ? "right" : "left"]: "clamp(8px, 3vw, 48px)",
           zIndex: 5,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           pointerEvents: "none",
-          width: 44,
+          width: "auto",
         }}
         aria-hidden="true"
       >

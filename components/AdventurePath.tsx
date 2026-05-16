@@ -20,8 +20,9 @@ export default function AdventurePath({ landCount = 12 }: { landCount?: number }
   const R = 94   // right badge x
 
   // Badge centre coordinates in viewBox space
+  // Badge is at TOP of each section (~top 20% of each 100-unit land block)
   const bx = (n: number) => (n % 2 !== 0 ? L : R)
-  const by = (n: number) => 150 + (n - 1) * 100
+  const by = (n: number) => 108 + (n - 1) * 100
 
   // ── Handcrafted path — every segment has its own character ────────────
   //
