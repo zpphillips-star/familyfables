@@ -459,6 +459,7 @@ export default function AdventurelandPage() {
       {/* ═══ HERO — Welcome to Adventureland ═══════════════════════════════ */}
       <section
         ref={heroRef}
+        className="adventure-hero-section"
         style={{
           position: "relative",
           minHeight: "100vh",
@@ -501,12 +502,15 @@ export default function AdventurelandPage() {
           zIndex: 2,
         }}>
           {/* Logo */}
-          <div style={{
-            width: "clamp(80px, 16vw, 140px)",
-            height: "clamp(80px, 16vw, 140px)",
-            position: "relative",
-            filter: "drop-shadow(0 8px 32px rgba(90,50,200,0.6))",
-          }}>
+          <div
+            className="adventure-hero-logo-wrap"
+            style={{
+              width: "clamp(80px, 16vw, 140px)",
+              height: "clamp(80px, 16vw, 140px)",
+              position: "relative",
+              filter: "drop-shadow(0 8px 32px rgba(90,50,200,0.6))",
+            }}
+          >
             <Image
               src="/images/logo-detail-860.png"
               alt="Family Fables"

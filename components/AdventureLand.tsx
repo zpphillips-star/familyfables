@@ -37,6 +37,7 @@ export interface AdventureLandProps {
 function HillDivider({ fill }: { fill: string }) {
   return (
     <div
+      className="adventure-divider-wrap"
       style={{
         position: "absolute",
         bottom: -2,
@@ -70,6 +71,7 @@ function HillDivider({ fill }: { fill: string }) {
 function WaveDivider({ fill }: { fill: string }) {
   return (
     <div
+      className="adventure-divider-wrap"
       style={{
         position: "absolute",
         bottom: -2,
@@ -103,6 +105,7 @@ function WaveDivider({ fill }: { fill: string }) {
 function SlopeDivider({ fill }: { fill: string }) {
   return (
     <div
+      className="adventure-divider-wrap"
       style={{
         position: "absolute",
         bottom: -2,
@@ -158,6 +161,7 @@ export default function AdventureLand({
   return (
     <section
       id={id}
+      className="adventure-land-section"
       style={{
         position: "relative",
         minHeight: "92vh",
@@ -170,6 +174,7 @@ export default function AdventureLand({
     >
       {/* ── Milestone marker (path node) ────────────────────────────── */}
       <div
+        className="adventure-milestone-wrap"
         style={{
           position: "absolute",
           top: "50%",
@@ -234,6 +239,7 @@ export default function AdventureLand({
 
       {/* ── Main content ────────────────────────────────────────────── */}
       <div
+        className="adventure-land-content"
         style={{
           maxWidth: 1100,
           margin: "0 auto",
@@ -250,12 +256,14 @@ export default function AdventureLand({
       >
         {/* Book cover */}
         <div
+          className="adventure-cover-outer"
           style={{
             flex: "0 0 auto",
             position: "relative",
           }}
         >
           <div
+            className="adventure-book-cover adventure-cover-wrap"
             style={{
               position: "relative",
               width: "clamp(140px, 22vw, 240px)",
@@ -265,7 +273,6 @@ export default function AdventureLand({
               transform: `rotate(${isEven ? "2deg" : "-2deg"})`,
               transition: "transform 0.3s ease, box-shadow 0.3s ease",
             }}
-            className="adventure-book-cover"
           >
             <Image
               src={coverImage}
@@ -280,6 +287,7 @@ export default function AdventureLand({
           {/* Character art — floating beside/behind cover */}
           {characterImage && (
             <div
+              className="adventure-char-wrap"
               style={{
                 position: "absolute",
                 bottom: -20,
@@ -304,7 +312,7 @@ export default function AdventureLand({
         </div>
 
         {/* Text + activities */}
-        <div style={{ flex: "1 1 260px", minWidth: 220 }}>
+        <div className="adventure-land-text" style={{ flex: "1 1 260px", minWidth: 220 }}>
           {/* Land name */}
           <p
             style={{
@@ -321,6 +329,7 @@ export default function AdventureLand({
           </p>
 
           <h2
+            className="adventure-land-title"
             style={{
               fontFamily: "var(--font-concert-one), 'Concert One', cursive",
               fontSize: "clamp(28px, 5vw, 52px)",
@@ -347,6 +356,7 @@ export default function AdventureLand({
 
           {/* Activity buttons */}
           <div
+            className="adventure-land-btns"
             style={{
               display: "flex",
               flexWrap: "wrap",

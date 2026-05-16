@@ -705,3 +705,106 @@ section     { overflow-x: hidden; }
     min-height: 44px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   ADVENTURE MAP — MOBILE & TABLET DENSITY FIXES
+   Breakpoints: mobile ≤639px | tablet 640–1023px
+   Goal: compact, scrollable — same vibe as desktop, just tighter
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Tablet: slightly reduce hero + land padding ─────────────────── */
+@media (max-width: 1023px) and (min-width: 640px) {
+  .adventure-hero-section {
+    padding: 60px 24px 100px !important;
+  }
+  .adventure-land-section {
+    min-height: auto !important;
+  }
+  .adventure-land-content {
+    padding: 56px 28px 80px !important;
+    gap: 28px !important;
+  }
+  .adventure-divider-wrap {
+    height: 60px !important;
+  }
+}
+
+/* ── Mobile: full density treatment ─────────────────────────────── */
+@media (max-width: 639px) {
+
+  /* Hero */
+  .adventure-hero-section {
+    min-height: 60vh !important;
+    padding: 40px 20px 64px !important;
+  }
+  .adventure-hero-logo-wrap {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  /* Land sections — auto height, no forced 92vh */
+  .adventure-land-section {
+    min-height: auto !important;
+  }
+
+  /* Content area — vertical stack, tight padding */
+  .adventure-land-content {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 36px 16px 52px !important;
+    gap: 16px !important;
+  }
+
+  /* Book cover — cap at 180px wide */
+  .adventure-cover-outer {
+    display: flex !important;
+    justify-content: center !important;
+  }
+  .adventure-cover-wrap {
+    width: clamp(120px, 44vw, 180px) !important;
+  }
+
+  /* Character art — hide on mobile (absolute positioning causes overflow) */
+  .adventure-char-wrap {
+    display: none !important;
+  }
+
+  /* Text block — full width, centered */
+  .adventure-land-text {
+    flex: none !important;
+    width: 100% !important;
+    min-width: unset !important;
+    text-align: center !important;
+  }
+
+  /* Land title — clamp to ~1.6rem on very small screens */
+  .adventure-land-title {
+    font-size: clamp(1.4rem, 6vw, 1.8rem) !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Activity buttons — full-width stacked column */
+  .adventure-land-btns {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  .adventure-land-btns a {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+    text-align: center !important;
+    padding: 10px 16px !important;
+  }
+
+  /* Milestone path markers — hide on mobile (land index shown in text) */
+  .adventure-milestone-wrap {
+    display: none !important;
+  }
+
+  /* Dividers — 40px instead of 100–120px */
+  .adventure-divider-wrap {
+    height: 40px !important;
+  }
+}
