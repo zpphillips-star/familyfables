@@ -13,7 +13,7 @@ export default function Footer() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Image src="/images/logo-teal.png" alt="Family Fables" width={36} height={36} />
+                <Image src="/images/logo-detail-860.png" alt="Family Fables" width={44} height={44} />
                 <span
                   className="text-xl"
                   style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", color: "#009380" }}
@@ -100,7 +100,7 @@ export default function Footer() {
       {/* Footer bottom bar — deep purple (matches WP #footer-bottom: #78087c) */}
       <div style={{ backgroundColor: "#78087c" }}>
         <div
-          className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs"
+          className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs footer-bottom-row"
           style={{ color: "#ffffff" }}
         >
           <p>Copyright {new Date().getFullYear()} | Family Fables LLC</p>

@@ -23,7 +23,7 @@ const PAGES = [
   'She taught them to fly and to walk and to swim. She kept them clean from their scaly nose to their scaly toes. And she trained them to control their magical breath of fire and ice!',
   'But her most favorite thing of all the things to do with the dragons was to ride them. Amber and the dragons would spend hours in the skies. Diving, swirling, twirling, and scoobatoobing...',
   '...scoobatoobing was a special move you could only do with the dragons of Sydar.',
-  'All the dragons of Sydar were amazing in their own special way, but Amber did have a favorite. She considered this dragon her best friend in all of Sydar. A majestic dragon with soft blue scales and a golden mane. A dragon named Cinnamon.',
+  'All the dragons of Sydar were amazing in their own special way, but Amber did have a favorite. She considered this dragon her best friend in all of Sydar. He was a majestic dragon with soft blue scales and a golden mane. His name was Cinnamon.',
   'Cinnamon and Amber went on amazing adventures together. They fought off dangerous witches and warlocks, helped villagers build their cottages, and watched over all the creatures of Sydar.',
   "But it wasn't always work for Amber and Cinnamon — they also found a way to have fun. They flew high up above the clouds. They went camping and roasted as many marshmallows as they could fit in their mouths. They created ice lakes for the villagers to skate on and made many, many friends along the way.",
   'This was everyday life in Sydar. But days are still days, and all days come to an end.',
@@ -33,26 +33,43 @@ const PAGES = [
   'Amber, the Dragon Keeper!',
 ];
 
-async function generatePage(idx, text) {
+async function generatePage(idx, text, retries = 3) {
   const filename = `page-${String(idx + 1).padStart(2, '0')}.mp3`;
   const url = `${BASE_URL}/api/tts-amber`;
   console.log(`[${idx + 1}/${PAGES.length}] Generating ${filename}...`);
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text }),
-  });
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
 
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`API error ${res.status}: ${err}`);
+      if (!res.ok) {
+        const err = await res.text();
+        if (attempt < retries) {
+          console.log(`  ⚠️  Attempt ${attempt} failed (${res.status}), retrying in 5s...`);
+          await new Promise(r => setTimeout(r, 5000));
+          continue;
+        }
+        throw new Error(`API error ${res.status}: ${err}`);
+      }
+
+      const buf = await res.arrayBuffer();
+      const outPath = join(OUT_DIR, filename);
+      writeFileSync(outPath, Buffer.from(buf));
+      console.log(`  ✅ ${filename} (${Math.round(buf.byteLength / 1024)}KB)`);
+      return;
+    } catch (e) {
+      if (attempt < retries) {
+        console.log(`  ⚠️  Attempt ${attempt} error: ${e.message}, retrying in 5s...`);
+        await new Promise(r => setTimeout(r, 5000));
+      } else {
+        throw e;
+      }
+    }
   }
-
-  const buf = await res.arrayBuffer();
-  const outPath = join(OUT_DIR, filename);
-  writeFileSync(outPath, Buffer.from(buf));
-  console.log(`  ✅ ${filename} (${Math.round(buf.byteLength / 1024)}KB)`);
 }
 
 console.log(`🐉 Generating Amber narration — nova voice (adventurous female)`);
@@ -61,7 +78,7 @@ console.log('');
 
 for (let i = 0; i < PAGES.length; i++) {
   await generatePage(i, PAGES[i]);
-  await new Promise(r => setTimeout(r, 400)); // rate limit buffer
+  await new Promise(r => setTimeout(r, 600)); // rate limit buffer
 }
 
 console.log('\n✨ All done! Commit public/audio/amber-dragon-keeper/ to the repo.');

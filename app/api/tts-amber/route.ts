@@ -2,7 +2,7 @@
 // Voice: nova — OpenAI's adventurous, energetic female voice
 // Model: tts-1-hd — highest quality
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 export async function POST(request: Request) {
   const { text } = await request.json();
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       model: 'tts-1-hd',
       voice: 'nova',
       input: text,
-      speed: 0.90,
+      speed: 1.0,
     }),
   });
 

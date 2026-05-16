@@ -39,7 +39,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="nav-desktop-links items-center gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -64,7 +64,7 @@ export default function Navbar() {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg transition-colors"
+            className="nav-hamburger p-2 rounded-lg transition-colors"
             style={{ color: "#6B3FA0" }}
             aria-label="Toggle menu"
           >
@@ -96,7 +96,7 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {mobileOpen && (
           <div
-            className="md:hidden py-4 space-y-1 border-t"
+            className="py-3 space-y-1 border-t"
             style={{ borderColor: "#b0e8dc" }}
           >
             {navLinks.map((link) => (
@@ -104,19 +104,19 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="block px-4 py-3 rounded-lg font-semibold transition-colors hover:bg-teal-50"
+                className="nav-mobile-item block hover:bg-teal-50"
                 style={{ color: "#009380" }}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="px-4 pt-2">
+            <div className="px-4 pt-2 pb-2">
               <a
                 href={AMAZON_STORE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-5 py-2 rounded font-bold text-sm shadow"
-                style={{ backgroundColor: "#ff9c1a", color: "#ffffff" }}
+                className="nav-mobile-shop-btn btn-shine shadow"
+                style={{ backgroundColor: "#ff9c1a", color: "#ffffff", display: "flex", textDecoration: "none" }}
               >
                 Shop on Amazon
               </a>
