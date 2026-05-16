@@ -1,50 +1,92 @@
 'use client'
 
 /**
- * AdventurePath — full-page squiggly SVG trail
+ * AdventurePath — full-page creative SVG trail
  *
- * Renders a single <svg> stretched over the entire adventure-map wrapper.
- * The path snakes left↔right, threading through the center of each land's
- * numbered milestone badge (odd lands badge on LEFT, even lands on RIGHT).
+ * Each segment between numbered land badges has a unique visual personality:
+ * arcs, loops, spirals, zigzags, diagonals, and grand sweeps.
+ * The endpoint of every bezier segment lands exactly on the badge centre so
+ * the trail visually passes through every milestone marker.
  *
- * z-index: 2 puts it above section backgrounds (z-index: auto) but the
- * badges themselves (z-index: 5 within their section stacking context) and
- * brighter colors ensure they always read as "in front" of the faint trail.
+ * ViewBox: 0 0 100 1300  (hero=100 units, each land=100 units, 12 lands)
+ * Badge positions — odd lands LEFT (x=6), even lands RIGHT (x=94):
+ *   badgeY(n) = 150 + (n−1)×100
+ *
+ * z-index: 2 → above section backgrounds, below Navbar/FAB (z≥50).
  */
 
 export default function AdventurePath({ landCount = 12 }: { landCount?: number }) {
-  // ── Horizontal badge positions in viewBox x-space (0–100) ──────────────
-  // Milestone column is clamp(8px,3vw,48px) from the edge; badge is 44px wide.
-  // At 1200px desktop: (36+22)/1200*100 ≈ 5%.  At 360px mobile: (8+16)/360*100 ≈ 7%.
-  // Using 6 / 94 gives a good centred average that works across breakpoints.
-  const LEFT = 6;
-  const RIGHT = 94;
+  const L = 6    // left badge x
+  const R = 94   // right badge x
 
-  // ── ViewBox: 0 0 100 1300 ───────────────────────────────────────────────
-  // Hero section  : y=0 … 100  (~100 vh, ≈7.7 % of total)
-  // Land n section: starts at y = 100+(n-1)*100, badge centre at midpoint
-  //   → badge y = 100 + (n-1)*100 + 50 = 150 + (n-1)*100
-  const badgeX = (n: number) => (n % 2 !== 0 ? LEFT : RIGHT)
-  const badgeY = (n: number) => 150 + (n - 1) * 100
+  // Badge centre coordinates in viewBox space
+  const bx = (n: number) => (n % 2 !== 0 ? L : R)
+  const by = (n: number) => 150 + (n - 1) * 100
 
-  // ── Build SVG path ──────────────────────────────────────────────────────
-  // Start at top of page, run straight down to first badge (left side).
-  let d = `M ${LEFT},0 L ${LEFT},${badgeY(1)}`
+  // ── Handcrafted path — every segment has its own character ────────────
+  //
+  //  C x1,y1  x2,y2  ex,ey   = cubic bezier (control-pt-1, control-pt-2, endpoint)
+  //  Control points outside 0–100 x-range are fine: the CURVE is clipped by the
+  //  container overflow, but the interesting deviation stays on-screen.
+  //
+  const d = [
+    // ── Entry: drop straight down the left side to Badge 1 ─────────────
+    `M ${L},50`,
+    `L ${L},${by(1)}`,
 
-  for (let i = 2; i <= landCount; i++) {
-    const x1 = badgeX(i - 1)
-    const y1 = badgeY(i - 1)
-    const x2 = badgeX(i)
-    const y2 = badgeY(i)
-    // Cubic bezier: leave each badge going straight down (CP1 stays at x1),
-    // approach next badge straight from above (CP2 stays at x2).
-    // This creates a clean S-curve that crosses the page centre at the midpoint.
-    const third = Math.round((y2 - y1) / 3) // ≈ 33 units
-    d += ` C ${x1},${y1 + third} ${x2},${y2 - third} ${x2},${y2}`
-  }
+    // ── 1 → 2 : BIG SWEEPING RIGHT ARC ─────────────────────────────────
+    // Like a parenthesis ")" hugging the right side of the page.
+    `C 132,155  132,245  ${R},${by(2)}`,
 
-  // Extend a bit below the last badge to the bottom of the viewBox.
-  d += ` L ${badgeX(landCount)},1300`
+    // ── 2 → 3 : LEFT HOOK LOOP ──────────────────────────────────────────
+    // Shoots wide left past the page edge, curls back to land at badge 3.
+    `C 50,262  -42,292  -28,332`,
+    `C -16,348   0,356  ${L},${by(3)}`,
+
+    // ── 3 → 4 : TIGHT DOUBLE ZIGZAG ─────────────────────────────────────
+    // Two quick S-bends — a snappy left-then-right wriggle.
+    `C  ${L},372  52,382  52,401`,
+    `C  52,422  ${R},432  ${R},${by(4)}`,
+
+    // ── 4 → 5 : WIDE LAZY LEFT CURVE ────────────────────────────────────
+    // A single long bow that drifts well past the left edge.
+    `C ${R},472  -22,528  ${L},${by(5)}`,
+
+    // ── 5 → 6 : LOOSE SPIRAL ────────────────────────────────────────────
+    // Two curves that arc through the page centre — a tightening gyre.
+    `C 60,562  80,600  64,622`,
+    `C 50,642  ${R},645  ${R},${by(6)}`,
+
+    // ── 6 → 7 : TIGHT RIGHT LOOP ────────────────────────────────────────
+    // Rockets right off the page, curls back around, arrives on the left.
+    `C 124,658  124,710  90,726`,
+    `C 66,740   20,748  ${L},${by(7)}`,
+
+    // ── 7 → 8 : LONG CONFIDENT DIAGONAL ────────────────────────────────
+    // Clean crossing from left to right — like a bold stride.
+    `C 28,772  70,828  ${R},${by(8)}`,
+
+    // ── 8 → 9 : WIDE LEFT SWOOPING LOOP ─────────────────────────────────
+    // Sweeps far left, hooks downward, snaps back to badge on left side.
+    `C 50,866  -30,898  -22,937`,
+    `C -14,958   4,956  ${L},${by(9)}`,
+
+    // ── 9 → 10 : RELAXED GENTLE S-CURVE ────────────────────────────────
+    // Unhurried left-to-right classic S.
+    `C ${L},978  ${R},1022  ${R},${by(10)}`,
+
+    // ── 10 → 11 : OVERSIZED RIGHT BALLOON LOOP ──────────────────────────
+    // Balloons way out to the right before arcing back left to badge 11.
+    `C 136,1062  136,1140  50,1148`,
+    `C  12,1150   ${L},1152  ${L},${by(11)}`,
+
+    // ── 11 → 12 : GRAND FINALE — FULL-WIDTH LEFT SWEEP ──────────────────
+    // One dramatic arc that crosses the full width from far-left to badge 12.
+    `C -38,1162  -38,1238  ${R},${by(12)}`,
+
+    // Trail fades off the bottom of the page
+    `L ${R},1300`,
+  ].join(' ')
 
   return (
     <svg
@@ -56,13 +98,10 @@ export default function AdventurePath({ landCount = 12 }: { landCount?: number }
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
-        // Positive z-index keeps the trail above section backgrounds
-        // (sections are position:relative with no explicit z-index → z-index:auto)
-        // while remaining below the Navbar and MapDrawer FAB (both z-index 50+).
         zIndex: 2,
+        overflow: 'visible',
       }}
       viewBox="0 0 100 1300"
-      // Non-uniform scaling so the path covers the exact page width & height.
       preserveAspectRatio="none"
     >
       <path
@@ -72,7 +111,6 @@ export default function AdventurePath({ landCount = 12 }: { landCount?: number }
         strokeDasharray="12 8"
         strokeLinecap="round"
         fill="none"
-        // Keep stroke-width in screen pixels regardless of viewBox scaling.
         vectorEffect="non-scaling-stroke"
         style={{ filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.12))' }}
       />
