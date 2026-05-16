@@ -24,6 +24,8 @@ export interface Book {
   gradient: string;
   /** The land name used on the homepage adventure map */
   landName: string;
+  /** 1-based index matching the homepage adventure map order (1–12) */
+  landIndex: number;
   /** Whether a full read-aloud experience exists for this book */
   hasReadAloud: boolean;
   /** Direct Amazon link (falls back to AMAZON_STORE_URL if not set) */
@@ -54,6 +56,7 @@ export const books: Book[] = [
     themes: ["😂 Potty Training", "👨‍👧 Parent-Child Bond", "🤣 Laugh-Out-Loud"],
     gradient: "linear-gradient(150deg, #fff3e0 0%, #ffe08a 30%, #ffb3c6 70%, #ff8fab 100%)",
     landName: "Poo Poo Face Town",
+    landIndex: 3,
     hasReadAloud: true,
   },
   {
@@ -76,6 +79,7 @@ export const books: Book[] = [
     themes: ["🌙 Bedtime", "🎵 Singalong", "💡 Imagination"],
     gradient: "linear-gradient(160deg, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 100%)",
     landName: "Dream Ideas Land",
+    landIndex: 1,
     hasReadAloud: true,
   },
   {
@@ -98,6 +102,7 @@ export const books: Book[] = [
     themes: ["🐉 Adventure", "✨ Magic", "💪 Courage"],
     gradient: "linear-gradient(155deg, #2d0a3a 0%, #5a1060 30%, #8b1a6b 60%, #c0394a 100%)",
     landName: "Dragon Mountain",
+    landIndex: 2,
     hasReadAloud: true,
   },
   {
@@ -120,6 +125,7 @@ export const books: Book[] = [
     themes: ["🦃 Confidence", "🎶 Be Yourself", "❤️ Feel-Good"],
     gradient: "linear-gradient(150deg, #fff8e1 0%, #ffcc80 30%, #ffa726 65%, #e65100 100%)",
     landName: "Gilroy's Harvest Forest",
+    landIndex: 5,
     hasReadAloud: true,
   },
   {
@@ -142,6 +148,7 @@ export const books: Book[] = [
     themes: ["🎁 Friendship", "💚 Giving", "🤩 Heartwarming"],
     gradient: "linear-gradient(155deg, #e8f5e9 0%, #a5d6a7 30%, #66bb6a 60%, #43a047 100%)",
     landName: "Hampton's Quest Meadow",
+    landIndex: 4,
     hasReadAloud: true,
   },
   {
@@ -164,6 +171,7 @@ export const books: Book[] = [
     themes: ["🎃 Halloween", "🌟 Be Yourself", "🍂 Seasonal"],
     gradient: "linear-gradient(155deg, #3e1a00 0%, #6a2a0a 25%, #bf5600 55%, #ff8c00 80%, #ff6b35 100%)",
     landName: "The Lumpiest Pumpkin Patch",
+    landIndex: 6,
     hasReadAloud: false,
   },
   {
@@ -186,6 +194,7 @@ export const books: Book[] = [
     themes: ["🦃 Thanksgiving", "🎵 Singalong", "🍁 Holiday"],
     gradient: "linear-gradient(150deg, #fff3e8 0%, #ffccaa 30%, #e08040 60%, #c0560a 100%)",
     landName: "Tom Turkey's Harvest Parade",
+    landIndex: 10,
     hasReadAloud: true,
   },
   {
@@ -208,6 +217,7 @@ export const books: Book[] = [
     themes: ["🐱 Adventure", "🏡 Home & Family", "💚 Heartwarming"],
     gradient: "linear-gradient(155deg, #1a2a1a 0%, #2d4a20 30%, #4a7c3f 60%, #6db85c 100%)",
     landName: "Ollie's Cozy Corner",
+    landIndex: 7,
     hasReadAloud: true,
   },
   {
@@ -230,6 +240,7 @@ export const books: Book[] = [
     themes: ["🐓 Read Aloud", "😂 Silly", "🌅 Morning Routine"],
     gradient: "linear-gradient(155deg, #fff9e6 0%, #ffe57f 30%, #ffca28 60%, #ff8f00 100%)",
     landName: "Doodle-Do's Barnyard",
+    landIndex: 9,
     hasReadAloud: true,
   },
   {
@@ -252,6 +263,7 @@ export const books: Book[] = [
     themes: ["💙 Comfort Zone", "🏠 Cozy", "😌 Relatable"],
     gradient: "linear-gradient(150deg, #e3f0ff 0%, #b3d4f5 30%, #7bb8f0 60%, #4a9de0 100%)",
     landName: "Shut-In Button Land",
+    landIndex: 8,
     hasReadAloud: true,
   },
   {
@@ -274,6 +286,7 @@ export const books: Book[] = [
     themes: ["🐸 Halloween", "😂 Silly", "🐶 Be Yourself"],
     gradient: "linear-gradient(155deg, #1a1a3a 0%, #2a3a20 30%, #3a6a2a 60%, #4a9b35 100%)",
     landName: "Bailey's Frog Dream",
+    landIndex: 11,
     hasReadAloud: true,
   },
   {
@@ -295,6 +308,7 @@ export const books: Book[] = [
     themes: ["👻 Halloween", "💜 Kindness", "🤝 Friendship"],
     gradient: "linear-gradient(155deg, #1a0a2a 0%, #2d1260 35%, #4a1a80 65%, #7b5ea7 100%)",
     landName: "Brian's Haunted House",
+    landIndex: 12,
     hasReadAloud: true,
   },
 ];
