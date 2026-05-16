@@ -13,7 +13,7 @@ export default function Footer() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Image src="/images/logo-teal.png" alt="Family Fables" width={36} height={36} />
+                <Image src="/images/logo-detail-860.png" alt="Family Fables" width={44} height={44} />
                 <span
                   className="text-xl"
                   style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", color: "#009380" }}

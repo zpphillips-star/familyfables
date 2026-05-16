@@ -138,7 +138,7 @@ const landDefs: LandDef[] = [
     dividerType: "cloud",
     activities: [
       { label: "🎵 Play Lullaby", href: "/activities", variant: "primary" },
-      { label: "🛒 Get the Book", href: SHOP, external: true, variant: "secondary" },
+      { label: "Explore this Land →", href: "/books/dream-ideas", variant: "secondary" },
     ],
     accentColor: "#5B9BD5",
     textColor: "#e8d8ff",
@@ -152,15 +152,15 @@ const landDefs: LandDef[] = [
     landName: "Dragon Mountain",
     tagline: "She didn't ask to be a dragon keeper — the dragons had other plans",
     bookTitle: "Amber The Dragon Keeper",
-    coverImage: "/images/books/amber-dragon-keeper.png",
+    coverImage: "/images/books/amber-cover-square.jpg",
     characterImage: "/images/characters/amber-no-background.png",
     characterAlt: "Amber the Dragon Keeper",
     gradient: "linear-gradient(155deg, #2d0a3a 0%, #5a1060 30%, #8b1a6b 60%, #c0394a 100%)",
     nextGradientColor: "#fff3e0",
     dividerType: "hill",
     activities: [
-      { label: "📖 Read the Story", href: "/read/amber-dragon-keeper", variant: "primary" },
-      { label: "🎮 Crystal Game", href: "/activities", variant: "secondary" },
+      { label: "📖 Read It To Me", href: "/read/amber-dragon-keeper", variant: "primary" },
+      { label: "Explore this Land →", href: "/books/amber-the-dragon-keeper", variant: "secondary" },
     ],
     accentColor: "#E86BB5",
     textColor: "#ffe8f5",
@@ -181,8 +181,8 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#e8f5e9",
     dividerType: "wave",
     activities: [
-      { label: "📖 Read the Story", href: "/read/poo-poo-face", variant: "primary" },
-      { label: "😜 Take the Quiz", href: "/activities", variant: "secondary" },
+      { label: "📖 Read It To Me", href: "/read/poo-poo-face", variant: "primary" },
+      { label: "Explore this Land →", href: "/books/whats-your-poo-poo-face", variant: "secondary" },
     ],
     accentColor: "#9B6FD0",
     textColor: "#4a1060",
@@ -203,8 +203,7 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#fff8e1",
     dividerType: "slope",
     activities: [
-      { label: "🛒 Get the Book", href: SHOP, external: true, variant: "primary" },
-      { label: "🎉 Fun Fact", href: "/activities", variant: "secondary" },
+      { label: "Explore this Land →", href: "/books/finding-hampton", variant: "primary" },
     ],
     accentColor: "#5CB85C",
     textColor: "#1b3a1e",
@@ -225,8 +224,7 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#3e1a00",
     dividerType: "hill",
     activities: [
-      { label: "🛒 Get the Book", href: SHOP, external: true, variant: "primary" },
-      { label: "💛 Daily Affirmation", href: "/activities", variant: "secondary" },
+      { label: "Explore this Land →", href: "/books/gilroys-gobble", variant: "primary" },
     ],
     accentColor: "#F4A839",
     textColor: "#3e1a00",
@@ -247,7 +245,7 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#1a2a1a",
     dividerType: "wave",
     activities: [
-      { label: "🛒 Get the Book", href: SHOP, external: true, variant: "primary" },
+      { label: "Explore this Land →", href: "/books/the-lumpiest-pumpkin", variant: "primary" },
     ],
     accentColor: "#E07B39",
     textColor: "#fff3e0",
@@ -268,7 +266,7 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#e3f0ff",
     dividerType: "slope",
     activities: [
-      { label: "🛒 Get the Book", href: SHOP, external: true, variant: "primary" },
+      { label: "Explore this Land →", href: "/books/ollie-come-home", variant: "primary" },
     ],
     accentColor: "#5CB85C",
     textColor: "#f0fff0",
@@ -289,7 +287,7 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#fff9e6",
     dividerType: "hill",
     activities: [
-      { label: "🛒 Get the Book", href: SHOP, external: true, variant: "primary" },
+      { label: "Explore this Land →", href: "/books/the-shut-in-button", variant: "primary" },
     ],
     accentColor: "#5B9BD5",
     textColor: "#0a2d61",
@@ -310,7 +308,7 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#fff3e8",
     dividerType: "wave",
     activities: [
-      { label: "🛒 Get the Book", href: SHOP, external: true, variant: "primary" },
+      { label: "Explore this Land →", href: "/books/what-a-doodle-do", variant: "primary" },
     ],
     accentColor: "#E86BB5",
     textColor: "#3a1a00",
@@ -331,7 +329,7 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#1a1a3a",
     dividerType: "slope",
     activities: [
-      { label: "🛒 Get the Book", href: SHOP, external: true, variant: "primary" },
+      { label: "Explore this Land →", href: "/books/one-tom-turkey", variant: "primary" },
     ],
     accentColor: "#C06B39",
     textColor: "#fff8f0",
@@ -352,7 +350,7 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#1a0a2a",
     dividerType: "hill",
     activities: [
-      { label: "🛒 Get the Book", href: SHOP, external: true, variant: "primary" },
+      { label: "Explore this Land →", href: "/books/frog-a-dog", variant: "primary" },
     ],
     accentColor: "#9B6FD0",
     textColor: "#e8ffe8",
@@ -372,7 +370,7 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#050212",
     dividerType: "wave",
     activities: [
-      { label: "🛒 Get the Book", href: SHOP, external: true, variant: "primary" },
+      { label: "Explore this Land →", href: "/books/brian-the-ghost", variant: "primary" },
     ],
     accentColor: "#7B5EA7",
     textColor: "#f0e8ff",
@@ -588,10 +586,10 @@ export default function AdventurelandPage() {
                 transition: "transform 0.2s ease, box-shadow 0.2s ease",
               }}
             >
-              🛒 Shop All Books
+              Shop All Books
             </a>
             <Link
-              href="/read"
+              href="/books"
               className="adventure-btn"
               style={{
                 display: "inline-flex",
@@ -610,7 +608,7 @@ export default function AdventurelandPage() {
                 transition: "transform 0.2s ease, box-shadow 0.2s ease",
               }}
             >
-              📖 Read a Story
+              📚 Browse All Books
             </Link>
           </div>
 

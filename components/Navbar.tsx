@@ -8,7 +8,6 @@ import { AMAZON_STORE_URL } from "@/lib/books";
 const navLinks = [
   { href: "/", label: "home" },
   { href: "/books", label: "bookstore" },
-  { href: "/read", label: "read a story" },
   { href: "/about", label: "about us" },
 ];
 
@@ -119,7 +118,7 @@ export default function Navbar() {
                 className="nav-mobile-shop-btn btn-shine shadow"
                 style={{ backgroundColor: "#ff9c1a", color: "#ffffff", display: "flex", textDecoration: "none" }}
               >
-                🛒 Shop on Amazon
+                Shop on Amazon
               </a>
             </div>
           </div>
