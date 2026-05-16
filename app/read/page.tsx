@@ -45,7 +45,7 @@ export default function ReadLandingPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '20px 28px',
+        padding: 'clamp(14px, 3vw, 20px) clamp(16px, 5vw, 28px)',
         maxWidth: '900px',
         margin: '0 auto',
         width: '100%',
@@ -102,7 +102,7 @@ export default function ReadLandingPage() {
       </div>
 
       {/* Book cards */}
-      <main style={{
+      <main className="read-landing-cards" style={{
         display: 'flex',
         gap: '28px',
         flexWrap: 'wrap',
@@ -116,13 +116,14 @@ export default function ReadLandingPage() {
           <Link
             key={story.slug}
             href={`/read/${story.slug}`}
+            className="read-landing-card"
             style={{
               textDecoration: 'none',
               flex: '1 1 320px',
               maxWidth: '380px',
             }}
           >
-            <div style={{
+            <div className="read-landing-card-inner" style={{
               background: '#ffffff',
               borderRadius: '24px',
               overflow: 'hidden',
@@ -131,16 +132,6 @@ export default function ReadLandingPage() {
               transition: 'transform 0.2s cubic-bezier(.175,.885,.32,1.275), box-shadow 0.2s ease',
               cursor: 'pointer',
             }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLDivElement;
-                el.style.transform = 'translateY(-6px) scale(1.02)';
-                el.style.boxShadow = `0 16px 48px rgba(0,0,0,0.18)`;
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLDivElement;
-                el.style.transform = 'translateY(0) scale(1)';
-                el.style.boxShadow = '0 8px 40px rgba(0,0,0,0.12)';
-              }}
             >
               {/* Cover image */}
               <div style={{

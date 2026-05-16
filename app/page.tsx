@@ -419,6 +419,7 @@ function AdventureMap() {
           <button
             key={z.id}
             onClick={() => scrollTo(z.id)}
+            className="adv-map-btn"
             style={{
               flex: '0 0 auto', scrollSnapAlign: 'start',
               background: z.bg,
@@ -526,13 +527,13 @@ function ZoneSky() {
           cursor: 'pointer', outline: 'none',
           opacity: 0.92,
         }}
-        className={wiggle ? 'narwhal-wiggle' : ''}
+        className={`hero-narwhal-wrap${wiggle ? ' narwhal-wiggle' : ''}`}
       >
         <TiltNarwhal size={420} />
       </div>
 
-      {/* Content block — left-center */}
-      <div style={{
+      {/* Content block — left on desktop, centered on tablet/mobile */}
+      <div className="hero-content-wrap" style={{
         position: 'relative', zIndex: 3,
         display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
         maxWidth: '640px', width: '100%',
@@ -554,7 +555,7 @@ function ZoneSky() {
         {/* Title */}
         <h1 style={{
           fontFamily: FF,
-          fontSize: 'clamp(3.8rem, 13vw, 8.5rem)',
+          fontSize: 'clamp(2.6rem, 13vw, 8.5rem)',
           color: '#ffffff',
           textShadow: '3px 3px 0 #009380, 7px 7px 0 rgba(0,100,80,0.18)',
           lineHeight: 0.92, marginBottom: '20px',
@@ -565,9 +566,9 @@ function ZoneSky() {
         </h1>
 
         {/* Tagline */}
-        <p style={{
+        <p className="hero-tagline" style={{
           fontFamily: CAT, fontWeight: 700,
-          fontSize: 'clamp(1.1rem, 3.5vw, 1.5rem)',
+          fontSize: 'clamp(1.05rem, 3.5vw, 1.5rem)',
           color: '#005a4a',
           marginBottom: '36px',
           maxWidth: '420px',
@@ -578,7 +579,7 @@ function ZoneSky() {
         </p>
 
         {/* Two CTAs */}
-        <div style={{
+        <div className="hero-ctas" style={{
           display: 'flex', gap: '14px', flexWrap: 'wrap',
           animation: 'fadeSlideUp 1s ease-out 0.32s both',
         }}>
@@ -673,7 +674,7 @@ function ZoneAmberMountain() {
           </p>
         </Reveal>
 
-        <div style={{
+        <div className="amber-zone-flex" style={{
           display: 'flex', gap: '40px', flexWrap: 'wrap',
           alignItems: 'flex-start', justifyContent: 'center',
         }}>
@@ -698,7 +699,8 @@ function ZoneAmberMountain() {
                   src="/images/originals/Amber-383-height.png"
                   alt="Amber the Dragon Keeper"
                   width={280} height={383}
-                  style={{ width: 'clamp(260px, 38vw, 420px)', height: 'auto', display: 'block' }}
+                  className="amber-zone-img"
+                  style={{ width: 'clamp(220px, 38vw, 420px)', height: 'auto', display: 'block' }}
                   priority
                 />
               </div>
@@ -972,6 +974,7 @@ function ZoneDragonTown() {
         </Reveal>
 
         {/* ── Activity buttons — normal flow, below title, left-aligned into tail zone ── */}
+        <div className="dragon-activity-reveal-wrap">
         <Reveal delay={160} style={{ alignSelf: 'flex-start', marginTop: 'clamp(55px, 9vw, 85px)', width: 'clamp(220px, 55%, 320px)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
@@ -1040,6 +1043,7 @@ function ZoneDragonTown() {
 
           </div>
         </Reveal>
+        </div>{/* end dragon-activity-reveal-wrap */}
 
         {/* Quiz — expands below the dragon, full width */}
         {quizOpen && (
@@ -1324,14 +1328,14 @@ function ZoneReadStory() {
         </Reveal>
 
         {/* Book cards */}
-        <div style={{
+        <div className="read-story-cards" style={{
           display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap',
           marginBottom: '44px',
         }}>
           {books.map((b, i) => (
             <Reveal key={b.slug} delay={i * 120}>
               <Link href={`/read/${b.slug}`} style={{ textDecoration: 'none' }}>
-                <div style={{
+                <div className="read-story-card" style={{
                   background: 'rgba(255,255,255,0.06)',
                   border: `2px solid ${b.color}`,
                   borderRadius: '20px',
@@ -1440,6 +1444,7 @@ function ZoneColoringMeadow() {
           {COLORING_PAGES.map((p, i) => (
             <div
               key={i}
+              className="coloring-card-item"
               onClick={() => setLifted(lifted === i ? null : i)}
               role="button" tabIndex={0} aria-label={`${p.label} coloring page — tap to pick up`}
               onKeyDown={e => e.key === 'Enter' && setLifted(lifted === i ? null : i)}
@@ -1626,7 +1631,7 @@ function ZoneCampfire() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <div className="campfire-inputs-row" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                 <input
                   type="text" placeholder="First Name" value={firstName}
                   onChange={e => setFirstName(e.target.value)}

@@ -100,7 +100,7 @@ export default function Footer() {
       {/* Footer bottom bar — deep purple (matches WP #footer-bottom: #78087c) */}
       <div style={{ backgroundColor: "#78087c" }}>
         <div
-          className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs"
+          className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs footer-bottom-row"
           style={{ color: "#ffffff" }}
         >
           <p>Copyright {new Date().getFullYear()} | Family Fables LLC</p>

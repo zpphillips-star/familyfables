@@ -778,6 +778,62 @@ export default function BookReader({
           background: #fff;
           transform: scale(1.35);
         }
+
+        /* ── Mobile responsive overrides ── */
+        @media (max-width: 639px) {
+          .book-reader__btn {
+            width: 44px;
+            height: 44px;
+          }
+          .book-reader__nav-btn {
+            width: 48px;
+            height: 48px;
+            font-size: 1.8rem;
+          }
+          .book-reader__dots {
+            max-width: calc(100vw - 120px);
+            gap: 4px;
+          }
+          .book-reader__dot {
+            width: 7px;
+            height: 7px;
+          }
+          .book-reader__top-bar {
+            padding: 0.65rem 0.875rem;
+          }
+          .book-reader__bottom-bar {
+            padding: 0.65rem 0.875rem 1.25rem;
+            gap: 0.5rem;
+          }
+          .book-reader__title {
+            font-size: 0.78rem;
+          }
+          .book-reader__start-card {
+            padding: 2rem 1.5rem;
+          }
+          .book-reader__start-icon {
+            font-size: 4.5rem;
+          }
+        }
+
+        /* ── Landscape on phone: compact controls ── */
+        @media (max-height: 500px) and (orientation: landscape) {
+          .book-reader__top-bar    { padding: 0.4rem 0.875rem; }
+          .book-reader__bottom-bar { padding: 0.4rem 0.875rem 0.5rem; }
+          .book-reader__btn        { width: 38px; height: 38px; font-size: 1rem; }
+          .book-reader__nav-btn    { width: 42px; height: 42px; font-size: 1.5rem; }
+          .book-reader__start-card { padding: 1.2rem 1.5rem; }
+          .book-reader__start-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+          .book-reader__start-card h1 { font-size: 1.3rem; }
+          .book-reader__start-card p  { margin-bottom: 1.25rem; }
+          .book-reader__start-btn     { padding: 0.65rem 1rem; font-size: 0.9rem; }
+        }
+
+        /* ── Tablet: slightly larger targets ── */
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .book-reader__btn     { width: 44px; height: 44px; }
+          .book-reader__nav-btn { width: 52px; height: 52px; }
+        }
       `}</style>
     </div>
   );
