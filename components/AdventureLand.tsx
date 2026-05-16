@@ -172,34 +172,51 @@ export default function AdventureLand({
         justifyContent: "center",
       }}
     >
-      {/* ── Milestone marker (path node) ────────────────────────────── */}
+      {/* ── Milestone marker (continuous dotted path node) ──────────── */}
+      {/*
+       * The wrap spans the full section height (top:0 → bottom:0).
+       * A dotted line div runs the entire height behind the number badge,
+       * so when adjacent sections stack, their lines meet seamlessly — creating
+       * one unbroken dotted thread from Land 1 to Land 12.
+       * Hidden on mobile via globals.css (.adventure-milestone-wrap display:none).
+       */}
       <div
         className="adventure-milestone-wrap"
         style={{
           position: "absolute",
-          top: "50%",
+          top: 0,
+          bottom: 0,
           [isEven ? "right" : "left"]: "clamp(8px, 3vw, 48px)",
-          transform: "translateY(-50%)",
           zIndex: 5,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 6,
+          justifyContent: "center",
           pointerEvents: "none",
+          width: 44,
         }}
         aria-hidden="true"
       >
-        {/* Vertical dotted path line above marker */}
+        {/* Continuous dotted line — full height of section */}
         <div
+          className="adventure-milestone-line"
           style={{
-            width: 3,
-            height: "clamp(40px, 6vh, 80px)",
-            borderLeft: "3px dashed rgba(255,255,255,0.45)",
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: "50%",
+            width: 0,
+            borderLeft: "3px dotted rgba(255,255,255,0.4)",
+            transform: "translateX(-50%)",
+            zIndex: 0,
           }}
         />
-        {/* Numbered circle */}
+        {/* Numbered circle — sits on top of the line */}
         <div
+          className="adventure-milestone-number"
           style={{
+            position: "relative",
+            zIndex: 1,
             width: 44,
             height: 44,
             borderRadius: "50%",
@@ -217,14 +234,6 @@ export default function AdventureLand({
         >
           {index}
         </div>
-        {/* Vertical dotted path line below marker */}
-        <div
-          style={{
-            width: 3,
-            height: "clamp(40px, 6vh, 80px)",
-            borderLeft: "3px dashed rgba(255,255,255,0.45)",
-          }}
-        />
       </div>
 
       {/* ── Decorations ─────────────────────────────────────────────── */}
