@@ -20,6 +20,7 @@ export interface AdventureLandProps {
   landName: string;
   tagline: string;
   bookTitle: string;
+  bookSlug: string;
   coverImage: string;
   characterImage?: string;
   characterAlt?: string;
@@ -143,6 +144,7 @@ export default function AdventureLand({
   landName,
   tagline,
   bookTitle,
+  bookSlug,
   coverImage,
   characterImage,
   characterAlt,
@@ -209,7 +211,7 @@ export default function AdventureLand({
           width: "100%",
         }}
       >
-        {/* Book cover */}
+        {/* Book cover — clicks into the land page */}
         <div
           className="adventure-cover-outer"
           style={{
@@ -217,27 +219,30 @@ export default function AdventureLand({
             position: "relative",
           }}
         >
-          <div
-            className="adventure-book-cover adventure-cover-wrap"
-            style={{
-              position: "relative",
-              width: "clamp(140px, 22vw, 240px)",
-              borderRadius: 16,
-              boxShadow: "0 12px 48px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.25)",
-              overflow: "hidden",
-              transform: `rotate(${isEven ? "2deg" : "-2deg"})`,
-              transition: "transform 0.3s ease, box-shadow 0.3s ease",
-            }}
-          >
-            <Image
-              src={coverImage}
-              alt={`${bookTitle} book cover`}
-              width={240}
-              height={300}
-              style={{ width: "100%", height: "auto", display: "block" }}
-              sizes="(max-width: 768px) 140px, 240px"
-            />
-          </div>
+          <Link href={`/books/${bookSlug}`} style={{ display: "block" }}>
+            <div
+              className="adventure-book-cover adventure-cover-wrap"
+              style={{
+                position: "relative",
+                width: "clamp(140px, 22vw, 240px)",
+                borderRadius: 16,
+                boxShadow: "0 12px 48px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.25)",
+                overflow: "hidden",
+                transform: `rotate(${isEven ? "2deg" : "-2deg"})`,
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                cursor: "pointer",
+              }}
+            >
+              <Image
+                src={coverImage}
+                alt={`${bookTitle} book cover`}
+                width={240}
+                height={300}
+                style={{ width: "100%", height: "auto", display: "block" }}
+                sizes="(max-width: 768px) 140px, 240px"
+              />
+            </div>
+          </Link>
         </div>
 
         {/* Character art — separate column, beside the cover, not overlapping */}

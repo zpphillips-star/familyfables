@@ -124,7 +124,7 @@ type LandDef = Omit<AdventureLandProps, "decorations">;
 const landDefs: LandDef[] = [
   // 1. Dream Ideas Land
   {
-    id: "dream-ideas",
+    id: "dream-ideas", bookSlug: "dream-ideas",
     index: 1,
     emoji: "🌙",
     landName: "Dream Ideas Land",
@@ -146,7 +146,7 @@ const landDefs: LandDef[] = [
   },
   // 2. Amber's Dragon Mountain
   {
-    id: "amber-dragon-keeper",
+    id: "amber-dragon-keeper", bookSlug: "amber-the-dragon-keeper",
     index: 2,
     emoji: "🐉",
     landName: "Dragon Mountain",
@@ -168,7 +168,7 @@ const landDefs: LandDef[] = [
   },
   // 3. Poo Poo Face Town
   {
-    id: "poo-poo-face",
+    id: "poo-poo-face", bookSlug: "whats-your-poo-poo-face",
     index: 3,
     emoji: "😂",
     landName: "Poo Poo Face Town",
@@ -190,7 +190,7 @@ const landDefs: LandDef[] = [
   },
   // 4. Hampton's Quest Meadow
   {
-    id: "finding-hampton",
+    id: "finding-hampton", bookSlug: "finding-hampton",
     index: 4,
     emoji: "🎈",
     landName: "Hampton's Quest Meadow",
@@ -211,7 +211,7 @@ const landDefs: LandDef[] = [
   },
   // 5. Gilroy's Harvest Forest
   {
-    id: "gilroys-gobble",
+    id: "gilroys-gobble", bookSlug: "gilroys-gobble",
     index: 5,
     emoji: "🦃",
     landName: "Gilroy's Harvest Forest",
@@ -232,7 +232,7 @@ const landDefs: LandDef[] = [
   },
   // 6. Lumpiest Pumpkin Patch
   {
-    id: "lumpiest-pumpkin",
+    id: "lumpiest-pumpkin", bookSlug: "the-lumpiest-pumpkin",
     index: 6,
     emoji: "🎃",
     landName: "The Lumpiest Pumpkin Patch",
@@ -253,7 +253,7 @@ const landDefs: LandDef[] = [
   },
   // 7. Ollie's Cozy Corner
   {
-    id: "ollie-come-home",
+    id: "ollie-come-home", bookSlug: "ollie-come-home",
     index: 7,
     emoji: "🐱",
     landName: "Ollie's Cozy Corner",
@@ -274,7 +274,7 @@ const landDefs: LandDef[] = [
   },
   // 8. Shut-In Button Land
   {
-    id: "shut-in-button",
+    id: "shut-in-button", bookSlug: "the-shut-in-button",
     index: 8,
     emoji: "👆",
     landName: "Shut-In Button Land",
@@ -295,7 +295,7 @@ const landDefs: LandDef[] = [
   },
   // 9. Doodle-Do's Barnyard
   {
-    id: "what-a-doodle-do",
+    id: "what-a-doodle-do", bookSlug: "what-a-doodle-do",
     index: 9,
     emoji: "🐓",
     landName: "Doodle-Do's Barnyard",
@@ -316,7 +316,7 @@ const landDefs: LandDef[] = [
   },
   // 10. Tom Turkey's Harvest Parade
   {
-    id: "one-tom-turkey",
+    id: "one-tom-turkey", bookSlug: "one-tom-turkey",
     index: 10,
     emoji: "🦃",
     landName: "Tom Turkey's Harvest Parade",
@@ -337,7 +337,7 @@ const landDefs: LandDef[] = [
   },
   // 11. Bailey's Frog Dream
   {
-    id: "frog-a-dog",
+    id: "frog-a-dog", bookSlug: "frog-a-dog",
     index: 11,
     emoji: "🐸",
     landName: "Bailey's Frog Dream",
@@ -358,7 +358,7 @@ const landDefs: LandDef[] = [
   },
   // 12. Brian the Ghost's Haunted House
   {
-    id: "brian-the-ghost",
+    id: "brian-the-ghost", bookSlug: "brian-the-ghost",
     index: 12,
     emoji: "👻",
     landName: "Brian's Haunted House",

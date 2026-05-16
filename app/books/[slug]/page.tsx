@@ -205,18 +205,6 @@ export default async function BookPage({
               {book.title}
             </h1>
 
-            {/* Author */}
-            <p
-              style={{
-                fontSize: "clamp(14px, 2vw, 18px)",
-                color: heroSubColor,
-                marginBottom: 20,
-                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-              }}
-            >
-              By Zach &amp; Victoria Phillips
-            </p>
-
             {/* Theme badges */}
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
               {book.themes.map((theme) => (
