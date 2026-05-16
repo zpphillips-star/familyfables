@@ -468,12 +468,12 @@ function ZoneSky() {
   const [pulsed, setPulsed] = useState<number | null>(null);
   const [wiggle, setWiggle] = useState(false);
 
+  // Fewer clouds, better spaced — only background atmosphere
   const clouds = [
-    { top: '9%',  left: '3%',  w: 190, dur: '22s', shape: 0 },
-    { top: '22%', right: '6%', w: 155, dur: '30s', shape: 1 },
-    { top: '38%', left: '18%', w: 140, dur: '36s', shape: 2 },
-    { top: '14%', left: '48%', w: 210, dur: '26s', shape: 0 },
-    { top: '44%', right: '2%', w: 125, dur: '33s', shape: 1 },
+    { top: '8%',  left: '2%',   w: 180, dur: '24s', shape: 0 },
+    { top: '18%', right: '4%',  w: 150, dur: '32s', shape: 1 },
+    { top: '52%', left: '10%',  w: 130, dur: '38s', shape: 2 },
+    { top: '12%', left: '40%',  w: 200, dur: '28s', shape: 0 },
   ];
 
   const tapCloud = (i: number) => { setPulsed(i); setTimeout(() => setPulsed(null), 500); };
@@ -481,13 +481,13 @@ function ZoneSky() {
 
   return (
     <section style={{
-      background: 'linear-gradient(180deg, #b8f0eb 0%, #dcf9f3 55%, #e8fdf9 100%)',
+      background: 'linear-gradient(180deg, #9de8e0 0%, #c6f4ef 45%, #dcf9f3 100%)',
       minHeight: '100svh', position: 'relative',
       overflow: 'hidden', display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      paddingBottom: '130px', paddingTop: '60px',
+      paddingBottom: '120px', paddingTop: '40px',
     }}>
-      {/* Drifting clouds */}
+      {/* Drifting clouds — background only, subtle */}
       {clouds.map((c, i) => (
         <div
           key={i}
@@ -501,96 +501,122 @@ function ZoneSky() {
             right: (c as {right?: string}).right,
             width: c.w, height: c.w * 0.4,
             animation: `driftCloud ${c.dur} ease-in-out infinite alternate`,
-            transform: pulsed === i ? 'scale(1.35)' : 'scale(1)',
+            transform: pulsed === i ? 'scale(1.3)' : 'scale(1)',
             transition: 'transform 0.25s cubic-bezier(.175,.885,.32,1.275)',
             cursor: 'pointer', outline: 'none',
-            filter: 'drop-shadow(0 6px 16px rgba(0,147,128,0.1))',
-            opacity: 0.92,
+            opacity: 0.55,
           }}
         >
           <Cloud shape={c.shape} style={{ width: '100%', height: '100%', position: 'relative' }} />
         </div>
       ))}
 
-      {/* Narwhal — absolute left, slightly lower, behind title */}
+      {/* Narwhal — right side, floats freely */}
       <div
         onClick={tapNarwhal}
         role="button" tabIndex={0} aria-label="Tap the narwhal!"
         onKeyDown={e => e.key === 'Enter' && tapNarwhal()}
         style={{
           position: 'absolute',
-          left: 'clamp(-100px, -6vw, -30px)',
+          right: 'clamp(-80px, -2vw, 20px)',
           top: '50%',
-          transform: 'translateY(-58%)',
-          zIndex: 2,
-          animation: wiggle ? undefined : 'floatBob 4s ease-in-out infinite',
+          transform: 'translateY(-52%)',
+          zIndex: 1,
+          animation: wiggle ? undefined : 'floatBob 4.5s ease-in-out infinite',
           cursor: 'pointer', outline: 'none',
+          opacity: 0.92,
         }}
         className={wiggle ? 'narwhal-wiggle' : ''}
       >
-        <TiltNarwhal size={480} />
+        <TiltNarwhal size={420} />
       </div>
 
-      {/* Title — z-index 3 so it overlaps narwhal */}
-      <h1 style={{
-        fontFamily: FF,
-        fontSize: 'clamp(3.5rem, 14vw, 9rem)',
-        color: '#ffffff',
-        textShadow: '4px 4px 0 #009380, 8px 8px 0 rgba(0,147,128,0.2)',
-        lineHeight: 0.9, marginBottom: '16px',
-        position: 'relative', zIndex: 3,
-        animation: 'fadeSlideUp 0.8s ease-out both',
-        textAlign: 'center', letterSpacing: '-0.01em',
-        paddingLeft: 'clamp(60px, 16vw, 180px)',
-      }}>
-        Family Fables
-      </h1>
-
-      {/* Subtitle */}
-      <p style={{
-        fontFamily: CAT, fontWeight: 800,
-        fontSize: 'clamp(1.4rem, 4.5vw, 2.2rem)',
-        color: '#005a4a', marginBottom: '36px',
-        position: 'relative', zIndex: 3,
-        animation: 'fadeSlideUp 0.9s ease-out 0.15s both',
-        textAlign: 'center',
-        paddingLeft: 'clamp(40px, 12vw, 140px)',
-      }}>
-        Where every story is an adventure ✨
-      </p>
-
-      {/* CTA */}
+      {/* Content block — left-center */}
       <div style={{
         position: 'relative', zIndex: 3,
-        animation: 'fadeSlideUp 1s ease-out 0.3s both',
-        paddingLeft: 'clamp(40px, 12vw, 140px)',
+        display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
+        maxWidth: '640px', width: '100%',
+        padding: '0 clamp(24px, 6vw, 64px)',
+        gap: '0',
       }}>
-        <Link href="/books" style={{
-          display: 'inline-block',
-          background: '#ff9c1a', color: '#fff',
-          padding: '18px 52px', borderRadius: '999px',
-          fontFamily: FF, fontSize: 'clamp(1.1rem, 3.5vw, 1.45rem)',
-          textDecoration: 'none',
-          boxShadow: '0 4px 28px rgba(255,156,26,0.5)',
+        {/* Eyebrow */}
+        <p style={{
+          fontFamily: CAT, fontWeight: 800,
+          fontSize: 'clamp(0.75rem, 2vw, 0.95rem)',
+          color: '#005a4a', letterSpacing: '0.18em',
+          textTransform: 'uppercase', opacity: 0.7,
+          marginBottom: '10px',
+          animation: 'fadeSlideUp 0.6s ease-out both',
         }}>
-          Explore the Books →
-        </Link>
-      </div>
+          ✨ Award-winning kids&apos; books
+        </p>
 
-      {/* Adventure Map */}
-      <div style={{ position: 'relative', zIndex: 3, width: '100%', maxWidth: '780px', marginTop: '44px', animation: 'fadeSlideUp 1s ease-out 0.5s both' }}>
-        <AdventureMap />
+        {/* Title */}
+        <h1 style={{
+          fontFamily: FF,
+          fontSize: 'clamp(3.8rem, 13vw, 8.5rem)',
+          color: '#ffffff',
+          textShadow: '3px 3px 0 #009380, 7px 7px 0 rgba(0,100,80,0.18)',
+          lineHeight: 0.92, marginBottom: '20px',
+          letterSpacing: '-0.01em',
+          animation: 'fadeSlideUp 0.75s ease-out 0.1s both',
+        }}>
+          Family<br />Fables
+        </h1>
+
+        {/* Tagline */}
+        <p style={{
+          fontFamily: CAT, fontWeight: 700,
+          fontSize: 'clamp(1.1rem, 3.5vw, 1.5rem)',
+          color: '#005a4a',
+          marginBottom: '36px',
+          maxWidth: '420px',
+          lineHeight: 1.4,
+          animation: 'fadeSlideUp 0.85s ease-out 0.2s both',
+        }}>
+          Where every bedtime becomes<br />an adventure
+        </p>
+
+        {/* Two CTAs */}
+        <div style={{
+          display: 'flex', gap: '14px', flexWrap: 'wrap',
+          animation: 'fadeSlideUp 1s ease-out 0.32s both',
+        }}>
+          <Link href="/books" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            background: '#ff9c1a', color: '#fff',
+            padding: '16px 36px', borderRadius: '999px',
+            fontFamily: FF, fontSize: 'clamp(1rem, 3vw, 1.25rem)',
+            textDecoration: 'none',
+            boxShadow: '0 4px 24px rgba(255,156,26,0.45)',
+            whiteSpace: 'nowrap',
+          }}>
+            📚 Browse Books
+          </Link>
+          <Link href="/read" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            background: 'rgba(0,147,128,0.15)', color: '#005a4a',
+            padding: '16px 32px', borderRadius: '999px',
+            fontFamily: FF, fontSize: 'clamp(1rem, 3vw, 1.25rem)',
+            textDecoration: 'none',
+            border: '2.5px solid #009380',
+            whiteSpace: 'nowrap',
+            backdropFilter: 'blur(8px)',
+          }}>
+            📖 Read a Story
+          </Link>
+        </div>
       </div>
 
       {/* Scroll hint */}
       <div style={{
-        position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
+        position: 'absolute', bottom: '36px', left: '50%', transform: 'translateX(-50%)',
         animation: 'floatBob 1.8s ease-in-out infinite',
         color: '#009380', pointerEvents: 'none', zIndex: 3,
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
       }} aria-hidden>
-        <span style={{ fontFamily: CAT, fontWeight: 800, fontSize: '0.75rem', opacity: 0.7, letterSpacing: '0.05em' }}>scroll</span>
-        <span style={{ fontSize: '1.5rem' }}>↓</span>
+        <span style={{ fontFamily: CAT, fontWeight: 800, fontSize: '0.72rem', opacity: 0.6, letterSpacing: '0.06em' }}>scroll to explore</span>
+        <span style={{ fontSize: '1.4rem' }}>↓</span>
       </div>
 
       <BlobDivider fill="#d9b7e5" />
@@ -1228,6 +1254,155 @@ const COLORING_PAGES = [
   { src: '/coloring-pages/amber-dragon-keeper/page09-300dpi.png', rotate: '-2deg',   label: 'Crystal Valley' },
 ];
 
+function ZoneReadStory() {
+  const books = [
+    {
+      slug: 'poo-poo-face',
+      title: "What's Your Poo Poo Face?",
+      cover: '/images/books/poo-poo-face.png',
+      color: '#7030a0',
+      emoji: '😂',
+    },
+    {
+      slug: 'amber-dragon-keeper',
+      title: 'Amber the Dragon Keeper',
+      cover: '/images/books/amber-dragon-keeper.png',
+      color: '#009380',
+      emoji: '🐉',
+    },
+  ];
+
+  return (
+    <section style={{
+      background: 'linear-gradient(135deg, #1a0028 0%, #3a0060 50%, #2a0045 100%)',
+      position: 'relative', overflow: 'hidden',
+      padding: '80px 24px 100px',
+    }}>
+      {/* Subtle star dots */}
+      {[...Array(18)].map((_, i) => (
+        <div key={i} aria-hidden style={{
+          position: 'absolute',
+          left: `${(i * 37 + 11) % 97}%`,
+          top: `${(i * 53 + 7) % 75}%`,
+          width: 2 + (i % 3),
+          height: 2 + (i % 3),
+          borderRadius: '50%',
+          background: 'white',
+          opacity: 0.25 + (i % 4) * 0.1,
+          animation: `twinkle ${2 + (i % 3)}s ease-in-out infinite ${i * 0.3}s`,
+        }} />
+      ))}
+
+      <div style={{ maxWidth: '860px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
+        <Reveal>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <p style={{
+              fontFamily: CAT, fontWeight: 800, color: '#d9b7e5',
+              fontSize: '0.85rem', letterSpacing: '0.2em',
+              textTransform: 'uppercase', marginBottom: '12px', opacity: 0.8,
+            }}>
+              ✨ Interactive Read-Aloud
+            </p>
+            <h2 style={{
+              fontFamily: FF,
+              fontSize: 'clamp(2.4rem, 7vw, 4.5rem)',
+              color: '#ffffff',
+              textShadow: '2px 2px 0 rgba(180,100,220,0.4)',
+              marginBottom: '14px', lineHeight: 1,
+            }}>
+              Read a Story 📖
+            </h2>
+            <p style={{
+              fontFamily: CAT, fontWeight: 700,
+              color: 'rgba(255,255,255,0.7)',
+              fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
+              maxWidth: '480px', margin: '0 auto',
+            }}>
+              Flip the pages, hear the story — free, no downloads needed
+            </p>
+          </div>
+        </Reveal>
+
+        {/* Book cards */}
+        <div style={{
+          display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap',
+          marginBottom: '44px',
+        }}>
+          {books.map((b, i) => (
+            <Reveal key={b.slug} delay={i * 120}>
+              <Link href={`/read/${b.slug}`} style={{ textDecoration: 'none' }}>
+                <div style={{
+                  background: 'rgba(255,255,255,0.06)',
+                  border: `2px solid ${b.color}`,
+                  borderRadius: '20px',
+                  padding: '24px 20px',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px',
+                  width: '220px',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                  cursor: 'pointer',
+                }}
+                  onMouseEnter={e => {
+                    const el = e.currentTarget as HTMLDivElement;
+                    el.style.transform = 'translateY(-8px) scale(1.03)';
+                    el.style.boxShadow = `0 16px 48px ${b.color}55`;
+                  }}
+                  onMouseLeave={e => {
+                    const el = e.currentTarget as HTMLDivElement;
+                    el.style.transform = 'translateY(0) scale(1)';
+                    el.style.boxShadow = 'none';
+                  }}
+                >
+                  <Image
+                    src={b.cover}
+                    alt={b.title}
+                    width={140}
+                    height={180}
+                    style={{
+                      width: 'auto', height: '160px', objectFit: 'contain',
+                      filter: 'drop-shadow(0 6px 20px rgba(0,0,0,0.4))',
+                    }}
+                  />
+                  <p style={{
+                    fontFamily: FF, color: '#ffffff',
+                    fontSize: '0.95rem', textAlign: 'center', lineHeight: 1.3,
+                    margin: 0,
+                  }}>
+                    {b.title}
+                  </p>
+                  <div style={{
+                    background: b.color, color: '#fff',
+                    fontFamily: FF, fontSize: '0.9rem',
+                    padding: '10px 20px', borderRadius: '999px',
+                    width: '100%', textAlign: 'center',
+                  }}>
+                    {b.emoji} Read Now
+                  </div>
+                </div>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={240}>
+          <div style={{ textAlign: 'center' }}>
+            <Link href="/read" style={{
+              fontFamily: CAT, fontWeight: 800,
+              color: 'rgba(255,255,255,0.55)',
+              textDecoration: 'none', fontSize: '0.9rem',
+              borderBottom: '1px solid rgba(255,255,255,0.2)',
+              paddingBottom: '2px',
+              transition: 'color 0.2s',
+            }}>
+              See all stories →
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function ZoneColoringMeadow() {
   const [lifted, setLifted] = useState<number | null>(null);
 
@@ -1492,6 +1667,7 @@ export default function Home() {
       <ZoneAmberMountain />
       <ZoneDragonTown />
       <ZoneBookshelf />
+      <ZoneReadStory />
       <ZoneColoringMeadow />
       <ZoneCampfire />
     </div>
