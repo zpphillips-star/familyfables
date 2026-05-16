@@ -9,8 +9,10 @@ interface BookCardProps {
 
 export default function BookCard({ book, size = "normal" }: BookCardProps) {
   const isLarge = size === "large";
-  const coverHref = book.readUrl ?? AMAZON_STORE_URL;
-  const isExternal = !book.readUrl;
+  // Derive read URL from hasReadAloud flag + book id (avoids adding a redundant readUrl field)
+  const readUrl = book.hasReadAloud ? `/read/${book.id}` : undefined;
+  const coverHref = readUrl ?? AMAZON_STORE_URL;
+  const isExternal = !readUrl;
 
   return (
     <div
@@ -27,7 +29,7 @@ export default function BookCard({ book, size = "normal" }: BookCardProps) {
           className={`relative overflow-hidden flex items-center justify-center block ${isLarge ? "h-80" : "h-60"}`}
           style={{ backgroundColor: `${book.accentColor}18` }}
         >
-          <CoverContent book={book} isLarge={isLarge} />
+          <CoverContent book={book} isLarge={isLarge} hasReadAloud={false} />
         </a>
       ) : (
         <Link
@@ -36,7 +38,7 @@ export default function BookCard({ book, size = "normal" }: BookCardProps) {
           className={`relative overflow-hidden flex items-center justify-center block ${isLarge ? "h-80" : "h-60"}`}
           style={{ backgroundColor: `${book.accentColor}18` }}
         >
-          <CoverContent book={book} isLarge={isLarge} />
+          <CoverContent book={book} isLarge={isLarge} hasReadAloud={true} />
         </Link>
       )}
 
@@ -56,9 +58,9 @@ export default function BookCard({ book, size = "normal" }: BookCardProps) {
         </p>
 
         <div className="mt-4 flex gap-2 flex-wrap">
-          {book.readUrl && (
+          {readUrl && (
             <Link
-              href={book.readUrl}
+              href={readUrl}
               className="inline-block text-center py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-200 hover:opacity-90 hover:shadow-md"
               style={{ backgroundColor: "#7c3aed", color: "white" }}
             >
@@ -80,7 +82,7 @@ export default function BookCard({ book, size = "normal" }: BookCardProps) {
   );
 }
 
-function CoverContent({ book, isLarge }: { book: Book; isLarge: boolean }) {
+function CoverContent({ book, isLarge, hasReadAloud }: { book: Book; isLarge: boolean; hasReadAloud: boolean }) {
   return (
     <>
       {book.image ? (
@@ -119,7 +121,7 @@ function CoverContent({ book, isLarge }: { book: Book; isLarge: boolean }) {
       )}
 
       {/* Read badge — only when a land page exists */}
-      {book.readUrl && (
+      {hasReadAloud && (
         <div
           className="absolute bottom-3 left-3 px-3 py-1 rounded-full text-xs font-bold text-white shadow"
           style={{ backgroundColor: "rgba(124,58,237,0.88)" }}

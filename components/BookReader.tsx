@@ -29,6 +29,7 @@ export default function BookReader({
   const [showControls, setShowControls] = useState(true);
   const [audioSupported, setAudioSupported] = useState(false);
   const [showStartOverlay, setShowStartOverlay] = useState(true);
+  const [mapOpen, setMapOpen] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
@@ -284,6 +285,64 @@ export default function BookReader({
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
+      {/* ── Persistent Map Button — always visible (z-index 30) ─────── */}
+      {!showStartOverlay && (
+        <button
+          className="book-reader__map-btn"
+          onClick={(e) => { e.stopPropagation(); setMapOpen(true); }}
+          aria-label="Open adventure map"
+        >
+          🗺️
+        </button>
+      )}
+
+      {/* ── Adventure Map Overlay ────────────────────────────────────── */}
+      {mapOpen && (
+        <>
+          <div
+            className="book-reader__map-backdrop"
+            onClick={() => setMapOpen(false)}
+          />
+          <div className="book-reader__map-overlay" role="dialog" aria-modal="true" aria-label="Adventure Map">
+            <div className="book-reader__map-header">
+              <h2 className="book-reader__map-heading">🗺️ Adventure Map</h2>
+              <button
+                className="book-reader__map-close"
+                onClick={() => setMapOpen(false)}
+                aria-label="Close map"
+              >✕</button>
+            </div>
+            <div className="book-reader__map-list">
+              {[
+                { id: "dream-ideas",       index: 1,  emoji: "🌙", name: "Dream Ideas Land"            },
+                { id: "amber-dragon-keeper", index: 2, emoji: "🐉", name: "Dragon Mountain"             },
+                { id: "poo-poo-face",      index: 3,  emoji: "😂", name: "Poo Poo Face Town"           },
+                { id: "finding-hampton",   index: 4,  emoji: "🎈", name: "Hampton's Quest Meadow"      },
+                { id: "gilroys-gobble",    index: 5,  emoji: "🦃", name: "Gilroy's Harvest Forest"     },
+                { id: "lumpiest-pumpkin",  index: 6,  emoji: "🎃", name: "The Lumpiest Pumpkin Patch"  },
+                { id: "ollie-come-home",   index: 7,  emoji: "🐱", name: "Ollie's Cozy Corner"         },
+                { id: "shut-in-button",    index: 8,  emoji: "👆", name: "Shut-In Button Land"         },
+                { id: "what-a-doodle-do",  index: 9,  emoji: "🐓", name: "Doodle-Do's Barnyard"        },
+                { id: "one-tom-turkey",    index: 10, emoji: "🦃", name: "Tom Turkey's Harvest Parade" },
+                { id: "frog-a-dog",        index: 11, emoji: "🐸", name: "Bailey's Frog Dream"         },
+                { id: "brian-the-ghost",   index: 12, emoji: "👻", name: "Brian's Haunted House"       },
+              ].map((land) => (
+                <a
+                  key={land.id}
+                  href={`/#${land.id}`}
+                  className="book-reader__map-link"
+                  onClick={() => setMapOpen(false)}
+                >
+                  <span className="book-reader__map-link-num">{land.index}</span>
+                  <span>{land.emoji} {land.name}</span>
+                  <span className="book-reader__map-link-arrow">→</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Start Overlay */}
       {showStartOverlay && (
         <div className="book-reader__start-overlay" onClick={startReading}>
@@ -565,7 +624,7 @@ export default function BookReader({
         }
 
         .book-reader__start-card p {
-          color: rgba(255,255,255,0.4);
+          color: rgba(255,255,255,0.8);
           font-size: 0.85rem;
           margin: 0 0 2.25rem;
           font-family: var(--font-open-sans), sans-serif;
@@ -833,6 +892,125 @@ export default function BookReader({
         @media (min-width: 640px) and (max-width: 1023px) {
           .book-reader__btn     { width: 44px; height: 44px; }
           .book-reader__nav-btn { width: 52px; height: 52px; }
+        }
+
+        /* ── Adventure Map FAB + Overlay ── */
+        .book-reader__map-btn {
+          position: fixed;
+          bottom: 88px;
+          right: 20px;
+          z-index: 30;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: rgba(255,156,26,0.88);
+          border: 2px solid rgba(255,255,255,0.7);
+          box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+          cursor: pointer;
+          font-size: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.18s, box-shadow 0.18s;
+          pointer-events: auto;
+        }
+        .book-reader__map-btn:hover {
+          transform: scale(1.1);
+          box-shadow: 0 6px 22px rgba(0,0,0,0.5);
+        }
+
+        .book-reader__map-backdrop {
+          position: fixed;
+          inset: 0;
+          z-index: 31;
+          background: rgba(0,0,0,0.55);
+          backdrop-filter: blur(4px);
+        }
+
+        .book-reader__map-overlay {
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          z-index: 32;
+          width: min(360px, 100vw);
+          max-height: 80vh;
+          background: #120830;
+          border-radius: 20px 20px 0 0;
+          box-shadow: 0 -6px 40px rgba(0,0,0,0.6);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+
+        .book-reader__map-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px 20px 12px;
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+          flex-shrink: 0;
+        }
+
+        .book-reader__map-heading {
+          font-family: var(--font-concert-one), 'Concert One', cursive;
+          color: #fff;
+          font-size: 17px;
+          margin: 0;
+        }
+
+        .book-reader__map-close {
+          background: rgba(255,255,255,0.1);
+          border: none;
+          border-radius: 50%;
+          width: 34px;
+          height: 34px;
+          cursor: pointer;
+          color: #fff;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .book-reader__map-list {
+          overflow-y: auto;
+          flex: 1;
+          padding: 8px 0 20px;
+        }
+
+        .book-reader__map-link {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 20px;
+          color: rgba(255,255,255,0.88);
+          font-size: 14px;
+          font-family: var(--font-catamaran), 'Catamaran', sans-serif;
+          font-weight: 600;
+          text-decoration: none;
+          transition: background 0.15s;
+        }
+        .book-reader__map-link:hover {
+          background: rgba(255,255,255,0.07);
+        }
+
+        .book-reader__map-link-num {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.15);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          font-weight: 900;
+          flex-shrink: 0;
+        }
+
+        .book-reader__map-link-arrow {
+          margin-left: auto;
+          color: rgba(255,255,255,0.3);
+          font-size: 12px;
         }
       `}</style>
     </div>
