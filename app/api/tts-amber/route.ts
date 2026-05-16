@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       model: 'tts-1-hd',
       voice: 'nova',
       input: text,
-      speed: 1.15,
+      speed: 1.0,
     }),
   });
 

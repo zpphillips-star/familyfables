@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       model: 'tts-1-hd',
       voice: 'fable',
       input: text,
-      speed: 1.1,
+      speed: 1.0,
     }),
   });
 

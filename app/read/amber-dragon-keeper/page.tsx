@@ -48,7 +48,7 @@ const PAGES = [
   },
   {
     img: '/images/reader/amber-dragon-keeper/page-11.jpg',
-    text: 'All the dragons of Sydar were amazing in their own special way, but Amber did have a favorite. She considered this dragon her best friend in all of Sydar. A majestic dragon with soft blue scales and a golden mane. A dragon named Cinnamon.',
+    text: 'All the dragons of Sydar were amazing in their own special way, but Amber did have a favorite. She considered this dragon her best friend in all of Sydar. He was a majestic dragon with soft blue scales and a golden mane. His name was Cinnamon.',
   },
   {
     img: '/images/reader/amber-dragon-keeper/page-12.jpg',

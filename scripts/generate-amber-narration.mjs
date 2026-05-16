@@ -23,7 +23,7 @@ const PAGES = [
   'She taught them to fly and to walk and to swim. She kept them clean from their scaly nose to their scaly toes. And she trained them to control their magical breath of fire and ice!',
   'But her most favorite thing of all the things to do with the dragons was to ride them. Amber and the dragons would spend hours in the skies. Diving, swirling, twirling, and scoobatoobing...',
   '...scoobatoobing was a special move you could only do with the dragons of Sydar.',
-  'All the dragons of Sydar were amazing in their own special way, but Amber did have a favorite. She considered this dragon her best friend in all of Sydar. A majestic dragon with soft blue scales and a golden mane. A dragon named Cinnamon.',
+  'All the dragons of Sydar were amazing in their own special way, but Amber did have a favorite. She considered this dragon her best friend in all of Sydar. He was a majestic dragon with soft blue scales and a golden mane. His name was Cinnamon.',
   'Cinnamon and Amber went on amazing adventures together. They fought off dangerous witches and warlocks, helped villagers build their cottages, and watched over all the creatures of Sydar.',
   "But it wasn't always work for Amber and Cinnamon — they also found a way to have fun. They flew high up above the clouds. They went camping and roasted as many marshmallows as they could fit in their mouths. They created ice lakes for the villagers to skate on and made many, many friends along the way.",
   'This was everyday life in Sydar. But days are still days, and all days come to an end.',
