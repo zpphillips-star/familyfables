@@ -1,76 +1,515 @@
-import type { Metadata } from "next";
-import BookReader from "@/components/BookReader";
+'use client';
 
-export const metadata: Metadata = {
-  title: "Read: The Shut-In Button | Family Fables",
-  description:
-    "A button with exactly one job — and a serious aversion to doing it. Read The Shut-In Button, a Family Fables story about tiny bravery!",
-};
+import { useState, useRef, useEffect, useCallback, CSSProperties } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-// The Shut-In Button — 49-page paperback interior
-// Front matter: pages 1–4 (null) | Story: pages 5–48 (22 text beats × 2 pages) | Back matter: page 49 (null)
-// Voice: fable (dry, slightly dramatic — perfect for a very particular button)
+const SLUG = 'the-shut-in-button';
+const TITLE = 'The Shut-In Button';
+const ACCENT = '#A8D8EA';
 
-const narration: (string | null)[] = [
-  null, // 001 — blank
-  null, // 002 — title page
-  null, // 003 — copyright / dedication
-  null, // 004 — dedication spread
-  "This is a button. A very particular button — round, shiny, and perfectly content to stay right where it is.", // 005
-  null, // 006 — illustration
-  "Most buttons pop off by accident. This button popped off on purpose. There is a difference. And this button knows it.", // 007
-  null, // 008 — illustration
-  "You see, the little girl who owned the coat liked adventures. Muddy ones. Rainy ones. The kind where your buttons get absolutely no say.", // 009
-  null, // 010 — illustration
-  "The other buttons were fine with all of this. \"Going out? Wonderful!\" they said. They were, frankly, a bit much.", // 011
-  null, // 012 — illustration
-  "But this button had a system. A lifestyle, really. Button up. Button down. Repeat. No surprises. No mud.", // 013
-  null, // 014 — illustration
-  "One morning the little girl got very excited. \"We're going to the park!\" she announced. The other buttons cheered.", // 015
-  null, // 016 — illustration
-  "The Shut-In Button did not cheer. The Shut-In Button had concerns about the park. Specifically: everything about the park.", // 017
-  null, // 018 — illustration
-  "And so, very deliberately, the Shut-In Button did the thing it did best. It popped off. Plink. And rolled under the radiator.", // 019
-  null, // 020 — illustration
-  "\"Where did my button go?\" asked the little girl. She looked and looked, but couldn't find it. Off they went without it.", // 021
-  null, // 022 — illustration
-  "The Shut-In Button sat under the radiator. It was very quiet. And very safe. And very warm. And very... alone.", // 023
-  null, // 024 — illustration
-  "Through the window, it could just barely see the little girl laughing in the park. The other buttons were catching leaves.", // 025
-  null, // 026 — illustration
-  "Hmm. Catching leaves did look sort of fun. Not that the button would ever admit this.", // 027
-  null, // 028 — illustration
-  "When the little girl came home, she looked tired and happy and a little bit muddy. The other buttons did look worse for wear.", // 029
-  null, // 030 — illustration
-  "\"I really need ALL my buttons for the recital tomorrow,\" the little girl said quietly. \"I hope I can find the missing one.\"", // 031
-  null, // 032 — illustration
-  "The Shut-In Button thought about this for a long time. A recital. That was important. That was different from mud.", // 033
-  null, // 034 — illustration
-  "Perhaps… just for the recital… it could make an exception.", // 035
-  null, // 036 — illustration
-  "The next morning, the little girl found the button behind the radiator. \"There you are!\" She hugged the coat tight.", // 037
-  null, // 038 — illustration
-  "At the recital, the button was buttoned up perfectly. The little girl stood tall. The audience clapped. The button glowed.", // 039
-  null, // 040 — illustration
-  "It was not muddy. It was not rainy. There were no fallen leaves. It was, the button had to admit, actually quite nice.", // 041
-  null, // 042 — illustration
-  "The other buttons nodded wisely. They had known all along. But they were kind enough not to say so.", // 043
-  null, // 044 — illustration
-  "The Shut-In Button still prefers to stay in. But now, every once in a while — for something truly important — it buttons up bravely.", // 045
-  null, // 046 — illustration
-  "Because sometimes, the smallest act of courage is just deciding to show up.", // 047
-  null, // 048 — illustration
-  null, // 049 — back matter
+// ── Story pages: illustration + narration text ────────────────────────────
+const PAGES = [
+  { img: '/images/reader/the-shut-in-button/page-005.jpg', text: `This is a button. A very particular button — round, shiny, and perfectly content to stay right where it is.`, pn: 5 },
+  { img: '/images/reader/the-shut-in-button/page-007.jpg', text: `Most buttons pop off by accident. This button popped off on purpose. There is a difference. And this button knows it.`, pn: 7 },
+  { img: '/images/reader/the-shut-in-button/page-009.jpg', text: `You see, the little girl who owned the coat liked adventures. Muddy ones. Rainy ones. The kind where your buttons get absolutely no say.`, pn: 9 },
+  { img: '/images/reader/the-shut-in-button/page-011.jpg', text: `The other buttons were fine with all of this. "Going out? Wonderful!" they said. They were, frankly, a bit much.`, pn: 11 },
+  { img: '/images/reader/the-shut-in-button/page-013.jpg', text: `But this button had a system. A lifestyle, really. Button up. Button down. Repeat. No surprises. No mud.`, pn: 13 },
+  { img: '/images/reader/the-shut-in-button/page-015.jpg', text: `One morning the little girl got very excited. "We're going to the park!" she announced. The other buttons cheered.`, pn: 15 },
+  { img: '/images/reader/the-shut-in-button/page-017.jpg', text: `The Shut-In Button did not cheer. The Shut-In Button had concerns about the park. Specifically: everything about the park.`, pn: 17 },
+  { img: '/images/reader/the-shut-in-button/page-019.jpg', text: `And so, very deliberately, the Shut-In Button did the thing it did best. It popped off. Plink. And rolled under the radiator.`, pn: 19 },
+  { img: '/images/reader/the-shut-in-button/page-021.jpg', text: `"Where did my button go?" asked the little girl. She looked and looked, but couldn't find it. Off they went without it.`, pn: 21 },
+  { img: '/images/reader/the-shut-in-button/page-023.jpg', text: `The Shut-In Button sat under the radiator. It was very quiet. And very safe. And very warm. And very... alone.`, pn: 23 },
+  { img: '/images/reader/the-shut-in-button/page-025.jpg', text: `Through the window, it could just barely see the little girl laughing in the park. The other buttons were catching leaves.`, pn: 25 },
+  { img: '/images/reader/the-shut-in-button/page-027.jpg', text: `Hmm. Catching leaves did look sort of fun. Not that the button would ever admit this.`, pn: 27 },
+  { img: '/images/reader/the-shut-in-button/page-029.jpg', text: `When the little girl came home, she looked tired and happy and a little bit muddy. The other buttons did look worse for wear.`, pn: 29 },
+  { img: '/images/reader/the-shut-in-button/page-031.jpg', text: `"I really need ALL my buttons for the recital tomorrow," the little girl said quietly. "I hope I can find the missing one."`, pn: 31 },
+  { img: '/images/reader/the-shut-in-button/page-033.jpg', text: `The Shut-In Button thought about this for a long time. A recital. That was important. That was different from mud.`, pn: 33 },
+  { img: '/images/reader/the-shut-in-button/page-035.jpg', text: `Perhaps… just for the recital… it could make an exception.`, pn: 35 },
+  { img: '/images/reader/the-shut-in-button/page-037.jpg', text: `The next morning, the little girl found the button behind the radiator. "There you are!" She hugged the coat tight.`, pn: 37 },
+  { img: '/images/reader/the-shut-in-button/page-039.jpg', text: `At the recital, the button was buttoned up perfectly. The little girl stood tall. The audience clapped. The button glowed.`, pn: 39 },
+  { img: '/images/reader/the-shut-in-button/page-041.jpg', text: `It was not muddy. It was not rainy. There were no fallen leaves. It was, the button had to admit, actually quite nice.`, pn: 41 },
+  { img: '/images/reader/the-shut-in-button/page-043.jpg', text: `The other buttons nodded wisely. They had known all along. But they were kind enough not to say so.`, pn: 43 },
+  { img: '/images/reader/the-shut-in-button/page-045.jpg', text: `The Shut-In Button still prefers to stay in. But now, every once in a while — for something truly important — it buttons up bravely.`, pn: 45 },
+  { img: '/images/reader/the-shut-in-button/page-047.jpg', text: `Because sometimes, the smallest act of courage is just deciding to show up.`, pn: 47 },
 ];
 
-export default function TheShutInButtonReaderPage() {
+const FLIP_MS = 600;
+
+// ── Animated sparkle overlay (plays during audio) ─────────────────────────
+function PageSparkle() {
   return (
-    <BookReader
-      bookSlug="the-shut-in-button"
-      title="The Shut-In Button"
-      totalPages={49}
-      storyPages={[5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47]}
-      narration={narration}
-    />
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      {[...Array(8)].map((_, i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            width: 6 + (i % 3) * 4,
+            height: 6 + (i % 3) * 4,
+            borderRadius: '50%',
+            background: i % 2 === 0 ? ACCENT : '#9B6FD0',
+            opacity: 0,
+            top: `${10 + i * 10}%`,
+            left: `${5 + i * 12}%`,
+            animation: `sparkle ${1.4 + i * 0.3}s ease-in-out ${i * 0.2}s infinite`,
+          }}
+        />
+      ))}
+      <style>{`
+        @keyframes sparkle {
+          0%, 100% { opacity: 0; transform: scale(0) translateY(0); }
+          50% { opacity: 0.7; transform: scale(1) translateY(-12px); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default function ReaderPage() {
+  const [started, setStarted] = useState(false);
+  const [pageIdx, setPageIdx] = useState(0);
+  const [flipState, setFlipState] = useState<{
+    dir: 'forward' | 'back';
+    fromIdx: number;
+    toIdx: number;
+  } | null>(null);
+  const [audioStatus, setAudioStatus] = useState<'idle' | 'loading' | 'playing'>('idle');
+  const [autoPlay, setAutoPlay] = useState(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const total = PAGES.length;
+  const current = PAGES[pageIdx];
+
+  // ── Audio ────────────────────────────────────────────────────────────────
+  const stopAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current = null;
+    }
+    setAudioStatus('idle');
+  }, []);
+
+  const playPage = useCallback(async (idx: number) => {
+    stopAudio();
+    setAudioStatus('loading');
+    try {
+      const mp3Url = `/audio/reader/${SLUG}/page-${String(PAGES[idx].pn).padStart(3, '0')}.mp3`;
+      const audio = new Audio(mp3Url);
+      audioRef.current = audio;
+      audio.onended = () => setAudioStatus('idle');
+      audio.onerror = () => setAudioStatus('idle');
+      audio.onplaying = () => setAudioStatus('playing');
+      await audio.play();
+    } catch {
+      setAudioStatus('idle');
+    }
+  }, [stopAudio]);
+
+  // Auto-play when page changes
+  useEffect(() => {
+    if (started && autoPlay) {
+      playPage(pageIdx);
+    }
+    return stopAudio;
+  }, [pageIdx, started]); // eslint-disable-line
+
+  // ── Page turn ────────────────────────────────────────────────────────────
+  const goNext = useCallback(() => {
+    if (pageIdx >= total - 1 || flipState) return;
+    stopAudio();
+    const toIdx = pageIdx + 1;
+    setFlipState({ dir: 'forward', fromIdx: pageIdx, toIdx });
+    setTimeout(() => {
+      setPageIdx(toIdx);
+      setFlipState(null);
+    }, FLIP_MS);
+  }, [pageIdx, total, flipState, stopAudio]);
+
+  const goPrev = useCallback(() => {
+    if (pageIdx <= 0 || flipState) return;
+    stopAudio();
+    const toIdx = pageIdx - 1;
+    setFlipState({ dir: 'back', fromIdx: pageIdx, toIdx });
+    setTimeout(() => {
+      setPageIdx(toIdx);
+      setFlipState(null);
+    }, FLIP_MS);
+  }, [pageIdx, flipState, stopAudio]);
+
+  // Keyboard nav
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') goNext();
+      if (e.key === 'ArrowLeft') goPrev();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [goNext, goPrev]);
+
+  // ── Swipe ─────────────────────────────────────────────────────────────────
+  const touchX = useRef<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => { touchX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    if (dx < -40) goNext();
+    if (dx > 40) goPrev();
+    touchX.current = null;
+  };
+
+  // ── Start screen ──────────────────────────────────────────────────────────
+  if (!started) {
+    return (
+      <div
+        style={{
+          minHeight: '100dvh',
+          background: 'linear-gradient(160deg, #1a0a2e 0%, #2d1060 50%, #0d1f3c 100%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '24px',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {[...Array(20)].map((_, i) => (
+          <div key={i} style={{
+            position: 'absolute',
+            width: 2 + (i % 3),
+            height: 2 + (i % 3),
+            borderRadius: '50%',
+            background: 'white',
+            opacity: 0.4 + (i % 5) * 0.12,
+            top: `${(i * 17 + 5) % 90}%`,
+            left: `${(i * 23 + 3) % 95}%`,
+            animation: `twinkle ${2 + (i % 3)}s ease-in-out ${i * 0.3}s infinite`,
+          }} />
+        ))}
+        <style>{`@keyframes twinkle { 0%,100%{opacity:0.2} 50%{opacity:0.9} }`}</style>
+
+        <div style={{
+          width: 200, height: 200, borderRadius: 16,
+          overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
+          marginBottom: 32, border: `3px solid ${ACCENT}66`,
+        }}>
+          <Image
+            src={`/images/reader/${SLUG}/${PAGES[0].img.split('/').pop()}`}
+            alt={TITLE}
+            width={200} height={200}
+            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          />
+        </div>
+
+        <h1 style={{
+          fontFamily: "'Concert One', cursive",
+          fontSize: 'clamp(1.6rem, 5vw, 2.4rem)',
+          color: ACCENT,
+          margin: '0 0 8px',
+          textShadow: `0 0 20px ${ACCENT}80`,
+        }}>
+          {TITLE}
+        </h1>
+        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', margin: '0 0 32px' }}>
+          by Family Fables
+        </p>
+
+        <button
+          onClick={() => setStarted(true)}
+          style={{
+            background: 'linear-gradient(135deg, #9B6FD0, #7C3AED)',
+            color: 'white',
+            border: `2px solid ${ACCENT}80`,
+            borderRadius: 50,
+            padding: '16px 40px',
+            fontSize: '1.1rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            boxShadow: '0 6px 24px rgba(155,111,208,0.5)',
+            letterSpacing: '0.03em',
+            marginBottom: 16,
+          }}
+        >
+          🔘 Read It To Me!
+        </button>
+
+        <label style={{
+          display: 'flex', alignItems: 'center', gap: 8,
+          color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem', cursor: 'pointer',
+        }}>
+          <input
+            type="checkbox"
+            checked={autoPlay}
+            onChange={e => setAutoPlay(e.target.checked)}
+            style={{ width: 16, height: 16, cursor: 'pointer' }}
+          />
+          Read aloud automatically
+        </label>
+
+        <Link
+          href="/"
+          style={{
+            marginTop: 24, color: 'rgba(255,255,255,0.35)',
+            fontSize: '0.8rem', textDecoration: 'none',
+          }}
+        >
+          ← Back to Family Fables
+        </Link>
+      </div>
+    );
+  }
+
+  // ── Reader ────────────────────────────────────────────────────────────────
+  return (
+    <div
+      style={{
+        minHeight: '100dvh',
+        background: '#0a0018',
+        display: 'flex',
+        flexDirection: 'column',
+        userSelect: 'none',
+        overflow: 'hidden',
+      }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Top bar */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '10px 16px',
+        background: 'rgba(0,0,0,0.6)',
+        backdropFilter: 'blur(8px)',
+        borderBottom: `1px solid ${ACCENT}26`,
+        zIndex: 10,
+        flexShrink: 0,
+      }}>
+        <Link
+          href="/"
+          style={{
+            color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem',
+            textDecoration: 'none', padding: '4px 8px',
+          }}
+        >
+          ← Home
+        </Link>
+        <span style={{
+          color: `${ACCENT}b3`,
+          fontSize: '0.78rem',
+          fontFamily: "'Concert One', cursive",
+          letterSpacing: '0.05em',
+        }}>
+          🔘 {TITLE}
+        </span>
+        <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.78rem', minWidth: 50, textAlign: 'right' }}>
+          {pageIdx + 1} / {total}
+        </span>
+      </div>
+
+      {/* Page spread */}
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          cursor: 'pointer',
+          padding: '8px',
+          minHeight: 0,
+          overflow: 'hidden',
+        }}
+        onClick={goNext}
+      >
+        {(() => {
+          const imgStyle: CSSProperties = {
+            maxWidth: '100%',
+            maxHeight: 'calc(100dvh - 160px)',
+            objectFit: 'contain',
+            borderRadius: 8,
+            display: 'block',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.8)',
+            userSelect: 'none',
+            pointerEvents: 'none',
+          };
+
+          if (!flipState) {
+            return (
+              <div style={{ position: 'relative' }}>
+                <Image
+                  src={current.img}
+                  alt={`Page ${pageIdx + 1}`}
+                  width={1800} height={900}
+                  priority={pageIdx < 3}
+                  style={imgStyle}
+                />
+                {audioStatus === 'playing' && <PageSparkle />}
+              </div>
+            );
+          }
+
+          const incomingImg = PAGES[flipState.toIdx].img;
+          const outgoingImg = PAGES[flipState.fromIdx].img;
+          const isForward = flipState.dir === 'forward';
+
+          return (
+            <div style={{ position: 'relative', display: 'inline-flex', justifyContent: 'center' }}>
+              <Image
+                src={incomingImg}
+                alt={`Page ${flipState.toIdx + 1}`}
+                width={1800} height={900}
+                priority
+                style={{ ...imgStyle, display: 'block' }}
+              />
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                transformStyle: 'preserve-3d',
+                transformOrigin: isForward ? 'left center' : 'right center',
+                animation: isForward
+                  ? `pageTurnForward ${FLIP_MS}ms cubic-bezier(0.645, 0.045, 0.355, 1.000) forwards`
+                  : `pageTurnBack ${FLIP_MS}ms cubic-bezier(0.645, 0.045, 0.355, 1.000) forwards`,
+                perspective: '1800px',
+              }}>
+                <Image
+                  src={outgoingImg}
+                  alt={`Page ${flipState.fromIdx + 1}`}
+                  width={1800} height={900}
+                  style={{ ...imgStyle, width: '100%', height: '100%', objectFit: 'contain' }}
+                />
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: 8,
+                  background: isForward
+                    ? 'linear-gradient(to left, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.55) 100%)'
+                    : 'linear-gradient(to right, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.55) 100%)',
+                  animation: `pageShadow ${FLIP_MS}ms ease-in forwards`,
+                  pointerEvents: 'none',
+                }} />
+              </div>
+              <style>{`
+                @keyframes pageTurnForward {
+                  0%   { transform: perspective(1800px) rotateY(0deg); }
+                  100% { transform: perspective(1800px) rotateY(-180deg); }
+                }
+                @keyframes pageTurnBack {
+                  0%   { transform: perspective(1800px) rotateY(0deg); }
+                  100% { transform: perspective(1800px) rotateY(180deg); }
+                }
+                @keyframes pageShadow {
+                  0%   { opacity: 0; }
+                  40%  { opacity: 1; }
+                  80%  { opacity: 0.6; }
+                  100% { opacity: 0; }
+                }
+              `}</style>
+            </div>
+          );
+        })()}
+      </div>
+
+      {/* Bottom controls */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '10px 16px',
+        background: 'rgba(0,0,0,0.7)',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
+        gap: 12,
+        flexShrink: 0,
+      }}>
+        <button
+          onClick={(e) => { e.stopPropagation(); goPrev(); }}
+          disabled={pageIdx === 0}
+          aria-label="Previous page"
+          style={{
+            background: pageIdx === 0 ? 'rgba(255,255,255,0.05)' : 'rgba(155,111,208,0.3)',
+            border: '1px solid rgba(155,111,208,0.4)',
+            borderRadius: 40,
+            width: 44, height: 44,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: pageIdx === 0 ? 'rgba(255,255,255,0.15)' : 'white',
+            fontSize: '1.2rem',
+            cursor: pageIdx === 0 ? 'default' : 'pointer',
+            flexShrink: 0,
+          }}
+        >◀</button>
+
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ display: 'flex', gap: 3, justifyContent: 'center', flexWrap: 'wrap' }}>
+            {PAGES.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (i !== pageIdx && !flipState) {
+                    stopAudio();
+                    const dir = i > pageIdx ? 'forward' : 'back';
+                    setFlipState({ dir, fromIdx: pageIdx, toIdx: i });
+                    setTimeout(() => { setPageIdx(i); setFlipState(null); }, 600);
+                  }
+                }}
+                aria-label={`Go to page ${i + 1}`}
+                style={{
+                  width: i === pageIdx ? 18 : 8,
+                  height: 8,
+                  borderRadius: 4,
+                  background: i === pageIdx ? ACCENT : i < pageIdx ? 'rgba(155,111,208,0.6)' : 'rgba(255,255,255,0.15)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  padding: 0,
+                  flexShrink: 0,
+                }}
+              />
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (audioStatus !== 'idle') { stopAudio(); } else { playPage(pageIdx); }
+              }}
+              style={{
+                background: 'rgba(155,111,208,0.2)',
+                border: '1px solid rgba(155,111,208,0.4)',
+                borderRadius: 20,
+                padding: '4px 14px',
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: '0.78rem',
+                cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: 5,
+              }}
+            >
+              {audioStatus === 'idle' ? '🔊 Read aloud' : audioStatus === 'loading' ? '⏳ Loading…' : '⏹ Stop'}
+            </button>
+          </div>
+        </div>
+
+        <button
+          onClick={(e) => { e.stopPropagation(); goNext(); }}
+          disabled={pageIdx === total - 1}
+          aria-label="Next page"
+          style={{
+            background: pageIdx === total - 1 ? 'rgba(255,255,255,0.05)' : 'rgba(155,111,208,0.3)',
+            border: '1px solid rgba(155,111,208,0.4)',
+            borderRadius: 40,
+            width: 44, height: 44,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: pageIdx === total - 1 ? 'rgba(255,255,255,0.15)' : 'white',
+            fontSize: '1.2rem',
+            cursor: pageIdx === total - 1 ? 'default' : 'pointer',
+            flexShrink: 0,
+          }}
+        >▶</button>
+      </div>
+    </div>
   );
 }
