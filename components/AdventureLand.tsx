@@ -278,33 +278,33 @@ export default function AdventureLand({
               sizes="(max-width: 768px) 140px, 240px"
             />
           </div>
-
-          {/* Character art — floating beside/behind cover */}
-          {characterImage && (
-            <div
-              className="adventure-char-wrap"
-              style={{
-                position: "absolute",
-                bottom: -20,
-                [isEven ? "left" : "right"]: -50,
-                width: "clamp(80px, 14vw, 180px)",
-                zIndex: 3,
-                pointerEvents: "none",
-                filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.35))",
-                animation: "adventureFloat 4s ease-in-out infinite",
-              }}
-            >
-              <Image
-                src={characterImage}
-                alt={characterAlt || "character"}
-                width={180}
-                height={220}
-                style={{ width: "100%", height: "auto", display: "block" }}
-                sizes="(max-width: 768px) 80px, 180px"
-              />
-            </div>
-          )}
         </div>
+
+        {/* Character art — separate column, beside the cover, not overlapping */}
+        {characterImage && (
+          <div
+            className="adventure-char-wrap"
+            style={{
+              flex: "0 0 auto",
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              width: "clamp(80px, 12vw, 160px)",
+              pointerEvents: "none",
+              filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.35))",
+              animation: "adventureFloat 4s ease-in-out infinite",
+            }}
+          >
+            <Image
+              src={characterImage}
+              alt={characterAlt || "character"}
+              width={160}
+              height={200}
+              style={{ width: "100%", height: "auto", display: "block" }}
+              sizes="(max-width: 768px) 80px, 160px"
+            />
+          </div>
+        )}
 
         {/* Text + activities */}
         <div className="adventure-land-text" style={{ flex: "1 1 260px", minWidth: 220 }}>
