@@ -40,27 +40,27 @@ function HillDivider({ fill }: { fill: string }) {
       className="adventure-divider-wrap"
       style={{
         position: "absolute",
-        bottom: -2,
+        bottom: -80,
         left: 0,
         width: "100%",
-        height: 120,
+        height: 160,
         pointerEvents: "none",
         zIndex: 4,
       }}
     >
       <svg
-        viewBox="0 0 1440 120"
+        viewBox="0 0 1440 160"
         preserveAspectRatio="none"
         style={{ width: "100%", height: "100%", display: "block" }}
         aria-hidden="true"
       >
         <path
-          d="M0,120 L0,70 C180,110 360,30 540,60 C720,90 900,20 1080,50 C1260,80 1380,40 1440,55 L1440,120 Z"
+          d="M0,160 L0,90 C180,140 360,40 540,80 C720,120 900,30 1080,65 C1260,100 1380,55 1440,70 L1440,160 Z"
           fill={fill}
           fillOpacity="0.5"
         />
         <path
-          d="M0,120 L0,80 C200,120 400,45 600,70 C800,95 1000,35 1200,60 C1320,75 1400,50 1440,65 L1440,120 Z"
+          d="M0,160 L0,105 C200,155 400,55 600,90 C800,125 1000,45 1200,80 C1320,100 1400,65 1440,85 L1440,160 Z"
           fill={fill}
         />
       </svg>
@@ -74,27 +74,27 @@ function WaveDivider({ fill }: { fill: string }) {
       className="adventure-divider-wrap"
       style={{
         position: "absolute",
-        bottom: -2,
+        bottom: -80,
         left: 0,
         width: "100%",
-        height: 100,
+        height: 160,
         pointerEvents: "none",
         zIndex: 4,
       }}
     >
       <svg
-        viewBox="0 0 1440 100"
+        viewBox="0 0 1440 160"
         preserveAspectRatio="none"
         style={{ width: "100%", height: "100%", display: "block" }}
         aria-hidden="true"
       >
         <path
-          d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,100 L0,100 Z"
+          d="M0,90 C240,155 480,30 720,90 C960,150 1200,30 1440,90 L1440,160 L0,160 Z"
           fill={fill}
           fillOpacity="0.4"
         />
         <path
-          d="M0,70 C200,110 440,30 720,70 C1000,110 1240,30 1440,70 L1440,100 L0,100 Z"
+          d="M0,105 C200,165 440,45 720,105 C1000,165 1240,45 1440,105 L1440,160 L0,160 Z"
           fill={fill}
         />
       </svg>
@@ -108,22 +108,22 @@ function SlopeDivider({ fill }: { fill: string }) {
       className="adventure-divider-wrap"
       style={{
         position: "absolute",
-        bottom: -2,
+        bottom: -80,
         left: 0,
         width: "100%",
-        height: 120,
+        height: 160,
         pointerEvents: "none",
         zIndex: 4,
       }}
     >
       <svg
-        viewBox="0 0 1440 120"
+        viewBox="0 0 1440 160"
         preserveAspectRatio="none"
         style={{ width: "100%", height: "100%", display: "block" }}
         aria-hidden="true"
       >
-        <path d="M0,60 Q720,120 1440,40 L1440,120 L0,120 Z" fill={fill} fillOpacity="0.4" />
-        <path d="M0,80 Q720,120 1440,60 L1440,120 L0,120 Z" fill={fill} />
+        <path d="M0,80 Q360,160 720,100 Q1080,40 1440,120 L1440,160 L0,160 Z" fill={fill} fillOpacity="0.4" />
+        <path d="M0,105 Q360,160 720,120 Q1080,60 1440,140 L1440,160 L0,160 Z" fill={fill} />
       </svg>
     </div>
   );
@@ -166,7 +166,7 @@ export default function AdventureLand({
         position: "relative",
         minHeight: "92vh",
         background: gradient,
-        overflow: "hidden",
+        overflow: "visible",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
