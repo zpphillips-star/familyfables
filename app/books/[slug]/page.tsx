@@ -444,7 +444,7 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ABOUT THE BOOK
       ══════════════════════════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#ffffff", padding: "28px 24px 72px", position: "relative" }}>
+      <section style={{ backgroundColor: "#ffffff", padding: "28px 24px 72px", position: "relative", zIndex: 4 }}>
         <div
           style={{
             maxWidth: 720,
@@ -544,10 +544,7 @@ export default async function BookPage({
             textAlign: "center",
             position: "relative",
             marginTop: -40,
-            zIndex: 2,
-          }}
-        >
-          {/* Bottom wave: Read Aloud → Activity */}
+            zIndex: 3,
           <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
             <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
               <path d="M0,20 C360,38 720,2 1080,28 C1260,38 1380,12 1440,22 L1440,40 L0,40 Z" fill={`${book.accentColor}12`} />
@@ -619,10 +616,7 @@ export default async function BookPage({
             textAlign: "center",
             position: "relative",
             marginTop: -40,
-            zIndex: 2,
-          }}
-        >
-          {/* Bottom wave: Coming Soon → Activity */}
+            zIndex: 3,
           <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
             <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
               <path d="M0,20 C360,38 720,2 1080,28 C1260,38 1380,12 1440,22 L1440,40 L0,40 Z" fill={`${book.accentColor}12`} />
@@ -673,7 +667,7 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ACTIVITY SECTION (client component)
       ══════════════════════════════════════════════════════════════════ */}
-      <div style={{ position: "relative", zIndex: 3, marginTop: -40 }}>
+      <div style={{ position: "relative", zIndex: 2, marginTop: -40 }}>
         <BookActivity slug={slug} accentColor={book.accentColor} />
       </div>
 
@@ -688,7 +682,7 @@ export default async function BookPage({
           position: "relative",
           overflow: "visible",
           marginTop: -40,
-          zIndex: 4,
+          zIndex: 1,
         }}
       >
         {/* Wave at top of CTA — white bites down into the gradient, Activity section overlapped above */}
