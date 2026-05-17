@@ -204,6 +204,21 @@ export default async function BookPage({
   const heroBadgeBorder = heroTextLight ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.2)";
   const heroBadgeColor = heroTextLight ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.8)";
 
+  // Blend accentColor with white at a given opacity to get a solid opaque color.
+  // This ensures wave fills are fully opaque — no layering artifacts.
+  function blendWithWhite(hex: string, alpha: number): string {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const br = Math.round(r * alpha + 255 * (1 - alpha));
+    const bg2 = Math.round(g * alpha + 255 * (1 - alpha));
+    const bb = Math.round(b * alpha + 255 * (1 - alpha));
+    return `rgb(${br},${bg2},${bb})`;
+  }
+  // Solid equivalents of the semi-transparent section backgrounds (on white)
+  const readAloudBgSolid = blendWithWhite(book.accentColor, 0x2e / 255); // ~18%
+  const activityBgSolid  = blendWithWhite(book.accentColor, 0x12 / 255); // ~7%
+
   return (
     <>
       {/* ── Global keyframes ── */}
@@ -527,28 +542,25 @@ export default async function BookPage({
         </div>
       </section>
 
-      {/* ── SEAM: About → Read Aloud ─────────────────────────────────────
-          Two-path SVG: top=white (About's bg), bottom=Read Aloud's bg.
-          Sits on top of both, covers the boundary. No section overlap needed. */}
-      <div style={{ position: "relative", zIndex: 10, marginTop: -40, height: 40, pointerEvents: "none" }}>
-        <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-          <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill="#ffffff" />
-          <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,40 L0,40 Z" fill={book.hasReadAloud ? `${book.accentColor}2e` : "#f9f5ff"} />
-        </svg>
-      </div>
-
       {/* ══════════════════════════════════════════════════════════════════
-          READ ALOUD SECTION
+          READ ALOUD SECTION — slides on top of About (later in DOM = naturally on top)
       ══════════════════════════════════════════════════════════════════ */}
       {book.hasReadAloud ? (
         <section
           style={{
             backgroundColor: `${book.accentColor}2e`,
-            padding: "64px 24px",
+            padding: "104px 24px 64px",
             textAlign: "center",
             position: "relative",
+            marginTop: -40,
           }}
         >
+          {/* Wave at TOP: white fills the overlapping zone above the curve, hides About's flat edge */}
+          <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
+            <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+              <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill="#ffffff" />
+            </svg>
+          </div>
           <div style={{ maxWidth: 680, margin: "0 auto" }}>
             <p
               style={{
@@ -611,11 +623,18 @@ export default async function BookPage({
         <section
           style={{
             backgroundColor: "#f9f5ff",
-            padding: "64px 24px",
+            padding: "104px 24px 64px",
             textAlign: "center",
             position: "relative",
+            marginTop: -40,
           }}
         >
+          {/* Wave at TOP: white fills above the curve */}
+          <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
+            <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+              <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill="#ffffff" />
+            </svg>
+          </div>
           <div style={{ maxWidth: 480, margin: "0 auto" }}>
             <div
               style={{
@@ -658,41 +677,38 @@ export default async function BookPage({
         </section>
       )}
 
-      {/* ── SEAM: Read Aloud → Activity ─────────────────────────────────
-          Top = Read Aloud bg, Bottom = Activity bg (accentColor12) */}
-      <div style={{ position: "relative", zIndex: 10, marginTop: -40, height: 40, pointerEvents: "none" }}>
-        <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-          <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill={book.hasReadAloud ? `${book.accentColor}2e` : "#f9f5ff"} />
-          <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,40 L0,40 Z" fill={`${book.accentColor}12`} />
-        </svg>
-      </div>
-
       {/* ══════════════════════════════════════════════════════════════════
-          ACTIVITY SECTION (client component)
+          ACTIVITY SECTION — slides on top of Read Aloud, wave fill = solid Read Aloud color
       ══════════════════════════════════════════════════════════════════ */}
-      <BookActivity slug={slug} accentColor={book.accentColor} />
-
-      {/* ── SEAM: Activity → CTA ─────────────────────────────────────────
-          Top = Activity bg (accentColor12), Bottom = first stop of gradient */}
-      <div style={{ position: "relative", zIndex: 10, marginTop: -40, height: 40, pointerEvents: "none" }}>
-        <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-          <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill={`${book.accentColor}12`} />
-          <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,40 L0,40 Z" fill="rgba(0,0,0,0.08)" />
-        </svg>
+      <div style={{ position: "relative", marginTop: -40 }}>
+        {/* Wave at TOP: solid Read Aloud bg color fills above curve — fully opaque, no bleed-through */}
+        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill={readAloudBgSolid} />
+          </svg>
+        </div>
+        <BookActivity slug={slug} accentColor={book.accentColor} />
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════
-          GET THE BOOK — bottom CTA
+          GET THE BOOK — bottom CTA — slides on top of Activity
       ══════════════════════════════════════════════════════════════════ */}
       <section
         style={{
           background: book.gradient,
-          padding: "80px 24px",
+          padding: "104px 24px 80px",
           textAlign: "center",
           position: "relative",
           overflow: "visible",
+          marginTop: -40,
         }}
       >
+        {/* Wave at TOP: solid Activity bg color fills above curve */}
+        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill={activityBgSolid} />
+          </svg>
+        </div>
         {/* Themed land decorations */}
         <div
           aria-hidden="true"
