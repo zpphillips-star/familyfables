@@ -433,10 +433,10 @@ export default async function BookPage({
           </div>
         </div>
 
-        {/* Single wave line divider */}
-        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
-          <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" fill="#ffffff" />
+        {/* Bottom wave transition */}
+        <div style={{ position: "absolute", bottom: -2, left: 0, width: "100%", height: 80, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,40 C360,80 720,10 1080,50 C1260,70 1380,30 1440,45 L1440,80 L0,80 Z" fill="#ffffff" />
           </svg>
         </div>
       </section>
@@ -444,7 +444,7 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ABOUT THE BOOK
       ══════════════════════════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#ffffff", padding: "28px 24px 72px", position: "relative" }}>
+      <section style={{ backgroundColor: "#ffffff", padding: "72px 24px" }}>
         <div
           style={{
             maxWidth: 720,
@@ -525,12 +525,6 @@ export default async function BookPage({
             Perfect for {book.ageRange}
           </span>
         </div>
-        {/* Wave at bottom of About — next section overlaps to hide the seam */}
-        <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
-          <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,20 C360,38 720,2 1080,28 C1260,38 1380,12 1440,22 L1440,40 L0,40 Z" fill={`${book.accentColor}2e`} />
-          </svg>
-        </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
@@ -539,20 +533,12 @@ export default async function BookPage({
       {book.hasReadAloud ? (
         <section
           style={{
-            backgroundColor: `${book.accentColor}2e`,
-            padding: "104px 24px 64px",
+            backgroundColor: `${book.accentColor}10`,
+            padding: "64px 24px",
             textAlign: "center",
-            position: "relative",
-            marginTop: -40,
-            zIndex: 2,
+            borderTop: `3px solid ${book.accentColor}33`,
           }}
         >
-          {/* Bottom wave: Read Aloud → Activity */}
-          <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,20 C360,38 720,2 1080,28 C1260,38 1380,12 1440,22 L1440,40 L0,40 Z" fill={`${book.accentColor}12`} />
-            </svg>
-          </div>
           <div style={{ maxWidth: 680, margin: "0 auto" }}>
             <p
               style={{
@@ -615,19 +601,11 @@ export default async function BookPage({
         <section
           style={{
             backgroundColor: "#f9f5ff",
-            padding: "104px 24px 64px",
+            padding: "64px 24px",
             textAlign: "center",
-            position: "relative",
-            marginTop: -40,
-            zIndex: 2,
+            borderTop: `3px solid ${book.accentColor}33`,
           }}
         >
-          {/* Bottom wave: Coming Soon → Activity */}
-          <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,20 C360,38 720,2 1080,28 C1260,38 1380,12 1440,22 L1440,40 L0,40 Z" fill={`${book.accentColor}12`} />
-            </svg>
-          </div>
           <div style={{ maxWidth: 480, margin: "0 auto" }}>
             <div
               style={{
@@ -673,9 +651,7 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ACTIVITY SECTION (client component)
       ══════════════════════════════════════════════════════════════════ */}
-      <div style={{ position: "relative", zIndex: 3, marginTop: -40 }}>
-        <BookActivity slug={slug} accentColor={book.accentColor} />
-      </div>
+      <BookActivity slug={slug} accentColor={book.accentColor} />
 
       {/* ══════════════════════════════════════════════════════════════════
           GET THE BOOK — bottom CTA
@@ -683,20 +659,12 @@ export default async function BookPage({
       <section
         style={{
           background: book.gradient,
-          padding: "120px 24px 80px",
+          padding: "80px 24px",
           textAlign: "center",
           position: "relative",
-          overflow: "visible",
-          marginTop: -40,
-          zIndex: 4,
+          overflow: "hidden",
         }}
       >
-        {/* Wave at top of CTA — white bites down into the gradient, Activity section overlapped above */}
-        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 5 }}>
-          <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill={`${book.accentColor}12`} />
-          </svg>
-        </div>
         {/* Themed land decorations */}
         <div
           aria-hidden="true"
