@@ -433,10 +433,10 @@ export default async function BookPage({
           </div>
         </div>
 
-        {/* Bottom wave transition */}
-        <div style={{ position: "absolute", bottom: -2, left: 0, width: "100%", height: 80, pointerEvents: "none", zIndex: 4 }}>
-          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,40 C360,80 720,10 1080,50 C1260,70 1380,30 1440,45 L1440,80 L0,80 Z" fill="#ffffff" />
+        {/* Single wave line divider */}
+        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,16 C360,2 720,30 1080,10 C1260,2 1380,22 1440,14 L1440,32 L0,32 Z" fill="#ffffff" />
           </svg>
         </div>
       </section>
