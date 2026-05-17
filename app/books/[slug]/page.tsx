@@ -448,7 +448,7 @@ export default async function BookPage({
         {/* Wave into Read Aloud section */}
         <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
           <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d={`M0,16 C400,2 800,30 1200,12 C1320,6 1400,20 1440,16 L1440,32 L0,32 Z`} fill={book.accentColor} fillOpacity="0.18" />
+            <path d="M0,16 C360,2 720,30 1080,10 C1260,2 1380,22 1440,14 L1440,32 L0,32 Z" fill={book.accentColor} fillOpacity="0.18" />
           </svg>
         </div>
         <div
@@ -548,7 +548,7 @@ export default async function BookPage({
           {/* Wave into Activity section */}
           <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
             <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,14 C360,28 720,2 1080,18 C1260,26 1380,8 1440,14 L1440,32 L0,32 Z" fill="#ffffff" />
+              <path d="M0,16 C360,2 720,30 1080,10 C1260,2 1380,22 1440,14 L1440,32 L0,32 Z" fill="#ffffff" />
             </svg>
           </div>
           <div style={{ maxWidth: 680, margin: "0 auto" }}>
@@ -680,7 +680,7 @@ export default async function BookPage({
         {/* Wave in from Activity section above */}
         <div style={{ position: "absolute", top: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
           <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,18 C360,32 720,6 1080,22 C1260,30 1380,12 1440,18 L1440,0 L0,0 Z" fill="#ffffff" />
+            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" fill="#ffffff" />
           </svg>
         </div>
         {/* Themed land decorations */}
