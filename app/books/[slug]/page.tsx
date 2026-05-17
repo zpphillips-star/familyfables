@@ -444,7 +444,7 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ABOUT THE BOOK
       ══════════════════════════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#ffffff", padding: "72px 24px" }}>
+      <section style={{ backgroundColor: "#ffffff", padding: "28px 24px 72px" }}>
         <div
           style={{
             maxWidth: 720,
