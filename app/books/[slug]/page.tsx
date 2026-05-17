@@ -545,12 +545,6 @@ export default async function BookPage({
               <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" fill="#ffffff" />
             </svg>
           </div>
-          {/* White wave at BOTTOM — blends into white Activity section below */}
-          <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" fill="#ffffff" />
-            </svg>
-          </div>
           <div style={{ maxWidth: 680, margin: "0 auto" }}>
             <p
               style={{
@@ -618,16 +612,10 @@ export default async function BookPage({
             position: "relative",
           }}
         >
-          {/* White wave at TOP */}
+          {/* White wave at TOP only */}
           <div style={{ position: "absolute", top: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
             <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
               <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" fill="#ffffff" />
-            </svg>
-          </div>
-          {/* White wave at BOTTOM */}
-          <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" fill="#ffffff" />
             </svg>
           </div>
           <div style={{ maxWidth: 480, margin: "0 auto" }}>
@@ -686,7 +674,7 @@ export default async function BookPage({
           padding: "80px 24px",
           textAlign: "center",
           position: "relative",
-          overflow: "hidden",
+          overflow: "visible",
         }}
       >
         {/* Wave in from Activity section above */}
