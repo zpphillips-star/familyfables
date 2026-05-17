@@ -459,7 +459,7 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ABOUT THE BOOK
       ══════════════════════════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#ffffff", padding: "28px 24px 72px", position: "relative" }}>
+      <section style={{ backgroundColor: "#ffffff", padding: "28px 24px 72px", position: "relative", overflow: "visible" }}>
         <div
           style={{
             maxWidth: 720,
@@ -540,16 +540,14 @@ export default async function BookPage({
             Perfect for {book.ageRange}
           </span>
         </div>
-      </section>
 
-      {/* ── WAVE LINE: About → Read Aloud ── single stroke, no fill, no band ── */}
-      <div style={{ position: "relative", height: 0, overflow: "visible", zIndex: 20, pointerEvents: "none" }}>
-        <svg viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"
-          style={{ position: "absolute", top: -14, left: 0, width: "100%", height: 28, display: "block" }}>
-          <path d="M0,14 C240,2 480,26 720,14 C960,2 1200,26 1440,14"
-            fill="none" stroke={book.accentColor} strokeWidth="4" vectorEffect="non-scaling-stroke" />
-        </svg>
-      </div>
+        {/* Wave at bottom of About → matches Read Aloud background exactly */}
+        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" fill={readAloudBgSolid} />
+          </svg>
+        </div>
+      </section>
 
       {/* ══════════════════════════════════════════════════════════════════
           READ ALOUD SECTION
@@ -561,6 +559,7 @@ export default async function BookPage({
             padding: "64px 24px",
             textAlign: "center",
             position: "relative",
+            overflow: "visible",
           }}
         >
           <div style={{ maxWidth: 680, margin: "0 auto" }}>
@@ -620,6 +619,13 @@ export default async function BookPage({
               📖 Start Reading Now →
             </Link>
           </div>
+
+          {/* Wave at bottom of Read Aloud → matches Activity background exactly */}
+          <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
+            <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" fill={activityBgSolid} />
+            </svg>
+          </div>
         </section>
       ) : (
         <section
@@ -628,6 +634,7 @@ export default async function BookPage({
             padding: "64px 24px",
             textAlign: "center",
             position: "relative",
+            overflow: "visible",
           }}
         >
           <div style={{ maxWidth: 480, margin: "0 auto" }}>
@@ -669,31 +676,20 @@ export default async function BookPage({
               Check back soon — the full read-aloud experience is coming. 🎙️
             </p>
           </div>
+
+          {/* Wave at bottom of Coming Soon → matches Activity background exactly */}
+          <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
+            <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" fill={activityBgSolid} />
+            </svg>
+          </div>
         </section>
       )}
-
-      {/* ── WAVE LINE: Read Aloud → Activity ── */}
-      <div style={{ position: "relative", height: 0, overflow: "visible", zIndex: 20, pointerEvents: "none" }}>
-        <svg viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"
-          style={{ position: "absolute", top: -14, left: 0, width: "100%", height: 28, display: "block" }}>
-          <path d="M0,14 C240,2 480,26 720,14 C960,2 1200,26 1440,14"
-            fill="none" stroke={book.accentColor} strokeWidth="4" vectorEffect="non-scaling-stroke" />
-        </svg>
-      </div>
 
       {/* ══════════════════════════════════════════════════════════════════
           ACTIVITY SECTION (client component)
       ══════════════════════════════════════════════════════════════════ */}
       <BookActivity slug={slug} accentColor={book.accentColor} />
-
-      {/* ── WAVE LINE: Activity → CTA ── */}
-      <div style={{ position: "relative", height: 0, overflow: "visible", zIndex: 20, pointerEvents: "none" }}>
-        <svg viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"
-          style={{ position: "absolute", top: -14, left: 0, width: "100%", height: 28, display: "block" }}>
-          <path d="M0,14 C240,2 480,26 720,14 C960,2 1200,26 1440,14"
-            fill="none" stroke={book.accentColor} strokeWidth="4" vectorEffect="non-scaling-stroke" />
-        </svg>
-      </div>
 
       {/* ══════════════════════════════════════════════════════════════════
           GET THE BOOK — bottom CTA
@@ -707,6 +703,12 @@ export default async function BookPage({
           overflow: "visible",
         }}
       >
+        {/* Wave at top of CTA → matches Activity background exactly */}
+        <div style={{ position: "absolute", top: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" fill={activityBgSolid} />
+          </svg>
+        </div>
         {/* Themed land decorations */}
         <div
           aria-hidden="true"
