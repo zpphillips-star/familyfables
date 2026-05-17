@@ -204,20 +204,18 @@ export default async function BookPage({
   const heroBadgeBorder = heroTextLight ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.2)";
   const heroBadgeColor = heroTextLight ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.8)";
 
-  // Blend accentColor with white at a given opacity to get a solid opaque color.
-  // This ensures wave fills are fully opaque — no layering artifacts.
-  function blendWithWhite(hex: string, alpha: number): string {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    const br = Math.round(r * alpha + 255 * (1 - alpha));
-    const bg2 = Math.round(g * alpha + 255 * (1 - alpha));
-    const bb = Math.round(b * alpha + 255 * (1 - alpha));
-    return `rgb(${br},${bg2},${bb})`;
+  // Blend a hex color over a background at given alpha → fully opaque solid color.
+  function blendColors(bg: string, fg: string, alpha: number): string {
+    const br = parseInt(bg.slice(1,3),16), bg2 = parseInt(bg.slice(3,5),16), bb = parseInt(bg.slice(5,7),16);
+    const fr = parseInt(fg.slice(1,3),16), fg2 = parseInt(fg.slice(3,5),16), fb = parseInt(fg.slice(5,7),16);
+    return `rgb(${Math.round(fr*alpha+br*(1-alpha))},${Math.round(fg2*alpha+bg2*(1-alpha))},${Math.round(fb*alpha+bb*(1-alpha))})`;
   }
-  // Solid equivalents of the semi-transparent section backgrounds (on white)
-  const readAloudBgSolid = blendWithWhite(book.accentColor, 0x2e / 255); // ~18%
-  const activityBgSolid  = blendWithWhite(book.accentColor, 0x12 / 255); // ~7%
+  // Day-mode solids (white bg = #ffffff)
+  const readAloudBgSolid = blendColors('#ffffff', book.accentColor, 0x2e / 255);
+  const activityBgSolid  = blendColors('#ffffff', book.accentColor, 0x12 / 255);
+  // Bedtime-mode solids (dark bg = #0D0520)
+  const readAloudBgDark  = blendColors('#0D0520', book.accentColor, 0x2e / 255);
+  const activityBgDark   = blendColors('#0D0520', book.accentColor, 0x12 / 255);
 
   return (
     <>
@@ -285,6 +283,18 @@ export default async function BookPage({
           box-shadow: 0 10px 32px rgba(0,0,0,0.3) !important;
         }
         .book-back-link:hover { opacity: 0.75; }
+
+        /* Section backgrounds — opaque solids that match day/bedtime page bg */
+        .section-read-aloud { background-color: ${readAloudBgSolid}; }
+        [data-mode="bedtime"] .section-read-aloud { background-color: ${readAloudBgDark}; }
+        .section-activity { background-color: ${activityBgSolid}; }
+        [data-mode="bedtime"] .section-activity { background-color: ${activityBgDark}; }
+
+        /* Wave fill colors — must exactly match the section they transition INTO */
+        .wave-fill-read-aloud { fill: ${readAloudBgSolid}; }
+        [data-mode="bedtime"] .wave-fill-read-aloud { fill: ${readAloudBgDark}; }
+        .wave-fill-activity { fill: ${activityBgSolid}; }
+        [data-mode="bedtime"] .wave-fill-activity { fill: ${activityBgDark}; }
       `}</style>
 
       {/* ══════════════════════════════════════════════════════════════════
@@ -544,7 +554,7 @@ export default async function BookPage({
         {/* Wave at bottom of About → matches Read Aloud background exactly */}
         <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
           <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" fill={readAloudBgSolid} />
+            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" className="wave-fill-read-aloud" />
           </svg>
         </div>
       </section>
@@ -555,12 +565,13 @@ export default async function BookPage({
       {book.hasReadAloud ? (
         <section
           style={{
-            backgroundColor: `${book.accentColor}2e`,
+            backgroundColor: undefined,
             padding: "64px 24px",
             textAlign: "center",
             position: "relative",
             overflow: "visible",
           }}
+          className="section-read-aloud"
         >
           <div style={{ maxWidth: 680, margin: "0 auto" }}>
             <p
@@ -623,7 +634,7 @@ export default async function BookPage({
           {/* Wave at bottom of Read Aloud → matches Activity background exactly */}
           <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
             <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" fill={activityBgSolid} />
+              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" className="wave-fill-activity" />
             </svg>
           </div>
         </section>
@@ -680,7 +691,7 @@ export default async function BookPage({
           {/* Wave at bottom of Coming Soon → matches Activity background exactly */}
           <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
             <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" fill={activityBgSolid} />
+              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" className="wave-fill-activity" />
             </svg>
           </div>
         </section>
@@ -689,7 +700,7 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ACTIVITY SECTION (client component)
       ══════════════════════════════════════════════════════════════════ */}
-      <BookActivity slug={slug} accentColor={book.accentColor} />
+      <BookActivity slug={slug} accentColor={book.accentColor} activityBgSolid={activityBgSolid} activityBgDark={activityBgDark} />
 
       {/* ══════════════════════════════════════════════════════════════════
           GET THE BOOK — bottom CTA
@@ -706,7 +717,7 @@ export default async function BookPage({
         {/* Wave at top of CTA → matches Activity background exactly */}
         <div style={{ position: "absolute", top: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
           <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" fill={activityBgSolid} />
+            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" className="wave-fill-activity" />
           </svg>
         </div>
         {/* Themed land decorations */}
