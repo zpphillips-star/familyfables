@@ -448,7 +448,7 @@ export default async function BookPage({
         {/* Wave into Read Aloud section */}
         <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
           <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d={`M0,16 C400,2 800,30 1200,12 C1320,6 1400,20 1440,16 L1440,32 L0,32 Z`} fill={`${book.accentColor}10`} />
+            <path d={`M0,16 C400,2 800,30 1200,12 C1320,6 1400,20 1440,16 L1440,32 L0,32 Z`} fill={book.accentColor} fillOpacity="0.18" />
           </svg>
         </div>
         <div
@@ -539,7 +539,7 @@ export default async function BookPage({
       {book.hasReadAloud ? (
         <section
           style={{
-            backgroundColor: `${book.accentColor}10`,
+            backgroundColor: `${book.accentColor}2e`,
             padding: "64px 24px",
             textAlign: "center",
             position: "relative",
