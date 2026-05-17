@@ -566,7 +566,7 @@ export default async function BookPage({
         <section
           style={{
             backgroundColor: undefined,
-            padding: "64px 24px",
+            padding: "64px 24px 24px",
             textAlign: "center",
             position: "relative",
             overflow: "visible",
