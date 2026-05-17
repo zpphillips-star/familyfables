@@ -631,10 +631,10 @@ export default async function BookPage({
             </Link>
           </div>
 
-          {/* Wave at bottom of Read Aloud — fills ABOVE the curve with Read Aloud's own color */}
+          {/* Wave at bottom of Read Aloud — fills BELOW the curve with Activity's color (same rule as all other waves) */}
           <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
             <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
+              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" className="wave-fill-activity" />
             </svg>
           </div>
         </section>
@@ -688,10 +688,10 @@ export default async function BookPage({
             </p>
           </div>
 
-          {/* Wave at bottom of Coming Soon — fills ABOVE the curve with section's own color */}
+          {/* Wave at bottom of Coming Soon — fills BELOW the curve with Activity's color */}
           <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
             <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
+              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" className="wave-fill-activity" />
             </svg>
           </div>
         </section>
