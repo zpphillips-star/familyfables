@@ -505,22 +505,13 @@ function TextInputActivity({
 interface BookActivityProps {
   slug: string;
   accentColor: string;
-  activityBgSolid?: string;
-  activityBgDark?: string;
 }
 
-export default function BookActivity({ slug, accentColor, activityBgSolid, activityBgDark }: BookActivityProps) {
-  const lightBg = activityBgSolid || `${accentColor}12`;
-
+export default function BookActivity({ slug, accentColor }: BookActivityProps) {
   const wrap = (title: string, emoji: string, child: React.ReactNode) => (
     <section
-      style={{
-        padding: "64px 24px",
-        // If activityBgSolid is passed, CSS class handles the background (with bedtime support)
-        // Otherwise fall back to the semi-transparent inline style
-        background: activityBgSolid ? undefined : lightBg,
-      }}
-      className={activityBgSolid ? "section-activity" : undefined}
+      style={{ padding: "64px 24px" }}
+      className="section-activity"
     >
       <div style={{ maxWidth: 680, margin: "0 auto" }}>
         <p

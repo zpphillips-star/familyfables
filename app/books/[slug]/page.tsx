@@ -284,17 +284,13 @@ export default async function BookPage({
         }
         .book-back-link:hover { opacity: 0.75; }
 
-        /* Section backgrounds — opaque solids that match day/bedtime page bg */
-        .section-read-aloud { background-color: ${readAloudBgSolid}; }
-        [data-mode="bedtime"] .section-read-aloud { background-color: ${readAloudBgDark}; }
-        .section-activity { background-color: ${activityBgSolid}; }
-        [data-mode="bedtime"] .section-activity { background-color: ${activityBgDark}; }
+        /* Section backgrounds — color-mix always matches page-bg (day or bedtime) */
+        .section-read-aloud { background-color: color-mix(in srgb, ${book.accentColor} 18%, var(--page-bg, white)); }
+        .section-activity   { background-color: color-mix(in srgb, ${book.accentColor}  7%, var(--page-bg, white)); }
 
-        /* Wave fill colors — must exactly match the section they transition INTO */
-        .wave-fill-read-aloud { fill: ${readAloudBgSolid}; }
-        [data-mode="bedtime"] .wave-fill-read-aloud { fill: ${readAloudBgDark}; }
-        .wave-fill-activity { fill: ${activityBgSolid}; }
-        [data-mode="bedtime"] .wave-fill-activity { fill: ${activityBgDark}; }
+        /* Wave fills — exact same expression = always matches adjacent section */
+        .wave-fill-read-aloud { fill: color-mix(in srgb, ${book.accentColor} 18%, var(--page-bg, white)); }
+        .wave-fill-activity   { fill: color-mix(in srgb, ${book.accentColor}  7%, var(--page-bg, white)); }
       `}</style>
 
       {/* ══════════════════════════════════════════════════════════════════
@@ -700,7 +696,7 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ACTIVITY SECTION (client component)
       ══════════════════════════════════════════════════════════════════ */}
-      <BookActivity slug={slug} accentColor={book.accentColor} activityBgSolid={activityBgSolid} activityBgDark={activityBgDark} />
+      <BookActivity slug={slug} accentColor={book.accentColor} />
 
       {/* ══════════════════════════════════════════════════════════════════
           GET THE BOOK — bottom CTA

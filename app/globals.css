@@ -10,12 +10,14 @@
   --lavender: #d9b7e5;
   --deep-purple: #78087c;
   --white: #ffffff;
+  --page-bg: #ffffff;
 }
 
 /* ── Bedtime Mode ────────────────────────────────────────────────── */
 [data-mode="bedtime"] {
   --background: #0D0520;
   --foreground: #EEE8FF;
+  --page-bg: #0D0520;
 }
 [data-mode="bedtime"] body {
   background: #0D0520;
