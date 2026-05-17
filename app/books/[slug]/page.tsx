@@ -212,10 +212,8 @@ export default async function BookPage({
   }
   // Day-mode solids (white bg = #ffffff)
   const readAloudBgSolid = blendColors('#ffffff', book.accentColor, 0x2e / 255);
-  const activityBgSolid  = blendColors('#ffffff', book.accentColor, 0x12 / 255);
-  // Bedtime-mode solids (dark bg = #0D0520)
-  const readAloudBgDark  = blendColors('#0D0520', book.accentColor, 0x2e / 255);
-  const activityBgDark   = blendColors('#0D0520', book.accentColor, 0x12 / 255);
+  // First color stop of the gradient — used as wave fill when Activity uses the gradient bg
+  const gradientStartColor = (book.gradient.match(/#[0-9a-fA-F]{6}/) ?? ['#ffffff'])[0];
 
   return (
     <>
@@ -288,9 +286,15 @@ export default async function BookPage({
         .section-read-aloud { background-color: color-mix(in srgb, ${book.accentColor} 18%, var(--page-bg, white)); }
         .section-activity   { background-color: color-mix(in srgb, ${book.accentColor}  7%, var(--page-bg, white)); }
 
-        /* Wave fills — exact same expression = always matches adjacent section */
+        /* In bedtime mode: Activity uses the same warm gradient as CTA → no dark dead zone */
+        [data-mode="bedtime"] .section-activity { background: ${book.gradient}; }
+
+        /* Wave fills — must exactly match the section they blend into */
         .wave-fill-read-aloud { fill: color-mix(in srgb, ${book.accentColor} 18%, var(--page-bg, white)); }
         .wave-fill-activity   { fill: color-mix(in srgb, ${book.accentColor}  7%, var(--page-bg, white)); }
+
+        /* In bedtime mode: wave into Activity uses gradient start color */
+        [data-mode="bedtime"] .wave-fill-activity { fill: ${gradientStartColor}; }
       `}</style>
 
       {/* ══════════════════════════════════════════════════════════════════
