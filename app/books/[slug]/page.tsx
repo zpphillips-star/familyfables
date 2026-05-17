@@ -542,25 +542,27 @@ export default async function BookPage({
         </div>
       </section>
 
+      {/* ── WAVE LINE: About → Read Aloud ── single stroke, no fill, no band ── */}
+      <div style={{ position: "relative", height: 0, overflow: "visible", zIndex: 20, pointerEvents: "none" }}>
+        <svg viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"
+          style={{ position: "absolute", top: -14, left: 0, width: "100%", height: 28, display: "block" }}>
+          <path d="M0,14 C240,2 480,26 720,14 C960,2 1200,26 1440,14"
+            fill="none" stroke={book.accentColor} strokeWidth="4" vectorEffect="non-scaling-stroke" />
+        </svg>
+      </div>
+
       {/* ══════════════════════════════════════════════════════════════════
-          READ ALOUD SECTION — slides on top of About (later in DOM = naturally on top)
+          READ ALOUD SECTION
       ══════════════════════════════════════════════════════════════════ */}
       {book.hasReadAloud ? (
         <section
           style={{
             backgroundColor: `${book.accentColor}2e`,
-            padding: "104px 24px 64px",
+            padding: "64px 24px",
             textAlign: "center",
             position: "relative",
-            marginTop: -40,
           }}
         >
-          {/* Wave at TOP: white fills the overlapping zone above the curve, hides About's flat edge */}
-          <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill="#ffffff" />
-            </svg>
-          </div>
           <div style={{ maxWidth: 680, margin: "0 auto" }}>
             <p
               style={{
@@ -623,18 +625,11 @@ export default async function BookPage({
         <section
           style={{
             backgroundColor: "#f9f5ff",
-            padding: "104px 24px 64px",
+            padding: "64px 24px",
             textAlign: "center",
             position: "relative",
-            marginTop: -40,
           }}
         >
-          {/* Wave at TOP: white fills above the curve */}
-          <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill="#ffffff" />
-            </svg>
-          </div>
           <div style={{ maxWidth: 480, margin: "0 auto" }}>
             <div
               style={{
@@ -677,38 +672,41 @@ export default async function BookPage({
         </section>
       )}
 
-      {/* ══════════════════════════════════════════════════════════════════
-          ACTIVITY SECTION — slides on top of Read Aloud, wave fill = solid Read Aloud color
-      ══════════════════════════════════════════════════════════════════ */}
-      <div style={{ position: "relative", marginTop: -40 }}>
-        {/* Wave at TOP: solid Read Aloud bg color fills above curve — fully opaque, no bleed-through */}
-        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
-          <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill={readAloudBgSolid} />
-          </svg>
-        </div>
-        <BookActivity slug={slug} accentColor={book.accentColor} />
+      {/* ── WAVE LINE: Read Aloud → Activity ── */}
+      <div style={{ position: "relative", height: 0, overflow: "visible", zIndex: 20, pointerEvents: "none" }}>
+        <svg viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"
+          style={{ position: "absolute", top: -14, left: 0, width: "100%", height: 28, display: "block" }}>
+          <path d="M0,14 C240,2 480,26 720,14 C960,2 1200,26 1440,14"
+            fill="none" stroke={book.accentColor} strokeWidth="4" vectorEffect="non-scaling-stroke" />
+        </svg>
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════
-          GET THE BOOK — bottom CTA — slides on top of Activity
+          ACTIVITY SECTION (client component)
+      ══════════════════════════════════════════════════════════════════ */}
+      <BookActivity slug={slug} accentColor={book.accentColor} />
+
+      {/* ── WAVE LINE: Activity → CTA ── */}
+      <div style={{ position: "relative", height: 0, overflow: "visible", zIndex: 20, pointerEvents: "none" }}>
+        <svg viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"
+          style={{ position: "absolute", top: -14, left: 0, width: "100%", height: 28, display: "block" }}>
+          <path d="M0,14 C240,2 480,26 720,14 C960,2 1200,26 1440,14"
+            fill="none" stroke={book.accentColor} strokeWidth="4" vectorEffect="non-scaling-stroke" />
+        </svg>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          GET THE BOOK — bottom CTA
       ══════════════════════════════════════════════════════════════════ */}
       <section
         style={{
           background: book.gradient,
-          padding: "104px 24px 80px",
+          padding: "80px 24px",
           textAlign: "center",
           position: "relative",
           overflow: "visible",
-          marginTop: -40,
         }}
       >
-        {/* Wave at TOP: solid Activity bg color fills above curve */}
-        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 40, pointerEvents: "none", zIndex: 4 }}>
-          <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,20 C360,2 720,38 1080,12 C1260,2 1380,28 1440,18 L1440,0 L0,0 Z" fill={activityBgSolid} />
-          </svg>
-        </div>
         {/* Themed land decorations */}
         <div
           aria-hidden="true"
