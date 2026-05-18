@@ -70,7 +70,7 @@ export const books: Book[] = [
       "What if the best idea you ever had was waiting for you in a dream? Dream Ideas is a bedtime singalong set to an original tune — one so warm and catchy that getting kids to sleep actually becomes fun. Follow along as dreamland opens its doors and imagination runs wild with ice cream mountains, flying inventions, and the kind of dreams that make you excited for morning. The sneakiest bedtime book in existence.",
     image: "/images/books/dream-ideas.png",
     coverImage: "/images/books/dream-ideas.png",
-    characterImage: "/images/characters/dream-ideas-400-height.png",
+    characterImage: "/images/characters/dream-ideas-hero-nobg.png",
     tag: "Bedtime Read",
     accentColor: "#5B9BD5",
     ageRange: "Ages 2–5",
