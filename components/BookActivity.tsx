@@ -20,7 +20,7 @@ const CHEERS = [
   "The morning is here! Which means breakfast, and also — YOU! Hooray! 🍳",
 ];
 
-function DreamIdeasActivity({ accentColor }: { accentColor: string }) {
+function DreamIdeasActivity({ accentColor, textLight }: { accentColor: string; textLight?: boolean }) {
   const [dream, setDream] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -28,7 +28,7 @@ function DreamIdeasActivity({ accentColor }: { accentColor: string }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {!submitted ? (
         <>
-          <p style={{ fontSize: 16, lineHeight: 1.5, color: "#1a1060" }}>
+          <p style={{ fontSize: 16, lineHeight: 1.5, color: textLight ? "rgba(255,255,255,0.9)" : "#1a1060" }}>
             What&apos;s YOUR dream idea? Close your eyes, think really hard... then type it below! ✨
           </p>
           <textarea
@@ -173,13 +173,13 @@ const PUMPKIN_RESULTS = [
   { emoji: "✨", label: "The Hidden Gem", desc: "People have to look twice to notice how amazing you are. Their loss — and then their gain." },
 ];
 
-function PumpkinQuiz({ accentColor }: { accentColor: string }) {
+function PumpkinQuiz({ accentColor, textLight }: { accentColor: string; textLight?: boolean }) {
   const [answer, setAnswer] = useState<number | null>(null);
   const qs = ["Smooth & perfect", "A little wobbly but shiny", "Totally lumpy but loveable"];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <p style={{ fontSize: 16, color: "#3e1a00", fontWeight: 600 }}>Which pumpkin are you? 🎃</p>
+      <p style={{ fontSize: 16, color: textLight ? "rgba(255,255,255,0.9)" : "#3e1a00", fontWeight: 600 }}>Which pumpkin are you? 🎃</p>
       {answer === null ? (
         qs.map((q, i) => (
           <button
@@ -240,7 +240,7 @@ function PumpkinQuiz({ accentColor }: { accentColor: string }) {
   );
 }
 
-function ShutInButtonActivity({ accentColor }: { accentColor: string }) {
+function ShutInButtonActivity({ accentColor, textLight }: { accentColor: string; textLight?: boolean }) {
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
 
@@ -256,7 +256,7 @@ function ShutInButtonActivity({ accentColor }: { accentColor: string }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <p style={{ fontSize: 16, color: "#0a2d61" }}>
+      <p style={{ fontSize: 16, color: textLight ? "rgba(255,255,255,0.9)" : "#0a2d61" }}>
         If you had a magical button, what would it do? 👆
       </p>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -506,9 +506,10 @@ interface BookActivityProps {
   slug: string;
   accentColor: string;
   transparent?: boolean;
+  textLight?: boolean;
 }
 
-export default function BookActivity({ slug, accentColor, transparent }: BookActivityProps) {
+export default function BookActivity({ slug, accentColor, transparent, textLight }: BookActivityProps) {
   const wrap = (title: string, emoji: string, child: React.ReactNode) => (
     <section
       style={{ padding: "72px 24px" }}
@@ -521,7 +522,7 @@ export default function BookActivity({ slug, accentColor, transparent }: BookAct
             fontWeight: 700,
             textTransform: "uppercase",
             letterSpacing: "0.12em",
-            color: accentColor,
+            color: textLight ? "rgba(255,255,255,0.8)" : accentColor,
             marginBottom: 10,
             fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
           }}
@@ -532,7 +533,7 @@ export default function BookActivity({ slug, accentColor, transparent }: BookAct
           style={{
             fontFamily: "var(--font-concert-one), 'Concert One', cursive",
             fontSize: "clamp(28px, 5vw, 48px)",
-            color: "#1a1060",
+            color: textLight ? "#ffffff" : "#1a1060",
             marginBottom: 28,
             lineHeight: 1.2,
           }}
@@ -545,16 +546,16 @@ export default function BookActivity({ slug, accentColor, transparent }: BookAct
   );
 
   if (slug === "dream-ideas")
-    return wrap("What's YOUR dream idea?", "💡", <DreamIdeasActivity accentColor={accentColor} />);
+    return wrap("What's YOUR dream idea?", "💡", <DreamIdeasActivity accentColor={accentColor} textLight={textLight} />);
 
   if (slug === "gilroys-gobble")
     return wrap("Your confidence chant!", "🦃", <GilroyAffirmation accentColor={accentColor} />);
 
   if (slug === "the-lumpiest-pumpkin")
-    return wrap("Which pumpkin are you?", "🎃", <PumpkinQuiz accentColor={accentColor} />);
+    return wrap("Which pumpkin are you?", "🎃", <PumpkinQuiz accentColor={accentColor} textLight={textLight} />);
 
   if (slug === "the-shut-in-button")
-    return wrap("What would YOUR magical button do?", "👆", <ShutInButtonActivity accentColor={accentColor} />);
+    return wrap("What would YOUR magical button do?", "👆", <ShutInButtonActivity accentColor={accentColor} textLight={textLight} />);
 
   if (slug === "what-a-doodle-do")
     return wrap("Your morning cheer!", "🐓", <DoodleDoActivity accentColor={accentColor} />);
@@ -572,7 +573,7 @@ export default function BookActivity({ slug, accentColor, transparent }: BookAct
           `"${i}" — brilliant choice! Hampton would DEFINITELY hide there. He loves cozy, surprising spots. Go check right away! 🎈`
         }
         accentColor={accentColor}
-        textColor="#1b3a1e"
+        textColor={textLight ? "rgba(255,255,255,0.9)" : "#1b3a1e"}
       />
     ));
 
@@ -586,7 +587,7 @@ export default function BookActivity({ slug, accentColor, transparent }: BookAct
           `"${i}" — Ollie would love that! He's a little scared but mostly just wants his warm cozy bed back. You're a great adventure buddy. 🏡`
         }
         accentColor={accentColor}
-        textColor="#1a2a1a"
+        textColor={textLight ? "rgba(255,255,255,0.9)" : "#1a2a1a"}
       />
     ));
 
@@ -600,7 +601,7 @@ export default function BookActivity({ slug, accentColor, transparent }: BookAct
           `"${i}"! Classic frog-dog behavior. Bailey would be so proud. You've really got that amphibian-canine energy down perfectly. 🐸🐶`
         }
         accentColor={accentColor}
-        textColor="#1a3a2a"
+        textColor={textLight ? "rgba(255,255,255,0.9)" : "#1a3a2a"}
       />
     ));
 
@@ -614,7 +615,7 @@ export default function BookActivity({ slug, accentColor, transparent }: BookAct
           `"${i}"! Brian approves. He'd probably float by and wave at everyone there too. The friendliest haunting in St. Germaine history. 👻✨`
         }
         accentColor={accentColor}
-        textColor="#2d1260"
+        textColor={textLight ? "rgba(255,255,255,0.9)" : "#2d1260"}
       />
     ));
 

@@ -707,7 +707,7 @@ export default async function BookPage({
         </div>
 
         {/* Activity — transparent so gradient wrapper shows through */}
-        <BookActivity slug={slug} accentColor={book.accentColor} transparent />
+        <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={heroTextLight} />
 
         {/* CTA — transparent, same continuous gradient */}
         <section
