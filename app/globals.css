@@ -892,11 +892,5 @@ section     { overflow-x: hidden; }
   .amber-activity-divider { display: none !important; }
 }
 
-/* ── Bedtime mode: read aloud text must be legible on dark bg ─────── */
-[data-mode="bedtime"] .section-read-aloud h2 {
-  color: #ffffff !important;
-}
-[data-mode="bedtime"] .section-read-aloud p {
-  color: rgba(255, 255, 255, 0.82) !important;
-}
+/* Read Aloud section is always #ffffff bg — dark text works in all modes, no bedtime override needed */
 
