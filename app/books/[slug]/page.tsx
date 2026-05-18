@@ -407,7 +407,7 @@ export default async function BookPage({
           )}
 
           {/* Text block */}
-          <div style={{ flex: "1 1 280px", minWidth: 240 }}>
+          <div className="book-page-text-block" style={{ flex: "1 1 280px", minWidth: 240 }}>
             {/* Land name badge */}
             <span
               style={{
@@ -736,7 +736,7 @@ export default async function BookPage({
         {/* Activity (default) OR merged About+CTA (activityFirst — dream-ideas) */}
         {activityFirst ? (
           /* dream-ideas: About + CTA merged into one unified section */
-          <section style={{ padding: "170px 24px 96px", textAlign: "center", position: "relative", overflow: "visible" }}>
+          <section className="book-activityfirst-bottom" style={{ padding: "170px 24px 96px", textAlign: "center", position: "relative", overflow: "visible" }}>
             {/* Decorations */}
             <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}>
               {getDecorations(book.landIndex)}

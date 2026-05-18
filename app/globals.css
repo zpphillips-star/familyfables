@@ -821,3 +821,91 @@ section     { overflow-x: hidden; }
   /* Dividers — compact on small mobile */
     .adventure-divider-wrap { height: 60px !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   BOOK DETAIL PAGE — RESPONSIVE
+   Breakpoints: mobile ≤639px | tablet 640–1023px
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Hero: stack cover above text, center everything ─────────────── */
+@media (max-width: 639px) {
+  .book-page-hero-content {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 24px !important;
+  }
+  .book-page-cover {
+    width: clamp(140px, 48vw, 210px) !important;
+    flex: none !important;
+  }
+  .book-page-text-block {
+    flex: none !important;
+    width: 100% !important;
+    min-width: unset !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+}
+
+/* ── Activity section (white) — tighter padding on mobile ────────── */
+@media (max-width: 639px) {
+  .section-activity,
+  .book-activity-wrap {
+    padding: 40px 16px !important;
+  }
+  /* Targets the inner wrap() wrapper in BookActivity */
+  .book-activity-section-inner {
+    padding: 40px 16px !important;
+  }
+}
+
+/* ── activityFirst bottom gradient section ───────────────────────── */
+@media (max-width: 639px) {
+  .book-activityfirst-bottom {
+    padding: 80px 20px 64px !important;
+  }
+  /* CTA buttons — stack full-width */
+  .book-activityfirst-bottom .book-cta-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    white-space: normal !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+  /* Cover + buttons inline-flex → column */
+  .book-activityfirst-bottom > div > div[style*="inline-flex"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+  /* Button column — full width */
+  .book-activityfirst-bottom > div > div[style*="inline-flex"] > div:last-child {
+    width: 100% !important;
+    max-width: 320px !important;
+  }
+}
+
+/* ── Amber two-column activities — fix padding when stacked ─────── */
+@media (max-width: 720px) {
+  /* Remove the asymmetric padding when columns stack */
+  .amber-activity-left {
+    padding: 0 0 32px 0 !important;
+    width: 100% !important;
+    flex: none !important;
+    max-width: 100% !important;
+  }
+  .amber-activity-right {
+    padding: 0 !important;
+    width: 100% !important;
+    flex: none !important;
+    max-width: 100% !important;
+  }
+  /* Reduce outer section padding */
+  .amber-activities-outer {
+    padding: 40px 16px !important;
+  }
+}
+
