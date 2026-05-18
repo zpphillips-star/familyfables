@@ -894,6 +894,9 @@ section     { overflow-x: hidden; }
 
 /* Read Aloud section is always #ffffff bg — dark text works in all modes, no bedtime override needed */
 
+/* ── Always hide poo-poo-face text block (title lives in stacked layout) ─── */
+.poo-hide { display: none !important; }
+
 
 /* ── Book detail page — hero bottom padding reduction on mobile/tablet ───── */
 @media (max-width: 1023px) {
@@ -908,12 +911,3 @@ section     { overflow-x: hidden; }
   }
 }
 
-/* ── Poo Poo Face — composite dragon+text unit ───────────────────────────── */
-@media (max-width: 1023px) {
-  .poo-composite { width: clamp(360px, 88vw, 720px) !important; }
-}
-@media (max-width: 639px) {
-  .poo-composite { width: clamp(300px, 96vw, 480px) !important; }
-  .poo-text-overlay { top: 1% !important; left: 42% !important; }
-  .poo-text-overlay h1 { font-size: clamp(14px, 4.5vw, 22px) !important; }
-}

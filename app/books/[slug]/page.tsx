@@ -443,9 +443,9 @@ export default async function BookPage({
             </div>
           )}
 
-          {/* Text block — hidden for poo-poo-face (text lives inside the composite above) */}
+          {/* Text block — hidden for poo-poo-face (text lives inside the stacked layout above) */}
           <div
-            className="book-page-text-block"
+            className={`book-page-text-block${isPooPooFace ? " poo-hide" : ""}`}
             style={{
               flex: "1 1 280px",
               minWidth: 240,
