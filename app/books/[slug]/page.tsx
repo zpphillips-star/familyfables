@@ -302,13 +302,13 @@ export default async function BookPage({
       <section
         style={{
           background: book.gradient,
-          minHeight: "70vh",
+          minHeight: "50vh",
           position: "relative",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: "80px 24px 120px",
+          padding: "48px 24px 88px",
         }}
       >
         {/* Themed land decorations — positioned as background atmosphere */}
