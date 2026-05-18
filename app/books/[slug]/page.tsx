@@ -215,10 +215,9 @@ export default async function BookPage({
   // First color stop of the gradient — used as wave fill when Activity uses the gradient bg
   const gradientStartColor = (book.gradient.match(/#[0-9a-fA-F]{6}/) ?? ['#ffffff'])[0];
 
-  // dream-ideas: show Activity in the white section, About in the gradient section
-  const activityFirst = slug === 'dream-ideas';
-  // amber: character art in hero (same as dream-ideas) but standard About section
-  const useCharacterHero = activityFirst || slug === 'amber-the-dragon-keeper';
+  // dream-ideas + amber: Activity in white section, About+CTA merged in gradient section
+  const activityFirst = slug === 'dream-ideas' || slug === 'amber-the-dragon-keeper';
+  // useCharacterHero covered by activityFirst for both slugs
 
   return (
     <>
@@ -364,7 +363,7 @@ export default async function BookPage({
           }}
         >
           {/* Cover / Character */}
-          {useCharacterHero && book.characterImage ? (
+          {activityFirst && book.characterImage ? (
             /* dream-ideas: show character art (transparent bg — no frame) */
             <div
               className="book-page-cover"
