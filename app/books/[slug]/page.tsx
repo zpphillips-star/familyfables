@@ -628,10 +628,10 @@ export default async function BookPage({
             </Link>
           </div>
 
-          {/* Wave 3 — Read Aloud → Activity (fills above with Read Aloud color, sits entirely below section) */}
-          <div style={{ position: "absolute", bottom: -64, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,38 C300,12 620,58 940,18 C1140,4 1320,52 1440,30 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
+          {/* Wave 3 — Read Aloud → Activity (fills above with Read Aloud color, 1px overlap eliminates seam) */}
+          <div style={{ position: "absolute", bottom: -63, left: 0, width: "100%", height: 65, pointerEvents: "none", zIndex: 4 }}>
+            <svg viewBox="0 0 1440 65" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+              <path d="M0,39 C300,13 620,59 940,19 C1140,5 1320,53 1440,31 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
             </svg>
           </div>
         </section>
@@ -686,10 +686,10 @@ export default async function BookPage({
             </p>
           </div>
 
-          {/* Wave 4 — Coming Soon → Activity (fills above, sits entirely below section) */}
-          <div style={{ position: "absolute", bottom: -64, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,28 C280,54 580,8 880,44 C1110,62 1320,16 1440,36 L1440,0 L0,0 Z" style={{ fill: "#f9f5ff" }} />
+          {/* Wave 4 — Coming Soon → Activity (fills above, 1px overlap eliminates seam) */}
+          <div style={{ position: "absolute", bottom: -63, left: 0, width: "100%", height: 65, pointerEvents: "none", zIndex: 4 }}>
+            <svg viewBox="0 0 1440 65" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+              <path d="M0,29 C280,55 580,9 880,45 C1110,63 1320,17 1440,37 L1440,0 L0,0 Z" style={{ fill: "#f9f5ff" }} />
             </svg>
           </div>
         </section>
