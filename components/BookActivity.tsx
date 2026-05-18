@@ -40,29 +40,31 @@ function DreamIdeasActivity({ accentColor, textLight }: { accentColor: string; t
               width: "100%",
               padding: "12px 16px",
               borderRadius: 12,
-              border: `2px solid ${accentColor}`,
+              border: `2px solid ${accentColor}88`,
               fontSize: 16,
               fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
               resize: "none",
               outline: "none",
+              color: "#1a1060",
               boxSizing: "border-box",
             }}
           />
           <button
             onClick={() => dream.trim() && setSubmitted(true)}
-            disabled={!dream.trim()}
             style={{
               alignSelf: "flex-start",
-              padding: "10px 24px",
+              padding: "12px 28px",
               borderRadius: 50,
-              backgroundColor: dream.trim() ? accentColor : "#ccc",
+              backgroundColor: accentColor,
               color: "#fff",
               fontWeight: 700,
-              fontSize: 15,
+              fontSize: 16,
               border: "none",
               cursor: dream.trim() ? "pointer" : "not-allowed",
-              transition: "background-color 0.2s",
+              opacity: dream.trim() ? 1 : 0.45,
+              transition: "opacity 0.2s, transform 0.15s",
               fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
+              boxShadow: dream.trim() ? `0 4px 20px ${accentColor}66` : "none",
             }}
           >
             Dream it! 💫
@@ -522,7 +524,7 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
             fontWeight: 700,
             textTransform: "uppercase",
             letterSpacing: "0.12em",
-            color: textLight ? "rgba(255,255,255,0.8)" : accentColor,
+            color: textLight ? "rgba(255,255,255,0.8)" : "#1a1060",
             marginBottom: 10,
             fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
           }}
