@@ -904,6 +904,6 @@ section     { overflow-x: hidden; }
 }
 @media (max-width: 639px) {
   .book-page-hero {
-    padding-bottom: 52px !important;
+    padding-bottom: 36px !important;
   }
 }
