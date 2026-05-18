@@ -282,19 +282,15 @@ export default async function BookPage({
         }
         .book-back-link:hover { opacity: 0.75; }
 
-        /* Section backgrounds — color-mix always matches page-bg (day or bedtime) */
+        /* Section backgrounds */
         .section-read-aloud { background-color: color-mix(in srgb, ${book.accentColor} 18%, var(--page-bg, white)); }
-        .section-activity   { background-color: color-mix(in srgb, ${book.accentColor}  7%, var(--page-bg, white)); }
-
-        /* In bedtime mode: Activity uses the same warm gradient as CTA → no dark dead zone */
-        [data-mode="bedtime"] .section-activity { background: ${book.gradient}; }
+        /* Activity always uses the same warm gradient as CTA — they visually merge, no seam */
+        .section-activity { background: ${book.gradient}; }
 
         /* Wave fills — must exactly match the section they blend into */
         .wave-fill-read-aloud { fill: color-mix(in srgb, ${book.accentColor} 18%, var(--page-bg, white)); }
-        .wave-fill-activity   { fill: color-mix(in srgb, ${book.accentColor}  7%, var(--page-bg, white)); }
-
-        /* In bedtime mode: wave into Activity uses gradient start color */
-        [data-mode="bedtime"] .wave-fill-activity { fill: ${gradientStartColor}; }
+        /* Wave into Activity fills with gradient start color so it matches Activity's background */
+        .wave-fill-activity { fill: ${gradientStartColor}; }
       `}</style>
 
       {/* ══════════════════════════════════════════════════════════════════
@@ -714,12 +710,7 @@ export default async function BookPage({
           overflow: "visible",
         }}
       >
-        {/* Wave at top of CTA → matches Activity background exactly */}
-        <div style={{ position: "absolute", top: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
-          <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" className="wave-fill-activity" />
-          </svg>
-        </div>
+        {/* No wave needed — Activity and CTA share the same gradient, they merge seamlessly */}
         {/* Themed land decorations */}
         <div
           aria-hidden="true"
