@@ -851,11 +851,6 @@ section     { overflow-x: hidden; }
 
 /* ── Activity section (white) — tighter padding on mobile ────────── */
 @media (max-width: 639px) {
-  .section-activity,
-  .book-activity-wrap {
-    padding: 40px 16px !important;
-  }
-  /* Targets the inner wrap() wrapper in BookActivity */
   .book-activity-section-inner {
     padding: 40px 16px !important;
   }
@@ -865,45 +860,47 @@ section     { overflow-x: hidden; }
 @media (max-width: 639px) {
   .book-activityfirst-bottom {
     padding: 80px 20px 64px !important;
+    overflow-x: hidden !important;
   }
-  /* CTA buttons — stack full-width */
-  .book-activityfirst-bottom .book-cta-btn {
+  /* Hide decorations on mobile — they overlap and distract */
+  .book-activityfirst-bottom > [aria-hidden="true"] {
+    display: none !important;
+  }
+  /* Cover + buttons: stack to column, full-width */
+  .book-cta-container {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 20px !important;
+  }
+  /* Button group: full width */
+  .book-cta-btn-group {
+    width: 100% !important;
+    flex: none !important;
+  }
+  /* CTA buttons — full width, text wraps */
+  .book-cta-btn {
     width: 100% !important;
     justify-content: center !important;
     white-space: normal !important;
     text-align: center !important;
     box-sizing: border-box !important;
-  }
-  /* Cover + buttons inline-flex → column */
-  .book-activityfirst-bottom > div > div[style*="inline-flex"] {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    width: 100% !important;
-  }
-  /* Button column — full width */
-  .book-activityfirst-bottom > div > div[style*="inline-flex"] > div:last-child {
-    width: 100% !important;
-    max-width: 320px !important;
+    font-size: 15px !important;
+    padding: 14px 20px !important;
   }
 }
 
 /* ── Amber two-column activities — fix padding when stacked ─────── */
 @media (max-width: 720px) {
-  /* Remove the asymmetric padding when columns stack */
   .amber-activity-left {
     padding: 0 0 32px 0 !important;
     width: 100% !important;
     flex: none !important;
-    max-width: 100% !important;
   }
   .amber-activity-right {
     padding: 0 !important;
     width: 100% !important;
     flex: none !important;
-    max-width: 100% !important;
   }
-  /* Reduce outer section padding */
   .amber-activities-outer {
     padding: 40px 16px !important;
   }

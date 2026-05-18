@@ -725,7 +725,7 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ACTIVITY + CTA — one shared gradient wrapper, zero seams
       ══════════════════════════════════════════════════════════════════ */}
-      <div style={{ background: book.gradient, marginTop: -64, position: "relative", zIndex: 0 }}>
+      <div style={{ background: book.gradient, marginTop: -64, position: "relative", zIndex: 0, overflowX: "hidden" }}>
         {/* Wave at top — fills Read Aloud color above curve, gradient shows below */}
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 65, pointerEvents: "none", zIndex: 4 }}>
           <svg viewBox="0 0 1440 65" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
@@ -756,7 +756,7 @@ export default async function BookPage({
               </p>
 
               {/* 2-column: cover left, CTA right — tight container keeps them adjacent */}
-              <div style={{ display: "inline-flex", gap: 32, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+              <div className="book-cta-container" style={{ display: "flex", gap: 32, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
                 {/* Left — book cover */}
                 {book.coverImage && (
                   <div style={{ flex: "0 0 auto", width: 180, height: 180, borderRadius: 24, overflow: "hidden", boxShadow: "0 16px 48px rgba(0,0,0,0.55)" }}>
@@ -764,7 +764,7 @@ export default async function BookPage({
                   </div>
                 )}
                 {/* Right — buy buttons, centered */}
-                <div style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
+                <div className="book-cta-btn-group" style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
                   <a href={amazonUrl} target="_blank" rel="noopener noreferrer" className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", borderRadius: 50, backgroundColor: "#ff9c1a", color: "#fff", fontWeight: 900, fontSize: 17, textDecoration: "none", boxShadow: "0 6px 24px rgba(255,156,26,0.5)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease", whiteSpace: "nowrap" }}>
                     Get {book.title} on Amazon →
                   </a>
