@@ -20,7 +20,7 @@ export default function Footer() {
                   Family Fables
                 </span>
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: "#a89ec9" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.75)", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
                 Stories that warm little hearts and spark big imaginations.
               </p>
             </div>
