@@ -7,7 +7,7 @@ export default function Footer() {
       {/* Main footer area */}
       <div style={{ backgroundColor: "#0d0b1e", color: "#a89ec9" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
 
             {/* Brand */}
             <div>
@@ -29,8 +29,8 @@ export default function Footer() {
             <div>
               <Link
                 href="/"
-                className="font-bold text-sm uppercase tracking-widest hover:opacity-75 transition-opacity"
-                style={{ color: "#ff9c1a", display: "inline-block" }}
+                className="hover:opacity-75 transition-opacity"
+                style={{ color: "#ff9c1a", display: "inline-block", fontWeight: 700, fontSize: "18px", textTransform: "uppercase", letterSpacing: "0.12em" }}
               >
                 Explore
               </Link>
@@ -42,11 +42,22 @@ export default function Footer() {
                 href="https://www.amazon.com/familyfables"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-bold text-sm uppercase tracking-widest hover:opacity-75 transition-opacity"
-                style={{ color: "#ff9c1a", display: "inline-block" }}
+                className="hover:opacity-75 transition-opacity"
+                style={{ color: "#ff9c1a", display: "inline-block", fontWeight: 700, fontSize: "18px", textTransform: "uppercase", letterSpacing: "0.12em" }}
               >
                 Shop
               </a>
+            </div>
+
+            {/* About Us */}
+            <div>
+              <Link
+                href="/about"
+                className="hover:opacity-75 transition-opacity"
+                style={{ color: "#ff9c1a", display: "inline-block", fontWeight: 700, fontSize: "18px", textTransform: "uppercase", letterSpacing: "0.12em" }}
+              >
+                About Us
+              </Link>
             </div>
 
           </div>
