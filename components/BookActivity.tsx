@@ -51,7 +51,6 @@ function DreamIdeasActivity({ accentColor, textLight }: { accentColor: string; t
           />
           <button
             onClick={() => dream.trim() && setSubmitted(true)}
-            className="dream-it-btn"
             style={{
               alignSelf: "flex-start",
               padding: "12px 28px",
@@ -769,7 +768,7 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
   const wrap = (title: string, emoji: string, child: React.ReactNode) => (
     <section
       style={{ padding: "72px 24px" }}
-      className={`book-activity-section-inner${transparent ? "" : " section-activity"}`}
+      className={transparent ? undefined : "section-activity"}
     >
       <div style={{ maxWidth: 760, margin: "0 auto" }}>
         <p
@@ -877,11 +876,11 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
 
   if (slug === "amber-the-dragon-keeper")
     return (
-      <section style={{ padding: "72px 24px" }} className="amber-activities-outer">
+      <section style={{ padding: "72px 24px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", gap: 0, flexWrap: "wrap" }}>
 
           {/* ── Left: Diamond Catch ── */}
-          <div className="amber-activity-left" style={{ flex: "1 1 320px", padding: "0 40px 0 0", minWidth: 280 }}>
+          <div style={{ flex: "1 1 320px", padding: "0 40px 0 0", minWidth: 280 }}>
             <p style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: textLight ? "rgba(255,255,255,0.8)" : "#1a1060", marginBottom: 10, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
               💎 Fun Activity
             </p>
@@ -901,7 +900,7 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
           }} className="amber-activity-divider" />
 
           {/* ── Right: Dragon Creator ── */}
-          <div className="amber-activity-right" style={{ flex: "1 1 320px", padding: "0 0 0 40px", minWidth: 280, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+          <div style={{ flex: "1 1 320px", padding: "0 0 0 40px", minWidth: 280, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
             <p style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: textLight ? "rgba(255,255,255,0.8)" : "#1a1060", marginBottom: 10, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
               🐉 Fun Activity
             </p>
