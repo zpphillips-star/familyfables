@@ -124,12 +124,12 @@ function GilroyAffirmation({ accentColor }: { accentColor: string }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div
         style={{
-          padding: "20px 24px",
-          borderRadius: 16,
+          padding: "28px 32px",
+          borderRadius: 20,
           background: `linear-gradient(135deg, ${accentColor}22, ${accentColor}44)`,
           border: `2px solid ${accentColor}`,
           textAlign: "center",
-          minHeight: 80,
+          minHeight: 100,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -137,7 +137,7 @@ function GilroyAffirmation({ accentColor }: { accentColor: string }) {
       >
         <p
           style={{
-            fontSize: "clamp(16px, 2.5vw, 20px)",
+            fontSize: "clamp(20px, 3vw, 28px)",
             fontFamily: "var(--font-concert-one), 'Concert One', cursive",
             color: "#3e1a00",
             lineHeight: 1.4,
@@ -510,18 +510,18 @@ interface BookActivityProps {
 export default function BookActivity({ slug, accentColor }: BookActivityProps) {
   const wrap = (title: string, emoji: string, child: React.ReactNode) => (
     <section
-      style={{ padding: "64px 24px" }}
+      style={{ padding: "72px 24px" }}
       className="section-activity"
     >
-      <div style={{ maxWidth: 680, margin: "0 auto" }}>
+      <div style={{ maxWidth: 760, margin: "0 auto" }}>
         <p
           style={{
-            fontSize: 13,
+            fontSize: 14,
             fontWeight: 700,
             textTransform: "uppercase",
             letterSpacing: "0.12em",
             color: accentColor,
-            marginBottom: 8,
+            marginBottom: 10,
             fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
           }}
         >
@@ -530,9 +530,9 @@ export default function BookActivity({ slug, accentColor }: BookActivityProps) {
         <h2
           style={{
             fontFamily: "var(--font-concert-one), 'Concert One', cursive",
-            fontSize: "clamp(22px, 4vw, 36px)",
+            fontSize: "clamp(28px, 5vw, 48px)",
             color: "#1a1060",
-            marginBottom: 24,
+            marginBottom: 28,
             lineHeight: 1.2,
           }}
         >
