@@ -215,9 +215,10 @@ export default async function BookPage({
   // First color stop of the gradient — used as wave fill when Activity uses the gradient bg
   const gradientStartColor = (book.gradient.match(/#[0-9a-fA-F]{6}/) ?? ['#ffffff'])[0];
 
-  // dream-ideas + amber: Activity in white section, About+CTA merged in gradient section
-  const activityFirst = slug === 'dream-ideas' || slug === 'amber-the-dragon-keeper';
-  // useCharacterHero covered by activityFirst for both slugs
+  // dream-ideas + amber + poo-poo-face: Activity in white section, About+CTA merged in gradient section
+  const activityFirst = slug === 'dream-ideas' || slug === 'amber-the-dragon-keeper' || slug === 'whats-your-poo-poo-face';
+  // poo-poo-face uses a landscape dragon — position it differently in the hero
+  const isPooPooFace = slug === 'whats-your-poo-poo-face';
 
   return (
     <>
@@ -366,26 +367,50 @@ export default async function BookPage({
         >
           {/* Cover / Character */}
           {activityFirst && book.characterImage ? (
-            /* dream-ideas: show character art (transparent bg — no frame) */
-            <div
-              className="book-page-cover"
-              style={{
-                flex: "0 0 auto",
-                width: "clamp(180px, 24vw, 300px)",
-                display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "center",
-              }}
-            >
-              <Image
-                src={book.characterImage}
-                alt={`${book.title} character`}
-                width={300}
-                height={400}
-                style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.45))" }}
-                priority
-              />
-            </div>
+            isPooPooFace ? (
+              /* poo-poo-face: landscape dragon, floats center-right above the text at an angle */
+              <div
+                className="book-page-cover poo-dragon-wrap"
+                style={{
+                  position: "absolute",
+                  right: "clamp(-20px, 2vw, 40px)",
+                  bottom: 0,
+                  width: "clamp(260px, 38vw, 520px)",
+                  pointerEvents: "none",
+                  zIndex: 2,
+                }}
+              >
+                <Image
+                  src={book.characterImage}
+                  alt={`${book.title} character`}
+                  width={520}
+                  height={335}
+                  style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 16px 40px rgba(0,0,0,0.35))", transform: "rotate(-6deg) scaleX(-1)" }}
+                  priority
+                />
+              </div>
+            ) : (
+              /* dream-ideas / amber: portrait character art */
+              <div
+                className="book-page-cover"
+                style={{
+                  flex: "0 0 auto",
+                  width: "clamp(180px, 24vw, 300px)",
+                  display: "flex",
+                  alignItems: "flex-end",
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  src={book.characterImage}
+                  alt={`${book.title} character`}
+                  width={300}
+                  height={400}
+                  style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.45))" }}
+                  priority
+                />
+              </div>
+            )
           ) : (
             <div
               className="book-page-cover"

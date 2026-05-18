@@ -907,3 +907,17 @@ section     { overflow-x: hidden; }
     padding-bottom: 36px !important;
   }
 }
+
+/* ── Poo Poo Face — dragon hero positioning ──────────────────────────────── */
+@media (max-width: 1023px) {
+  .poo-dragon-wrap {
+    width: clamp(180px, 28vw, 320px) !important;
+    right: -10px !important;
+  }
+}
+@media (max-width: 639px) {
+  /* On mobile stack: hide the absolute dragon so it doesn't overlap text */
+  .poo-dragon-wrap {
+    display: none !important;
+  }
+}

@@ -764,6 +764,99 @@ interface BookActivityProps {
   textLight?: boolean;
 }
 
+// ── Poo Poo Face Game ─────────────────────────────────────────────────────────
+const ANIMALS = [
+  { name: "Dragon",    emoji: "🐉", face: "😤", caption: "Steam comes out the nose. Every. Single. Time." },
+  { name: "Unicorn",   emoji: "🦄", face: "😬", caption: "Tries to look majestic. Fails spectacularly." },
+  { name: "T-Rex",     emoji: "🦖", face: "😳", caption: "Tiny arms. Can't reach. Maximum struggle face." },
+  { name: "Elephant",  emoji: "🐘", face: "😮", caption: "The trunk does NOT help in this situation." },
+  { name: "Cat",       emoji: "🐱", face: "😒", caption: "Deeply judging everyone within a 3-mile radius." },
+  { name: "Dog",       emoji: "🐶", face: "🥴", caption: "Spins around 47 times first. Then the face." },
+  { name: "Penguin",   emoji: "🐧", face: "😦", caption: "Stands very still. Eyes go very wide. Very wide." },
+  { name: "Sloth",     emoji: "🦥", face: "😪", caption: "Takes so long. The face lasts 20 minutes." },
+  { name: "YOU",       emoji: "🧒", face: "😖", caption: "You know the face. We ALL know the face. 😂" },
+];
+
+function PooPooFaceGame({ accentColor }: { accentColor: string }) {
+  const [selected, setSelected] = useState<number | null>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  const handlePick = (i: number) => {
+    setSelected(i);
+    setRevealed(false);
+    setTimeout(() => setRevealed(true), 400);
+  };
+
+  const animal = selected !== null ? ANIMALS[selected] : null;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+      {/* Animal picker grid */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center" }}>
+        {ANIMALS.map((a, i) => (
+          <button
+            key={a.name}
+            onClick={() => handlePick(i)}
+            style={{
+              padding: "10px 18px",
+              borderRadius: 50,
+              border: `2px solid ${selected === i ? accentColor : accentColor + "55"}`,
+              backgroundColor: selected === i ? accentColor + "22" : "transparent",
+              color: "#5a2d82",
+              fontWeight: 700,
+              fontSize: 15,
+              cursor: "pointer",
+              fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
+              transition: "all 0.2s ease",
+            }}
+          >
+            {a.emoji} {a.name}
+          </button>
+        ))}
+      </div>
+
+      {/* Result reveal */}
+      {animal && (
+        <div
+          style={{
+            marginTop: 8,
+            padding: "28px 32px",
+            borderRadius: 24,
+            background: `linear-gradient(135deg, ${accentColor}18, ${accentColor}08)`,
+            border: `2px solid ${accentColor}44`,
+            textAlign: "center",
+            maxWidth: 420,
+            width: "100%",
+            opacity: revealed ? 1 : 0,
+            transform: revealed ? "scale(1)" : "scale(0.85)",
+            transition: "opacity 0.35s ease, transform 0.35s ease",
+          }}
+        >
+          <div style={{ fontSize: 72, lineHeight: 1, marginBottom: 8 }}>{animal.face}</div>
+          <p style={{ fontSize: 18, fontWeight: 800, color: "#5a2d82", marginBottom: 8, fontFamily: "var(--font-concert-one),'Concert One',cursive" }}>
+            {animal.emoji} {animal.name}&apos;s Poo Poo Face!
+          </p>
+          <p style={{ fontSize: 15, color: "#7B6898", lineHeight: 1.5, fontFamily: "var(--font-open-sans),'Open Sans',sans-serif" }}>
+            {animal.caption}
+          </p>
+          <button
+            onClick={() => { setSelected(null); setRevealed(false); }}
+            style={{ marginTop: 16, background: "none", border: "none", color: accentColor, fontWeight: 700, fontSize: 13, cursor: "pointer", textDecoration: "underline", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}
+          >
+            Try another animal →
+          </button>
+        </div>
+      )}
+
+      {!animal && (
+        <p style={{ color: "#bba8d4", fontSize: 14, fontFamily: "var(--font-open-sans),'Open Sans',sans-serif" }}>
+          👆 Pick an animal above to see their face!
+        </p>
+      )}
+    </div>
+  );
+}
+
 export default function BookActivity({ slug, accentColor, transparent, textLight }: BookActivityProps) {
   const wrap = (title: string, emoji: string, child: React.ReactNode) => (
     <section
@@ -910,6 +1003,24 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
             <AmberDragonCreator accentColor={accentColor} textLight={textLight} />
           </div>
 
+        </div>
+      </section>
+    );
+
+  if (slug === "whats-your-poo-poo-face")
+    return (
+      <section className="poo-activities-section" style={{ padding: "72px 24px" }}>
+        <div style={{ maxWidth: 680, margin: "0 auto" }}>
+          <p style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#9B6FD0", marginBottom: 10, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", textAlign: "center" }}>
+            😂 Fun Activity
+          </p>
+          <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 36px)", color: "#5a2d82", marginBottom: 8, lineHeight: 1.2, textAlign: "center" }}>
+            What&apos;s YOUR Poo Poo Face?
+          </h2>
+          <p style={{ fontSize: 14, color: "#7B6898", textAlign: "center", marginBottom: 28, fontFamily: "var(--font-open-sans),'Open Sans',sans-serif" }}>
+            Pick an animal and find out what face they make! 🐾
+          </p>
+          <PooPooFaceGame accentColor={accentColor} />
         </div>
       </section>
     );
