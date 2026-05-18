@@ -361,26 +361,49 @@ export default async function BookPage({
             zIndex: 2,
           }}
         >
-          {/* Cover */}
-          <div
-            className="book-page-cover"
-            style={{
-              flex: "0 0 auto",
-              width: "clamp(160px, 22vw, 260px)",
-              borderRadius: 20,
-              overflow: "hidden",
-              boxShadow: "0 20px 64px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.3)",
-            }}
-          >
-            <Image
-              src={book.coverImage}
-              alt={`${book.title} book cover`}
-              width={260}
-              height={260}
-              style={{ width: "100%", height: "auto", display: "block" }}
-              priority
-            />
-          </div>
+          {/* Cover / Character */}
+          {activityFirst && book.characterImage ? (
+            /* dream-ideas: show character art (transparent bg — no frame) */
+            <div
+              className="book-page-cover"
+              style={{
+                flex: "0 0 auto",
+                width: "clamp(180px, 24vw, 300px)",
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                src={book.characterImage}
+                alt={`${book.title} character`}
+                width={300}
+                height={400}
+                style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.45))" }}
+                priority
+              />
+            </div>
+          ) : (
+            <div
+              className="book-page-cover"
+              style={{
+                flex: "0 0 auto",
+                width: "clamp(160px, 22vw, 260px)",
+                borderRadius: 20,
+                overflow: "hidden",
+                boxShadow: "0 20px 64px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.3)",
+              }}
+            >
+              <Image
+                src={book.coverImage}
+                alt={`${book.title} book cover`}
+                width={260}
+                height={260}
+                style={{ width: "100%", height: "auto", display: "block" }}
+                priority
+              />
+            </div>
+          )}
 
           {/* Text block */}
           <div style={{ flex: "1 1 280px", minWidth: 240 }}>
