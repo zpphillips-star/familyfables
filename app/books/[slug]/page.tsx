@@ -368,54 +368,33 @@ export default async function BookPage({
           {/* Cover / Character */}
           {activityFirst && book.characterImage ? (
             isPooPooFace ? (
-              /* poo-poo-face: ONE composite unit — dragon sets the height, text anchored above the tail */
-              <div
-                className="poo-composite"
-                style={{
-                  position: "relative",
-                  width: "clamp(480px, 72vw, 960px)",
-                  margin: "0 auto",
-                  flexShrink: 0,
-                }}
-              >
-                {/* Dragon — normal flow, defines container size */}
+              /* poo-poo-face: dragon centered, text below — simple stacked layout */
+              <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 20, position: "relative", zIndex: 2 }}>
+                {/* Dragon — centered, slightly smaller */}
                 <Image
                   src={book.characterImage}
                   alt={`${book.title} character`}
-                  width={960}
-                  height={618}
-                  className="poo-dragon-img"
-                  style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 16px 40px rgba(0,0,0,0.18))", transform: "scaleX(-1)" }}
+                  width={600}
+                  height={386}
+                  style={{ width: "clamp(260px, 44vw, 560px)", height: "auto", display: "block", filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.18))", transform: "scaleX(-1)" }}
                   priority
                 />
-                {/* Text — absolutely anchored above the tail (upper-right of the dragon image) */}
-                <div
-                  className="poo-text-overlay"
-                  style={{
-                    position: "absolute",
-                    top: "2%",
-                    left: "46%",
-                    right: "2%",
-                    zIndex: 3,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 0,
-                  }}
-                >
-                  <span style={{ display: "inline-block", padding: "3px 12px", borderRadius: 50, fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", backgroundColor: heroBadgeBg, border: `1.5px solid ${heroBadgeBorder}`, color: heroBadgeColor, marginBottom: 10, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif", backdropFilter: "blur(4px)", alignSelf: "flex-start" }}>
+                {/* Text below the dragon, centered */}
+                <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+                  <span style={{ display: "inline-block", padding: "3px 12px", borderRadius: 50, fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", backgroundColor: heroBadgeBg, border: `1.5px solid ${heroBadgeBorder}`, color: heroBadgeColor, marginBottom: 12, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif", backdropFilter: "blur(4px)" }}>
                     Land {book.landIndex} — {book.landName}
                   </span>
-                  <h1 style={{ fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: "clamp(20px, 3.8vw, 52px)", color: heroTextColor, lineHeight: 1.05, marginBottom: 10, textShadow: "0 2px 8px rgba(255,255,255,0.4)" }}>
+                  <h1 style={{ fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: "clamp(28px, 5vw, 56px)", color: heroTextColor, lineHeight: 1.05, marginBottom: 12 }}>
                     {book.title}
                   </h1>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 10 }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 12 }}>
                     {book.themes.map((theme) => (
-                      <span key={theme} style={{ display: "inline-block", padding: "4px 12px", borderRadius: 50, fontSize: 12, fontWeight: 700, backgroundColor: book.accentColor, color: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.2)", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+                      <span key={theme} style={{ display: "inline-block", padding: "5px 14px", borderRadius: 50, fontSize: 13, fontWeight: 700, backgroundColor: book.accentColor, color: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.2)", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
                         {theme}
                       </span>
                     ))}
                   </div>
-                  <p style={{ fontSize: 14, color: heroSubColor, fontWeight: 600, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+                  <p style={{ fontSize: 15, color: heroSubColor, fontWeight: 600, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
                     📚 {book.ageRange}
                   </p>
                 </div>
