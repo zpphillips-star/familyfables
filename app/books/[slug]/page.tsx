@@ -712,32 +712,24 @@ export default async function BookPage({
         {/* Activity (default) OR merged About+CTA (activityFirst — dream-ideas) */}
         {activityFirst ? (
           /* dream-ideas: About + CTA merged into one unified section */
-          <section style={{ padding: "72px 24px 80px", textAlign: "center", position: "relative", overflow: "visible" }}>
+          <section style={{ padding: "80px 24px 96px", textAlign: "center", position: "relative", overflow: "visible" }}>
             {/* Decorations */}
             <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}>
               {getDecorations(book.landIndex)}
             </div>
-            <div style={{ position: "relative", zIndex: 2, maxWidth: 720, margin: "0 auto" }}>
+            <div style={{ position: "relative", zIndex: 2, maxWidth: 760, margin: "0 auto" }}>
               {/* Hook */}
-              <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(24px, 4vw, 42px)", color: "#ffffff", marginBottom: 20, lineHeight: 1.2, textShadow: "0 2px 16px rgba(0,0,0,0.4)" }}>
+              <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 40px)", color: "#ffffff", marginBottom: 20, lineHeight: 1.25, textShadow: "0 2px 16px rgba(0,0,0,0.4)", wordBreak: "break-word" }}>
                 {book.hook}
               </h2>
               {/* Description */}
-              <p style={{ fontSize: "clamp(15px, 2vw, 18px)", color: "rgba(255,255,255,0.85)", lineHeight: 1.75, marginBottom: 28, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
+              <p style={{ fontSize: "clamp(15px, 2vw, 18px)", color: "rgba(255,255,255,0.85)", lineHeight: 1.75, marginBottom: 20, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
                 {description}
               </p>
-              {/* Perfect For */}
-              <div style={{ padding: "14px 20px", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.12)", border: "2px solid rgba(255,255,255,0.25)", marginBottom: 20, display: "inline-block", maxWidth: 560 }}>
-                <p style={{ fontSize: 15, color: "rgba(255,255,255,0.9)", fontWeight: 700, margin: 0, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
-                  {book.perfectFor}
-                </p>
-              </div>
-              {/* Age badge */}
-              <div style={{ marginBottom: 40 }}>
-                <span style={{ display: "inline-block", padding: "6px 18px", borderRadius: 50, fontSize: 14, fontWeight: 700, backgroundColor: "rgba(255,255,255,0.18)", color: "#fff", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
-                  Perfect for {book.ageRange}
-                </span>
-              </div>
+              {/* Perfect For — single clean line, no bubbles */}
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.65)", fontStyle: "italic", marginBottom: 48, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
+                ✨ {book.perfectFor} · {book.ageRange}
+              </p>
 
               {/* 2-column: cover left, CTA right */}
               <div style={{ display: "flex", gap: 40, alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>

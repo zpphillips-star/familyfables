@@ -81,6 +81,7 @@ export const books: Book[] = [
     gradient: "linear-gradient(160deg, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 100%)",
         landIndex: 1,
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1951173147",
   },
   {
     id: "amber-dragon-keeper",
