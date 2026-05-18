@@ -454,10 +454,10 @@ export default async function BookPage({
           </div>
         </div>
 
-        {/* Single wave line divider */}
-        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
-          <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" fill="#ffffff" />
+        {/* Wave 1 — Hero → About (unique shape, fills white below) */}
+        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z" fill="#ffffff" />
           </svg>
         </div>
       </section>
@@ -547,10 +547,10 @@ export default async function BookPage({
           </span>
         </div>
 
-        {/* Wave at bottom of About → matches Read Aloud background exactly */}
-        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
-          <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,32 L0,32 Z" className="wave-fill-read-aloud" />
+        {/* Wave 2 — About → Read Aloud (unique shape, fills Read Aloud color below) */}
+        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" className="wave-fill-read-aloud" />
           </svg>
         </div>
       </section>
@@ -628,11 +628,10 @@ export default async function BookPage({
             </Link>
           </div>
 
-          {/* Wave at bottom of Read Aloud — fills ABOVE the curve with Read Aloud's own color.
-              Activity slides up underneath (marginTop: -32) — no color dependency needed. */}
-          <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
+          {/* Wave 3 — Read Aloud → Activity (unique shape, fills above with Read Aloud color) */}
+          <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+            <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+              <path d="M0,38 C300,12 620,58 940,18 C1140,4 1320,52 1440,30 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
             </svg>
           </div>
         </section>
@@ -687,10 +686,10 @@ export default async function BookPage({
             </p>
           </div>
 
-          {/* Wave fills ABOVE the curve with Coming Soon's own color — Activity slides up underneath */}
-          <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 32, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 32" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,16 C360,30 720,2 1080,22 C1260,30 1380,10 1440,18 L1440,0 L0,0 Z" style={{ fill: "#f9f5ff" }} />
+          {/* Wave 4 — Coming Soon → Activity (unique shape, fills above) */}
+          <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+            <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+              <path d="M0,28 C280,54 580,8 880,44 C1110,62 1320,16 1440,36 L1440,0 L0,0 Z" style={{ fill: "#f9f5ff" }} />
             </svg>
           </div>
         </section>
@@ -699,8 +698,8 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ACTIVITY SECTION (client component)
       ══════════════════════════════════════════════════════════════════ */}
-      {/* Activity slides up 32px under the Read Aloud wave — wave's lavender fill covers the seam */}
-      <div style={{ marginTop: -32, position: "relative", zIndex: 0 }}>
+      {/* Activity slides up 64px under the Read Aloud wave — wave's lavender fill covers the seam */}
+      <div style={{ marginTop: -64, position: "relative", zIndex: 0 }}>
         <BookActivity slug={slug} accentColor={book.accentColor} />
       </div>
 
