@@ -176,8 +176,12 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Divider */}
-          <div className="border-t my-4" style={{ borderColor: "#E8DCF5" }} />
+          {/* Wave divider — replaces straight border-t */}
+          <div style={{ margin: "8px 0 4px", lineHeight: 0 }}>
+            <svg viewBox="0 0 800 32" preserveAspectRatio="none" style={{ width: "100%", height: 32, display: "block" }} aria-hidden="true">
+              <path d="M0,16 C100,4 220,28 360,14 C480,2 600,26 720,12 C760,8 780,18 800,16" fill="none" stroke="#C8B4E8" strokeWidth="2.5" strokeLinecap="round" />
+            </svg>
+          </div>
 
           {/* Z.P. Phillips section */}
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start py-12">

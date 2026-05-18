@@ -15,7 +15,7 @@ export default function BooksPage() {
     <div>
       {/* ─── HEADER — matches WP bookstore hero ─────────────── */}
       <section
-        className="py-20 px-4 text-center relative overflow-hidden"
+        className="py-20 px-4 text-center relative overflow-visible"
         style={{
           background: "#dcf9f3",
           minHeight: "30vh",
@@ -65,11 +65,17 @@ export default function BooksPage() {
             Shop on Amazon
           </a>
         </div>
+        {/* Wave 1 — Hero → Book Grid */}
+        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 56, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 56" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,28 C240,52 540,6 840,36 C1060,56 1280,12 1440,30 L1440,56 L0,56 Z" fill="#d9b7e5" />
+          </svg>
+        </div>
       </section>
 
       {/* ─── BOOK GRID — matches WP book grid layout ────────── */}
       <section
-        className="py-16 px-4"
+        className="py-16 px-4 relative overflow-visible"
         style={{ backgroundColor: "#d9b7e5" }}
       >
         <div className="max-w-6xl mx-auto">
@@ -78,6 +84,12 @@ export default function BooksPage() {
               <BookCard key={book.id} book={book} />
             ))}
           </div>
+        </div>
+        {/* Wave 2 — Book Grid → About */}
+        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 56, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 56" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,32 C300,10 620,50 960,20 C1160,6 1340,44 1440,26 L1440,56 L0,56 Z" fill="#dcf9f3" />
+          </svg>
         </div>
       </section>
 
