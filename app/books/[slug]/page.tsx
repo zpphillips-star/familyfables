@@ -302,6 +302,7 @@ export default async function BookPage({
           HERO — themed gradient + cover + title
       ══════════════════════════════════════════════════════════════════ */}
       <section
+        className="book-page-hero"
         style={{
           background: book.gradient,
           minHeight: "50vh",

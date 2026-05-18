@@ -894,3 +894,16 @@ section     { overflow-x: hidden; }
 
 /* Read Aloud section is always #ffffff bg — dark text works in all modes, no bedtime override needed */
 
+
+/* ── Book detail page — hero bottom padding reduction on mobile/tablet ───── */
+@media (max-width: 1023px) {
+  .book-page-hero {
+    min-height: unset !important;
+    padding-bottom: 64px !important;
+  }
+}
+@media (max-width: 639px) {
+  .book-page-hero {
+    padding-bottom: 52px !important;
+  }
+}
