@@ -709,32 +709,58 @@ export default async function BookPage({
           </svg>
         </div>
 
-        {/* Activity (default) OR About content (activityFirst — dream-ideas) — transparent so gradient wrapper shows through */}
+        {/* Activity (default) OR merged About+CTA (activityFirst — dream-ideas) */}
         {activityFirst ? (
-          <div style={{ padding: "48px 24px 72px", maxWidth: 720, margin: "0 auto" }}>
-            <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.8)", marginBottom: 12, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
-              📖 About the Book
-            </p>
-            <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(24px, 4vw, 40px)", color: "#ffffff", marginBottom: 24, lineHeight: 1.2 }}>
-              {book.hook}
-            </h2>
-            <p style={{ fontSize: "clamp(15px, 2vw, 18px)", color: "rgba(255,255,255,0.85)", lineHeight: 1.75, marginBottom: 32, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
-              {description}
-            </p>
-            <div style={{ padding: "16px 20px", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.15)", border: "2px solid rgba(255,255,255,0.3)", marginBottom: 24 }}>
-              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.9)", fontWeight: 700, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
-                {book.perfectFor}
-              </p>
+          /* dream-ideas: About + CTA merged into one unified section */
+          <section style={{ padding: "72px 24px 80px", textAlign: "center", position: "relative", overflow: "visible" }}>
+            {/* Decorations */}
+            <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}>
+              {getDecorations(book.landIndex)}
             </div>
-            <span style={{ display: "inline-block", padding: "6px 18px", borderRadius: 50, fontSize: 14, fontWeight: 700, backgroundColor: "rgba(255,255,255,0.2)", color: "#fff", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
-              Perfect for {book.ageRange}
-            </span>
-          </div>
+            <div style={{ position: "relative", zIndex: 2, maxWidth: 720, margin: "0 auto" }}>
+              {/* Cover image */}
+              {book.coverImage && (
+                <div style={{ width: 130, height: 130, borderRadius: 20, overflow: "hidden", margin: "0 auto 32px", boxShadow: "0 12px 40px rgba(0,0,0,0.5)" }}>
+                  <Image src={book.coverImage} alt={book.title} width={130} height={130} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+              )}
+              {/* Hook */}
+              <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(24px, 4vw, 42px)", color: "#ffffff", marginBottom: 20, lineHeight: 1.2, textShadow: "0 2px 16px rgba(0,0,0,0.4)" }}>
+                {book.hook}
+              </h2>
+              {/* Description */}
+              <p style={{ fontSize: "clamp(15px, 2vw, 18px)", color: "rgba(255,255,255,0.85)", lineHeight: 1.75, marginBottom: 28, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
+                {description}
+              </p>
+              {/* Perfect For */}
+              <div style={{ padding: "14px 20px", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.12)", border: "2px solid rgba(255,255,255,0.25)", marginBottom: 20, display: "inline-block", maxWidth: 560 }}>
+                <p style={{ fontSize: 15, color: "rgba(255,255,255,0.9)", fontWeight: 700, margin: 0, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
+                  {book.perfectFor}
+                </p>
+              </div>
+              {/* Age badge */}
+              <div style={{ marginBottom: 36 }}>
+                <span style={{ display: "inline-block", padding: "6px 18px", borderRadius: 50, fontSize: 14, fontWeight: 700, backgroundColor: "rgba(255,255,255,0.18)", color: "#fff", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
+                  Perfect for {book.ageRange}
+                </span>
+              </div>
+              {/* Buy buttons */}
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+                <a href={amazonUrl} target="_blank" rel="noopener noreferrer" className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", borderRadius: 50, backgroundColor: "#ff9c1a", color: "#fff", fontWeight: 900, fontSize: 17, textDecoration: "none", boxShadow: "0 6px 24px rgba(255,156,26,0.5)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease" }}>
+                  Get {book.title} on Amazon →
+                </a>
+                <Link href="/" className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", borderRadius: 50, backgroundColor: "rgba(255,255,255,0.15)", color: "#fff", fontWeight: 700, fontSize: 16, textDecoration: "none", border: "2px solid rgba(255,255,255,0.5)", backdropFilter: "blur(4px)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease" }}>
+                  ← Browse all books
+                </Link>
+              </div>
+            </div>
+          </section>
         ) : (
           <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={heroTextLight} />
         )}
 
-        {/* CTA — transparent, same continuous gradient */}
+        {/* CTA — only for standard pages (activityFirst pages use the merged section above) */}
+        {!activityFirst && (
         <section
           style={{
             padding: "80px 24px",
@@ -856,6 +882,7 @@ export default async function BookPage({
           </div>
         </div>
       </section>
+        )} {/* end !activityFirst CTA */}
       </div>{/* end gradient wrapper */}
     </>
   );
