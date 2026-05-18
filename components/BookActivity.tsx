@@ -505,13 +505,14 @@ function TextInputActivity({
 interface BookActivityProps {
   slug: string;
   accentColor: string;
+  transparent?: boolean;
 }
 
-export default function BookActivity({ slug, accentColor }: BookActivityProps) {
+export default function BookActivity({ slug, accentColor, transparent }: BookActivityProps) {
   const wrap = (title: string, emoji: string, child: React.ReactNode) => (
     <section
       style={{ padding: "72px 24px" }}
-      className="section-activity"
+      className={transparent ? undefined : "section-activity"}
     >
       <div style={{ maxWidth: 760, margin: "0 auto" }}>
         <p

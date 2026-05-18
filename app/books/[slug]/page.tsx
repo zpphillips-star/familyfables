@@ -696,25 +696,28 @@ export default async function BookPage({
       )}
 
       {/* ══════════════════════════════════════════════════════════════════
-          ACTIVITY SECTION (client component)
+          ACTIVITY + CTA — one shared gradient wrapper, zero seams
       ══════════════════════════════════════════════════════════════════ */}
-      {/* Activity slides up 64px under the Read Aloud wave — wave's lavender fill covers the seam */}
-      <div style={{ marginTop: -64, position: "relative", zIndex: 0 }}>
-        <BookActivity slug={slug} accentColor={book.accentColor} />
-      </div>
+      <div style={{ background: book.gradient, marginTop: -64, position: "relative", zIndex: 0 }}>
+        {/* Wave at top — fills Read Aloud color above curve, gradient shows below */}
+        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 65, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 65" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,39 C300,13 620,59 940,19 C1140,5 1320,53 1440,31 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
+          </svg>
+        </div>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          GET THE BOOK — bottom CTA
-      ══════════════════════════════════════════════════════════════════ */}
-      <section
-        style={{
-          background: book.gradient,
-          padding: "80px 24px",
-          textAlign: "center",
-          position: "relative",
-          overflow: "visible",
-        }}
-      >
+        {/* Activity — transparent so gradient wrapper shows through */}
+        <BookActivity slug={slug} accentColor={book.accentColor} transparent />
+
+        {/* CTA — transparent, same continuous gradient */}
+        <section
+          style={{
+            padding: "80px 24px",
+            textAlign: "center",
+            position: "relative",
+            overflow: "visible",
+          }}
+        >
         {/* No wave needed — Activity and CTA share the same gradient, they merge seamlessly */}
         {/* Themed land decorations */}
         <div
@@ -828,6 +831,7 @@ export default async function BookPage({
           </div>
         </div>
       </section>
+      </div>{/* end gradient wrapper */}
     </>
   );
 }
