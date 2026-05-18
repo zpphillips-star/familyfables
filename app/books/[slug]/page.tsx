@@ -368,27 +368,57 @@ export default async function BookPage({
           {/* Cover / Character */}
           {activityFirst && book.characterImage ? (
             isPooPooFace ? (
-              /* poo-poo-face: dragon sits absolute bottom-left (flipped so head=left, tail sweeps right).
-                 Text block floats above the tail via paddingLeft — looks like one illustration. */
+              /* poo-poo-face: ONE composite unit — dragon sets the height, text anchored above the tail */
               <div
-                className="book-page-cover poo-dragon-wrap"
+                className="poo-composite"
                 style={{
-                  position: "absolute",
-                  left: "clamp(80px, 12vw, 200px)",
-                  bottom: -8,
-                  width: "clamp(320px, 52vw, 680px)",
-                  pointerEvents: "none",
-                  zIndex: 2,
+                  position: "relative",
+                  width: "clamp(480px, 72vw, 960px)",
+                  margin: "0 auto",
+                  flexShrink: 0,
                 }}
               >
+                {/* Dragon — normal flow, defines container size */}
                 <Image
                   src={book.characterImage}
                   alt={`${book.title} character`}
-                  width={680}
-                  height={437}
-                  style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 16px 40px rgba(0,0,0,0.2))", transform: "scaleX(-1)" }}
+                  width={960}
+                  height={618}
+                  className="poo-dragon-img"
+                  style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 16px 40px rgba(0,0,0,0.18))", transform: "scaleX(-1)" }}
                   priority
                 />
+                {/* Text — absolutely anchored above the tail (upper-right of the dragon image) */}
+                <div
+                  className="poo-text-overlay"
+                  style={{
+                    position: "absolute",
+                    top: "2%",
+                    left: "46%",
+                    right: "2%",
+                    zIndex: 3,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 0,
+                  }}
+                >
+                  <span style={{ display: "inline-block", padding: "3px 12px", borderRadius: 50, fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", backgroundColor: heroBadgeBg, border: `1.5px solid ${heroBadgeBorder}`, color: heroBadgeColor, marginBottom: 10, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif", backdropFilter: "blur(4px)", alignSelf: "flex-start" }}>
+                    Land {book.landIndex} — {book.landName}
+                  </span>
+                  <h1 style={{ fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: "clamp(20px, 3.8vw, 52px)", color: heroTextColor, lineHeight: 1.05, marginBottom: 10, textShadow: "0 2px 8px rgba(255,255,255,0.4)" }}>
+                    {book.title}
+                  </h1>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 10 }}>
+                    {book.themes.map((theme) => (
+                      <span key={theme} style={{ display: "inline-block", padding: "4px 12px", borderRadius: 50, fontSize: 12, fontWeight: 700, backgroundColor: book.accentColor, color: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.2)", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+                        {theme}
+                      </span>
+                    ))}
+                  </div>
+                  <p style={{ fontSize: 14, color: heroSubColor, fontWeight: 600, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+                    📚 {book.ageRange}
+                  </p>
+                </div>
               </div>
             ) : (
               /* dream-ideas / amber: portrait character art */
@@ -434,19 +464,13 @@ export default async function BookPage({
             </div>
           )}
 
-          {/* Text block */}
+          {/* Text block — hidden for poo-poo-face (text lives inside the composite above) */}
           <div
             className="book-page-text-block"
             style={{
               flex: "1 1 280px",
               minWidth: 240,
-              ...(isPooPooFace ? {
-                // Text starts left — dragon floats right of it, tail sweeps across
-                paddingLeft: "clamp(0px, 18vw, 240px)",
-                paddingBottom: "clamp(60px, 10vw, 120px)",
-                position: "relative",
-                zIndex: 3,
-              } : {}),
+              ...(isPooPooFace ? { display: "none" } : {}),
             }}
           >
             {/* Land name badge */}

@@ -908,20 +908,12 @@ section     { overflow-x: hidden; }
   }
 }
 
-/* ── Poo Poo Face — dragon hero positioning ──────────────────────────────── */
+/* ── Poo Poo Face — composite dragon+text unit ───────────────────────────── */
 @media (max-width: 1023px) {
-  .poo-dragon-wrap {
-    width: clamp(240px, 44vw, 460px) !important;
-  }
+  .poo-composite { width: clamp(360px, 88vw, 720px) !important; }
 }
 @media (max-width: 639px) {
-  /* Mobile: dragon smaller at bottom, text resets padding so it stacks cleanly */
-  .poo-dragon-wrap {
-    width: clamp(200px, 60vw, 300px) !important;
-    left: -16px !important;
-  }
-  .book-page-text-block {
-    padding-left: 0 !important;
-    padding-bottom: 16px !important;
-  }
+  .poo-composite { width: clamp(300px, 96vw, 480px) !important; }
+  .poo-text-overlay { top: 1% !important; left: 42% !important; }
+  .poo-text-overlay h1 { font-size: clamp(14px, 4.5vw, 22px) !important; }
 }
