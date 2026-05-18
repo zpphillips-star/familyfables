@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { AMAZON_STORE_URL } from "@/lib/books";
 
 export default function Footer() {
   return (
@@ -24,76 +23,33 @@ export default function Footer() {
               <p className="text-sm leading-relaxed" style={{ color: "#a89ec9" }}>
                 Stories that warm little hearts and spark big imaginations.
               </p>
-
             </div>
 
-            {/* Quick Links */}
+            {/* Explore */}
             <div>
-              <h3
-                className="font-bold text-sm uppercase tracking-widest mb-4"
-                style={{ color: "#ff9c1a" }}
+              <Link
+                href="/"
+                className="font-bold text-sm uppercase tracking-widest hover:opacity-75 transition-opacity"
+                style={{ color: "#ff9c1a", display: "inline-block" }}
               >
                 Explore
-              </h3>
-              <ul className="space-y-2">
-                {[
-                  { href: "/", label: "home" },
-                  { href: "/books", label: "bookstore" },
-                  { href: "/about", label: "about us" },
-                ].map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm transition-colors hover:opacity-75"
-                      style={{ color: "#c8bfdf" }}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              </Link>
             </div>
 
             {/* Shop */}
             <div>
-              <h3
-                className="font-bold text-sm uppercase tracking-widest mb-4"
-                style={{ color: "#ff9c1a" }}
-              >
-                Shop
-              </h3>
-              <p className="text-sm mb-2" style={{ color: "#a89ec9" }}>All books available on Amazon.</p>
               <a
-                href={AMAZON_STORE_URL}
+                href="https://www.amazon.com/familyfables"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm transition-colors hover:opacity-75"
-                style={{ color: "#ff9c1a", textDecoration: "underline" }}
+                className="font-bold text-sm uppercase tracking-widest hover:opacity-75 transition-opacity"
+                style={{ color: "#ff9c1a", display: "inline-block" }}
               >
-                Shop on Amazon →
+                Shop
               </a>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Footer nav bar */}
-      <div style={{ backgroundColor: "#09071a" }}>
-        <div className="max-w-6xl mx-auto px-4 py-3 flex gap-6 justify-center">
-          {[
-            { href: "/", label: "home" },
-            { href: "/books", label: "bookstore" },
-            { href: "/about", label: "about us" },
-          ].map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm transition-colors hover:opacity-75"
-              style={{ color: "#a89ec9", fontSize: "15px" }}
-            >
-              {link.label}
-            </Link>
-          ))}
+          </div>
         </div>
       </div>
 
