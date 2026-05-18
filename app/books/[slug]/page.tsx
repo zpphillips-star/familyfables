@@ -198,8 +198,6 @@ export default async function BookPage({
     "the-lumpiest-pumpkin",
   ];
   const heroTextLight = darkGradients.includes(slug);
-  // Dream Ideas puts Activity first (right under hero) and About last (on gradient)
-  const activityFirst = slug === "dream-ideas";
   const heroTextColor = heroTextLight ? "#ffffff" : "#1a1a1a";
   const heroSubColor = heroTextLight ? "rgba(255,255,255,0.85)" : "rgba(30,30,30,0.75)";
   const heroBadgeBg = heroTextLight ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.12)";
@@ -456,134 +454,14 @@ export default async function BookPage({
           </div>
         </div>
 
-        {/* Wave 1 — Hero → About (standard books only; activityFirst skips this, gradient continues) */}
-        {!activityFirst && (
-          <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
-            <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z" fill="#ffffff" />
-            </svg>
-          </div>
-        )}
+        {/* Wave 1 — Hero → About (unique shape, fills white below) */}
+        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z" fill="#ffffff" />
+          </svg>
+        </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          SECTION ORDER — conditional based on book
-          activityFirst (dream-ideas): Activity → ReadAloud → About+CTA
-          default: About → ReadAloud → Activity+CTA
-      ══════════════════════════════════════════════════════════════════ */}
-
-      {activityFirst ? (
-        <>
-          {/* ── ACTIVITY — same gradient as hero, flows seamlessly ── */}
-          <div style={{ background: book.gradient, position: "relative", zIndex: 0 }}>
-            {/* No top wave — hero gradient continues directly into activity */}
-            <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={heroTextLight} />
-            {/* Wave at bottom → fills Read Aloud color */}
-            <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
-              <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-                <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" className="wave-fill-read-aloud" />
-              </svg>
-            </div>
-          </div>
-
-          {/* ── READ ALOUD ── */}
-          {book.hasReadAloud ? (
-            <section
-              style={{ padding: "48px 24px", textAlign: "center", position: "relative", overflow: "visible", zIndex: 1 }}
-              className="section-read-aloud"
-            >
-              <div style={{ maxWidth: 680, margin: "0 auto" }}>
-                <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: book.accentColor, marginBottom: 12, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>🎧 Read Aloud</p>
-                <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(24px, 4vw, 40px)", color: "#2D1B69", marginBottom: 16 }}>Read It To Me!</h2>
-                <p style={{ fontSize: 16, color: "#4a3a6e", marginBottom: 32, lineHeight: 1.6, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
-                  Snuggle up — the full story is ready to read aloud. Tap a page to hear it read to you, flip through at your own pace, or let it play automatically! 📖✨
-                </p>
-                <Link href={`/read/${book.id}`} className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", borderRadius: 50, backgroundColor: book.accentColor, color: "#fff", fontWeight: 900, fontSize: 17, textDecoration: "none", boxShadow: `0 6px 24px ${book.accentColor}55`, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease" }}>
-                  📖 Start Reading Now →
-                </Link>
-              </div>
-              {/* Wave → About+CTA gradient below */}
-              <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
-                <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-                  <path d="M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z" className="wave-fill-activity" />
-                </svg>
-              </div>
-            </section>
-          ) : (
-            <section style={{ backgroundColor: "#f9f5ff", padding: "64px 24px", textAlign: "center", position: "relative", overflow: "visible", zIndex: 1 }}>
-              <div style={{ maxWidth: 480, margin: "0 auto" }}>
-                <div style={{ width: 80, height: 80, borderRadius: "50%", backgroundColor: `${book.accentColor}20`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: 36 }}>📖</div>
-                <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 36px)", color: "#2D1B69", marginBottom: 16 }}>Coming Soon — Read Aloud!</h2>
-                <p style={{ fontSize: 16, color: "#7B6898", lineHeight: 1.6, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
-                  We&apos;re recording <strong style={{ color: book.accentColor }}>{book.title}</strong> right now! Check back soon — the full read-aloud experience is coming. 🎙️
-                </p>
-              </div>
-              <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
-                <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-                  <path d="M0,29 C280,55 580,9 880,45 C1110,63 1320,17 1440,37 L1440,64 L0,64 Z" className="wave-fill-activity" />
-                </svg>
-              </div>
-            </section>
-          )}
-
-          {/* ── ABOUT + CTA — on gradient, dark bg, white text ── */}
-          <div style={{ background: book.gradient, position: "relative", zIndex: 0 }}>
-            {/* No top wave — Read Aloud wave fills gradient start color, gradient picks up seamlessly */}
-
-            {/* About the Book */}
-            <section style={{ padding: "48px 24px 72px", position: "relative", overflow: "visible" }}>
-              <div style={{ maxWidth: 720, margin: "0 auto" }}>
-                <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: book.accentColor, marginBottom: 12, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
-                  📖 About the Book
-                </p>
-                <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(24px, 4vw, 40px)", color: heroTextColor, marginBottom: 24, lineHeight: 1.2 }}>
-                  {book.hook}
-                </h2>
-                <p style={{ fontSize: "clamp(15px, 2vw, 18px)", color: heroSubColor, lineHeight: 1.75, marginBottom: 32, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
-                  {description}
-                </p>
-                <div style={{ padding: "16px 20px", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.12)", border: "2px solid rgba(255,255,255,0.25)", marginBottom: 24 }}>
-                  <p style={{ fontSize: 15, color: "rgba(255,255,255,0.9)", fontWeight: 700, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
-                    {book.perfectFor}
-                  </p>
-                </div>
-                <span style={{ display: "inline-block", padding: "6px 18px", borderRadius: 50, fontSize: 14, fontWeight: 700, backgroundColor: book.accentColor, color: "#fff", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
-                  Perfect for {book.ageRange}
-                </span>
-              </div>
-            </section>
-
-            {/* CTA */}
-            <section style={{ padding: "80px 24px", textAlign: "center", position: "relative", overflow: "visible" }}>
-              <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}>
-                {getDecorations(book.landIndex)}
-              </div>
-              <div style={{ position: "relative", zIndex: 2 }}>
-                {book.coverImage && (
-                  <div style={{ width: 100, height: 100, borderRadius: 16, overflow: "hidden", margin: "0 auto 24px", boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}>
-                    <Image src={book.coverImage} alt={book.title} width={100} height={100} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  </div>
-                )}
-                <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(24px, 4.5vw, 48px)", color: heroTextColor, marginBottom: 12, textShadow: heroTextLight ? "0 2px 16px rgba(0,0,0,0.4)" : "none" }}>
-                  Love {book.title}?
-                </h2>
-                <p style={{ fontSize: "clamp(14px, 2vw, 18px)", color: heroSubColor, marginBottom: 32, maxWidth: 480, margin: "0 auto 32px", lineHeight: 1.5, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
-                  Get your copy on Amazon and bring {book.landName} home with you. 🌟
-                </p>
-                <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
-                  <a href={amazonUrl} target="_blank" rel="noopener noreferrer" className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", borderRadius: 50, backgroundColor: "#ff9c1a", color: "#fff", fontWeight: 900, fontSize: 17, textDecoration: "none", boxShadow: "0 6px 24px rgba(255,156,26,0.5)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease" }}>
-                    Get {book.title} on Amazon →
-                  </a>
-                  <Link href="/" className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", borderRadius: 50, backgroundColor: "rgba(255,255,255,0.15)", color: heroTextLight ? "#fff" : "#333", fontWeight: 700, fontSize: 16, textDecoration: "none", border: `2px solid ${heroTextLight ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.25)"}`, backdropFilter: "blur(4px)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease" }}>
-                    ← Browse all books
-                  </Link>
-                </div>
-              </div>
-            </section>
-          </div>{/* end dream-ideas gradient wrapper */}
-        </>
-      ) : (
-        <>
       {/* ══════════════════════════════════════════════════════════════════
           ABOUT THE BOOK
       ══════════════════════════════════════════════════════════════════ */}
@@ -954,8 +832,6 @@ export default async function BookPage({
         </div>
       </section>
       </div>{/* end gradient wrapper */}
-        </>
-      )}{/* end section order conditional */}
     </>
   );
 }
