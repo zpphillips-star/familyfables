@@ -30,7 +30,7 @@ export default function Footer() {
               <Link
                 href="/"
                 className="hover:opacity-75 transition-opacity"
-                style={{ color: "#ff9c1a", display: "inline-block", fontWeight: 700, fontSize: "18px", textTransform: "uppercase", letterSpacing: "0.12em" }}
+                style={{ color: "#ff9c1a", display: "inline-block", fontWeight: 700, fontSize: "26px", textTransform: "uppercase", letterSpacing: "0.1em", fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
               >
                 Explore
               </Link>
@@ -43,7 +43,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:opacity-75 transition-opacity"
-                style={{ color: "#ff9c1a", display: "inline-block", fontWeight: 700, fontSize: "18px", textTransform: "uppercase", letterSpacing: "0.12em" }}
+                style={{ color: "#ff9c1a", display: "inline-block", fontWeight: 700, fontSize: "26px", textTransform: "uppercase", letterSpacing: "0.1em", fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
               >
                 Shop
               </a>
@@ -54,7 +54,7 @@ export default function Footer() {
               <Link
                 href="/about"
                 className="hover:opacity-75 transition-opacity"
-                style={{ color: "#ff9c1a", display: "inline-block", fontWeight: 700, fontSize: "18px", textTransform: "uppercase", letterSpacing: "0.12em" }}
+                style={{ color: "#ff9c1a", display: "inline-block", fontWeight: 700, fontSize: "26px", textTransform: "uppercase", letterSpacing: "0.1em", fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
               >
                 About Us
               </Link>
