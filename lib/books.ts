@@ -104,6 +104,7 @@ export const books: Book[] = [
     gradient: "linear-gradient(155deg, #2d0a3a 0%, #5a1060 30%, #8b1a6b 60%, #c0394a 100%)",
         landIndex: 2,
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1951173007",
   },
   {
     id: "gilroys-gobble",

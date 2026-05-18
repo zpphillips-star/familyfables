@@ -217,6 +217,8 @@ export default async function BookPage({
 
   // dream-ideas: show Activity in the white section, About in the gradient section
   const activityFirst = slug === 'dream-ideas';
+  // amber: character art in hero (same as dream-ideas) but standard About section
+  const useCharacterHero = activityFirst || slug === 'amber-the-dragon-keeper';
 
   return (
     <>
@@ -362,7 +364,7 @@ export default async function BookPage({
           }}
         >
           {/* Cover / Character */}
-          {activityFirst && book.characterImage ? (
+          {useCharacterHero && book.characterImage ? (
             /* dream-ideas: show character art (transparent bg — no frame) */
             <div
               className="book-page-cover"

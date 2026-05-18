@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // ── Per-book activity definitions ─────────────────────────────────────────────
 
@@ -502,6 +502,259 @@ function TextInputActivity({
   );
 }
 
+// ── Amber: Catch Cinnamon's Diamonds (canvas game) ──────────────────────────
+interface DiamondObj { x: number; y: number; speed: number; size: number; color: string; }
+
+function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; textLight?: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [phase, setPhase] = useState<"idle" | "playing" | "over">("idle");
+  const [finalScore, setFinalScore] = useState(0);
+  const gameRef = useRef({ diamonds: [] as DiamondObj[], playerX: 165, score: 0, lives: 3, frame: 0, running: false });
+  const keysRef = useRef({ left: false, right: false });
+  const animRef = useRef(0);
+  const W = 400, H = 280, PW = 70, PH = 14, PSPEED = 5;
+  const DCOLORS = ["#E86BB5", "#C8A4FF", "#FFD700", "#FF6B9D", "#7CF5FF"];
+
+  function startGame() {
+    const g = gameRef.current;
+    g.diamonds = []; g.playerX = W / 2 - PW / 2; g.score = 0; g.lives = 3; g.frame = 0; g.running = true;
+    setFinalScore(0); setPhase("playing");
+  }
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const d = e.type === "keydown";
+      if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") keysRef.current.left = d;
+      if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") keysRef.current.right = d;
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("keyup", onKey);
+    return () => { window.removeEventListener("keydown", onKey); window.removeEventListener("keyup", onKey); };
+  }, []);
+
+  useEffect(() => {
+    if (phase !== "playing") return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const loop = () => {
+      const g = gameRef.current;
+      if (!g.running) return;
+      g.frame++;
+      if (keysRef.current.left) g.playerX = Math.max(0, g.playerX - PSPEED);
+      if (keysRef.current.right) g.playerX = Math.min(W - PW, g.playerX + PSPEED);
+      const spawnEvery = Math.max(20, 80 - Math.floor(g.score / 4) * 8);
+      if (g.frame % spawnEvery === 0) {
+        g.diamonds.push({ x: 10 + Math.random() * (W - 40), y: -20, speed: 1.8 + g.score * 0.07, size: 13, color: DCOLORS[Math.floor(Math.random() * DCOLORS.length)] });
+      }
+      const py = H - PH - 8;
+      g.diamonds = g.diamonds.filter(d => {
+        d.y += d.speed;
+        if (d.y + d.size > py && d.y < py + PH + 4 && d.x + d.size > g.playerX && d.x < g.playerX + PW) { g.score++; return false; }
+        if (d.y > H + 10) { g.lives--; return false; }
+        return true;
+      });
+      if (g.lives <= 0) { g.running = false; setFinalScore(g.score); setPhase("over"); return; }
+      ctx.fillStyle = "#1a0533"; ctx.fillRect(0, 0, W, H);
+      for (let i = 0; i < 25; i++) {
+        ctx.fillStyle = `rgba(255,255,255,${0.15 + (i % 4) * 0.1})`;
+        ctx.beginPath(); ctx.arc((i * 61 + 17) % W, (i * 43 + 11) % Math.floor(H * 0.75), 1, 0, Math.PI * 2); ctx.fill();
+      }
+      g.diamonds.forEach(d => {
+        ctx.save(); ctx.translate(d.x + d.size / 2, d.y + d.size / 2);
+        ctx.fillStyle = d.color;
+        ctx.beginPath(); ctx.moveTo(0, -d.size * 0.6); ctx.lineTo(d.size * 0.5, 0); ctx.lineTo(0, d.size * 0.6); ctx.lineTo(-d.size * 0.5, 0); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.6)"; ctx.lineWidth = 1; ctx.stroke();
+        ctx.restore();
+      });
+      ctx.fillStyle = accentColor; ctx.fillRect(g.playerX, py, PW, PH);
+      ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.fillRect(g.playerX + 4, py + 3, PW - 8, 4);
+      ctx.fillStyle = "rgba(255,255,255,0.9)"; ctx.font = "bold 13px sans-serif"; ctx.textAlign = "left"; ctx.fillText(`💎 ${g.score}`, 10, 20);
+      ctx.textAlign = "right"; ctx.fillText("❤️".repeat(g.lives), W - 8, 20);
+      animRef.current = requestAnimationFrame(loop);
+    };
+    animRef.current = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animRef.current);
+  }, [phase, accentColor]); // eslint-disable-line
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "center" }}>
+      <p style={{ fontSize: 15, color: textLight ? "rgba(255,255,255,0.9)" : "#2d0a3a", lineHeight: 1.5, maxWidth: 400, textAlign: "center", margin: 0 }}>
+        Cinnamon scattered his magic diamonds! Help Amber catch them all. 💎<br />
+        <span style={{ fontSize: 13, opacity: 0.75 }}>← → arrow keys, or tap ◀ ▶ buttons below.</span>
+      </p>
+      <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.5)", width: "100%", maxWidth: 400 }}>
+        <canvas ref={canvasRef} width={W} height={H} style={{ display: "block", width: "100%", height: "auto" }} />
+        {phase === "idle" && (
+          <div style={{ position: "absolute", inset: 0, background: "rgba(26,5,51,0.93)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12 }}>
+            <span style={{ fontSize: 52 }}>💎</span>
+            <p style={{ color: "#fff", fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: 22, textAlign: "center", padding: "0 16px", margin: 0 }}>Catch Cinnamon&apos;s Diamonds!</p>
+            <button onClick={startGame} style={{ padding: "12px 28px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+              Start Game! 💎
+            </button>
+          </div>
+        )}
+        {phase === "over" && (
+          <div style={{ position: "absolute", inset: 0, background: "rgba(26,5,51,0.93)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10 }}>
+            <span style={{ fontSize: 44 }}>{finalScore >= 15 ? "🐉" : "💎"}</span>
+            <p style={{ color: "#fff", fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: 22, margin: 0 }}>
+              {finalScore >= 20 ? "Dragon Keeper!" : finalScore >= 12 ? "Great catch!" : finalScore >= 6 ? "Nice try!" : "Keep practicing!"}
+            </p>
+            <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 17, margin: 0 }}>💎 {finalScore} diamonds caught</p>
+            <button onClick={startGame} style={{ padding: "10px 22px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+              Play Again 🔄
+            </button>
+          </div>
+        )}
+      </div>
+      {phase === "playing" && (
+        <div style={{ display: "flex", gap: 12 }}>
+          {(["left", "right"] as const).map((dir) => (
+            <button key={dir}
+              onPointerDown={() => { keysRef.current[dir] = true; }}
+              onPointerUp={() => { keysRef.current[dir] = false; }}
+              onPointerLeave={() => { keysRef.current[dir] = false; }}
+              style={{ padding: "14px 28px", borderRadius: 12, backgroundColor: `${accentColor}cc`, color: "#fff", fontWeight: 700, fontSize: 22, border: "none", cursor: "pointer", userSelect: "none", touchAction: "none" }}>
+              {dir === "left" ? "◀" : "▶"}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Amber: Create Your Own Dragon ─────────────────────────────────────────────
+const DRAGON_COLORS = [
+  { label: "Royal Purple", hex: "#9B30FF" },
+  { label: "Golden", hex: "#FFD700" },
+  { label: "Crimson", hex: "#DC143C" },
+  { label: "Emerald", hex: "#2ECC71" },
+  { label: "Sapphire", hex: "#2980FF" },
+  { label: "Midnight", hex: "#4B0082" },
+];
+const DRAGON_POWERS = [
+  { label: "Fire", emoji: "🔥", desc: "breathes roaring magical flames" },
+  { label: "Ice", emoji: "❄️", desc: "exhales magical frost and snow" },
+  { label: "Lightning", emoji: "⚡", desc: "crackles with electric power" },
+  { label: "Healing", emoji: "✨", desc: "glows with warm healing light" },
+  { label: "Invisibility", emoji: "👻", desc: "vanishes in the blink of an eye" },
+  { label: "Telepathy", emoji: "🌀", desc: "speaks directly to your thoughts" },
+];
+const DRAGON_SIZES = [
+  { label: "Tiny", desc: "fits in your pocket!", emoji: "🤏" },
+  { label: "Medium", desc: "rides like a horse!", emoji: "🏇" },
+  { label: "Enormous", desc: "covers the whole sky!", emoji: "🏔️" },
+];
+
+function AmberDragonCreator({ accentColor, textLight }: { accentColor: string; textLight?: boolean }) {
+  const [step, setStep] = useState(0);
+  const [chosenColor, setChosenColor] = useState<typeof DRAGON_COLORS[0] | null>(null);
+  const [chosenPower, setChosenPower] = useState<typeof DRAGON_POWERS[0] | null>(null);
+  const [chosenSize, setChosenSize] = useState<typeof DRAGON_SIZES[0] | null>(null);
+  const [dragonName, setDragonName] = useState("");
+  const [created, setCreated] = useState(false);
+  const tc = textLight ? "rgba(255,255,255,0.9)" : "#2d0a3a";
+
+  function reset() { setStep(0); setChosenColor(null); setChosenPower(null); setChosenSize(null); setDragonName(""); setCreated(false); }
+
+  if (created && chosenColor && chosenPower && chosenSize) {
+    const name = dragonName.trim() || "your dragon";
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, textAlign: "center" }}>
+        <div style={{ fontSize: 60 }}>🐉</div>
+        <h3 style={{ fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: 30, color: chosenColor.hex, margin: 0, textShadow: "0 2px 12px rgba(0,0,0,0.4)" }}>
+          {dragonName.trim() || "Your Dragon"}
+        </h3>
+        <div style={{ background: `linear-gradient(135deg, ${chosenColor.hex}22, ${chosenColor.hex}44)`, border: `2px solid ${chosenColor.hex}88`, borderRadius: 16, padding: "20px 24px", maxWidth: 480, textAlign: "left" }}>
+          <p style={{ fontSize: 15, color: textLight ? "rgba(255,255,255,0.92)" : "#2d0a3a", lineHeight: 1.75, margin: 0 }}>
+            Deep in the Dragon Mountains of Sydar lives <strong>{name}</strong> — a {chosenSize.emoji} {chosenSize.label.toLowerCase()} dragon with gleaming {chosenColor.label.toLowerCase()} scales who {chosenPower.desc} {chosenPower.emoji}.<br /><br />
+            Amber herself has heard whispers of this dragon. <em>&ldquo;{name} is extraordinary,&rdquo;</em> she smiled. <em>&ldquo;With {chosenPower.label.toLowerCase()} powers like that, I think we&apos;re going to be the greatest dragon team in all of Sydar.&rdquo;</em><br /><br />
+            Every creature in the land knows {name}&apos;s name. And now — so does the Dragon Keeper. 🌟
+          </p>
+        </div>
+        <button onClick={reset} style={{ padding: "10px 24px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+          Create another dragon 🐉
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 480 }}>
+      <div style={{ display: "flex", gap: 6 }}>
+        {["Color", "Power", "Size", "Name"].map((s, i) => (
+          <div key={s} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: i <= step ? accentColor : "rgba(255,255,255,0.2)", transition: "background-color 0.3s" }} />
+        ))}
+      </div>
+
+      {step === 0 && (
+        <>
+          <p style={{ fontSize: 15, color: tc, fontWeight: 600, margin: 0 }}>What color are your dragon&apos;s scales? ✨</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {DRAGON_COLORS.map(c => (
+              <button key={c.label} onClick={() => { setChosenColor(c); setStep(1); }}
+                style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 16px", borderRadius: 12, border: `2px solid ${c.hex}88`, backgroundColor: `${c.hex}22`, color: textLight ? "#fff" : "#2d0a3a", fontWeight: 600, fontSize: 14, cursor: "pointer", fontFamily: "var(--font-open-sans),'Open Sans',sans-serif" }}>
+                <span style={{ width: 18, height: 18, borderRadius: "50%", backgroundColor: c.hex, display: "inline-block", flexShrink: 0 }} />
+                {c.label}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      {step === 1 && (
+        <>
+          <p style={{ fontSize: 15, color: tc, fontWeight: 600, margin: 0 }}>What&apos;s your dragon&apos;s special power? 🐉</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {DRAGON_POWERS.map(p => (
+              <button key={p.label} onClick={() => { setChosenPower(p); setStep(2); }}
+                style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 16px", borderRadius: 12, border: `2px solid ${accentColor}66`, backgroundColor: "rgba(255,255,255,0.1)", color: textLight ? "#fff" : "#2d0a3a", fontWeight: 600, fontSize: 14, cursor: "pointer", fontFamily: "var(--font-open-sans),'Open Sans',sans-serif" }}>
+                {p.emoji} {p.label}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      {step === 2 && (
+        <>
+          <p style={{ fontSize: 15, color: tc, fontWeight: 600, margin: 0 }}>How big is your dragon? {chosenPower?.emoji}</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {DRAGON_SIZES.map(s => (
+              <button key={s.label} onClick={() => { setChosenSize(s); setStep(3); }}
+                style={{ padding: "12px 18px", borderRadius: 12, border: `2px solid ${accentColor}66`, backgroundColor: "rgba(255,255,255,0.1)", color: textLight ? "#fff" : "#2d0a3a", fontWeight: 600, fontSize: 14, cursor: "pointer", textAlign: "left", fontFamily: "var(--font-open-sans),'Open Sans',sans-serif" }}>
+                {s.emoji} {s.label} — {s.desc}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      {step === 3 && (
+        <>
+          <p style={{ fontSize: 15, color: tc, fontWeight: 600, margin: 0 }}>Give your dragon a name! 🐉</p>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <input value={dragonName} onChange={e => setDragonName(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && setCreated(true)}
+              placeholder="My dragon's name is..."
+              style={{ flex: "1 1 180px", padding: "12px 16px", borderRadius: 12, border: `2px solid ${accentColor}`, fontSize: 15, outline: "none", backgroundColor: "rgba(255,255,255,0.9)", fontFamily: "var(--font-open-sans),'Open Sans',sans-serif", color: "#2d0a3a" }}
+            />
+            <button onClick={() => setCreated(true)}
+              style={{ padding: "12px 20px", borderRadius: 12, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+              Create! 🐉
+            </button>
+          </div>
+          <button onClick={() => setStep(2)} style={{ alignSelf: "flex-start", padding: "6px 14px", borderRadius: 50, backgroundColor: "transparent", color: textLight ? "rgba(255,255,255,0.7)" : accentColor, fontWeight: 600, fontSize: 13, border: `1px solid ${accentColor}66`, cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+            ← Back
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ── Main export ───────────────────────────────────────────────────────────────
 
 interface BookActivityProps {
@@ -621,6 +874,14 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
       />
     ));
 
-  // Amber and Poo Poo Face have full BookReader — no activity needed
+  if (slug === "amber-the-dragon-keeper")
+    return (
+      <>
+        {wrap("Catch Cinnamon's Diamonds!", "💎", <AmberDiamondCatch accentColor={accentColor} textLight={textLight} />)}
+        {wrap("Create Your Own Dragon!", "🐉", <AmberDragonCreator accentColor={accentColor} textLight={textLight} />)}
+      </>
+    );
+
+  // Poo Poo Face has full BookReader — no activity needed
   return null;
 }
