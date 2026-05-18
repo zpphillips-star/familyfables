@@ -215,6 +215,9 @@ export default async function BookPage({
   // First color stop of the gradient — used as wave fill when Activity uses the gradient bg
   const gradientStartColor = (book.gradient.match(/#[0-9a-fA-F]{6}/) ?? ['#ffffff'])[0];
 
+  // dream-ideas: show Activity in the white section, About in the gradient section
+  const activityFirst = slug === 'dream-ideas';
+
   return (
     <>
       {/* ── Global keyframes ── */}
@@ -463,15 +466,14 @@ export default async function BookPage({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          ABOUT THE BOOK
+          WHITE SECTION — About the Book (default) OR Activity (activityFirst)
       ══════════════════════════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#ffffff", padding: "28px 24px 72px", position: "relative", overflow: "visible" }}>
-        <div
-          style={{
-            maxWidth: 720,
-            margin: "0 auto",
-          }}
-        >
+      <section style={{ backgroundColor: "#ffffff", padding: activityFirst ? "0" : "28px 24px 72px", position: "relative", overflow: "visible" }}>
+        {activityFirst ? (
+          /* dream-ideas: Activity goes here in white section */
+          <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={false} />
+        ) : (
+          <div style={{ maxWidth: 720, margin: "0 auto" }}>
           <p
             style={{
               fontSize: 13,
@@ -546,8 +548,9 @@ export default async function BookPage({
             Perfect for {book.ageRange}
           </span>
         </div>
+        )} {/* end activityFirst conditional */}
 
-        {/* Wave 2 — About → Read Aloud (unique shape, fills Read Aloud color below) */}
+        {/* Wave 2 — About/Activity → Read Aloud (unique shape, fills Read Aloud color below) */}
         <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
           <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
             <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" className="wave-fill-read-aloud" />
@@ -706,8 +709,30 @@ export default async function BookPage({
           </svg>
         </div>
 
-        {/* Activity — transparent so gradient wrapper shows through */}
-        <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={heroTextLight} />
+        {/* Activity (default) OR About content (activityFirst — dream-ideas) — transparent so gradient wrapper shows through */}
+        {activityFirst ? (
+          <div style={{ padding: "48px 24px 72px", maxWidth: 720, margin: "0 auto" }}>
+            <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.8)", marginBottom: 12, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
+              📖 About the Book
+            </p>
+            <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(24px, 4vw, 40px)", color: "#ffffff", marginBottom: 24, lineHeight: 1.2 }}>
+              {book.hook}
+            </h2>
+            <p style={{ fontSize: "clamp(15px, 2vw, 18px)", color: "rgba(255,255,255,0.85)", lineHeight: 1.75, marginBottom: 32, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
+              {description}
+            </p>
+            <div style={{ padding: "16px 20px", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.15)", border: "2px solid rgba(255,255,255,0.3)", marginBottom: 24 }}>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.9)", fontWeight: 700, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
+                {book.perfectFor}
+              </p>
+            </div>
+            <span style={{ display: "inline-block", padding: "6px 18px", borderRadius: 50, fontSize: 14, fontWeight: 700, backgroundColor: "rgba(255,255,255,0.2)", color: "#fff", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
+              Perfect for {book.ageRange}
+            </span>
+          </div>
+        ) : (
+          <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={heroTextLight} />
+        )}
 
         {/* CTA — transparent, same continuous gradient */}
         <section
