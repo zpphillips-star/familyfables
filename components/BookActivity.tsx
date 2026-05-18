@@ -51,6 +51,7 @@ function DreamIdeasActivity({ accentColor, textLight }: { accentColor: string; t
           />
           <button
             onClick={() => dream.trim() && setSubmitted(true)}
+            className="dream-it-btn"
             style={{
               alignSelf: "flex-start",
               padding: "12px 28px",

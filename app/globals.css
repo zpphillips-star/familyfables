@@ -29,6 +29,17 @@
 }
 [data-mode="bedtime"] ::-webkit-scrollbar-track { background: #1A0A3A; }
 
+/* ── Bedtime: Read Aloud section — light text on dark bg ─────────── */
+[data-mode="bedtime"] .section-read-aloud h2 {
+  color: #ffffff !important;
+}
+[data-mode="bedtime"] .section-read-aloud p {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+[data-mode="bedtime"] .section-read-aloud .book-cta-btn {
+  /* Button already uses accentColor bg — keeps its color */
+}
+
 /* Animated star field */
 @keyframes twinkle {
   0%, 100% { opacity: 0.2; transform: scale(0.8); }
@@ -886,6 +897,15 @@ section     { overflow-x: hidden; }
     box-sizing: border-box !important;
     font-size: 15px !important;
     padding: 14px 20px !important;
+  }
+}
+
+/* ── Dream it! button — centered on mobile ───────────────────────── */
+@media (max-width: 639px) {
+  .dream-it-btn {
+    align-self: center !important;
+    width: 100% !important;
+    justify-content: center !important;
   }
 }
 

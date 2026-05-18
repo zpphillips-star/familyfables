@@ -727,7 +727,7 @@ export default async function BookPage({
       ══════════════════════════════════════════════════════════════════ */}
       <div style={{ background: book.gradient, marginTop: -64, position: "relative", zIndex: 0, overflowX: "hidden" }}>
         {/* Wave at top — fills Read Aloud color above curve, gradient shows below */}
-        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 65, pointerEvents: "none", zIndex: 4 }}>
+        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 65, pointerEvents: "none", zIndex: 1 }}>
           <svg viewBox="0 0 1440 65" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
             <path d="M0,39 C300,13 620,59 940,19 C1140,5 1320,53 1440,31 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
           </svg>
@@ -736,7 +736,7 @@ export default async function BookPage({
         {/* Activity (default) OR merged About+CTA (activityFirst — dream-ideas) */}
         {activityFirst ? (
           /* dream-ideas: About + CTA merged into one unified section */
-          <section className="book-activityfirst-bottom" style={{ padding: "170px 24px 96px", textAlign: "center", position: "relative", overflow: "visible" }}>
+          <section className="book-activityfirst-bottom" style={{ padding: "170px 24px 96px", textAlign: "center", position: "relative", zIndex: 2, overflow: "visible" }}>
             {/* Decorations */}
             <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}>
               {getDecorations(book.landIndex)}
