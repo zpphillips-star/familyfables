@@ -287,12 +287,12 @@ export default async function BookPage({
         .book-back-link:hover { opacity: 0.75; }
 
         /* Section backgrounds */
-        .section-read-aloud { background-color: color-mix(in srgb, ${book.accentColor} 18%, var(--page-bg, white)); }
+        .section-read-aloud { background-color: color-mix(in srgb, ${book.accentColor} 18%, #ffffff); }
         /* Activity always uses the same warm gradient as CTA — they visually merge, no seam */
         .section-activity { background: ${book.gradient}; }
 
         /* Wave fills — must exactly match the section they blend into */
-        .wave-fill-read-aloud { fill: color-mix(in srgb, ${book.accentColor} 18%, var(--page-bg, white)); }
+        .wave-fill-read-aloud { fill: color-mix(in srgb, ${book.accentColor} 18%, #ffffff); }
         /* Wave into Activity fills with gradient start color so it matches Activity's background */
         .wave-fill-activity { fill: ${gradientStartColor}; }
       `}</style>
