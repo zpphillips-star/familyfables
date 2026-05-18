@@ -374,7 +374,7 @@ export default async function BookPage({
                 className="book-page-cover poo-dragon-wrap"
                 style={{
                   position: "absolute",
-                  left: "clamp(-60px, -2vw, -20px)",
+                  left: "clamp(80px, 12vw, 200px)",
                   bottom: -8,
                   width: "clamp(320px, 52vw, 680px)",
                   pointerEvents: "none",
@@ -441,8 +441,8 @@ export default async function BookPage({
               flex: "1 1 280px",
               minWidth: 240,
               ...(isPooPooFace ? {
-                // Push text right — sits above the dragon's sweeping tail
-                paddingLeft: "clamp(0px, 36vw, 480px)",
+                // Text starts left — dragon floats right of it, tail sweeps across
+                paddingLeft: "clamp(0px, 18vw, 240px)",
                 paddingBottom: "clamp(60px, 10vw, 120px)",
                 position: "relative",
                 zIndex: 3,
