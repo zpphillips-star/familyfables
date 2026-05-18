@@ -701,6 +701,13 @@ section     { overflow-x: hidden; }
   }
 }
 
+/* ── Amber side-by-side divider — hide when columns stack on mobile ── */
+@media (max-width: 720px) {
+  .amber-activity-divider {
+    display: none !important;
+  }
+}
+
 /* ── General touch-target minimum ───────────────────────────────── */
 @media (pointer: coarse) {
   button, a, [role="button"] {

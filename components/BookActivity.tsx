@@ -876,10 +876,42 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
 
   if (slug === "amber-the-dragon-keeper")
     return (
-      <>
-        {wrap("Catch Cinnamon's Diamonds!", "💎", <AmberDiamondCatch accentColor={accentColor} textLight={textLight} />)}
-        {wrap("Create Your Own Dragon!", "🐉", <AmberDragonCreator accentColor={accentColor} textLight={textLight} />)}
-      </>
+      <section style={{ padding: "72px 24px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "flex-start", gap: 0, flexWrap: "wrap" }}>
+
+          {/* ── Left: Diamond Catch ── */}
+          <div style={{ flex: "1 1 320px", padding: "0 40px 0 0", minWidth: 280 }}>
+            <p style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: textLight ? "rgba(255,255,255,0.8)" : "#1a1060", marginBottom: 10, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
+              💎 Fun Activity
+            </p>
+            <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 36px)", color: textLight ? "#ffffff" : "#1a1060", marginBottom: 24, lineHeight: 1.2 }}>
+              Catch Cinnamon&apos;s Diamonds!
+            </h2>
+            <AmberDiamondCatch accentColor={accentColor} textLight={textLight} />
+          </div>
+
+          {/* ── Divider — fades in/out so it doesn't run full height ── */}
+          <div style={{
+            width: 1,
+            alignSelf: "stretch",
+            background: `linear-gradient(to bottom, transparent, ${accentColor}55 18%, ${accentColor}55 82%, transparent)`,
+            margin: "0 8px",
+            flexShrink: 0,
+          }} className="amber-activity-divider" />
+
+          {/* ── Right: Dragon Creator ── */}
+          <div style={{ flex: "1 1 320px", padding: "0 0 0 40px", minWidth: 280 }}>
+            <p style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: textLight ? "rgba(255,255,255,0.8)" : "#1a1060", marginBottom: 10, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
+              🐉 Fun Activity
+            </p>
+            <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 36px)", color: textLight ? "#ffffff" : "#1a1060", marginBottom: 24, lineHeight: 1.2 }}>
+              Create Your Own Dragon!
+            </h2>
+            <AmberDragonCreator accentColor={accentColor} textLight={textLight} />
+          </div>
+
+        </div>
+      </section>
     );
 
   // Poo Poo Face has full BookReader — no activity needed
