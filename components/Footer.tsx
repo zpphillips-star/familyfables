@@ -5,8 +5,8 @@ import { AMAZON_STORE_URL } from "@/lib/books";
 export default function Footer() {
   return (
     <footer>
-      {/* Main footer area — mint bg, teal text (matches WP #main-footer) */}
-      <div style={{ backgroundColor: "#dcf9f3", color: "#009380" }}>
+      {/* Main footer area */}
+      <div style={{ backgroundColor: "#0d0b1e", color: "#a89ec9" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
@@ -16,12 +16,12 @@ export default function Footer() {
                 <Image src="/images/logo-detail-860.png" alt="Family Fables" width={44} height={44} />
                 <span
                   className="text-xl"
-                  style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", color: "#009380" }}
+                  style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", color: "#ffffff" }}
                 >
                   Family Fables
                 </span>
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: "#009380" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "#a89ec9" }}>
                 Stories that warm little hearts and spark big imaginations.
               </p>
 
@@ -44,8 +44,8 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm transition-colors hover:text-teal-700"
-                      style={{ color: "#77137a" }}
+                      className="text-sm transition-colors hover:opacity-75"
+                      style={{ color: "#c8bfdf" }}
                     >
                       {link.label}
                     </Link>
@@ -62,13 +62,13 @@ export default function Footer() {
               >
                 Shop
               </h3>
-              <p className="text-sm mb-2" style={{ color: "#009380" }}>All books available on Amazon.</p>
+              <p className="text-sm mb-2" style={{ color: "#a89ec9" }}>All books available on Amazon.</p>
               <a
                 href={AMAZON_STORE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm transition-colors hover:opacity-75"
-                style={{ color: "#006e59", textDecoration: "underline" }}
+                style={{ color: "#ff9c1a", textDecoration: "underline" }}
               >
                 Shop on Amazon →
               </a>
@@ -77,8 +77,8 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Footer nav bar — purple bg (matches WP #et-footer-nav: #a935a6) */}
-      <div style={{ backgroundColor: "#a935a6" }}>
+      {/* Footer nav bar */}
+      <div style={{ backgroundColor: "#09071a" }}>
         <div className="max-w-6xl mx-auto px-4 py-3 flex gap-6 justify-center">
           {[
             { href: "/", label: "home" },
@@ -89,7 +89,7 @@ export default function Footer() {
               key={link.href}
               href={link.href}
               className="text-sm transition-colors hover:opacity-75"
-              style={{ color: "#daf8f2", fontSize: "17px" }}
+              style={{ color: "#a89ec9", fontSize: "15px" }}
             >
               {link.label}
             </Link>
@@ -97,11 +97,11 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Footer bottom bar — deep purple (matches WP #footer-bottom: #78087c) */}
-      <div style={{ backgroundColor: "#78087c" }}>
+      {/* Footer bottom bar */}
+      <div style={{ backgroundColor: "#060415" }}>
         <div
           className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs footer-bottom-row"
-          style={{ color: "#ffffff" }}
+          style={{ color: "#6b6080" }}
         >
           <p>Copyright {new Date().getFullYear()} | Family Fables LLC</p>
           <div className="flex gap-3">
@@ -114,7 +114,7 @@ export default function Footer() {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "#dcf9f3", fontSize: "13px" }}
+                style={{ color: "#a89ec9", fontSize: "13px" }}
                 className="hover:opacity-75 transition-opacity"
               >
                 {label}
