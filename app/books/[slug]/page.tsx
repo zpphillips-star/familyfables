@@ -287,14 +287,13 @@ export default async function BookPage({
         .book-back-link:hover { opacity: 0.75; }
 
         /* Section backgrounds */
-        /* #ffffff — fully opaque white. color-mix() fails silently on old iOS Safari, leaving
-           the section transparent/dark. This guarantees readable dark text on every device. */
-        .section-read-aloud { background-color: #ffffff; }
+        /* readAloudBgSolid = pre-computed solid hex (no color-mix, no CSS vars) — safe on every browser */
+        .section-read-aloud { background-color: ${readAloudBgSolid}; }
         /* Activity always uses the same warm gradient as CTA — they visually merge, no seam */
         .section-activity { background: ${book.gradient}; }
 
         /* Wave fills — must exactly match the section they blend into */
-        .wave-fill-read-aloud { fill: #ffffff; }
+        .wave-fill-read-aloud { fill: ${readAloudBgSolid}; }
         /* Wave into Activity fills with gradient start color so it matches Activity's background */
         .wave-fill-activity { fill: ${gradientStartColor}; }
       `}</style>
