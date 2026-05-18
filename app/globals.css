@@ -821,3 +821,82 @@ section     { overflow-x: hidden; }
   /* Dividers — compact on small mobile */
     .adventure-divider-wrap { height: 60px !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   BOOK DETAIL PAGE — RESPONSIVE (TABLET & MOBILE)
+   RULE: Desktop (≥1024px) is NEVER touched. All overrides use
+   max-width queries only. Same fonts, same colors, same order.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Tablet (640–1023px): compress spacing, keep side-by-side ───── */
+@media (max-width: 1023px) {
+  /* Amber: reduce column padding so columns don't feel too tight */
+  .amber-activity-left  { padding-right: 20px !important; }
+  .amber-activity-right { padding-left:  20px !important; }
+}
+
+/* ── Mobile (≤639px): stack hero, fix overflow, same look ────────── */
+@media (max-width: 639px) {
+
+  /* Hero — stack image above text, center both */
+  .book-page-hero-content {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 20px !important;
+  }
+  .book-page-cover {
+    width: clamp(160px, 50vw, 220px) !important;
+    flex: none !important;
+  }
+  .book-page-text-block {
+    width: 100% !important;
+    min-width: unset !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  /* CTA cover+buttons — stack vertically, full width */
+  .book-cta-container {
+    display: flex !important;   /* override inline-flex */
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 16px !important;
+    align-items: center !important;
+  }
+  .book-cta-btn-group {
+    width: 100% !important;
+    flex: none !important;
+  }
+  .book-cta-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    white-space: normal !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Amber activities — stack left column above right */
+  .amber-activities-section { padding: 40px 16px !important; }
+  .amber-activity-left {
+    flex: none !important;
+    width: 100% !important;
+    padding: 0 0 32px 0 !important;
+  }
+  .amber-activity-right {
+    flex: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+  .amber-activity-divider { display: none !important; }
+}
+
+/* ── Bedtime mode: read aloud text must be legible on dark bg ─────── */
+[data-mode="bedtime"] .section-read-aloud h2 {
+  color: #ffffff !important;
+}
+[data-mode="bedtime"] .section-read-aloud p {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+
