@@ -911,13 +911,17 @@ section     { overflow-x: hidden; }
 /* ── Poo Poo Face — dragon hero positioning ──────────────────────────────── */
 @media (max-width: 1023px) {
   .poo-dragon-wrap {
-    width: clamp(180px, 28vw, 320px) !important;
-    right: -10px !important;
+    width: clamp(240px, 44vw, 460px) !important;
   }
 }
 @media (max-width: 639px) {
-  /* On mobile stack: hide the absolute dragon so it doesn't overlap text */
+  /* Mobile: dragon smaller at bottom, text resets padding so it stacks cleanly */
   .poo-dragon-wrap {
-    display: none !important;
+    width: clamp(200px, 60vw, 300px) !important;
+    left: -16px !important;
+  }
+  .book-page-text-block {
+    padding-left: 0 !important;
+    padding-bottom: 16px !important;
   }
 }

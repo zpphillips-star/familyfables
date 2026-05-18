@@ -306,7 +306,7 @@ export default async function BookPage({
         className="book-page-hero"
         style={{
           background: book.gradient,
-          minHeight: "50vh",
+          minHeight: isPooPooFace ? "62vh" : "50vh",
           position: "relative",
           overflow: "hidden",
           display: "flex",
@@ -368,14 +368,15 @@ export default async function BookPage({
           {/* Cover / Character */}
           {activityFirst && book.characterImage ? (
             isPooPooFace ? (
-              /* poo-poo-face: landscape dragon, floats center-right above the text at an angle */
+              /* poo-poo-face: dragon sits absolute bottom-left (flipped so head=left, tail sweeps right).
+                 Text block floats above the tail via paddingLeft — looks like one illustration. */
               <div
                 className="book-page-cover poo-dragon-wrap"
                 style={{
                   position: "absolute",
-                  right: "clamp(-20px, 2vw, 40px)",
-                  bottom: 0,
-                  width: "clamp(260px, 38vw, 520px)",
+                  left: "clamp(-60px, -2vw, -20px)",
+                  bottom: -8,
+                  width: "clamp(320px, 52vw, 680px)",
                   pointerEvents: "none",
                   zIndex: 2,
                 }}
@@ -383,9 +384,9 @@ export default async function BookPage({
                 <Image
                   src={book.characterImage}
                   alt={`${book.title} character`}
-                  width={520}
-                  height={335}
-                  style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 16px 40px rgba(0,0,0,0.35))", transform: "rotate(-6deg) scaleX(-1)" }}
+                  width={680}
+                  height={437}
+                  style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 16px 40px rgba(0,0,0,0.2))", transform: "scaleX(-1)" }}
                   priority
                 />
               </div>
@@ -434,7 +435,20 @@ export default async function BookPage({
           )}
 
           {/* Text block */}
-          <div className="book-page-text-block" style={{ flex: "1 1 280px", minWidth: 240 }}>
+          <div
+            className="book-page-text-block"
+            style={{
+              flex: "1 1 280px",
+              minWidth: 240,
+              ...(isPooPooFace ? {
+                // Push text right — sits above the dragon's sweeping tail
+                paddingLeft: "clamp(0px, 36vw, 480px)",
+                paddingBottom: "clamp(60px, 10vw, 120px)",
+                position: "relative",
+                zIndex: 3,
+              } : {}),
+            }}
+          >
             {/* Land name badge */}
             <span
               style={{
