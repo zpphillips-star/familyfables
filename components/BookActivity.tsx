@@ -682,8 +682,8 @@ function AmberDragonCreator({ accentColor, textLight }: { accentColor: string; t
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 480 }}>
-      <div style={{ display: "flex", gap: 6 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 480, margin: "0 auto", alignItems: "center", width: "100%" }}>
+      <div style={{ display: "flex", gap: 6, width: "100%" }}>
         {["Color", "Power", "Size", "Name"].map((s, i) => (
           <div key={s} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: i <= step ? accentColor : "rgba(255,255,255,0.2)", transition: "background-color 0.3s" }} />
         ))}
@@ -877,7 +877,7 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
   if (slug === "amber-the-dragon-keeper")
     return (
       <section style={{ padding: "72px 24px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "flex-start", gap: 0, flexWrap: "wrap" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", gap: 0, flexWrap: "wrap" }}>
 
           {/* ── Left: Diamond Catch ── */}
           <div style={{ flex: "1 1 320px", padding: "0 40px 0 0", minWidth: 280 }}>
@@ -900,7 +900,7 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
           }} className="amber-activity-divider" />
 
           {/* ── Right: Dragon Creator ── */}
-          <div style={{ flex: "1 1 320px", padding: "0 0 0 40px", minWidth: 280 }}>
+          <div style={{ flex: "1 1 320px", padding: "0 0 0 40px", minWidth: 280, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
             <p style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: textLight ? "rgba(255,255,255,0.8)" : "#1a1060", marginBottom: 10, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
               🐉 Fun Activity
             </p>
