@@ -739,14 +739,14 @@ export default async function BookPage({
                     <Image src={book.coverImage} alt={book.title} width={180} height={180} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
                 )}
-                {/* Right — buy buttons */}
-                <div style={{ flex: "1 1 220px", display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start", textAlign: "left" }}>
+                {/* Right — buy buttons, centered */}
+                <div style={{ flex: "1 1 220px", display: "flex", flexDirection: "column", gap: 12, alignItems: "center", textAlign: "center" }}>
                   <a href={amazonUrl} target="_blank" rel="noopener noreferrer" className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", borderRadius: 50, backgroundColor: "#ff9c1a", color: "#fff", fontWeight: 900, fontSize: 17, textDecoration: "none", boxShadow: "0 6px 24px rgba(255,156,26,0.5)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease", whiteSpace: "nowrap" }}>
                     Get {book.title} on Amazon →
                   </a>
-                  <Link href="/" className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", borderRadius: 50, backgroundColor: "rgba(255,255,255,0.15)", color: "#fff", fontWeight: 700, fontSize: 16, textDecoration: "none", border: "2px solid rgba(255,255,255,0.5)", backdropFilter: "blur(4px)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease", whiteSpace: "nowrap" }}>
+                  <a href="https://www.amazon.com/familyfables" target="_blank" rel="noopener noreferrer" className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", borderRadius: 50, backgroundColor: "rgba(255,255,255,0.15)", color: "#fff", fontWeight: 700, fontSize: 16, textDecoration: "none", border: "2px solid rgba(255,255,255,0.5)", backdropFilter: "blur(4px)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease", whiteSpace: "nowrap" }}>
                     ← Browse all books
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
