@@ -712,7 +712,7 @@ export default async function BookPage({
         {/* Activity (default) OR merged About+CTA (activityFirst — dream-ideas) */}
         {activityFirst ? (
           /* dream-ideas: About + CTA merged into one unified section */
-          <section style={{ padding: "80px 24px 96px", textAlign: "center", position: "relative", overflow: "visible" }}>
+          <section style={{ padding: "140px 24px 96px", textAlign: "center", position: "relative", overflow: "visible" }}>
             {/* Decorations */}
             <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}>
               {getDecorations(book.landIndex)}
