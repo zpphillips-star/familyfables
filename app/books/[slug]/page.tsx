@@ -725,7 +725,7 @@ export default async function BookPage({
       {/* ══════════════════════════════════════════════════════════════════
           ACTIVITY + CTA — one shared gradient wrapper, zero seams
       ══════════════════════════════════════════════════════════════════ */}
-      <div style={{ background: book.gradient, marginTop: -64, position: "relative", zIndex: 0, overflowX: "hidden" }}>
+      <div style={{ background: book.gradient, marginTop: -64, position: "relative", zIndex: 3, overflowX: "hidden" }}>
         {/* Wave at top — fills Read Aloud color above curve, gradient shows below */}
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 65, pointerEvents: "none", zIndex: 1 }}>
           <svg viewBox="0 0 1440 65" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
