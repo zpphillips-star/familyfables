@@ -649,6 +649,7 @@ export default function AdventurelandPage() {
           padding: "80px 24px 140px",
           overflow: "hidden",
           textAlign: "center",
+          zIndex: 9,
         }}
       >
         <Stars count={40} />
@@ -764,11 +765,10 @@ export default function AdventurelandPage() {
           <ScrollIndicator />
         </div>
 
-        {/* Hero → Land 1 transition */}
-        <div style={{ position: "absolute", bottom: -2, left: 0, width: "100%", height: 100, pointerEvents: "none", zIndex: 4 }}>
-          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,60 C360,100 720,20 1080,60 C1260,80 1380,50 1440,60 L1440,100 L0,100 Z" fill="#0a0422" fillOpacity="0.5" />
-            <path d="M0,75 C240,100 520,35 800,70 C1040,100 1280,45 1440,75 L1440,100 L0,100 Z" fill="#0a0422" />
+        {/* Hero → Land 1 wave seam */}
+        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 90, pointerEvents: "none", zIndex: 5 }}>
+          <svg viewBox="0 0 1440 90" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,52 C240,12 480,82 720,42 C960,4 1200,62 1440,32 L1440,90 L0,90 Z" fill="#0a0422" />
           </svg>
         </div>
       </section>
@@ -788,6 +788,7 @@ export default function AdventurelandPage() {
         padding: "80px 24px",
         textAlign: "center",
         position: "relative",
+        zIndex: 25,
       }}>
         <Stars count={20} />
         <div style={{ position: "relative", zIndex: 2 }}>
