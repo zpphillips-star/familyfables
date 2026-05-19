@@ -11,6 +11,11 @@ const Maze = lazy(() => import("@/components/games/Maze"));
 
 type GameKey = "wordsearch" | "crossword" | "memory" | "unscramble" | "maze";
 
+function pickN<T>(arr: T[], n: number): T[] {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(n, arr.length));
+}
+
 interface GameCard {
   key: GameKey;
   emoji: string;
@@ -45,7 +50,19 @@ export default function BookGames({ slug, accentColor }: Props) {
   const [open, setOpen] = useState<GameKey | null>(null);
 
   const gameData = GAME_DATA[slug];
-  if (!gameData) return null;
+
+  const [gameWords] = useState(() => {
+    const d = GAME_DATA[slug];
+    if (!d) return null;
+    return {
+      wordSearch: pickN(d.wordSearch.wordPool, 10),
+      crossword: pickN(d.crossword.wordPool, 5),
+      memoryMatch: pickN(d.memoryMatch.pairPool, 8),
+      unscramble: pickN(d.unscramble.wordPool, 12),
+    };
+  });
+
+  if (!gameData || !gameWords) return null;
 
   const allCards = [...GAME_CARDS];
   const activeCard = allCards.find(c => c.key === open);
@@ -122,16 +139,16 @@ export default function BookGames({ slug, accentColor }: Props) {
         >
           <Suspense fallback={<LoadingSpinner color={accentColor} />}>
             {open === "wordsearch" && (
-              <WordSearch slug={slug} words={gameData.wordSearch.words} accentColor={accentColor} />
+              <WordSearch slug={slug} words={gameWords.wordSearch} accentColor={accentColor} />
             )}
             {open === "crossword" && (
-              <Crossword words={gameData.crossword.words} accentColor={accentColor} />
+              <Crossword words={gameWords.crossword} accentColor={accentColor} />
             )}
             {open === "memory" && (
-              <MemoryMatch pairs={gameData.memoryMatch.pairs} accentColor={accentColor} />
+              <MemoryMatch pairs={gameWords.memoryMatch} accentColor={accentColor} />
             )}
             {open === "unscramble" && (
-              <WordUnscramble words={gameData.unscramble.words} accentColor={accentColor} />
+              <WordUnscramble words={gameWords.unscramble} accentColor={accentColor} />
             )}
             {open === "maze" && (
               <Maze slug={slug} accentColor={accentColor} />
