@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { books } from "@/lib/books";
 
 // Build the 12 map stops from books data, sorted by landIndex
@@ -18,37 +18,27 @@ const MAP_STOPS = [...books]
 
 // Section IDs on the homepage (must match the `id` prop on each AdventureLand)
 const LAND_IDS: Record<number, string> = {
-  1: "dream-ideas",
-  2: "amber-dragon-keeper",
-  3: "poo-poo-face",
+  1: "amber-dragon-keeper",
+  2: "poo-poo-face",
+  3: "brian-the-ghost",
   4: "finding-hampton",
-  5: "gilroys-gobble",
-  6: "lumpiest-pumpkin",
-  7: "ollie-come-home",
-  8: "shut-in-button",
-  9: "what-a-doodle-do",
-  10: "one-tom-turkey",
-  11: "frog-a-dog",
-  12: "brian-the-ghost",
+  5: "dream-ideas",
+  6: "gilroys-gobble",
+  7: "lumpiest-pumpkin",
+  8: "ollie-come-home",
+  9: "shut-in-button",
+  10: "what-a-doodle-do",
+  11: "one-tom-turkey",
+  12: "frog-a-dog",
 };
 
 export default function GlobalMapDrawer() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
-  const isHome = pathname === "/";
 
-  const goToLand = (landIndex: number) => {
-    const sectionId = LAND_IDS[landIndex];
+  const goToLand = (slug: string) => {
     setOpen(false);
-    if (isHome) {
-      // Already on home — smooth scroll
-      const el = document.getElementById(sectionId);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      // Navigate home and jump to anchor
-      router.push(`/#${sectionId}`);
-    }
+    router.push(`/books/${slug}`);
   };
 
   return (
@@ -169,7 +159,7 @@ export default function GlobalMapDrawer() {
           {MAP_STOPS.map((stop, i) => (
             <button
               key={stop.index}
-              onClick={() => goToLand(stop.index)}
+              onClick={() => goToLand(stop.slug)}
               style={{
                 display: "flex",
                 alignItems: "center",
