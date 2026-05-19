@@ -58,60 +58,14 @@ export default function BookGames({ slug, accentColor }: Props) {
 
   return (
     <>
-      {/* Fun Zone section */}
-      <div style={{ maxWidth: 760, margin: "0 auto", padding: "48px 24px 8px" }}>
-
-        {/* Playful Fun Zone header */}
-        <div
-          style={{
-            background: `linear-gradient(135deg, ${accentColor}dd 0%, ${accentColor}aa 100%)`,
-            borderRadius: "20px 20px 0 0",
-            padding: "22px 28px 18px",
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {["✨","⭐","🌟"].map((s, i) => (
-            <span key={i} aria-hidden="true" style={{
-              position: "absolute",
-              fontSize: 18,
-              opacity: 0.45,
-              top: `${[20, 50, 25][i]}%`,
-              left: `${[6, 88, 82][i]}%`,
-              pointerEvents: "none",
-            }}>{s}</span>
-          ))}
-          <p
-            style={{
-              fontSize: "clamp(20px, 4vw, 26px)",
-              fontWeight: 900,
-              color: "#fff",
-              margin: 0,
-              fontFamily: "var(--font-concert-one),'Concert One',cursive",
-              textShadow: "0 2px 8px rgba(0,0,0,0.25)",
-              letterSpacing: "0.03em",
-            }}
-          >
-            🎮 Fun Zone!
-          </p>
-          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", margin: "4px 0 0", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
-            Tap a game to play!
-          </p>
-        </div>
-
-        {/* 3-column game card grid */}
+      {/* Game cards — no header, just a fun themed grid */}
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "40px 24px 8px" }}>
         <div
           className="book-games-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 10,
-            background: `${accentColor}14`,
-            borderRadius: "0 0 20px 20px",
-            padding: "14px",
-            border: `2px solid ${accentColor}35`,
-            borderTop: "none",
+            gap: 12,
           }}
         >
           {GAME_CARDS.map(card => (
@@ -123,34 +77,33 @@ export default function BookGames({ slug, accentColor }: Props) {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 6,
-                padding: "16px 10px 12px",
-                borderRadius: 18,
-                border: `2px solid ${card.color}50`,
-                background: `${card.color}1a`,
+                gap: 8,
+                padding: "20px 12px 16px",
+                borderRadius: 22,
+                border: `3px solid ${card.color}55`,
+                background: `${card.color}18`,
                 cursor: "pointer",
                 textAlign: "center",
-                transition: "transform 0.15s, box-shadow 0.15s, border-color 0.15s",
+                transition: "transform 0.15s, box-shadow 0.15s",
+                boxShadow: `0 4px 14px ${card.color}25`,
               }}
               onMouseEnter={e => {
                 const btn = e.currentTarget as HTMLButtonElement;
-                btn.style.transform = "translateY(-4px) scale(1.04)";
-                btn.style.boxShadow = `0 8px 20px ${card.color}55`;
-                btn.style.borderColor = `${card.color}99`;
+                btn.style.transform = "translateY(-4px) scale(1.05)";
+                btn.style.boxShadow = `0 10px 28px ${card.color}55`;
               }}
               onMouseLeave={e => {
                 const btn = e.currentTarget as HTMLButtonElement;
                 btn.style.transform = "";
-                btn.style.boxShadow = "";
-                btn.style.borderColor = `${card.color}50`;
+                btn.style.boxShadow = `0 4px 14px ${card.color}25`;
               }}
             >
-              <span style={{ fontSize: 34, lineHeight: 1 }}>{card.emoji}</span>
+              <span style={{ fontSize: 38, lineHeight: 1 }}>{card.emoji}</span>
               <div
                 style={{
                   fontWeight: 800,
-                  fontSize: "clamp(11px, 2vw, 13px)",
-                  color: "#1a1060",
+                  fontSize: "clamp(12px, 2vw, 14px)",
+                  color: card.color,
                   fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
                   lineHeight: 1.2,
                 }}
