@@ -292,6 +292,7 @@ export const books: Book[] = [
       "In the spooky town of St. Germaine, Halloween is serious business. Cleo the mummy wraps herself up perfectly. Roman the werewolf practices his most terrifying howl. And Brian the ghost... waves. Just waves. While every other monster is out haunting and scaring and spooking, Brian wanders through the neighborhood saying hello to everyone he meets. The kids aren't scared of him. The grown-ups aren't either. But something unexpected happens when Brian's friendliness spreads through town — something better than any scare. A heartwarming Halloween story about the extraordinary power of simply being kind.",
     image: "/images/books/brian-the-ghost.jpg",
     coverImage: "/images/books/brian-the-ghost.jpg",
+    characterImage: "/images/characters/brian-dance-party.png",
     tag: "Halloween",
     accentColor: "#7B5EA7",
     ageRange: "Ages 3–7",
