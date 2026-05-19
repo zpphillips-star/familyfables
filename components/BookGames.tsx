@@ -53,7 +53,7 @@ export default function BookGames({ slug, accentColor }: Props) {
   return (
     <>
       {/* Game cards — no header, just a fun themed grid */}
-      <div style={{ maxWidth: 760, margin: "0 auto", padding: "40px 24px 8px" }}>
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "40px 24px 100px" }}>
         <div
           className="book-games-grid"
           style={{
