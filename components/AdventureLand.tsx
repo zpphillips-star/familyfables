@@ -117,6 +117,7 @@ export default function AdventureLand({
         // wave ON TOP of later sections' backgrounds. No stacking-context tricks.
         marginTop: -64,
         zIndex: 20 - index,
+        cursor: "pointer",
       }}
     >
       {/* ── Milestone marker (continuous dotted path node) ──────────── */}
@@ -128,6 +129,19 @@ export default function AdventureLand({
        * Hidden on mobile via globals.css (.adventure-milestone-wrap display:none).
        */}
       {/* Colored badge removed — "Land #" label lives inline with the title */}
+
+      {/* ── Full-section click target → book page ───────────────────── */}
+      <Link
+        href={`/books/${bookSlug}`}
+        aria-label={`Explore ${landName}`}
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          display: "block",
+        }}
+        tabIndex={-1}
+      />
 
       {/* ── Decorations ─────────────────────────────────────────────── */}
       {decorations && (
