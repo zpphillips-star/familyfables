@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import CountingSheep from "@/components/games/CountingSheep";
 
 // ── Per-book activity definitions ─────────────────────────────────────────────
 
@@ -980,7 +981,44 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
   );
 
   if (slug === "dream-ideas")
-    return wrap("What's YOUR dream idea?", "💡", <DreamIdeasActivity accentColor={accentColor} textLight={textLight} />);
+    return (
+      <section className="dream-activities-section" style={{ padding: "72px 24px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "flex-start", gap: 0, flexWrap: "wrap" }}>
+
+          {/* ── Left: Counting Sheep ── */}
+          <div className="amber-activity-left" style={{ flex: "1 1 320px", padding: "0 40px 0 0", minWidth: 280 }}>
+            <p style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: textLight ? "rgba(255,255,255,0.8)" : "#1a1060", marginBottom: 10, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", textAlign: "center" }}>
+              🐑 Fun Activity
+            </p>
+            <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 36px)", color: textLight ? "#ffffff" : "#1a1060", marginBottom: 24, lineHeight: 1.2, textAlign: "center" }}>
+              Counting Sheep!
+            </h2>
+            <CountingSheep accentColor={accentColor} />
+          </div>
+
+          {/* ── Divider ── */}
+          <div style={{
+            width: 1,
+            alignSelf: "stretch",
+            background: `linear-gradient(to bottom, transparent, ${accentColor}55 18%, ${accentColor}55 82%, transparent)`,
+            margin: "0 8px",
+            flexShrink: 0,
+          }} className="amber-activity-divider" />
+
+          {/* ── Right: Dream Idea ── */}
+          <div className="amber-activity-right" style={{ flex: "1 1 320px", padding: "0 0 0 40px", minWidth: 280, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-start", textAlign: "left" }}>
+            <p style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: textLight ? "rgba(255,255,255,0.8)" : "#1a1060", marginBottom: 10, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", textAlign: "center", width: "100%" }}>
+              💡 Fun Activity
+            </p>
+            <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 36px)", color: textLight ? "#ffffff" : "#1a1060", marginBottom: 24, lineHeight: 1.2, textAlign: "center", width: "100%" }}>
+              What&apos;s YOUR Dream Idea?
+            </h2>
+            <DreamIdeasActivity accentColor={accentColor} textLight={textLight} />
+          </div>
+
+        </div>
+      </section>
+    );
 
   if (slug === "gilroys-gobble")
     return wrap("Your confidence chant!", "🦃", <GilroyAffirmation accentColor={accentColor} />);

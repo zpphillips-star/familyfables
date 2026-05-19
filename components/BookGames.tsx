@@ -8,9 +8,8 @@ const Crossword = lazy(() => import("@/components/games/Crossword"));
 const MemoryMatch = lazy(() => import("@/components/games/MemoryMatch"));
 const WordUnscramble = lazy(() => import("@/components/games/WordUnscramble"));
 const Maze = lazy(() => import("@/components/games/Maze"));
-const CountingSheep = lazy(() => import("@/components/games/CountingSheep"));
 
-type GameKey = "wordsearch" | "crossword" | "memory" | "unscramble" | "maze" | "sheep";
+type GameKey = "wordsearch" | "crossword" | "memory" | "unscramble" | "maze";
 
 interface GameCard {
   key: GameKey;
@@ -48,12 +47,7 @@ export default function BookGames({ slug, accentColor }: Props) {
   const gameData = GAME_DATA[slug];
   if (!gameData) return null;
 
-  const extraCards: GameCard[] =
-    slug === "dream-ideas"
-      ? [{ key: "sheep" as const, emoji: "🐑", title: "Count the Sheep!", color: "#7c3aed" }]
-      : [];
-
-  const allCards = [...GAME_CARDS, ...extraCards];
+  const allCards = [...GAME_CARDS];
   const activeCard = allCards.find(c => c.key === open);
 
   return (
@@ -141,9 +135,6 @@ export default function BookGames({ slug, accentColor }: Props) {
             )}
             {open === "maze" && (
               <Maze slug={slug} accentColor={accentColor} />
-            )}
-            {open === "sheep" && (
-              <CountingSheep accentColor={accentColor} />
             )}
           </Suspense>
         </GameModal>
