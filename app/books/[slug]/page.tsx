@@ -417,7 +417,7 @@ export default async function BookPage({
                   alt={`${book.title} character`}
                   width={300}
                   height={400}
-                  style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.45))" }}
+                  style={{ width: "100%", height: "auto", maxHeight: "380px", objectFit: "contain", display: "block", filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.45))" }}
                   priority
                 />
               </div>
