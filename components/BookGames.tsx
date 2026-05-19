@@ -2,17 +2,14 @@
 import { useState, lazy, Suspense } from "react";
 import GameModal from "@/components/games/GameModal";
 import { GAME_DATA } from "@/lib/gameData";
-import { SCENES } from "@/components/games/GameScenes";
 
 const WordSearch = lazy(() => import("@/components/games/WordSearch"));
 const Crossword = lazy(() => import("@/components/games/Crossword"));
-const FindDifferences = lazy(() => import("@/components/games/FindDifferences"));
-const HiddenObjects = lazy(() => import("@/components/games/HiddenObjects"));
 const MemoryMatch = lazy(() => import("@/components/games/MemoryMatch"));
 const WordUnscramble = lazy(() => import("@/components/games/WordUnscramble"));
 const Maze = lazy(() => import("@/components/games/Maze"));
 
-type GameKey = "wordsearch" | "crossword" | "memory" | "unscramble" | "finddiff" | "hidden" | "maze";
+type GameKey = "wordsearch" | "crossword" | "memory" | "unscramble" | "maze";
 
 interface GameCard {
   key: GameKey;
@@ -22,13 +19,11 @@ interface GameCard {
 }
 
 const GAME_CARDS: GameCard[] = [
-  { key: "wordsearch",  emoji: "🔍", title: "Word Search",         color: "#6366f1" },
-  { key: "crossword",   emoji: "🧩", title: "Crossword",           color: "#f59e0b" },
-  { key: "memory",      emoji: "🌟", title: "Memory Match",        color: "#ec4899" },
-  { key: "unscramble",  emoji: "🔡", title: "Word Unscramble",     color: "#10b981" },
-  { key: "finddiff",    emoji: "👀", title: "Spot the Diff",       color: "#06b6d4" },
-  { key: "hidden",      emoji: "🕵️", title: "Hidden Objects",      color: "#8b5cf6" },
-  { key: "maze",        emoji: "🗺️", title: "Maze",                color: "#f97316" },
+  { key: "wordsearch",  emoji: "🔍", title: "Word Search",     color: "#6366f1" },
+  { key: "crossword",   emoji: "🧩", title: "Crossword",       color: "#f59e0b" },
+  { key: "memory",      emoji: "🌟", title: "Memory Match",    color: "#ec4899" },
+  { key: "unscramble",  emoji: "🔡", title: "Word Unscramble", color: "#10b981" },
+  { key: "maze",        emoji: "🗺️", title: "Maze",            color: "#f97316" },
 ];
 
 interface Props {
@@ -52,8 +47,6 @@ export default function BookGames({ slug, accentColor }: Props) {
   const gameData = GAME_DATA[slug];
   if (!gameData) return null;
 
-  const sceneKey = gameData.findDiff.scene;
-  const scene = SCENES[sceneKey];
   const activeCard = GAME_CARDS.find(c => c.key === open);
 
   return (
@@ -138,12 +131,6 @@ export default function BookGames({ slug, accentColor }: Props) {
             )}
             {open === "unscramble" && (
               <WordUnscramble words={gameData.unscramble.words} accentColor={accentColor} />
-            )}
-            {open === "finddiff" && scene && (
-              <FindDifferences config={scene} accentColor={accentColor} />
-            )}
-            {open === "hidden" && scene && (
-              <HiddenObjects config={scene} accentColor={accentColor} />
             )}
             {open === "maze" && (
               <Maze slug={slug} accentColor={accentColor} />
