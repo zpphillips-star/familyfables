@@ -167,9 +167,13 @@ function SheepGroup({
 function ProblemDisplay({
   problem,
   jumpingIdxs,
+  showSheep,
+  onHint,
 }: {
   problem: Problem;
   jumpingIdxs: Set<number>;
+  showSheep: boolean;
+  onHint: () => void;
 }) {
   const equationStyle: CSSProperties = {
     fontSize: "clamp(32px, 7vw, 48px)",
@@ -196,60 +200,64 @@ function ProblemDisplay({
     alignItems: "center",
     gap: 8,
     marginTop: 4,
+    animation: "fadeSlideIn 0.35s ease both",
   };
 
-  const hintStyle: CSSProperties = {
+  const hintBtnStyle: CSSProperties = {
+    marginTop: 8,
+    padding: "7px 20px",
+    borderRadius: 50,
+    border: "2px solid rgba(196,181,253,0.5)",
+    background: "rgba(255,255,255,0.07)",
     color: "#c4b5fd",
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: 700,
     fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
-    opacity: 0.8,
-    marginTop: 4,
+    cursor: "pointer",
+    transition: "background 0.15s, border-color 0.15s",
   };
 
+  // Counting: sheep ARE the problem — always visible
   if (problem.type === "counting") {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-        <div style={sheepBoxStyle}>
+        <div style={{ ...sheepBoxStyle, animation: undefined }}>
           <SheepGroup count={problem.answer} jumpingIdxs={jumpingIdxs} />
         </div>
       </div>
     );
   }
 
-  // Addition: show "A + B = ?" then all (A+B) sheep below
-  if (problem.type === "addition") {
-    return (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-        <div style={equationStyle}>
-          {problem.a}{" "}
-          <span style={{ color: "#f9a8d4" }}>+</span>{" "}
-          {problem.b}{" "}
-          <span style={{ color: "#94a3b8" }}>=</span>{" "}
-          <span style={questionMarkStyle}>?</span>
-        </div>
-        <div style={sheepBoxStyle}>
-          <SheepGroup count={problem.answer} jumpingIdxs={jumpingIdxs} />
-        </div>
-        <div style={hintStyle}>count the sheep or solve the math!</div>
-      </div>
-    );
-  }
+  // Addition / Subtraction
+  const op = problem.type === "addition"
+    ? <span style={{ color: "#f9a8d4" }}>+</span>
+    : <span style={{ color: "#f9a8d4" }}>−</span>;
 
-  // Subtraction: show "A - B = ?" then (A-B) sheep below
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
       <div style={equationStyle}>
-        {problem.a}{" "}
-        <span style={{ color: "#f9a8d4" }}>−</span>{" "}
-        {problem.b}{" "}
+        {problem.a}{" "}{op}{" "}{problem.b}{" "}
         <span style={{ color: "#94a3b8" }}>=</span>{" "}
         <span style={questionMarkStyle}>?</span>
       </div>
-      <div style={sheepBoxStyle}>
-        <SheepGroup count={problem.answer} jumpingIdxs={jumpingIdxs} />
-      </div>
-      <div style={hintStyle}>count the sheep or solve the math!</div>
+
+      {showSheep ? (
+        <div style={sheepBoxStyle}>
+          <SheepGroup count={problem.answer} jumpingIdxs={jumpingIdxs} />
+          <div style={{ color: "#c4b5fd", fontSize: 12, fontWeight: 700, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif", opacity: 0.8 }}>
+            count the sheep!
+          </div>
+        </div>
+      ) : (
+        <button
+          style={hintBtnStyle}
+          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(196,181,253,0.18)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(196,181,253,0.9)"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.07)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(196,181,253,0.5)"; }}
+          onClick={onHint}
+        >
+          🐑 Show Hint
+        </button>
+      )}
     </div>
   );
 }
@@ -268,6 +276,7 @@ export default function CountingSheep({ accentColor }: Props) {
   const [done, setDone] = useState(false);
   const [advancing, setAdvancing] = useState(false);
   const [displayKey, setDisplayKey] = useState(0);
+  const [sheepVisible, setSheepVisible] = useState(false);
 
   const problem = problems[probIdx];
 
@@ -284,6 +293,7 @@ export default function CountingSheep({ accentColor }: Props) {
       if (choice === problem.answer) {
         setCorrectBtn(btnIdx);
         if (isFirstTry) setScore((s) => s + 1);
+        setSheepVisible(true); // reveal sheep on correct answer
         setJumpingIdxs(
           new Set(Array.from({ length: sheepCount }, (_, i) => i))
         );
@@ -297,6 +307,7 @@ export default function CountingSheep({ accentColor }: Props) {
           } else {
             setProbIdx((i) => i + 1);
             setIsFirstTry(true);
+            setSheepVisible(false); // hide sheep for next problem
             setDisplayKey((k) => k + 1);
           }
         }, 870);
@@ -320,6 +331,7 @@ export default function CountingSheep({ accentColor }: Props) {
     setJumpingIdxs(new Set());
     setDone(false);
     setAdvancing(false);
+    setSheepVisible(false);
     setDisplayKey((k) => k + 1);
   };
 
@@ -634,7 +646,7 @@ export default function CountingSheep({ accentColor }: Props) {
           zIndex: 1,
         }}
       >
-        <ProblemDisplay problem={problem} jumpingIdxs={jumpingIdxs} />
+        <ProblemDisplay problem={problem} jumpingIdxs={jumpingIdxs} showSheep={sheepVisible} onHint={() => setSheepVisible(true)} />
       </div>
 
       {/* Answer buttons */}
