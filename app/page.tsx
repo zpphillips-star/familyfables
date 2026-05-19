@@ -649,7 +649,6 @@ export default function AdventurelandPage() {
           padding: "80px 24px 140px",
           overflow: "hidden",
           textAlign: "center",
-          zIndex: 9,
         }}
       >
         <Stars count={40} />
@@ -766,9 +765,9 @@ export default function AdventurelandPage() {
         </div>
 
         {/* Hero → Land 1 wave seam */}
-        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 90, pointerEvents: "none", zIndex: 5 }}>
-          <svg viewBox="0 0 1440 90" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,52 C240,12 480,82 720,42 C960,4 1200,62 1440,32 L1440,90 L0,90 Z" fill="#0a0422" />
+        <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+            <path d="M0,38 C240,10 480,58 720,30 C960,4 1200,52 1440,24 L1440,64 L0,64 Z" fill="#0a0422" />
           </svg>
         </div>
       </section>
@@ -788,7 +787,6 @@ export default function AdventurelandPage() {
         padding: "80px 24px",
         textAlign: "center",
         position: "relative",
-        zIndex: 25,
       }}>
         <Stars count={20} />
         <div style={{ position: "relative", zIndex: 2 }}>

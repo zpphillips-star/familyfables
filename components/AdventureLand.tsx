@@ -44,9 +44,9 @@ export interface AdventureLandProps {
 /** Clean bottom-seal wave — fills downward with the next section's color */
 function HillDivider({ fill }: { fill: string }) {
   return (
-    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 90, pointerEvents: "none", zIndex: 5 }}>
-      <svg viewBox="0 0 1440 90" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-        <path d="M0,52 C240,12 480,82 720,42 C960,4 1200,62 1440,32 L1440,90 L0,90 Z" fill={fill} />
+    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+      <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+        <path d="M0,38 C240,10 480,58 720,30 C960,4 1200,52 1440,24 L1440,64 L0,64 Z" fill={fill} />
       </svg>
     </div>
   );
@@ -54,9 +54,9 @@ function HillDivider({ fill }: { fill: string }) {
 
 function WaveDivider({ fill }: { fill: string }) {
   return (
-    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 90, pointerEvents: "none", zIndex: 5 }}>
-      <svg viewBox="0 0 1440 90" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-        <path d="M0,46 C180,14 360,78 540,46 C720,14 900,78 1080,46 C1260,14 1380,66 1440,42 L1440,90 L0,90 Z" fill={fill} />
+    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+      <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+        <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" fill={fill} />
       </svg>
     </div>
   );
@@ -64,9 +64,9 @@ function WaveDivider({ fill }: { fill: string }) {
 
 function SlopeDivider({ fill }: { fill: string }) {
   return (
-    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 90, pointerEvents: "none", zIndex: 5 }}>
-      <svg viewBox="0 0 1440 90" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-        <path d="M0,58 Q360,8 720,52 Q1080,88 1440,30 L1440,90 L0,90 Z" fill={fill} />
+    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+      <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+        <path d="M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z" fill={fill} />
       </svg>
     </div>
   );
@@ -112,7 +112,6 @@ export default function AdventureLand({
         overflow: "visible",
         display: "flex",
         flexDirection: "column",
-        zIndex: index + 10,
       }}
     >
       {/* ── Milestone marker (continuous dotted path node) ──────────── */}
