@@ -90,7 +90,7 @@ export const books: Book[] = [
     description:
       "She thought she was just a regular kid. The dragons had other plans. When Amber stumbles into a magical land, she discovers a destiny that's way cooler than anything on her schedule — and way more responsibility than she signed up for. Perfect for: fans of Where the Wild Things Are, The Bad Guys.",
     longDescription:
-      "Amber is just a regular girl — she goes to school, plays with her friends, and has a perfectly ordinary closet. Except her closet opens into Sydar, a magical land where fairies fly free, mermaids swim the deepest seas, and the most extraordinary creatures of all — dragons — soar the skies. In Sydar, Amber is famous. She's the Dragon Keeper. And today, the dragons need her more than ever. A breathtaking adventure about courage, magic, and the extraordinary destiny that might be hiding in your own bedroom.",
+      "Amber looks like any other kid — until she steps through her closet and into Sydar, a magical land of fairies, mermaids, and dragons. Here, she's not just a girl. She's the Dragon Keeper. She trains dragons to breathe fire and ice, rides them through the clouds — diving, swirling, twirling, and scoobatoobing — and goes on wild adventures with her best friend, a blue-scaled dragon named Cinnamon. Together they fight witches, help villagers, and roast way too many marshmallows. Every night she returns home to dream — and to do it all again tomorrow.",
     image: "/images/books/amber-dragon-keeper.png",
     coverImage: "/images/books/amber-cover-square.jpg",
     characterImage: "/images/characters/amber-no-background.png",
