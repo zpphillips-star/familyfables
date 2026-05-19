@@ -14,17 +14,28 @@ export default function HiddenObjects({ config, accentColor }: Props) {
   const svgRef = useRef<SVGSVGElement>(null);
 
   const { Scene, hiddenItems, viewBox } = config;
-  const [vbW, vbH] = viewBox.split(" ").slice(2).map(Number);
 
   const handleClick = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
     const svg = svgRef.current;
     if (!svg) return;
-    const rect = svg.getBoundingClientRect();
-    const clientX = "touches" in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
-    const clientY = "touches" in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
-    const x = ((clientX - rect.left) / rect.width) * vbW;
-    const y = ((clientY - rect.top) / rect.height) * vbH;
+
+    // Use SVG's own coordinate transform — handles preserveAspectRatio letterboxing correctly
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return;
+    const pt = svg.createSVGPoint();
+
+    if ("changedTouches" in e) {
+      pt.x = e.changedTouches[0].clientX;
+      pt.y = e.changedTouches[0].clientY;
+    } else {
+      pt.x = (e as React.MouseEvent).clientX;
+      pt.y = (e as React.MouseEvent).clientY;
+    }
+
+    const svgPt = pt.matrixTransform(ctm.inverse());
+    const x = svgPt.x;
+    const y = svgPt.y;
 
     let hit: string | null = null;
     for (const item of hiddenItems) {
@@ -42,7 +53,7 @@ export default function HiddenObjects({ config, accentColor }: Props) {
       setMissFlash(true);
       setTimeout(() => setMissFlash(false), 350);
     }
-  }, [found, hiddenItems, vbW, vbH]);
+  }, [found, hiddenItems]);
 
   if (won) return (
     <div style={{ textAlign: "center", padding: "32px 16px" }}>
@@ -99,7 +110,7 @@ export default function HiddenObjects({ config, accentColor }: Props) {
           viewBox={viewBox}
           style={{ width: "100%", display: "block", touchAction: "none" }}
           onClick={handleClick}
-          onTouchStart={handleClick}
+          onTouchEnd={handleClick}
         >
           <Scene variant="a" />
 

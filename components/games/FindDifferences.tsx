@@ -15,17 +15,23 @@ export default function FindDifferences({ config, accentColor }: Props) {
   const svgRefB = useRef<SVGSVGElement>(null);
 
   const { Scene, differences, viewBox } = config;
-  const [vbW, vbH] = viewBox.split(" ").slice(2).map(Number);
+  // viewBox kept for reference; coordinate mapping uses getScreenCTM()
 
   function svgCoords(e: React.MouseEvent | React.TouchEvent, ref: React.RefObject<SVGSVGElement | null>) {
     const svg = ref.current;
     if (!svg) return null;
-    const rect = svg.getBoundingClientRect();
-    const clientX = "touches" in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
-    const clientY = "touches" in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
-    const x = ((clientX - rect.left) / rect.width) * vbW;
-    const y = ((clientY - rect.top) / rect.height) * vbH;
-    return { x, y };
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return null;
+    const pt = svg.createSVGPoint();
+    if ("changedTouches" in e) {
+      pt.x = e.changedTouches[0].clientX;
+      pt.y = e.changedTouches[0].clientY;
+    } else {
+      pt.x = (e as React.MouseEvent).clientX;
+      pt.y = (e as React.MouseEvent).clientY;
+    }
+    const svgPt = pt.matrixTransform(ctm.inverse());
+    return { x: svgPt.x, y: svgPt.y };
   }
 
   const handleClick = useCallback((e: React.MouseEvent | React.TouchEvent, panel: "a" | "b") => {
@@ -92,7 +98,7 @@ export default function FindDifferences({ config, accentColor }: Props) {
               viewBox={viewBox}
               style={{ width: "100%", display: "block", touchAction: "none" }}
               onClick={e => handleClick(e, panel)}
-              onTouchStart={e => handleClick(e, panel)}
+              onTouchEnd={e => handleClick(e, panel)}
             >
               <Scene variant={panel} />
 
