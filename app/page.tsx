@@ -127,7 +127,7 @@ const landDefs: LandDef[] = [
     id: "dream-ideas", bookSlug: "dream-ideas",
     index: 1,
     emoji: "🌙",
-    landName: "Dream Ideas Land",
+    landName: "Dream Land",
     tagline: "Your best idea ever is waiting in a dream",
     bookTitle: "Dream Ideas",
     coverImage: "/images/books/dream-ideas.png",

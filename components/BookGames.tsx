@@ -22,13 +22,13 @@ interface GameCard {
 }
 
 const GAME_CARDS: GameCard[] = [
-  { key: "wordsearch",  emoji: "🔤", title: "Word Search",         color: "#6366f1" },
-  { key: "crossword",   emoji: "✏️", title: "Crossword",           color: "#f59e0b" },
-  { key: "memory",      emoji: "🃏", title: "Memory Match",        color: "#ec4899" },
-  { key: "unscramble",  emoji: "🔀", title: "Word Unscramble",     color: "#10b981" },
-  { key: "finddiff",    emoji: "🔍", title: "Spot the Difference", color: "#06b6d4" },
+  { key: "wordsearch",  emoji: "🔍", title: "Word Search",         color: "#6366f1" },
+  { key: "crossword",   emoji: "🧩", title: "Crossword",           color: "#f59e0b" },
+  { key: "memory",      emoji: "🌟", title: "Memory Match",        color: "#ec4899" },
+  { key: "unscramble",  emoji: "🔡", title: "Word Unscramble",     color: "#10b981" },
+  { key: "finddiff",    emoji: "👀", title: "Spot the Diff",       color: "#06b6d4" },
   { key: "hidden",      emoji: "🕵️", title: "Hidden Objects",      color: "#8b5cf6" },
-  { key: "maze",        emoji: "🌀", title: "Maze",                color: "#f97316" },
+  { key: "maze",        emoji: "🗺️", title: "Maze",                color: "#f97316" },
 ];
 
 interface Props {
@@ -58,46 +58,59 @@ export default function BookGames({ slug, accentColor }: Props) {
 
   return (
     <>
-      {/* Game Zone section */}
+      {/* Fun Zone section */}
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "48px 24px 8px" }}>
-        {/* Dark gradient header bar */}
+
+        {/* Playful Fun Zone header */}
         <div
           style={{
-            background: "linear-gradient(135deg, #1a1060 0%, #2d1b8e 100%)",
-            borderRadius: "16px 16px 0 0",
-            padding: "20px 24px 16px",
+            background: `linear-gradient(135deg, ${accentColor}dd 0%, ${accentColor}aa 100%)`,
+            borderRadius: "20px 20px 0 0",
+            padding: "22px 28px 18px",
+            textAlign: "center",
+            position: "relative",
+            overflow: "hidden",
           }}
         >
+          {["✨","⭐","🌟"].map((s, i) => (
+            <span key={i} aria-hidden="true" style={{
+              position: "absolute",
+              fontSize: 18,
+              opacity: 0.45,
+              top: `${[20, 50, 25][i]}%`,
+              left: `${[6, 88, 82][i]}%`,
+              pointerEvents: "none",
+            }}>{s}</span>
+          ))}
           <p
             style={{
-              fontSize: 11,
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: "0.18em",
+              fontSize: "clamp(20px, 4vw, 26px)",
+              fontWeight: 900,
               color: "#fff",
-              marginBottom: 4,
-              fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
-              fontVariant: "small-caps",
+              margin: 0,
+              fontFamily: "var(--font-concert-one),'Concert One',cursive",
+              textShadow: "0 2px 8px rgba(0,0,0,0.25)",
+              letterSpacing: "0.03em",
             }}
           >
-            🕹️ GAME ZONE
+            🎮 Fun Zone!
           </p>
-          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", margin: 0 }}>
-            Pick a game to play!
+          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", margin: "4px 0 0", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+            Tap a game to play!
           </p>
         </div>
 
-        {/* 2-column (3-column on ≥600px) game card grid */}
+        {/* 3-column game card grid */}
         <div
           className="book-games-grid"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
+            gridTemplateColumns: "repeat(3, 1fr)",
             gap: 10,
-            background: "#f8f7ff",
-            borderRadius: "0 0 16px 16px",
+            background: `${accentColor}14`,
+            borderRadius: "0 0 20px 20px",
             padding: "14px",
-            border: "2px solid #1a106022",
+            border: `2px solid ${accentColor}35`,
             borderTop: "none",
           }}
         >
@@ -108,36 +121,38 @@ export default function BookGames({ slug, accentColor }: Props) {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "flex-start",
+                alignItems: "center",
+                justifyContent: "center",
                 gap: 6,
-                padding: "14px 12px",
-                borderRadius: 16,
-                border: `2px solid ${card.color}40`,
-                background: `${card.color}15`,
+                padding: "16px 10px 12px",
+                borderRadius: 18,
+                border: `2px solid ${card.color}50`,
+                background: `${card.color}1a`,
                 cursor: "pointer",
-                textAlign: "left",
+                textAlign: "center",
                 transition: "transform 0.15s, box-shadow 0.15s, border-color 0.15s",
               }}
               onMouseEnter={e => {
                 const btn = e.currentTarget as HTMLButtonElement;
-                btn.style.transform = "translateY(-3px)";
-                btn.style.boxShadow = `0 8px 20px ${card.color}44`;
-                btn.style.borderColor = `${card.color}80`;
+                btn.style.transform = "translateY(-4px) scale(1.04)";
+                btn.style.boxShadow = `0 8px 20px ${card.color}55`;
+                btn.style.borderColor = `${card.color}99`;
               }}
               onMouseLeave={e => {
                 const btn = e.currentTarget as HTMLButtonElement;
                 btn.style.transform = "";
                 btn.style.boxShadow = "";
-                btn.style.borderColor = `${card.color}40`;
+                btn.style.borderColor = `${card.color}50`;
               }}
             >
-              <span style={{ fontSize: 36 }}>{card.emoji}</span>
+              <span style={{ fontSize: 34, lineHeight: 1 }}>{card.emoji}</span>
               <div
                 style={{
                   fontWeight: 800,
-                  fontSize: 13,
+                  fontSize: "clamp(11px, 2vw, 13px)",
                   color: "#1a1060",
                   fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
+                  lineHeight: 1.2,
                 }}
               >
                 {card.title}

@@ -62,7 +62,7 @@ export const books: Book[] = [
   },
   {
     id: "dream-ideas",
-    slug: "dream-ideas", landName: "Dream Ideas Land", landEmoji: "🌙",
+    slug: "dream-ideas", landName: "Dream Land", landEmoji: "🌙",
     title: "Dream Ideas",
     description:
       "Warning: may cause extremely vivid dreams about ice cream, rocket ships, and talking animals. This bedtime singalong is the sneakiest way to get kids excited about sleep — set to a tune so catchy it'll be stuck in your head until Thursday. Perfect for: fans of Llama Llama Red Pajama, Goodnight Moon.",

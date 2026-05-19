@@ -264,31 +264,7 @@ export default function AdventureLand({
           </Link>
         </div>
 
-        {/* Character art — separate column, beside the cover, not overlapping */}
-        {characterImage && (
-          <div
-            className="adventure-char-wrap"
-            style={{
-              flex: "0 0 auto",
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "center",
-              width: "clamp(80px, 12vw, 160px)",
-              pointerEvents: "none",
-              filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.35))",
-              animation: "adventureFloat 4s ease-in-out infinite",
-            }}
-          >
-            <Image
-              src={characterImage}
-              alt={characterAlt || "character"}
-              width={160}
-              height={200}
-              style={{ width: "100%", height: "auto", display: "block" }}
-              sizes="(max-width: 768px) 80px, 160px"
-            />
-          </div>
-        )}
+
 
         {/* Text + activities */}
         <div className="adventure-land-text" style={{ flex: "1 1 260px", minWidth: 220 }}>
