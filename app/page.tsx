@@ -632,8 +632,7 @@ export default function AdventurelandPage() {
        */}
       <div style={{ position: "relative", overflowX: "hidden" }}>
 
-        {/* ── Squiggly adventure trail — behind sections, threading through badges ── */}
-        <AdventurePath landCount={12} />
+        {/* Squiggly adventure trail removed */}
 
         {/* ═══ HERO — Welcome to Adventureland ═══════════════════════ */}
         <section
