@@ -911,3 +911,10 @@ section     { overflow-x: hidden; }
   }
 }
 
+/* ── BookGames card grid — single column on small phones ────────────────── */
+@media (max-width: 480px) {
+  .book-games-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+

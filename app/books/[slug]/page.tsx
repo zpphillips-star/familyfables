@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { books, AMAZON_STORE_URL } from "@/lib/books";
 import BookActivity from "@/components/BookActivity";
+import BookGames from "@/components/BookGames";
 
 // ── Static params for all 12 book slugs ──────────────────────────────────────
 export async function generateStaticParams() {
@@ -539,7 +540,10 @@ export default async function BookPage({
       <section style={{ backgroundColor: "#ffffff", padding: activityFirst ? "0" : "28px 24px 72px", position: "relative", overflow: "visible" }}>
         {activityFirst ? (
           /* dream-ideas: Activity goes here in white section */
+          <>
           <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={false} />
+          <BookGames slug={slug} accentColor={book.accentColor} />
+          </>
         ) : (
           <div style={{ maxWidth: 720, margin: "0 auto" }}>
           <p
