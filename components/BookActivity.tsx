@@ -506,15 +506,18 @@ function TextInputActivity({
 // ── Amber: Catch Cinnamon's Diamonds (canvas game) ──────────────────────────
 interface DiamondObj { x: number; y: number; speed: number; size: number; color: string; }
 const AMBER_GAME_DURATION = 300; // 5 minutes
+const MAX_LIVES = 5;
 
 function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; textLight?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [phase, setPhase] = useState<"idle" | "playing" | "over">("idle");
   const [finalScore, setFinalScore] = useState(0);
+  const [livesDisplay, setLivesDisplay] = useState(MAX_LIVES);
   const gameRef = useRef({
     diamonds: [] as DiamondObj[],
     playerX: 200,
     score: 0,
+    lives: MAX_LIVES,
     frame: 0,
     running: false,
     startTime: 0,
@@ -523,25 +526,32 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
   const animRef = useRef(0);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const imgLoadedRef = useRef(false);
+  // Store natural aspect ratio so character renders proportionately
+  const imgRatioRef = useRef(1.0); // height / width
 
-  const W = 400, H = 300;
-  const PW = 90, PH = 76; // dragon render size
+  const W = 400, H = 320;
+  const PW = 72; // fixed width; height computed from aspect ratio
   const PSPEED = 5;
   const DCOLORS = ["#E86BB5", "#C8A4FF", "#FFD700", "#FF6B9D", "#7CF5FF"];
 
-  // Load dragon image once
+  // Load dragon image once — store natural aspect ratio
   useEffect(() => {
     const img = new Image();
     img.src = "/images/characters/amber-no-background.png";
-    img.onload = () => { imgLoadedRef.current = true; };
+    img.onload = () => {
+      if (img.naturalWidth > 0) {
+        imgRatioRef.current = img.naturalHeight / img.naturalWidth;
+      }
+      imgLoadedRef.current = true;
+    };
     imgRef.current = img;
   }, []);
 
   function startGame() {
     const g = gameRef.current;
-    g.diamonds = []; g.playerX = W / 2; g.score = 0; g.frame = 0;
-    g.running = true; g.startTime = performance.now();
-    setFinalScore(0); setPhase("playing");
+    g.diamonds = []; g.playerX = W / 2; g.score = 0; g.lives = MAX_LIVES;
+    g.frame = 0; g.running = true; g.startTime = performance.now();
+    setFinalScore(0); setLivesDisplay(MAX_LIVES); setPhase("playing");
   }
 
   // Keyboard support for desktop
@@ -577,6 +587,9 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
       if (!g.running) return;
       g.frame++;
 
+      // Proportionate character height from loaded image ratio
+      const PH = Math.round(PW * imgRatioRef.current) || 108;
+
       // Timer
       const elapsed = (performance.now() - g.startTime) / 1000;
       const timeLeft = Math.max(0, AMBER_GAME_DURATION - elapsed);
@@ -606,17 +619,35 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
       const catchTop  = dragonTop;
       const catchBot  = dragonTop + PH * 0.55;
 
+      let livesChanged = false;
       g.diamonds = g.diamonds.filter(d => {
         d.y += d.speed;
+        // Caught
         if (d.y + d.size > catchTop && d.y < catchBot &&
             d.x + d.size > dragonLeft && d.x < dragonLeft + PW) {
           g.score++; return false;
         }
-        return d.y <= H + 10; // diamonds that fall past bottom just vanish (no penalty)
+        // Missed — fell past bottom
+        if (d.y > H + 10) {
+          g.lives = Math.max(0, g.lives - 1);
+          livesChanged = true;
+          return false;
+        }
+        return true;
       });
 
+      // Update lives display in React state (triggers re-render for hearts)
+      if (livesChanged) {
+        setLivesDisplay(g.lives);
+        if (g.lives <= 0) {
+          g.running = false;
+          setFinalScore(g.score);
+          setPhase("over");
+          return;
+        }
+      }
+
       // ── Draw ───────────────────────────────────────────────────────────────
-      // Background
       ctx.fillStyle = "#1a0533"; ctx.fillRect(0, 0, W, H);
 
       // Stars
@@ -640,7 +671,7 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
         ctx.restore();
       });
 
-      // Dragon image (or emoji fallback)
+      // Amber character (proportionate)
       if (imgLoadedRef.current && imgRef.current) {
         ctx.drawImage(imgRef.current, dragonLeft, dragonTop, PW, PH);
       } else {
@@ -654,6 +685,12 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
       ctx.font = "bold 14px sans-serif";
       ctx.textAlign = "left";
       ctx.fillText(`💎 ${g.score}`, 10, 22);
+
+      // HUD — lives (hearts)
+      ctx.textAlign = "center";
+      ctx.font = "13px sans-serif";
+      const hearts = "❤️".repeat(g.lives) + "🖤".repeat(MAX_LIVES - g.lives);
+      ctx.fillText(hearts, W / 2, 22);
 
       // HUD — timer (MM:SS), turns red in last 30 s
       const mins = Math.floor(timeLeft / 60);
@@ -669,11 +706,14 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
     return () => cancelAnimationFrame(animRef.current);
   }, [phase, accentColor]); // eslint-disable-line
 
+  // Figure out if game over was lives or time
+  const gameOverByLives = phase === "over" && gameRef.current.lives <= 0;
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "center" }}>
       <p style={{ fontSize: 15, color: textLight ? "rgba(255,255,255,0.9)" : "#2d0a3a", lineHeight: 1.5, maxWidth: 400, textAlign: "center", margin: 0 }}>
         Cinnamon scattered his magic diamonds! Drag Amber to catch them. 💎<br />
-        <span style={{ fontSize: 13, opacity: 0.75 }}>Slide your finger left &amp; right — you have 5 minutes!</span>
+        <span style={{ fontSize: 13, opacity: 0.75 }}>Slide your finger left &amp; right — don&apos;t let 5 fall!</span>
       </p>
       <div
         style={{ position: "relative", borderRadius: 16, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.5)", width: "100%", maxWidth: 400 }}
@@ -697,9 +737,9 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
         )}
         {phase === "over" && (
           <div style={{ position: "absolute", inset: 0, background: "rgba(26,5,51,0.93)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10 }}>
-            <span style={{ fontSize: 44 }}>{finalScore >= 60 ? "🐉" : "💎"}</span>
+            <span style={{ fontSize: 44 }}>{gameOverByLives ? "💔" : finalScore >= 60 ? "🐉" : "💎"}</span>
             <p style={{ color: "#fff", fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: 22, margin: 0 }}>
-              {finalScore >= 100 ? "Dragon Master!" : finalScore >= 60 ? "Dragon Keeper!" : finalScore >= 30 ? "Great catch!" : finalScore >= 15 ? "Nice try!" : "Keep practicing!"}
+              {gameOverByLives ? "Oh no! 5 diamonds got away!" : finalScore >= 100 ? "Dragon Master!" : finalScore >= 60 ? "Dragon Keeper!" : finalScore >= 30 ? "Great catch!" : finalScore >= 15 ? "Nice try!" : "Keep practicing!"}
             </p>
             <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 17, margin: 0 }}>💎 {finalScore} diamonds caught</p>
             <button onClick={startGame} style={{ padding: "10px 22px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
