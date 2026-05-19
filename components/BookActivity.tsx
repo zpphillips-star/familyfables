@@ -504,27 +504,50 @@ function TextInputActivity({
 
 // ── Amber: Catch Cinnamon's Diamonds (canvas game) ──────────────────────────
 interface DiamondObj { x: number; y: number; speed: number; size: number; color: string; }
+const AMBER_GAME_DURATION = 300; // 5 minutes
 
 function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; textLight?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [phase, setPhase] = useState<"idle" | "playing" | "over">("idle");
   const [finalScore, setFinalScore] = useState(0);
-  const gameRef = useRef({ diamonds: [] as DiamondObj[], playerX: 165, score: 0, lives: 3, frame: 0, running: false });
+  const gameRef = useRef({
+    diamonds: [] as DiamondObj[],
+    playerX: 200,
+    score: 0,
+    frame: 0,
+    running: false,
+    startTime: 0,
+  });
   const keysRef = useRef({ left: false, right: false });
   const animRef = useRef(0);
-  const W = 400, H = 280, PW = 70, PH = 14, PSPEED = 5;
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const imgLoadedRef = useRef(false);
+
+  const W = 400, H = 300;
+  const PW = 90, PH = 76; // dragon render size
+  const PSPEED = 5;
   const DCOLORS = ["#E86BB5", "#C8A4FF", "#FFD700", "#FF6B9D", "#7CF5FF"];
+
+  // Load dragon image once
+  useEffect(() => {
+    const img = new Image();
+    img.src = "/images/characters/amber-no-background.png";
+    img.onload = () => { imgLoadedRef.current = true; };
+    imgRef.current = img;
+  }, []);
 
   function startGame() {
     const g = gameRef.current;
-    g.diamonds = []; g.playerX = W / 2 - PW / 2; g.score = 0; g.lives = 3; g.frame = 0; g.running = true;
+    g.diamonds = []; g.playerX = W / 2; g.score = 0; g.frame = 0;
+    g.running = true; g.startTime = performance.now();
     setFinalScore(0); setPhase("playing");
   }
 
+  // Keyboard support for desktop
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const d = e.type === "keydown";
-      if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") keysRef.current.left = d;
+      if (e.key === "ArrowLeft"  || e.key === "a" || e.key === "A") keysRef.current.left  = d;
       if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") keysRef.current.right = d;
     };
     window.addEventListener("keydown", onKey);
@@ -532,48 +555,115 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
     return () => { window.removeEventListener("keydown", onKey); window.removeEventListener("keyup", onKey); };
   }, []);
 
+  // Drag / touch — convert screen X → canvas X and update playerX directly
+  function handlePointer(e: React.PointerEvent<HTMLCanvasElement>) {
+    if (!gameRef.current.running || !canvasRef.current) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    const canvasX = (e.clientX - rect.left) * (W / rect.width);
+    gameRef.current.playerX = Math.max(PW / 2, Math.min(W - PW / 2, canvasX));
+  }
+
+  // Game loop
   useEffect(() => {
     if (phase !== "playing") return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
     const loop = () => {
       const g = gameRef.current;
       if (!g.running) return;
       g.frame++;
-      if (keysRef.current.left) g.playerX = Math.max(0, g.playerX - PSPEED);
-      if (keysRef.current.right) g.playerX = Math.min(W - PW, g.playerX + PSPEED);
-      const spawnEvery = Math.max(20, 80 - Math.floor(g.score / 4) * 8);
+
+      // Timer
+      const elapsed = (performance.now() - g.startTime) / 1000;
+      const timeLeft = Math.max(0, AMBER_GAME_DURATION - elapsed);
+      if (timeLeft <= 0) { g.running = false; setFinalScore(g.score); setPhase("over"); return; }
+
+      // Keyboard movement
+      if (keysRef.current.left)  g.playerX = Math.max(PW / 2,     g.playerX - PSPEED);
+      if (keysRef.current.right) g.playerX = Math.min(W - PW / 2, g.playerX + PSPEED);
+
+      // Spawn diamonds — speed ramps over the 5 minutes
+      const speedMult = 1 + (elapsed / AMBER_GAME_DURATION) * 1.8;
+      const spawnEvery = Math.max(18, 72 - Math.floor(elapsed / 30) * 7);
       if (g.frame % spawnEvery === 0) {
-        g.diamonds.push({ x: 10 + Math.random() * (W - 40), y: -20, speed: 1.8 + g.score * 0.07, size: 13, color: DCOLORS[Math.floor(Math.random() * DCOLORS.length)] });
+        g.diamonds.push({
+          x: 14 + Math.random() * (W - 28),
+          y: -20,
+          speed: (1.6 + g.score * 0.015) * speedMult,
+          size: 13,
+          color: DCOLORS[Math.floor(Math.random() * DCOLORS.length)],
+        });
       }
-      const py = H - PH - 8;
+
+      // Dragon position
+      const dragonLeft = g.playerX - PW / 2;
+      const dragonTop  = H - PH - 4;
+      // Catch zone = upper 55% of dragon sprite (arms/hands area)
+      const catchTop  = dragonTop;
+      const catchBot  = dragonTop + PH * 0.55;
+
       g.diamonds = g.diamonds.filter(d => {
         d.y += d.speed;
-        if (d.y + d.size > py && d.y < py + PH + 4 && d.x + d.size > g.playerX && d.x < g.playerX + PW) { g.score++; return false; }
-        if (d.y > H + 10) { g.lives--; return false; }
-        return true;
+        if (d.y + d.size > catchTop && d.y < catchBot &&
+            d.x + d.size > dragonLeft && d.x < dragonLeft + PW) {
+          g.score++; return false;
+        }
+        return d.y <= H + 10; // diamonds that fall past bottom just vanish (no penalty)
       });
-      if (g.lives <= 0) { g.running = false; setFinalScore(g.score); setPhase("over"); return; }
+
+      // ── Draw ───────────────────────────────────────────────────────────────
+      // Background
       ctx.fillStyle = "#1a0533"; ctx.fillRect(0, 0, W, H);
-      for (let i = 0; i < 25; i++) {
-        ctx.fillStyle = `rgba(255,255,255,${0.15 + (i % 4) * 0.1})`;
-        ctx.beginPath(); ctx.arc((i * 61 + 17) % W, (i * 43 + 11) % Math.floor(H * 0.75), 1, 0, Math.PI * 2); ctx.fill();
+
+      // Stars
+      for (let i = 0; i < 32; i++) {
+        ctx.fillStyle = `rgba(255,255,255,${0.12 + (i % 5) * 0.1})`;
+        ctx.beginPath();
+        ctx.arc((i * 61 + 17) % W, (i * 43 + 11) % Math.floor(H * 0.82), 1.2, 0, Math.PI * 2);
+        ctx.fill();
       }
+
+      // Diamonds
       g.diamonds.forEach(d => {
-        ctx.save(); ctx.translate(d.x + d.size / 2, d.y + d.size / 2);
+        ctx.save();
+        ctx.translate(d.x + d.size / 2, d.y + d.size / 2);
         ctx.fillStyle = d.color;
-        ctx.beginPath(); ctx.moveTo(0, -d.size * 0.6); ctx.lineTo(d.size * 0.5, 0); ctx.lineTo(0, d.size * 0.6); ctx.lineTo(-d.size * 0.5, 0); ctx.closePath(); ctx.fill();
-        ctx.strokeStyle = "rgba(255,255,255,0.6)"; ctx.lineWidth = 1; ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, -d.size * 0.6); ctx.lineTo(d.size * 0.5, 0);
+        ctx.lineTo(0, d.size * 0.6);  ctx.lineTo(-d.size * 0.5, 0);
+        ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.7)"; ctx.lineWidth = 1; ctx.stroke();
         ctx.restore();
       });
-      ctx.fillStyle = accentColor; ctx.fillRect(g.playerX, py, PW, PH);
-      ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.fillRect(g.playerX + 4, py + 3, PW - 8, 4);
-      ctx.fillStyle = "rgba(255,255,255,0.9)"; ctx.font = "bold 13px sans-serif"; ctx.textAlign = "left"; ctx.fillText(`💎 ${g.score}`, 10, 20);
-      ctx.textAlign = "right"; ctx.fillText("❤️".repeat(g.lives), W - 8, 20);
+
+      // Dragon image (or emoji fallback)
+      if (imgLoadedRef.current && imgRef.current) {
+        ctx.drawImage(imgRef.current, dragonLeft, dragonTop, PW, PH);
+      } else {
+        ctx.font = `${PH * 0.85}px sans-serif`;
+        ctx.textAlign = "center";
+        ctx.fillText("🐉", g.playerX, dragonTop + PH - 4);
+      }
+
+      // HUD — score
+      ctx.fillStyle = "rgba(255,255,255,0.95)";
+      ctx.font = "bold 14px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText(`💎 ${g.score}`, 10, 22);
+
+      // HUD — timer (MM:SS), turns red in last 30 s
+      const mins = Math.floor(timeLeft / 60);
+      const secs = Math.floor(timeLeft % 60);
+      ctx.fillStyle = timeLeft < 30 ? "#ff6b6b" : "rgba(255,255,255,0.95)";
+      ctx.textAlign = "right";
+      ctx.fillText(`⏱ ${mins}:${secs.toString().padStart(2, "0")}`, W - 10, 22);
+
       animRef.current = requestAnimationFrame(loop);
     };
+
     animRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animRef.current);
   }, [phase, accentColor]); // eslint-disable-line
@@ -581,15 +671,24 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "center" }}>
       <p style={{ fontSize: 15, color: textLight ? "rgba(255,255,255,0.9)" : "#2d0a3a", lineHeight: 1.5, maxWidth: 400, textAlign: "center", margin: 0 }}>
-        Cinnamon scattered his magic diamonds! Help Amber catch them all. 💎<br />
-        <span style={{ fontSize: 13, opacity: 0.75 }}>← → arrow keys, or tap ◀ ▶ buttons below.</span>
+        Cinnamon scattered his magic diamonds! Drag Amber to catch them. 💎<br />
+        <span style={{ fontSize: 13, opacity: 0.75 }}>Slide your finger left &amp; right — you have 5 minutes!</span>
       </p>
-      <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.5)", width: "100%", maxWidth: 400 }}>
-        <canvas ref={canvasRef} width={W} height={H} style={{ display: "block", width: "100%", height: "auto" }} />
+      <div
+        style={{ position: "relative", borderRadius: 16, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.5)", width: "100%", maxWidth: 400 }}
+      >
+        <canvas
+          ref={canvasRef}
+          width={W} height={H}
+          style={{ display: "block", width: "100%", height: "auto", touchAction: "none", cursor: "grab" }}
+          onPointerDown={handlePointer}
+          onPointerMove={handlePointer}
+        />
         {phase === "idle" && (
           <div style={{ position: "absolute", inset: 0, background: "rgba(26,5,51,0.93)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12 }}>
-            <span style={{ fontSize: 52 }}>💎</span>
+            <span style={{ fontSize: 52 }}>🐉</span>
             <p style={{ color: "#fff", fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: 22, textAlign: "center", padding: "0 16px", margin: 0 }}>Catch Cinnamon&apos;s Diamonds!</p>
+            <p style={{ color: "rgba(255,255,255,0.72)", fontSize: 13, textAlign: "center", margin: 0, padding: "0 20px" }}>Drag Amber left &amp; right with your finger 🐉<br />Catch as many as you can in 5 minutes!</p>
             <button onClick={startGame} style={{ padding: "12px 28px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
               Start Game! 💎
             </button>
@@ -597,9 +696,9 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
         )}
         {phase === "over" && (
           <div style={{ position: "absolute", inset: 0, background: "rgba(26,5,51,0.93)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10 }}>
-            <span style={{ fontSize: 44 }}>{finalScore >= 15 ? "🐉" : "💎"}</span>
+            <span style={{ fontSize: 44 }}>{finalScore >= 60 ? "🐉" : "💎"}</span>
             <p style={{ color: "#fff", fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: 22, margin: 0 }}>
-              {finalScore >= 20 ? "Dragon Keeper!" : finalScore >= 12 ? "Great catch!" : finalScore >= 6 ? "Nice try!" : "Keep practicing!"}
+              {finalScore >= 100 ? "Dragon Master!" : finalScore >= 60 ? "Dragon Keeper!" : finalScore >= 30 ? "Great catch!" : finalScore >= 15 ? "Nice try!" : "Keep practicing!"}
             </p>
             <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 17, margin: 0 }}>💎 {finalScore} diamonds caught</p>
             <button onClick={startGame} style={{ padding: "10px 22px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
@@ -608,19 +707,6 @@ function AmberDiamondCatch({ accentColor, textLight }: { accentColor: string; te
           </div>
         )}
       </div>
-      {phase === "playing" && (
-        <div style={{ display: "flex", gap: 12 }}>
-          {(["left", "right"] as const).map((dir) => (
-            <button key={dir}
-              onPointerDown={() => { keysRef.current[dir] = true; }}
-              onPointerUp={() => { keysRef.current[dir] = false; }}
-              onPointerLeave={() => { keysRef.current[dir] = false; }}
-              style={{ padding: "14px 28px", borderRadius: 12, backgroundColor: `${accentColor}cc`, color: "#fff", fontWeight: 700, fontSize: 22, border: "none", cursor: "pointer", userSelect: "none", touchAction: "none" }}>
-              {dir === "left" ? "◀" : "▶"}
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
