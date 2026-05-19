@@ -42,3 +42,4 @@ next-env.d.ts
 
 # coloring / ML utility scripts (contain API keys, not part of website)
 *.mjs
+.env*.local

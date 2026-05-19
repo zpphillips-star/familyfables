@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AMAZON_STORE_URL } from "@/lib/books";
 
 export interface LandActivity {
@@ -101,11 +102,18 @@ export default function AdventureLand({
 }: AdventureLandProps) {
   const Divider = DIVIDER_MAP[dividerType];
   const isEven = index % 2 === 0;
+  const router = useRouter();
 
   return (
     <section
       id={id}
       className="adventure-land-section"
+      onClick={(e) => {
+        // If click landed on/inside a real link or button, let it handle itself
+        const target = e.target as HTMLElement;
+        if (target.closest("a, button")) return;
+        router.push(`/books/${bookSlug}`);
+      }}
       style={{
         position: "relative",
         background: gradient,
@@ -129,19 +137,6 @@ export default function AdventureLand({
        * Hidden on mobile via globals.css (.adventure-milestone-wrap display:none).
        */}
       {/* Colored badge removed — "Land #" label lives inline with the title */}
-
-      {/* ── Full-section click target → book page ───────────────────── */}
-      <Link
-        href={`/books/${bookSlug}`}
-        aria-label={`Explore ${landName}`}
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 0,
-          display: "block",
-        }}
-        tabIndex={-1}
-      />
 
       {/* ── Decorations ─────────────────────────────────────────────── */}
       {decorations && (
