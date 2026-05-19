@@ -125,14 +125,10 @@ const CSS = `
 // ─── SheepGroup ────────────────────────────────────────────────────────────────
 function SheepGroup({
   count,
-  baseOffset = 0,
   jumpingIdxs,
-  dimAfter,
 }: {
   count: number;
-  baseOffset?: number;
   jumpingIdxs: Set<number>;
-  dimAfter?: number;
 }) {
   return (
     <div
@@ -141,26 +137,18 @@ function SheepGroup({
         flexWrap: "wrap",
         gap: 5,
         justifyContent: "center",
-        maxWidth: 280,
+        maxWidth: 300,
       }}
     >
       {Array.from({ length: count }, (_, i) => {
-        const globalIdx = baseOffset + i;
-        const isJumping = jumpingIdxs.has(globalIdx);
-        const isDim = dimAfter !== undefined && i >= dimAfter;
+        const isJumping = jumpingIdxs.has(i);
         return (
           <span
             key={i}
-            aria-label={isDim ? "sheep walking away" : "sheep"}
+            aria-label="sheep"
             style={{
-              fontSize: "clamp(22px, 4.5vw, 32px)",
+              fontSize: "clamp(24px, 5vw, 34px)",
               lineHeight: 1,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-              opacity: isDim ? 0.28 : 1,
-              filter: isDim ? "grayscale(1)" : "none",
               animation: isJumping
                 ? `sheepJump 0.65s ease ${i * 0.04}s both`
                 : `sheepWalkIn 0.45s ease ${i * 0.05}s both`,
@@ -168,19 +156,6 @@ function SheepGroup({
             }}
           >
             🐑
-            {isDim && (
-              <span
-                aria-hidden
-                style={{
-                  position: "absolute",
-                  top: "-3px",
-                  right: "-5px",
-                  fontSize: "0.42em",
-                }}
-              >
-                🚶
-              </span>
-            )}
           </span>
         );
       })}
@@ -196,84 +171,85 @@ function ProblemDisplay({
   problem: Problem;
   jumpingIdxs: Set<number>;
 }) {
-  const boxStyle: CSSProperties = {
-    background: "rgba(255,255,255,0.08)",
-    border: "1px solid rgba(255,255,255,0.13)",
-    borderRadius: 16,
-    padding: "14px 18px",
+  const equationStyle: CSSProperties = {
+    fontSize: "clamp(32px, 7vw, 48px)",
+    fontWeight: 900,
+    color: "#fff",
+    fontFamily: "var(--font-concert-one),'Concert One',cursive",
+    textShadow: "0 2px 10px rgba(0,0,0,0.5)",
+    letterSpacing: 2,
+    marginBottom: 12,
+  };
+
+  const questionMarkStyle: CSSProperties = {
+    color: "#fbbf24",
+    fontSize: "clamp(34px, 7.5vw, 52px)",
+  };
+
+  const sheepBoxStyle: CSSProperties = {
+    background: "rgba(255,255,255,0.07)",
+    border: "1px solid rgba(255,255,255,0.15)",
+    borderRadius: 18,
+    padding: "12px 16px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     gap: 8,
+    marginTop: 4,
   };
 
-  const labelStyle: CSSProperties = {
-    color: "#e9d5ff",
-    fontSize: 13,
+  const hintStyle: CSSProperties = {
+    color: "#c4b5fd",
+    fontSize: 12,
     fontWeight: 700,
     fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
-    opacity: 0.85,
+    opacity: 0.8,
+    marginTop: 4,
   };
 
   if (problem.type === "counting") {
     return (
-      <div style={boxStyle}>
-        <SheepGroup count={problem.a} jumpingIdxs={jumpingIdxs} />
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+        <div style={sheepBoxStyle}>
+          <SheepGroup count={problem.answer} jumpingIdxs={jumpingIdxs} />
+        </div>
       </div>
     );
   }
 
+  // Addition: show "A + B = ?" then all (A+B) sheep below
   if (problem.type === "addition") {
     return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          flexWrap: "wrap",
-          justifyContent: "center",
-        }}
-      >
-        <div style={boxStyle}>
-          <div style={labelStyle}>{problem.a} sheep</div>
-          <SheepGroup
-            count={problem.a}
-            baseOffset={0}
-            jumpingIdxs={jumpingIdxs}
-          />
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+        <div style={equationStyle}>
+          {problem.a}{" "}
+          <span style={{ color: "#f9a8d4" }}>+</span>{" "}
+          {problem.b}{" "}
+          <span style={{ color: "#94a3b8" }}>=</span>{" "}
+          <span style={questionMarkStyle}>?</span>
         </div>
-        <span
-          style={{
-            fontSize: "clamp(28px, 6vw, 40px)",
-            fontWeight: 900,
-            color: "#f9a8d4",
-            fontFamily: "var(--font-concert-one),'Concert One',cursive",
-            textShadow: "0 2px 8px rgba(0,0,0,0.4)",
-            flexShrink: 0,
-          }}
-        >
-          +
-        </span>
-        <div style={boxStyle}>
-          <div style={labelStyle}>{problem.b} sheep</div>
-          <SheepGroup
-            count={problem.b}
-            baseOffset={problem.a}
-            jumpingIdxs={jumpingIdxs}
-          />
+        <div style={sheepBoxStyle}>
+          <SheepGroup count={problem.answer} jumpingIdxs={jumpingIdxs} />
         </div>
+        <div style={hintStyle}>count the sheep or solve the math!</div>
       </div>
     );
   }
 
-  // Subtraction — last `b` sheep are dimmed (walking away)
+  // Subtraction: show "A - B = ?" then (A-B) sheep below
   return (
-    <div style={boxStyle}>
-      <SheepGroup
-        count={problem.a}
-        jumpingIdxs={jumpingIdxs}
-        dimAfter={problem.a - problem.b}
-      />
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+      <div style={equationStyle}>
+        {problem.a}{" "}
+        <span style={{ color: "#f9a8d4" }}>−</span>{" "}
+        {problem.b}{" "}
+        <span style={{ color: "#94a3b8" }}>=</span>{" "}
+        <span style={questionMarkStyle}>?</span>
+      </div>
+      <div style={sheepBoxStyle}>
+        <SheepGroup count={problem.answer} jumpingIdxs={jumpingIdxs} />
+      </div>
+      <div style={hintStyle}>count the sheep or solve the math!</div>
     </div>
   );
 }
@@ -300,8 +276,7 @@ export default function CountingSheep({ accentColor }: Props) {
     [problem]
   );
 
-  const sheepCount =
-    problem.type === "addition" ? problem.a + problem.b : problem.a;
+  const sheepCount = problem.answer;
 
   const handleAnswer = useCallback(
     (choice: number, btnIdx: number) => {
@@ -488,9 +463,7 @@ export default function CountingSheep({ accentColor }: Props) {
   const hint =
     problem.type === "counting"
       ? "🌙 How many sheep are there?"
-      : problem.type === "addition"
-      ? "⭐ Add the sheep together!"
-      : "💫 Some sheep walked away...";
+      : "⭐ Solve the math — or just count the sheep!";
 
   const progress = probIdx / problems.length;
 
