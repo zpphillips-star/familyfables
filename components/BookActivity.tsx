@@ -1118,18 +1118,65 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
     ));
 
   if (slug === "brian-the-ghost")
-    return wrap("What would YOU haunt?", "👻", (
-      <TextInputActivity
-        prompt="Brian the Ghost haunts with kindness — just lots of friendly waving. If you were a ghost, what would YOU haunt?"
-        placeholder="I would haunt..."
-        buttonLabel="BOO! (nicely) 👻"
-        responseTemplate={(i) =>
-          `"${i}"! Brian approves. He'd probably float by and wave at everyone there too. The friendliest haunting in St. Germaine history. 👻✨`
-        }
-        accentColor={accentColor}
-        textColor={textLight ? "rgba(255,255,255,0.9)" : "#2d1260"}
-      />
-    ));
+    return (
+      <section className="amber-activities-section" style={{ padding: "72px 24px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "flex-start", gap: 0, flexWrap: "wrap" }}>
+
+          {/* ── Left: What would YOU haunt? ── */}
+          <div className="amber-activity-left" style={{ flex: "1 1 320px", padding: "0 40px 0 0", minWidth: 280 }}>
+            <p style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: textLight ? "rgba(255,255,255,0.8)" : "#1a1060", marginBottom: 10, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
+              👻 Fun Activity
+            </p>
+            <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 36px)", color: textLight ? "#ffffff" : "#1a1060", marginBottom: 24, lineHeight: 1.2 }}>
+              What would YOU haunt?
+            </h2>
+            <TextInputActivity
+              prompt="Brian the Ghost haunts with kindness — just lots of friendly waving. If you were a ghost, what would YOU haunt?"
+              placeholder="I would haunt..."
+              buttonLabel="BOO! (nicely) 👻"
+              responseTemplate={(i) =>
+                `"${i}"! Brian approves. He'd probably float by and wave at everyone there too. The friendliest haunting in St. Germaine history. 👻✨`
+              }
+              accentColor={accentColor}
+              textColor={textLight ? "rgba(255,255,255,0.9)" : "#2d1260"}
+            />
+          </div>
+
+          {/* ── Divider ── */}
+          <div style={{
+            width: 1,
+            alignSelf: "stretch",
+            background: `linear-gradient(to bottom, transparent, ${accentColor}55 18%, ${accentColor}55 82%, transparent)`,
+            margin: "0 8px",
+            flexShrink: 0,
+          }} className="amber-activity-divider" />
+
+          {/* ── Right: How We Created Brian video ── */}
+          <div className="amber-activity-right" style={{ flex: "1 1 320px", padding: "0 0 0 40px", minWidth: 280, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-start" }}>
+            <p style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: textLight ? "rgba(255,255,255,0.8)" : "#1a1060", marginBottom: 10, fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}>
+              🎬 Behind the Scenes
+            </p>
+            <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 36px)", color: textLight ? "#ffffff" : "#1a1060", marginBottom: 16, lineHeight: 1.2 }}>
+              How We Created Brian
+            </h2>
+            <p style={{ fontSize: 15, color: textLight ? "rgba(255,255,255,0.75)" : "#5a4a7a", lineHeight: 1.65, marginBottom: 20, fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
+              Watch the magic happen — from the very first pencil strokes to the friendly little ghost who stole every kid&apos;s heart. 🖊️✨
+            </p>
+            <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: `0 8px 32px ${accentColor}44, 0 0 0 2px ${accentColor}33`, width: "100%" }}>
+              <video
+                controls
+                playsInline
+                style={{ width: "100%", display: "block" }}
+                poster="/images/books/brian-the-ghost.jpg"
+              >
+                <source src="/videos/brian.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    );
 
   if (slug === "amber-the-dragon-keeper")
     return (
