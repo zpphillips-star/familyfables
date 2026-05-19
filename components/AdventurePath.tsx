@@ -34,14 +34,14 @@ export default function AdventurePath({ landCount = 12 }: { landCount?: number }
     // ── Start exactly at Badge 1 ────────────────────────────────────────
     `M ${L},${by(1)}`,
 
-    // ── 1 → 2 : BIG SWEEPING RIGHT ARC ─────────────────────────────────
-    // Like a parenthesis ")" hugging the right side of the page.
-    `C 132,155  132,245  ${R},${by(2)}`,
+    // ── 1 → 2 : SWEEPING RIGHT ARC ──────────────────────────────────────
+    // Graceful arc hugging the right side — control pts capped near edge.
+    `C 92,155  92,245  ${R},${by(2)}`,
 
     // ── 2 → 3 : LEFT HOOK LOOP ──────────────────────────────────────────
-    // Shoots wide left past the page edge, curls back to land at badge 3.
-    `C 50,262  -42,292  -28,332`,
-    `C -16,348   0,356  ${L},${by(3)}`,
+    // Hooks left but stays just within the page.
+    `C 50,262  8,292  8,332`,
+    `C 8,348   8,356  ${L},${by(3)}`,
 
     // ── 3 → 4 : TIGHT DOUBLE ZIGZAG ─────────────────────────────────────
     // Two quick S-bends — a snappy left-then-right wriggle.
@@ -49,40 +49,40 @@ export default function AdventurePath({ landCount = 12 }: { landCount?: number }
     `C  52,422  ${R},432  ${R},${by(4)}`,
 
     // ── 4 → 5 : WIDE LAZY LEFT CURVE ────────────────────────────────────
-    // A single long bow that drifts well past the left edge.
-    `C ${R},472  -22,528  ${L},${by(5)}`,
+    // A long bow drifting leftward — stays on screen.
+    `C ${R},472  8,528  ${L},${by(5)}`,
 
     // ── 5 → 6 : LOOSE SPIRAL ────────────────────────────────────────────
-    // Two curves that arc through the page centre — a tightening gyre.
+    // Two curves arcing through the page centre.
     `C 60,562  80,600  64,622`,
     `C 50,642  ${R},645  ${R},${by(6)}`,
 
-    // ── 6 → 7 : TIGHT RIGHT LOOP ────────────────────────────────────────
-    // Rockets right off the page, curls back around, arrives on the left.
-    `C 124,658  124,710  90,726`,
-    `C 66,740   20,748  ${L},${by(7)}`,
+    // ── 6 → 7 : RIGHT LOOP BACK LEFT ────────────────────────────────────
+    // Curves right toward edge, arcs back left to badge 7.
+    `C 95,658  95,710  88,726`,
+    `C 70,740  20,748  ${L},${by(7)}`,
 
     // ── 7 → 8 : LONG CONFIDENT DIAGONAL ────────────────────────────────
-    // Clean crossing from left to right — like a bold stride.
+    // Clean crossing from left to right.
     `C 28,772  70,828  ${R},${by(8)}`,
 
-    // ── 8 → 9 : WIDE LEFT SWOOPING LOOP ─────────────────────────────────
-    // Sweeps far left, hooks downward, snaps back to badge on left side.
-    `C 50,866  -30,898  -22,937`,
-    `C -14,958   4,956  ${L},${by(9)}`,
+    // ── 8 → 9 : LEFT SWOOPING LOOP ───────────────────────────────────────
+    // Sweeps left, hooks downward, snaps back — stays on screen.
+    `C 50,866  8,898  8,937`,
+    `C 8,958   8,956  ${L},${by(9)}`,
 
     // ── 9 → 10 : RELAXED GENTLE S-CURVE ────────────────────────────────
     // Unhurried left-to-right classic S.
     `C ${L},978  ${R},1022  ${R},${by(10)}`,
 
-    // ── 10 → 11 : OVERSIZED RIGHT BALLOON LOOP ──────────────────────────
-    // Balloons way out to the right before arcing back left to badge 11.
-    `C 136,1062  136,1140  50,1148`,
-    `C  12,1150   ${L},1152  ${L},${by(11)}`,
+    // ── 10 → 11 : RIGHT BALLOON LOOP ────────────────────────────────────
+    // Balloons toward the right edge, arcs back left to badge 11.
+    `C 95,1062  95,1140  50,1148`,
+    `C  18,1150   ${L},1152  ${L},${by(11)}`,
 
     // ── 11 → 12 : GRAND FINALE — FULL-WIDTH LEFT SWEEP ──────────────────
-    // One dramatic arc that crosses the full width from far-left to badge 12.
-    `C -38,1162  -38,1238  ${R},${by(12)}`,
+    // Dramatic arc crossing full width — stays on screen.
+    `C 8,1162  8,1238  ${R},${by(12)}`,
 
     // Trail fades off the bottom of the page
     `L ${R},1300`,
