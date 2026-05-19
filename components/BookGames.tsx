@@ -77,35 +77,38 @@ export default function BookGames({ slug, accentColor }: Props) {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 8,
-                padding: "20px 12px 16px",
-                borderRadius: 22,
-                border: `3px solid ${card.color}55`,
-                background: `${card.color}18`,
+                gap: 6,
+                padding: "18px 10px 14px",
+                borderRadius: 20,
+                border: "none",
+                background: card.color,
                 cursor: "pointer",
                 textAlign: "center",
-                transition: "transform 0.15s, box-shadow 0.15s",
-                boxShadow: `0 4px 14px ${card.color}25`,
+                transition: "transform 0.15s, box-shadow 0.15s, filter 0.15s",
+                boxShadow: `0 4px 16px ${card.color}66`,
               }}
               onMouseEnter={e => {
                 const btn = e.currentTarget as HTMLButtonElement;
                 btn.style.transform = "translateY(-4px) scale(1.05)";
-                btn.style.boxShadow = `0 10px 28px ${card.color}55`;
+                btn.style.boxShadow = `0 10px 28px ${card.color}88`;
+                btn.style.filter = "brightness(1.1)";
               }}
               onMouseLeave={e => {
                 const btn = e.currentTarget as HTMLButtonElement;
                 btn.style.transform = "";
-                btn.style.boxShadow = `0 4px 14px ${card.color}25`;
+                btn.style.boxShadow = `0 4px 16px ${card.color}66`;
+                btn.style.filter = "";
               }}
             >
-              <span style={{ fontSize: 38, lineHeight: 1 }}>{card.emoji}</span>
+              <span style={{ fontSize: 34, lineHeight: 1 }}>{card.emoji}</span>
               <div
                 style={{
                   fontWeight: 800,
-                  fontSize: "clamp(12px, 2vw, 14px)",
-                  color: card.color,
+                  fontSize: "clamp(11px, 2vw, 13px)",
+                  color: "#fff",
                   fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
                   lineHeight: 1.2,
+                  textShadow: "0 1px 4px rgba(0,0,0,0.2)",
                 }}
               >
                 {card.title}
