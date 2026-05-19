@@ -6,6 +6,11 @@ export interface CrosswordWordDef {
   emoji: string;
 }
 
+export interface UnscrambleWord {
+  word: string;
+  hint: string;
+}
+
 export interface BookGameData {
   wordSearch: {
     title: string;
@@ -17,12 +22,14 @@ export interface BookGameData {
   };
   findDiff: {
     title: string;
-    scene: string; // scene key
+    scene: string;
   };
   hiddenObjects: {
     title: string;
-    scene: string; // scene key
+    scene: string;
   };
+  memoryMatch: { pairs: string[] };
+  unscramble: { words: UnscrambleWord[] };
 }
 
 export const GAME_DATA: Record<string, BookGameData> = {
@@ -43,6 +50,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "dream-ideas" },
     hiddenObjects: { title: "Find the Hidden Items!", scene: "dream-ideas" },
+    memoryMatch: { pairs: ['💭','⭐','🌈','🚀','🦋','🌙','✨','🎨'] },
+    unscramble: { words: [{word:'DREAM',hint:'What you have when you sleep'},{word:'STARS',hint:'They twinkle in the night sky'},{word:'CLOUD',hint:'Fluffy and floats in the sky'},{word:'MAGIC',hint:'Something wonderful and surprising'},{word:'SLEEP',hint:'Close your eyes and drift away'}] },
   },
 
   "amber-the-dragon-keeper": {
@@ -62,6 +71,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "amber" },
     hiddenObjects: { title: "Find the Hidden Gems!", scene: "amber" },
+    memoryMatch: { pairs: ['🐉','🔥','💎','🏰','🌋','⚔️','🧪','👑'] },
+    unscramble: { words: [{word:'DRAGON',hint:'A fire-breathing flying creature'},{word:'AMBER',hint:"The dragon keeper's name"},{word:'FIRE',hint:'Dragons breathe this'},{word:'CAVE',hint:'Where Amber lives underground'},{word:'WINGS',hint:'Dragons use these to fly'}] },
   },
 
   "whats-your-poo-poo-face": {
@@ -81,6 +92,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "poo-poo-face" },
     hiddenObjects: { title: "Find the Hidden Things!", scene: "poo-poo-face" },
+    memoryMatch: { pairs: ['💩','😂','🚽','🧻','😆','🤣','🪠','😜'] },
+    unscramble: { words: [{word:'SILLY',hint:'Makes you giggle and laugh'},{word:'FUNNY',hint:'Ha ha ha!'},{word:'LAUGH',hint:'What you do when something is silly'},{word:'TUMMY',hint:'Your belly your middle'},{word:'STINKY',hint:'Not a nice smell!'}] },
   },
 
   "gilroys-gobble": {
@@ -100,6 +113,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "gilroy" },
     hiddenObjects: { title: "Find the Farm Things!", scene: "gilroy" },
+    memoryMatch: { pairs: ['🦃','🏚️','🌽','🐓','🌾','🥚','🐔','🍂'] },
+    unscramble: { words: [{word:'TURKEY',hint:'The big bird on the farm'},{word:'GOBBLE',hint:'Sound a turkey makes'},{word:'BARN',hint:'Big red building on a farm'},{word:'WINGS',hint:'Birds use these to fly'},{word:'NEST',hint:'Where birds lay eggs'}] },
   },
 
   "finding-hampton": {
@@ -119,6 +134,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "hampton" },
     hiddenObjects: { title: "Find Hampton's Things!", scene: "hampton" },
+    memoryMatch: { pairs: ['🦛','🎁','🎂','🎉','💝','🎈','🎀','🌟'] },
+    unscramble: { words: [{word:'HIPPO',hint:"Hampton's big loveable animal"},{word:'PARTY',hint:'Celebration with balloons and cake'},{word:'GIFT',hint:'Something wrapped with a bow'},{word:'CAKE',hint:'Sweet birthday treat'},{word:'SMILE',hint:'Happy face expression'}] },
   },
 
   "the-lumpiest-pumpkin": {
@@ -138,6 +155,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "lumpiest-pumpkin" },
     hiddenObjects: { title: "Find the Patch Things!", scene: "lumpiest-pumpkin" },
+    memoryMatch: { pairs: ['🎃','🍂','🌾','👻','🕯️','🌙','⭐','🍁'] },
+    unscramble: { words: [{word:'PUMPKIN',hint:'Orange and round great for Halloween'},{word:'LUMPY',hint:'Not smooth bumpy and wobbly'},{word:'SEEDS',hint:'Slimy insides of a carved pumpkin'},{word:'GLOW',hint:'What a jack-o-lantern does in the dark'},{word:'PATCH',hint:'A field full of pumpkins'}] },
   },
 
   "one-tom-turkey": {
@@ -157,6 +176,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "one-tom-turkey" },
     hiddenObjects: { title: "Find the Feast Things!", scene: "one-tom-turkey" },
+    memoryMatch: { pairs: ['🦃','🍗','🌽','🥧','🍽️','🙏','🍎','🥕'] },
+    unscramble: { words: [{word:'TURKEY',hint:'The main dish on Thanksgiving'},{word:'FEAST',hint:'A huge delicious meal'},{word:'CORN',hint:'Yellow vegetable on the cob'},{word:'GRAVY',hint:'Thick brown sauce on everything'},{word:'FAMILY',hint:'The people you love most'}] },
   },
 
   "ollie-come-home": {
@@ -176,6 +197,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "ollie" },
     hiddenObjects: { title: "Find Ollie's Things!", scene: "ollie" },
+    memoryMatch: { pairs: ['🐱','🏡','🐾','❤️','🌳','🛋️','😻','🎀'] },
+    unscramble: { words: [{word:'KITTEN',hint:'A baby cat'},{word:'MEOW',hint:'Sound a cat makes'},{word:'PAWS',hint:"A cat's fluffy feet"},{word:'HOME',hint:'Where Ollie wants to be'},{word:'PURR',hint:'Happy sound cats make'}] },
   },
 
   "what-a-doodle-do": {
@@ -195,6 +218,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "doodle-do" },
     hiddenObjects: { title: "Find the Farm Things!", scene: "doodle-do" },
+    memoryMatch: { pairs: ['🐓','🌅','☀️','🌾','🥚','🎵','🐔','🌻'] },
+    unscramble: { words: [{word:'ROOSTER',hint:'The bird that crows at sunrise'},{word:'DAWN',hint:'When the sun first peeks up'},{word:'CROW',hint:"The rooster's loud morning call"},{word:'EGGS',hint:'Round things hens lay in the nest'},{word:'WAKE',hint:'The opposite of sleep'}] },
   },
 
   "the-shut-in-button": {
@@ -214,6 +239,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "shut-in-button" },
     hiddenObjects: { title: "Find the Magic Things!", scene: "shut-in-button" },
+    memoryMatch: { pairs: ['🔘','✨','🎪','🍬','💃','🌈','🪄','💡'] },
+    unscramble: { words: [{word:'BUTTON',hint:'Push it and something magical happens'},{word:'MAGIC',hint:'Wonderful and surprising things'},{word:'WISH',hint:'What you make when you press the button'},{word:'DANCE',hint:'Move your body to the music'},{word:'GLOW',hint:'The button shines and does this'}] },
   },
 
   "frog-a-dog": {
@@ -233,6 +260,8 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "frog-a-dog" },
     hiddenObjects: { title: "Find the Pond Things!", scene: "frog-a-dog" },
+    memoryMatch: { pairs: ['🐸','🐕','🌿','💧','🌊','🐾','🌳','🐟'] },
+    unscramble: { words: [{word:'FROG',hint:'Green jumpy loves lily pads'},{word:'POND',hint:'A small still body of water'},{word:'JUMP',hint:'What frogs love to do'},{word:'BARK',hint:'Loud sound a dog makes'},{word:'SWIM',hint:'How frogs move through water'}] },
   },
 
   "brian-the-ghost": {
@@ -252,5 +281,7 @@ export const GAME_DATA: Record<string, BookGameData> = {
     },
     findDiff: { title: "Spot the Differences!", scene: "brian" },
     hiddenObjects: { title: "Find the Spooky Things!", scene: "brian" },
+    memoryMatch: { pairs: ['👻','💜','🏚️','🕯️','🌙','⛓️','🕷️','✨'] },
+    unscramble: { words: [{word:'GHOST',hint:'A spooky floating spirit'},{word:'BRIAN',hint:"The friendly ghost's name"},{word:'WAVE',hint:'What friendly Brian does instead of scaring'},{word:'KIND',hint:'Opposite of mean'},{word:'FLOAT',hint:'How ghosts move without touching the ground'}] },
   },
 };
