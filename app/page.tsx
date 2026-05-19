@@ -122,32 +122,10 @@ const SHOP = AMAZON_STORE_URL;
 type LandDef = Omit<AdventureLandProps, "decorations">;
 
 const landDefs: LandDef[] = [
-  // 1. Dream Ideas Land
-  {
-    id: "dream-ideas", bookSlug: "dream-ideas",
-    index: 1,
-    emoji: "🌙",
-    landName: "Dream Land",
-    tagline: "Your best idea ever is waiting in a dream",
-    bookTitle: "Dream Ideas",
-    coverImage: "/images/books/dream-ideas.png",
-    characterImage: "/images/characters/dream-ideas-400-height.png",
-    characterAlt: "Dream Ideas character",
-    gradient: "linear-gradient(160deg, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 100%)",
-    nextGradientColor: "#2d0a3a",
-    dividerType: "cloud",
-    activities: [
-      { label: "🎵 Play Lullaby", href: "/activities", variant: "primary" },
-      { label: "Explore this Land →", href: "/books/dream-ideas", variant: "secondary" },
-    ],
-    accentColor: "#5B9BD5",
-    textColor: "#e8d8ff",
-    flip: false,
-  },
-  // 2. Amber's Dragon Mountain
+  // 1. Dragon Mountain
   {
     id: "amber-dragon-keeper", bookSlug: "amber-the-dragon-keeper",
-    index: 2,
+    index: 1,
     emoji: "🐉",
     landName: "Dragon Mountain",
     tagline: "She didn't ask to be a dragon keeper — the dragons had other plans",
@@ -166,10 +144,10 @@ const landDefs: LandDef[] = [
     textColor: "#ffe8f5",
     flip: true,
   },
-  // 3. Poo Poo Face Town
+  // 2. Poo Poo Face Town
   {
     id: "poo-poo-face", bookSlug: "whats-your-poo-poo-face",
-    index: 3,
+    index: 2,
     emoji: "😂",
     landName: "Poo Poo Face Town",
     tagline: "Everybody makes it — even dragons, even unicorns, even your teacher",
@@ -178,7 +156,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/poo-poo-dragon.png",
     characterAlt: "Poo Poo Dragon",
     gradient: "linear-gradient(150deg, #fff3e0 0%, #ffe08a 30%, #ffb3c6 70%, #ff8fab 100%)",
-    nextGradientColor: "#e8f5e9",
+    nextGradientColor: "#1a0a2a",
     dividerType: "wave",
     activities: [
       { label: "📖 Read It To Me", href: "/read/poo-poo-face", variant: "primary" },
@@ -187,6 +165,26 @@ const landDefs: LandDef[] = [
     accentColor: "#9B6FD0",
     textColor: "#4a1060",
     flip: false,
+  },
+  // 3. Brian the Ghost's Haunted House
+  {
+    id: "brian-the-ghost", bookSlug: "brian-the-ghost",
+    index: 3,
+    emoji: "👻",
+    landName: "Brian's Haunted House",
+    tagline: "Every monster had one job: spook & scare. Brian liked to wave.",
+    bookTitle: "Brian the Ghost",
+    coverImage: "/images/books/brian-the-ghost.jpg",
+    characterImage: undefined,
+    gradient: "linear-gradient(155deg, #1a0a2a 0%, #2d1260 35%, #4a1a80 65%, #7b5ea7 100%)",
+    nextGradientColor: "#e8f5e9",
+    dividerType: "slope",
+    activities: [
+      { label: "Explore this Land →", href: "/books/brian-the-ghost", variant: "primary" },
+    ],
+    accentColor: "#7B5EA7",
+    textColor: "#f0e8ff",
+    flip: true,
   },
   // 4. Hampton's Quest Meadow
   {
@@ -200,19 +198,41 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/finding-hampton-400-height.png",
     characterAlt: "Hampton",
     gradient: "linear-gradient(155deg, #e8f5e9 0%, #a5d6a7 30%, #66bb6a 60%, #43a047 100%)",
-    nextGradientColor: "#fff8e1",
+    nextGradientColor: "#0a0422",
     dividerType: "slope",
     activities: [
       { label: "Explore this Land →", href: "/books/finding-hampton", variant: "primary" },
     ],
     accentColor: "#5CB85C",
     textColor: "#1b3a1e",
+    flip: false,
+  },
+  // 5. Dream Land
+  {
+    id: "dream-ideas", bookSlug: "dream-ideas",
+    index: 5,
+    emoji: "🌙",
+    landName: "Dream Land",
+    tagline: "Your best idea ever is waiting in a dream",
+    bookTitle: "Dream Ideas",
+    coverImage: "/images/books/dream-ideas.png",
+    characterImage: "/images/characters/dream-ideas-400-height.png",
+    characterAlt: "Dream Ideas character",
+    gradient: "linear-gradient(160deg, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 100%)",
+    nextGradientColor: "#fff8e1",
+    dividerType: "cloud",
+    activities: [
+      { label: "🎵 Play Lullaby", href: "/activities", variant: "primary" },
+      { label: "Explore this Land →", href: "/books/dream-ideas", variant: "secondary" },
+    ],
+    accentColor: "#5B9BD5",
+    textColor: "#e8d8ff",
     flip: true,
   },
-  // 5. Gilroy's Harvest Forest
+  // 6. Gilroy's Harvest Forest
   {
     id: "gilroys-gobble", bookSlug: "gilroys-gobble",
-    index: 5,
+    index: 6,
     emoji: "🦃",
     landName: "Gilroy's Harvest Forest",
     tagline: "Be different — your voice is yours and yours alone",
@@ -230,10 +250,10 @@ const landDefs: LandDef[] = [
     textColor: "#3e1a00",
     flip: false,
   },
-  // 6. Lumpiest Pumpkin Patch
+  // 7. Lumpiest Pumpkin Patch
   {
     id: "lumpiest-pumpkin", bookSlug: "the-lumpiest-pumpkin",
-    index: 6,
+    index: 7,
     emoji: "🎃",
     landName: "The Lumpiest Pumpkin Patch",
     tagline: "The most beautiful things are the ones nobody else wanted",
@@ -251,10 +271,10 @@ const landDefs: LandDef[] = [
     textColor: "#fff3e0",
     flip: true,
   },
-  // 7. Ollie's Cozy Corner
+  // 8. Ollie's Cozy Corner
   {
     id: "ollie-come-home", bookSlug: "ollie-come-home",
-    index: 7,
+    index: 8,
     emoji: "🐱",
     landName: "Ollie's Cozy Corner",
     tagline: "Adventure awaits — but home is always sweeter",
@@ -272,10 +292,10 @@ const landDefs: LandDef[] = [
     textColor: "#f0fff0",
     flip: false,
   },
-  // 8. Shut-In Button Land
+  // 9. Shut-In Button Land
   {
     id: "shut-in-button", bookSlug: "the-shut-in-button",
-    index: 8,
+    index: 9,
     emoji: "👆",
     landName: "Shut-In Button Land",
     tagline: "This button had one job — and absolutely refused to do it",
@@ -293,10 +313,10 @@ const landDefs: LandDef[] = [
     textColor: "#0a2d61",
     flip: true,
   },
-  // 9. Doodle-Do's Barnyard
+  // 10. Doodle-Do's Barnyard
   {
     id: "what-a-doodle-do", bookSlug: "what-a-doodle-do",
-    index: 9,
+    index: 10,
     emoji: "🐓",
     landName: "Doodle-Do's Barnyard",
     tagline: "One very loud rooster. Zero chill. Maximum fun.",
@@ -314,10 +334,10 @@ const landDefs: LandDef[] = [
     textColor: "#3a1a00",
     flip: false,
   },
-  // 10. Tom Turkey's Harvest Parade
+  // 11. Tom Turkey's Harvest Parade
   {
     id: "one-tom-turkey", bookSlug: "one-tom-turkey",
-    index: 10,
+    index: 11,
     emoji: "🦃",
     landName: "Tom Turkey's Harvest Parade",
     tagline: "Sung to Wheels on the Bus — now it's stuck in your head. You're welcome.",
@@ -335,10 +355,10 @@ const landDefs: LandDef[] = [
     textColor: "#fff8f0",
     flip: true,
   },
-  // 11. Bailey's Frog Dream
+  // 12. Bailey's Frog Dream
   {
     id: "frog-a-dog", bookSlug: "frog-a-dog",
-    index: 11,
+    index: 12,
     emoji: "🐸",
     landName: "Bailey's Frog Dream",
     tagline: "She was a dog — inside, she was definitely a frog",
@@ -347,7 +367,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/bailey-frog-a-dog-400.png",
     characterAlt: "Bailey the frog-dog",
     gradient: "linear-gradient(155deg, #1a1a3a 0%, #2a3a20 30%, #3a6a2a 60%, #4a9b35 100%)",
-    nextGradientColor: "#1a0a2a",
+    nextGradientColor: "#050212",
     dividerType: "hill",
     activities: [
       { label: "Explore this Land →", href: "/books/frog-a-dog", variant: "primary" },
@@ -356,35 +376,15 @@ const landDefs: LandDef[] = [
     textColor: "#e8ffe8",
     flip: false,
   },
-  // 12. Brian the Ghost's Haunted House
-  {
-    id: "brian-the-ghost", bookSlug: "brian-the-ghost",
-    index: 12,
-    emoji: "👻",
-    landName: "Brian's Haunted House",
-    tagline: "Every monster had one job: spook & scare. Brian liked to wave.",
-    bookTitle: "Brian the Ghost",
-    coverImage: "/images/books/brian-the-ghost.jpg",
-    characterImage: undefined,
-    gradient: "linear-gradient(155deg, #1a0a2a 0%, #2d1260 35%, #4a1a80 65%, #7b5ea7 100%)",
-    nextGradientColor: "#050212",
-    dividerType: "wave",
-    activities: [
-      { label: "Explore this Land →", href: "/books/brian-the-ghost", variant: "primary" },
-    ],
-    accentColor: "#7B5EA7",
-    textColor: "#f0e8ff",
-    flip: true,
-  },
 ];
 
 // Map stops for the drawer
 
 
 // Land-specific decorations
-function LandDecorations({ index }: { index: number }) {
-  // 1. Dream Ideas Land — bedtime, moons, floating stars, drifting clouds
-  if (index === 1) return (
+function LandDecorations({ slug }: { slug: string }) {
+  // Dream Land — moons, stars, drifting clouds
+  if (slug === "dream-ideas") return (
     <>
       <Stars count={22} color="rgba(200,180,255,0.65)" />
       <span aria-hidden="true" style={{position:"absolute",top:"8%",left:"4%",fontSize:34,opacity:0.72,animation:"adventureFloat 4.5s ease-in-out infinite"}}>🌙</span>
@@ -396,8 +396,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 2. Dragon Mountain — fire sparks, crystal gems, sword
-  if (index === 2) return (
+  // Dragon Mountain — fire sparks, crystal gems, sword
+  if (slug === "amber-the-dragon-keeper") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"9%",left:"4%",fontSize:30,opacity:0.72,animation:"adventureFloat 3.2s ease-in-out infinite"}}>🔥</span>
       <span aria-hidden="true" style={{position:"absolute",top:"45%",right:"3%",fontSize:20,opacity:0.6,animation:"adventureFloat 2.8s ease-in-out infinite 0.7s"}}>🔥</span>
@@ -409,8 +409,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 3. Poo Poo Face Town — silly poop, tiny toilets, rainbow
-  if (index === 3) return (
+  // Poo Poo Face Town — silly poop, tiny toilets, rainbow
+  if (slug === "whats-your-poo-poo-face") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"9%",left:"5%",fontSize:30,opacity:0.7,animation:"adventureFloat 3.2s ease-in-out infinite"}}>💩</span>
       <span aria-hidden="true" style={{position:"absolute",top:"32%",right:"4%",fontSize:24,opacity:0.6,animation:"adventureFloat 4.5s ease-in-out infinite 0.8s"}}>💩</span>
@@ -422,8 +422,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 4. Hampton's Quest Meadow — balloons floating up, confetti, stars
-  if (index === 4) return (
+  // Hampton's Quest Meadow — balloons floating up, confetti, stars
+  if (slug === "finding-hampton") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"7%",left:"5%",fontSize:28,opacity:0.72,animation:"floatUp 4s ease-in-out infinite"}}>🎈</span>
       <span aria-hidden="true" style={{position:"absolute",top:"14%",right:"6%",fontSize:24,opacity:0.65,animation:"floatUp 5.5s ease-in-out infinite 0.9s"}}>🎈</span>
@@ -435,8 +435,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 5. Gilroy's Harvest Forest — autumn leaves, turkey feathers
-  if (index === 5) return (
+  // Gilroy's Harvest Forest — autumn leaves, turkey feathers
+  if (slug === "gilroys-gobble") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"8%",right:"5%",fontSize:28,opacity:0.7,animation:"leafSpin 4.5s ease-in-out infinite"}}>🍂</span>
       <span aria-hidden="true" style={{position:"absolute",top:"22%",left:"4%",fontSize:24,opacity:0.62,animation:"leafSpin 5.5s ease-in-out infinite 0.6s"}}>🍁</span>
@@ -448,8 +448,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 6. The Lumpiest Pumpkin Patch — pumpkins, autumn leaves, cobwebs
-  if (index === 6) return (
+  // The Lumpiest Pumpkin Patch — pumpkins, autumn leaves, cobwebs
+  if (slug === "the-lumpiest-pumpkin") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"9%",left:"5%",fontSize:32,opacity:0.68,animation:"adventureFloat 4.2s ease-in-out infinite"}}>🎃</span>
       <span aria-hidden="true" style={{position:"absolute",top:"22%",right:"5%",fontSize:26,opacity:0.62,animation:"adventureFloat 5.5s ease-in-out infinite 0.8s"}}>🎃</span>
@@ -461,8 +461,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 7. Ollie's Cozy Corner — paw prints, yarn balls, cat faces
-  if (index === 7) return (
+  // Ollie's Cozy Corner — paw prints, yarn balls, cat faces
+  if (slug === "ollie-come-home") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"11%",left:"4%",fontSize:26,opacity:0.68,animation:"adventureFloat 4s ease-in-out infinite"}}>🐾</span>
       <span aria-hidden="true" style={{position:"absolute",top:"36%",right:"5%",fontSize:22,opacity:0.62,animation:"adventureFloat 5.2s ease-in-out infinite 0.7s"}}>🐾</span>
@@ -474,8 +474,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 8. Shut-In Button Land — colorful buttons of different sizes spinning slowly
-  if (index === 8) return (
+  // Shut-In Button Land — colorful buttons spinning slowly
+  if (slug === "the-shut-in-button") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"10%",left:"4%",fontSize:28,opacity:0.72,animation:"spinSlow 8s linear infinite"}}>🔵</span>
       <span aria-hidden="true" style={{position:"absolute",top:"26%",right:"5%",fontSize:22,opacity:0.68,animation:"spinSlow 6s linear infinite 1s"}}>🔴</span>
@@ -487,8 +487,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 9. Doodle-Do's Barnyard — sunrise, roosters, sunflowers
-  if (index === 9) return (
+  // Doodle-Do's Barnyard — sunrise, roosters, sunflowers
+  if (slug === "what-a-doodle-do") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"7%",right:"5%",fontSize:34,opacity:0.68,animation:"adventureFloat 5s ease-in-out infinite"}}>☀️</span>
       <span aria-hidden="true" style={{position:"absolute",top:"26%",left:"4%",fontSize:26,opacity:0.62,animation:"adventureFloat 4.5s ease-in-out infinite 0.8s"}}>🌅</span>
@@ -500,8 +500,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 10. Tom Turkey's Harvest Parade — corn, maple leaves, turkey feathers
-  if (index === 10) return (
+  // Tom Turkey's Harvest Parade — corn, maple leaves, turkey feathers
+  if (slug === "one-tom-turkey") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"10%",left:"4%",fontSize:28,opacity:0.68,animation:"leafSpin 5.2s ease-in-out infinite"}}>🍁</span>
       <span aria-hidden="true" style={{position:"absolute",top:"22%",right:"5%",fontSize:26,opacity:0.65,animation:"adventureFloat 4.5s ease-in-out infinite 0.5s"}}>🌽</span>
@@ -513,8 +513,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 11. Bailey's Frog Dream — lily pad frogs, water drops, green reeds
-  if (index === 11) return (
+  // Bailey's Frog Dream — lily pads, water drops, green reeds
+  if (slug === "frog-a-dog") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"10%",left:"4%",fontSize:30,opacity:0.68,animation:"adventureFloat 4.2s ease-in-out infinite"}}>🐸</span>
       <span aria-hidden="true" style={{position:"absolute",bottom:"28%",right:"4%",fontSize:24,opacity:0.62,animation:"adventureFloat 5.8s ease-in-out infinite 0.9s"}}>🐸</span>
@@ -526,8 +526,8 @@ function LandDecorations({ index }: { index: number }) {
     </>
   );
 
-  // 12. Brian's Haunted House — bobbing ghosts, bats, cobwebs, candles
-  if (index === 12) return (
+  // Brian's Haunted House — bobbing ghosts, bats, cobwebs, candles
+  if (slug === "brian-the-ghost") return (
     <>
       <span aria-hidden="true" style={{position:"absolute",top:"11%",left:"5%",fontSize:34,opacity:0.78,animation:"ghostFloat 3.8s ease-in-out infinite"}}>👻</span>
       <span aria-hidden="true" style={{position:"absolute",top:"40%",right:"6%",fontSize:28,opacity:0.68,animation:"ghostFloat 4.8s ease-in-out infinite 1.1s"}}>👻</span>
@@ -768,7 +768,7 @@ export default function AdventurelandPage() {
         {/* Hero → Land 1 wave seam */}
         <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 1 }}>
           <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,38 C240,10 480,58 720,30 C960,4 1200,52 1440,24 L1440,64 L0,64 Z" fill="#0a0422" />
+            <path d="M0,38 C240,10 480,58 720,30 C960,4 1200,52 1440,24 L1440,64 L0,64 Z" fill="#2d0a3a" />
           </svg>
         </div>
       </section>
@@ -778,7 +778,7 @@ export default function AdventurelandPage() {
         <AdventureLand
           key={land.id}
           {...land}
-          decorations={<LandDecorations index={land.index} />}
+          decorations={<LandDecorations slug={land.bookSlug} />}
         />
       ))}
 

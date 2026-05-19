@@ -59,7 +59,7 @@ export default function BookGames({ slug, accentColor }: Props) {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 12,
+            gap: 10,
           }}
         >
           {allCards.map(card => (
@@ -71,26 +71,26 @@ export default function BookGames({ slug, accentColor }: Props) {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 6,
-                padding: "18px 10px 14px",
-                borderRadius: 20,
+                gap: 4,
+                padding: "14px 8px 12px",
+                borderRadius: 50,
                 border: "none",
-                background: card.color,
+                background: accentColor,
                 cursor: "pointer",
                 textAlign: "center",
                 transition: "transform 0.15s, box-shadow 0.15s, filter 0.15s",
-                boxShadow: `0 4px 16px ${card.color}66`,
+                boxShadow: `0 4px 16px ${accentColor}55`,
               }}
               onMouseEnter={e => {
                 const btn = e.currentTarget as HTMLButtonElement;
-                btn.style.transform = "translateY(-4px) scale(1.05)";
-                btn.style.boxShadow = `0 10px 28px ${card.color}88`;
+                btn.style.transform = "translateY(-3px) scale(1.04)";
+                btn.style.boxShadow = `0 8px 24px ${accentColor}88`;
                 btn.style.filter = "brightness(1.1)";
               }}
               onMouseLeave={e => {
                 const btn = e.currentTarget as HTMLButtonElement;
                 btn.style.transform = "";
-                btn.style.boxShadow = `0 4px 16px ${card.color}66`;
+                btn.style.boxShadow = `0 4px 16px ${accentColor}55`;
                 btn.style.filter = "";
               }}
             >

@@ -27,11 +27,15 @@ interface MutableGameState {
   canvasH: number;
 }
 
-const AMBER_SPEED = 360; // px per second
+const AMBER_SPEED = 360;       // px per second
 const CRYSTAL_SIZE = 26;
-const AMBER_SIZE = 44;
+const CATCHER_HALF_W = 52;     // half-width of the catch basket
+const CATCHER_DEPTH = 22;      // height of the basket for hit detection
+const GIRL_FONT_SIZE = 62;     // emoji font size for the girl
 const GAME_DURATION = 30;
-const MAX_MISSES = 3;
+const MAX_MISSES = 5;
+// legacy alias so nothing else breaks
+const AMBER_SIZE = CATCHER_HALF_W;
 
 export default function AmberGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -61,7 +65,7 @@ export default function AmberGame() {
 
   useEffect(() => {
     try {
-      const hs = localStorage.getItem('ff-amber-high-score');
+      const hs = localStorage.getItem('ff-cinnamon-high-score');
       if (hs) setHighScore(parseInt(hs, 10));
     } catch (_) {}
   }, []);
@@ -76,9 +80,9 @@ export default function AmberGame() {
     setGameState('gameover');
 
     try {
-      const prev = parseInt(localStorage.getItem('ff-amber-high-score') || '0', 10);
+      const prev = parseInt(localStorage.getItem('ff-cinnamon-high-score') || '0', 10);
       if (finalScore > prev) {
-        localStorage.setItem('ff-amber-high-score', String(finalScore));
+        localStorage.setItem('ff-cinnamon-high-score', String(finalScore));
         setHighScore(finalScore);
       }
     } catch (_) {}
@@ -149,9 +153,9 @@ export default function AmberGame() {
         c.y += c.speed * dt;
 
         if (!c.collected) {
-          const dx = c.x - g.amberX;
-          const dy = c.y - (g.canvasH - AMBER_SIZE * 0.9);
-          if (Math.sqrt(dx * dx + dy * dy) < AMBER_SIZE / 2 + CRYSTAL_SIZE / 2) {
+          const dx = Math.abs(c.x - g.amberX);
+          const catchY = g.canvasH - 14; // basket bottom edge
+          if (dx < CATCHER_HALF_W + CRYSTAL_SIZE / 2 && c.y >= catchY - CATCHER_DEPTH - CRYSTAL_SIZE / 2 && c.y <= catchY + CRYSTAL_SIZE / 2) {
             c.collected = true;
             g.score += 10;
             setScore(g.score);
@@ -215,35 +219,67 @@ export default function AmberGame() {
           ctx.restore();
         }
 
-        const amberY = g.canvasH - AMBER_SIZE * 0.9;
+        // ── Draw Cinnamon (girl character + basket) ──────────────────
+        const basketBottomY = g.canvasH - 14;
+        const basketTopY    = basketBottomY - CATCHER_DEPTH;
+        const girlBaseY     = basketTopY; // emoji sits right above basket
+
+        // Glow under basket
         ctx.save();
-        const glow = ctx.createRadialGradient(g.amberX, amberY, 0, g.amberX, amberY, AMBER_SIZE);
-        glow.addColorStop(0, 'rgba(255,156,26,0.35)');
-        glow.addColorStop(1, 'rgba(255,156,26,0)');
+        const glow = ctx.createRadialGradient(g.amberX, basketBottomY, 0, g.amberX, basketBottomY, CATCHER_HALF_W * 1.3);
+        glow.addColorStop(0, 'rgba(255,100,180,0.28)');
+        glow.addColorStop(1, 'rgba(255,100,180,0)');
         ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.arc(g.amberX, amberY, AMBER_SIZE, 0, Math.PI * 2);
+        ctx.ellipse(g.amberX, basketBottomY, CATCHER_HALF_W * 1.3, 18, 0, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
 
-        ctx.fillStyle = '#ff9c1a';
+        // Basket (trapezoid shape)
+        ctx.save();
         ctx.beginPath();
-        ctx.arc(g.amberX, amberY, AMBER_SIZE / 2, 0, Math.PI * 2);
+        ctx.moveTo(g.amberX - CATCHER_HALF_W,     basketTopY);
+        ctx.lineTo(g.amberX + CATCHER_HALF_W,     basketTopY);
+        ctx.lineTo(g.amberX + CATCHER_HALF_W - 8, basketBottomY);
+        ctx.lineTo(g.amberX - CATCHER_HALF_W + 8, basketBottomY);
+        ctx.closePath();
+        const basketGrad = ctx.createLinearGradient(0, basketTopY, 0, basketBottomY);
+        basketGrad.addColorStop(0, '#f9a8d4');
+        basketGrad.addColorStop(1, '#ec4899');
+        ctx.fillStyle = basketGrad;
         ctx.fill();
-        ctx.strokeStyle = '#005a4a';
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#be185d';
+        ctx.lineWidth = 2.5;
         ctx.stroke();
+        ctx.restore();
 
-        ctx.font = `${Math.round(AMBER_SIZE * 0.68)}px serif`;
+        // Sparkle lines on basket
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(g.amberX - CATCHER_HALF_W * 0.55, basketTopY + 4);
+        ctx.lineTo(g.amberX - CATCHER_HALF_W * 0.42, basketBottomY - 4);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(g.amberX - CATCHER_HALF_W * 0.1, basketTopY + 4);
+        ctx.lineTo(g.amberX - CATCHER_HALF_W * 0.04, basketBottomY - 4);
+        ctx.stroke();
+        ctx.restore();
+
+        // Girl emoji — drawn above the basket, full height, no circle
+        ctx.save();
+        ctx.font = `${GIRL_FONT_SIZE}px serif`;
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('🐉', g.amberX, amberY + 1);
+        ctx.textBaseline = 'bottom';
+        ctx.fillText('👧', g.amberX, girlBaseY + 2);
         ctx.restore();
 
         for (let i = 0; i < MAX_MISSES; i++) {
-          ctx.font = '18px serif';
+          ctx.font = '16px serif';
           ctx.textAlign = 'left';
           ctx.textBaseline = 'top';
-          ctx.fillText(i < g.misses ? '🖤' : '❤️', 10 + i * 26, 10);
+          ctx.fillText(i < g.misses ? '🖤' : '💎', 10 + i * 24, 10);
         }
       }
 
@@ -328,7 +364,7 @@ export default function AmberGame() {
           marginTop: 0,
         }}
       >
-        🐉 Amber&apos;s Crystal Rush
+        🌸 Cinnamon&apos;s Diamond Catch
       </h3>
 
       {gameState !== 'idle' && (
@@ -380,7 +416,7 @@ export default function AmberGame() {
               borderRadius: '16px',
             }}
           >
-            <div style={{ fontSize: '3rem' }}>🐉💎</div>
+            <div style={{ fontSize: '3rem' }}>👧💎</div>
             <p
               style={{
                 fontFamily: "'Open Sans', sans-serif",
@@ -392,7 +428,7 @@ export default function AmberGame() {
                 textAlign: 'center',
               }}
             >
-              Catch crystals before they fall!<br />
+              Catch Cinnamon&apos;s diamonds before they fall!<br />
               Use <strong>arrow keys</strong> or <strong>tap the screen</strong>
             </p>
             <button
@@ -447,7 +483,7 @@ export default function AmberGame() {
                 margin: 0,
               }}
             >
-              {score >= 150 ? 'Dragon Master!' : score >= 80 ? 'Crystal Keeper!' : 'Nice Try!'}
+              {score >= 150 ? 'Diamond Master! 💎' : score >= 80 ? 'Great Catch! 🌸' : 'Nice Try! 👧'}
             </h4>
             <p style={{ fontFamily: ff, fontSize: '1.15rem', color: '#78087c', margin: 0 }}>
               Score: {score}
