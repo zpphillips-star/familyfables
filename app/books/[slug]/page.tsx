@@ -216,7 +216,7 @@ export default async function BookPage({
   const gradientStartColor = (book.gradient.match(/#[0-9a-fA-F]{6}/) ?? ['#ffffff'])[0];
 
   // dream-ideas + amber + poo-poo-face: Activity in white section, About+CTA merged in gradient section
-  const activityFirst = slug === 'dream-ideas' || slug === 'amber-the-dragon-keeper' || slug === 'whats-your-poo-poo-face' || slug === 'finding-hampton' || slug === 'gilroys-gobble';
+  const activityFirst = slug === 'dream-ideas' || slug === 'amber-the-dragon-keeper' || slug === 'whats-your-poo-poo-face' || slug === 'finding-hampton' || slug === 'gilroys-gobble' || slug === 'the-lumpiest-pumpkin' || slug === 'one-tom-turkey' || slug === 'ollie-come-home' || slug === 'what-a-doodle-do' || slug === 'the-shut-in-button' || slug === 'frog-a-dog' || slug === 'brian-the-ghost';
   // poo-poo-face uses a landscape dragon — position it differently in the hero
   const isPooPooFace = slug === 'whats-your-poo-poo-face';
 
