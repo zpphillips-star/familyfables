@@ -311,9 +311,9 @@ export default async function BookPage({
         className="book-page-hero"
         style={{
           background: book.gradient,
-          minHeight: isPooPooFace ? "62vh" : "50vh",
+          minHeight: isBrianPage ? "72vh" : isPooPooFace ? "62vh" : "50vh",
           position: "relative",
-          overflow: "hidden",
+          overflow: isBrianPage ? "visible" : "hidden",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -328,11 +328,35 @@ export default async function BookPage({
             inset: 0,
             overflow: "hidden",
             pointerEvents: "none",
-            zIndex: 1,
+            zIndex: isBrianPage ? 5 : 1,
           }}
         >
           {getDecorations(book.landIndex)}
         </div>
+
+        {/* Brian: large ghost image anchored bottom-right, bleeds into section below */}
+        {isBrianPage && book.characterImage && (
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              bottom: -80,
+              right: "clamp(-40px, -2vw, 20px)",
+              width: "clamp(280px, 42vw, 560px)",
+              zIndex: 2,
+              pointerEvents: "none",
+            }}
+          >
+            <Image
+              src={book.characterImage}
+              alt=""
+              width={560}
+              height={700}
+              style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 20px 60px rgba(0,0,0,0.5))" }}
+              priority
+            />
+          </div>
+        )}
 
         {/* Back button */}
         <div style={{ maxWidth: 1100, margin: "0 auto", width: "100%", position: "relative", zIndex: 3, marginBottom: 40 }}>
@@ -370,8 +394,8 @@ export default async function BookPage({
             zIndex: 2,
           }}
         >
-          {/* Cover / Character */}
-          {activityFirst && book.characterImage ? (
+          {/* Cover / Character — skip for Brian (rendered as absolute bg above) */}
+          {activityFirst && book.characterImage && !isBrianPage ? (
             isPooPooFace ? (
               /* poo-poo-face: dragon centered, text below — simple stacked layout */
               <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 20, position: "relative", zIndex: 2 }}>
@@ -452,8 +476,9 @@ export default async function BookPage({
           <div
             className={`book-page-text-block${isPooPooFace ? " poo-hide" : ""}`}
             style={{
-              flex: "1 1 280px",
+              flex: isBrianPage ? "1 1 100%" : "1 1 280px",
               minWidth: 240,
+              maxWidth: isBrianPage ? "55%" : undefined,
               ...(isPooPooFace ? { display: "none" } : {}),
             }}
           >
