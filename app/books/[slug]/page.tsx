@@ -221,6 +221,10 @@ export default async function BookPage({
   const activityFirst = slug === 'dream-ideas' || slug === 'amber-the-dragon-keeper' || slug === 'whats-your-poo-poo-face' || slug === 'finding-hampton' || slug === 'gilroys-gobble' || slug === 'the-lumpiest-pumpkin' || slug === 'one-tom-turkey' || slug === 'ollie-come-home' || slug === 'what-a-doodle-do' || slug === 'the-shut-in-button' || slug === 'frog-a-dog' || slug === 'brian-the-ghost';
   // poo-poo-face uses a landscape dragon — position it differently in the hero
   const isPooPooFace = slug === 'whats-your-poo-poo-face';
+  // brian-the-ghost gets a full haunted house dark theme throughout the page
+  const isBrianPage = slug === 'brian-the-ghost';
+  const brianDark = '#0d0620';          // midnight haunted bg
+  const brianMid  = '#1a0a36';          // slightly lighter for cards/sections
 
   return (
     <>
@@ -528,25 +532,44 @@ export default async function BookPage({
           </div>
         </div>
 
-        {/* Wave 1 — Hero → About (unique shape, fills white below) */}
+        {/* Wave 1 — Hero → About (unique shape, fills white/dark below) */}
         <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
           <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z" fill="#ffffff" />
+            <path d="M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z" fill={isBrianPage ? brianDark : "#ffffff"} />
           </svg>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          WHITE SECTION — About the Book (default) OR Activity (activityFirst)
+          HAUNTED / WHITE SECTION — About the Book (default) OR Activity (activityFirst)
       ══════════════════════════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#ffffff", padding: activityFirst ? "0" : "28px 24px 72px", position: "relative", overflow: "visible" }}>
+      <section style={{ backgroundColor: isBrianPage ? brianDark : "#ffffff", padding: activityFirst ? "0" : "28px 24px 72px", position: "relative", overflow: "visible" }}>
+        {/* Brian: floating haunted house atmosphere behind the activity */}
+        {isBrianPage && (
+          <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
+            <span style={{position:"absolute",top:"5%",left:"3%",fontSize:38,opacity:0.18,animation:"ghostFloat 4.2s ease-in-out infinite"}}>👻</span>
+            <span style={{position:"absolute",top:"28%",right:"4%",fontSize:28,opacity:0.14,animation:"ghostFloat 5.5s ease-in-out infinite 1.3s"}}>👻</span>
+            <span style={{position:"absolute",top:"62%",left:"2%",fontSize:22,opacity:0.12,animation:"ghostFloat 6.5s ease-in-out infinite 2.5s"}}>👻</span>
+            <span style={{position:"absolute",top:"80%",right:"3%",fontSize:26,opacity:0.13,animation:"ghostFloat 4.8s ease-in-out infinite 0.7s"}}>👻</span>
+            <span style={{position:"absolute",top:"10%",right:"6%",fontSize:22,opacity:0.16,animation:"batFly 2.8s ease-in-out infinite"}}>🦇</span>
+            <span style={{position:"absolute",top:"45%",left:"4%",fontSize:18,opacity:0.14,animation:"batFly 3.4s ease-in-out infinite 0.8s"}}>🦇</span>
+            <span style={{position:"absolute",top:"70%",right:"5%",fontSize:20,opacity:0.13,animation:"batFly 2.6s ease-in-out infinite 1.5s"}}>🦇</span>
+            <span style={{position:"absolute",top:"2%",right:"2%",fontSize:20,opacity:0.22,pointerEvents:"none"}}>🕸️</span>
+            <span style={{position:"absolute",top:"2%",left:"1%",fontSize:18,opacity:0.20,pointerEvents:"none"}}>🕸️</span>
+            <span style={{position:"absolute",bottom:"4%",right:"2%",fontSize:18,opacity:0.18,pointerEvents:"none"}}>🕸️</span>
+            <span style={{position:"absolute",top:"18%",left:"6%",fontSize:20,opacity:0.15,animation:"adventureFloat 5s ease-in-out infinite 1s"}}>🕯️</span>
+            <span style={{position:"absolute",top:"55%",right:"6%",fontSize:18,opacity:0.14,animation:"adventureFloat 4.5s ease-in-out infinite 2s"}}>🕯️</span>
+            <span style={{position:"absolute",top:"38%",left:"2%",fontSize:16,opacity:0.15,animation:"twinkle 3.2s ease-in-out infinite 0.5s"}}>⭐</span>
+            <span style={{position:"absolute",top:"88%",left:"5%",fontSize:14,opacity:0.14,animation:"twinkle 2.8s ease-in-out infinite 1.2s"}}>✨</span>
+          </div>
+        )}
         {activityFirst ? (
-          /* dream-ideas: Activity goes here in white section */
+          /* Activity section — Brian gets dark-themed */
           <>
-          <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={false} />
+          <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={isBrianPage} />
           {slug === "brian-the-ghost" && (
-            <div style={{ textAlign: "center", padding: "0 24px 48px" }}>
-              <HalloweenCountdown theme="light" />
+            <div style={{ textAlign: "center", padding: "0 24px 48px", position: "relative", zIndex: 1 }}>
+              <HalloweenCountdown theme="dark" />
             </div>
           )}
           <BookGames slug={slug} accentColor={book.accentColor} />
@@ -632,7 +655,10 @@ export default async function BookPage({
         {/* Wave 2 — About/Activity → Read Aloud (unique shape, fills Read Aloud color below) */}
         <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
           <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" className="wave-fill-read-aloud" />
+            {isBrianPage
+              ? <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" fill={brianMid} />
+              : <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" className="wave-fill-read-aloud" />
+            }
           </svg>
         </div>
       </section>
@@ -643,14 +669,14 @@ export default async function BookPage({
       {book.hasReadAloud ? (
         <section
           style={{
-            backgroundColor: undefined,
+            backgroundColor: isBrianPage ? brianMid : undefined,
             padding: "48px 24px",
             textAlign: "center",
             position: "relative",
             overflow: "visible",
             zIndex: 1,
           }}
-          className="section-read-aloud"
+          className={isBrianPage ? undefined : "section-read-aloud"}
         >
           <div style={{ maxWidth: 680, margin: "0 auto" }}>
             <p
@@ -659,7 +685,7 @@ export default async function BookPage({
                 fontWeight: 700,
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
-                color: book.accentColor,
+                color: isBrianPage ? "#9B8FD0" : book.accentColor,
                 marginBottom: 12,
                 fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
               }}
@@ -670,7 +696,7 @@ export default async function BookPage({
               style={{
                 fontFamily: "var(--font-concert-one), 'Concert One', cursive",
                 fontSize: "clamp(24px, 4vw, 40px)",
-                color: "#2D1B69",
+                color: isBrianPage ? "#e8d5ff" : "#2D1B69",
                 marginBottom: 16,
               }}
             >
@@ -679,7 +705,7 @@ export default async function BookPage({
             <p
               style={{
                 fontSize: 16,
-                color: "#4a3a6e",
+                color: isBrianPage ? "rgba(220,200,255,0.8)" : "#4a3a6e",
                 marginBottom: 32,
                 lineHeight: 1.6,
                 fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
@@ -713,7 +739,10 @@ export default async function BookPage({
           {/* Wave 3 — Read Aloud → Activity (fills above with Read Aloud color, 1px overlap eliminates seam) */}
           <div style={{ position: "absolute", bottom: -63, left: 0, width: "100%", height: 65, pointerEvents: "none", zIndex: 4 }}>
             <svg viewBox="0 0 1440 65" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-              <path d="M0,39 C300,13 620,59 940,19 C1140,5 1320,53 1440,31 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
+              {isBrianPage
+                ? <path d="M0,39 C300,13 620,59 940,19 C1140,5 1320,53 1440,31 L1440,0 L0,0 Z" fill={brianMid} />
+                : <path d="M0,39 C300,13 620,59 940,19 C1140,5 1320,53 1440,31 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
+              }
             </svg>
           </div>
         </section>
@@ -784,7 +813,10 @@ export default async function BookPage({
         {/* Wave at top — fills Read Aloud color above curve, gradient shows below */}
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 65, pointerEvents: "none", zIndex: 4 }}>
           <svg viewBox="0 0 1440 65" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <path d="M0,39 C300,13 620,59 940,19 C1140,5 1320,53 1440,31 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
+            {isBrianPage
+              ? <path d="M0,39 C300,13 620,59 940,19 C1140,5 1320,53 1440,31 L1440,0 L0,0 Z" fill={brianMid} />
+              : <path d="M0,39 C300,13 620,59 940,19 C1140,5 1320,53 1440,31 L1440,0 L0,0 Z" className="wave-fill-read-aloud" />
+            }
           </svg>
         </div>
 

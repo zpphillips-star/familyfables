@@ -284,7 +284,7 @@ export const books: Book[] = [
   },
   {
     id: "brian-the-ghost",
-    slug: "brian-the-ghost", landName: "Brian's Haunted House", landEmoji: "👻",
+    slug: "brian-the-ghost", landName: "Brian's Haunted House", landEmoji: "👻", landIndex: 12,
     title: "Brian the Ghost",
     description:
       "In the town of St. Germaine, every monster had one job: spook, boo, and scare. Every monster except Brian. While Cleo the mummy and Roman the werewolf were out terrifying the neighborhood, Brian was just... waving. A heartwarming Halloween story about the friendliest ghost around — and why being different is its own kind of magic.",
@@ -301,7 +301,6 @@ export const books: Book[] = [
     moods: ['feel-good', 'spooky'],
     themes: ["👻 Halloween", "💜 Kindness", "🤝 Friendship"],
     gradient: "linear-gradient(155deg, #1a0a2a 0%, #2d1260 35%, #4a1a80 65%, #7b5ea7 100%)",
-        landIndex: 3,
     hasReadAloud: true,
   },
 ];
