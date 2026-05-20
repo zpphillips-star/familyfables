@@ -417,7 +417,7 @@ export default async function BookPage({
                   alt={`${book.title} character`}
                   width={300}
                   height={400}
-                  style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.45))" }}
+                  style={{ width: "100%", height: "auto", maxHeight: "380px", objectFit: "contain", display: "block", filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.45))" }}
                   priority
                 />
               </div>
@@ -953,87 +953,7 @@ export default async function BookPage({
         )} {/* end !activityFirst CTA */}
       </div>{/* end gradient wrapper */}
 
-      {/* ══════════════════════════════════════════════════════════════════
-          BRIAN THE GHOST — "How We Created Brian" video section
-      ══════════════════════════════════════════════════════════════════ */}
-      {slug === 'brian-the-ghost' && (
-        <section
-          style={{
-            backgroundColor: "#0d0720",
-            padding: "72px 24px 80px",
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {/* Spooky atmosphere */}
-          <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
-            <span style={{ position: "absolute", top: "8%",   left: "5%",  fontSize: 32, opacity: 0.18, animation: "ghostFloat 5s ease-in-out infinite" }}>👻</span>
-            <span style={{ position: "absolute", top: "20%",  right: "6%", fontSize: 24, opacity: 0.14, animation: "ghostFloat 6.5s ease-in-out infinite 1.2s" }}>👻</span>
-            <span style={{ position: "absolute", bottom: "18%", left: "8%", fontSize: 20, opacity: 0.12, animation: "batFly 4.8s ease-in-out infinite 0.8s" }}>🦇</span>
-            <span style={{ position: "absolute", bottom: "28%", right: "5%", fontSize: 26, opacity: 0.1,  animation: "batFly 4s ease-in-out infinite" }}>🦇</span>
-            <span style={{ position: "absolute", top: "45%",   left: "2%",  fontSize: 16, opacity: 0.18, animation: "twinkle 3.5s ease-in-out infinite 0.5s" }}>⭐</span>
-            <span style={{ position: "absolute", top: "30%",  right: "3%", fontSize: 14, opacity: 0.16, animation: "twinkle 4s ease-in-out infinite 1.8s" }}>✨</span>
-          </div>
 
-          <div style={{ maxWidth: 700, margin: "0 auto", position: "relative", zIndex: 2 }}>
-            <p
-              style={{
-                fontSize: 13,
-                fontWeight: 700,
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                color: "#9b7dd4",
-                marginBottom: 12,
-                fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
-              }}
-            >
-              🎬 Behind the Scenes
-            </p>
-            <h2
-              style={{
-                fontFamily: "var(--font-concert-one), 'Concert One', cursive",
-                fontSize: "clamp(26px, 4vw, 42px)",
-                color: "#ffffff",
-                marginBottom: 16,
-                textShadow: "0 2px 20px rgba(123,94,167,0.7)",
-              }}
-            >
-              How We Created Brian
-            </h2>
-            <p
-              style={{
-                fontSize: "clamp(15px, 2vw, 17px)",
-                color: "rgba(255,255,255,0.68)",
-                lineHeight: 1.75,
-                marginBottom: 36,
-                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-              }}
-            >
-              Watch the magic happen — from the very first pencil strokes to the friendly little ghost who stole every kid&apos;s heart. 🖊️✨
-            </p>
-
-            <div
-              style={{
-                borderRadius: 20,
-                overflow: "hidden",
-                boxShadow: "0 16px 56px rgba(123,94,167,0.5), 0 0 0 3px rgba(123,94,167,0.35)",
-                maxWidth: 640,
-                margin: "0 auto",
-              }}
-            >
-              <video
-                controls
-                playsInline
-                style={{ width: "100%", display: "block" }}
-                poster="/images/books/brian-the-ghost.jpg"
-              >
-                <source src="/videos/brian.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </div>
-        </section>
-      )}
     </>
   );
 }
