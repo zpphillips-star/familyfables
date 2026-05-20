@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { books, AMAZON_STORE_URL } from "@/lib/books";
 import BookActivity from "@/components/BookActivity";
 import BookGames from "@/components/BookGames";
+import HalloweenCountdown from "@/components/HalloweenCountdown";
 
 // ── Static params for all 12 book slugs ──────────────────────────────────────
 export async function generateStaticParams() {
@@ -523,6 +524,9 @@ export default async function BookPage({
             >
               📚 {book.ageRange}
             </p>
+
+            {/* Halloween countdown — Brian only */}
+            {slug === "brian-the-ghost" && <HalloweenCountdown />}
           </div>
         </div>
 
