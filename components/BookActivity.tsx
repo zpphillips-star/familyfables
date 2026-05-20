@@ -1207,9 +1207,9 @@ function BrianHauntActivity({ accentColor, textColor }: { accentColor: string; t
         </div>
       )}
 
-      {/* Halloween countdown lives here — under the activity */}
+      {/* Halloween countdown — bare style, matches section heading size */}
       <div style={{ marginTop: 8 }}>
-        <HalloweenCountdown theme="dark" />
+        <HalloweenCountdown bare />
       </div>
     </div>
   );

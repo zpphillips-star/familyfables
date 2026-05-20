@@ -20,7 +20,13 @@ function calcTimeLeft(target: Date) {
   };
 }
 
-export default function HalloweenCountdown({ theme = "dark" }: { theme?: "dark" | "light" }) {
+export default function HalloweenCountdown({
+  theme = "dark",
+  bare = false,
+}: {
+  theme?: "dark" | "light";
+  bare?: boolean;
+}) {
   const [timeLeft, setTimeLeft] = useState(() => calcTimeLeft(getNextHalloween()));
 
   useEffect(() => {
@@ -37,6 +43,61 @@ export default function HalloweenCountdown({ theme = "dark" }: { theme?: "dark" 
   ];
 
   const isLight = theme === "light";
+
+  // bare = no box, large heading to match section title, fits flush in left column
+  if (bare) {
+    return (
+      <div style={{ textAlign: "center", marginTop: 32 }}>
+        <h2
+          style={{
+            fontFamily: "var(--font-concert-one), 'Concert One', cursive",
+            fontSize: "clamp(22px, 3.5vw, 36px)",
+            color: "#ff9c1a",
+            lineHeight: 1.2,
+            marginBottom: 20,
+          }}
+        >
+          🎃 Halloween Countdown
+        </h2>
+        <div style={{ display: "flex", gap: 14, justifyContent: "center" }}>
+          {units.map(({ label, value }) => (
+            <div
+              key={label}
+              style={{
+                textAlign: "center",
+                minWidth: 60,
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "var(--font-concert-one), 'Concert One', cursive",
+                  fontSize: "clamp(28px, 5vw, 42px)",
+                  color: "#ff9c1a",
+                  lineHeight: 1,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                {String(value).padStart(2, "0")}
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.55)",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  marginTop: 5,
+                }}
+              >
+                {label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
