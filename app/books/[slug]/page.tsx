@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import { books, AMAZON_STORE_URL } from "@/lib/books";
 import BookActivity from "@/components/BookActivity";
 import BookGames from "@/components/BookGames";
-import HalloweenCountdown from "@/components/HalloweenCountdown";
 
 // ── Static params for all 12 book slugs ──────────────────────────────────────
 export async function generateStaticParams() {
@@ -567,11 +566,6 @@ export default async function BookPage({
           /* Activity section — Brian gets dark-themed */
           <>
           <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={isBrianPage} />
-          {slug === "brian-the-ghost" && (
-            <div style={{ textAlign: "center", padding: "0 24px 48px", position: "relative", zIndex: 1 }}>
-              <HalloweenCountdown theme="dark" />
-            </div>
-          )}
           <BookGames slug={slug} accentColor={book.accentColor} />
           </>
         ) : (

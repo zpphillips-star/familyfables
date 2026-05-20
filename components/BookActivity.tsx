@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import CountingSheep from "@/components/games/CountingSheep";
+import HalloweenCountdown from "@/components/HalloweenCountdown";
 
 // ── Per-book activity definitions ─────────────────────────────────────────────
 
@@ -1117,6 +1118,103 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
       />
     ));
 
+// ── Brian: AI-powered haunt reply ────────────────────────────────────────────
+function BrianHauntActivity({ accentColor, textColor }: { accentColor: string; textColor?: string }) {
+  const [input, setInput] = useState("");
+  const [reply, setReply] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const fallback = (i: string) =>
+    `Ooooh, ${i}! Brian says that's the friendliest haunting he's ever heard of — he'd float right in and wave at everyone. 👻✨`;
+
+  async function submit() {
+    const val = input.trim();
+    if (!val) return;
+    setLoading(true);
+    setReply("");
+    try {
+      const res = await fetch("/api/brian-haunt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input: val }),
+      });
+      const data = await res.json();
+      setReply(data.reply || fallback(val));
+    } catch {
+      setReply(fallback(val));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14, textAlign: "left" }}>
+      <p style={{ fontSize: 16, color: textColor ?? "rgba(255,255,255,0.9)", lineHeight: 1.55, margin: 0 }}>
+        Brian the Ghost haunts with kindness — just lots of friendly waving. If you were a ghost, what would YOU haunt?
+      </p>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && !loading && submit()}
+          placeholder="I would haunt..."
+          disabled={loading}
+          style={{
+            flex: "1 1 200px",
+            padding: "10px 16px",
+            borderRadius: 12,
+            border: `2px solid ${accentColor}`,
+            fontSize: 15,
+            outline: "none",
+            fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+            background: "rgba(255,255,255,0.07)",
+            color: "#fff",
+          }}
+        />
+        <button
+          onClick={submit}
+          disabled={!input.trim() || loading}
+          style={{
+            padding: "10px 20px",
+            borderRadius: 12,
+            border: "none",
+            backgroundColor: loading ? `${accentColor}88` : accentColor,
+            color: "#fff",
+            fontWeight: 700,
+            fontSize: 15,
+            cursor: input.trim() && !loading ? "pointer" : "not-allowed",
+            fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
+            whiteSpace: "nowrap",
+            transition: "opacity 0.2s",
+          }}
+        >
+          {loading ? "👻 Thinking…" : "BOO! (nicely) 👻"}
+        </button>
+      </div>
+      {reply && (
+        <div style={{
+          padding: "14px 18px",
+          borderRadius: 14,
+          background: "rgba(155,111,208,0.18)",
+          border: `1.5px solid ${accentColor}66`,
+          fontSize: 15,
+          color: "rgba(255,255,255,0.92)",
+          lineHeight: 1.6,
+          fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+          animation: "bookFadeIn 0.4s ease forwards",
+        }}>
+          {reply}
+        </div>
+      )}
+
+      {/* Halloween countdown lives here — under the activity */}
+      <div style={{ marginTop: 8 }}>
+        <HalloweenCountdown theme="dark" />
+      </div>
+    </div>
+  );
+}
+
   if (slug === "brian-the-ghost")
     return (
       <section className="amber-activities-section" style={{ padding: "72px 24px" }}>
@@ -1128,13 +1226,7 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
             <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 36px)", color: textLight ? "#ffffff" : "#1a1060", marginBottom: 24, lineHeight: 1.2 }}>
               What would YOU haunt?
             </h2>
-            <TextInputActivity
-              prompt="Brian the Ghost haunts with kindness — just lots of friendly waving. If you were a ghost, what would YOU haunt?"
-              placeholder="I would haunt..."
-              buttonLabel="BOO! (nicely) 👻"
-              responseTemplate={(i) =>
-                `"${i}"! Brian approves. He'd probably float by and wave at everyone there too. The friendliest haunting in St. Germaine history. 👻✨`
-              }
+            <BrianHauntActivity
               accentColor={accentColor}
               textColor={textLight ? "rgba(255,255,255,0.9)" : "#2d1260"}
             />
