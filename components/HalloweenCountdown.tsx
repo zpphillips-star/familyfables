@@ -47,7 +47,7 @@ export default function HalloweenCountdown({
   // bare = no box, large heading to match section title, fits flush in left column
   if (bare) {
     return (
-      <div style={{ textAlign: "center", marginTop: 32 }}>
+      <div style={{ textAlign: "center" }}>
         <h2
           style={{
             fontFamily: "var(--font-concert-one), 'Concert One', cursive",
