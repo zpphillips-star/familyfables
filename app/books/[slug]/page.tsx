@@ -525,8 +525,6 @@ export default async function BookPage({
               📚 {book.ageRange}
             </p>
 
-            {/* Halloween countdown — Brian only */}
-            {slug === "brian-the-ghost" && <HalloweenCountdown />}
           </div>
         </div>
 
@@ -546,6 +544,11 @@ export default async function BookPage({
           /* dream-ideas: Activity goes here in white section */
           <>
           <BookActivity slug={slug} accentColor={book.accentColor} transparent textLight={false} />
+          {slug === "brian-the-ghost" && (
+            <div style={{ textAlign: "center", padding: "0 24px 48px" }}>
+              <HalloweenCountdown theme="light" />
+            </div>
+          )}
           <BookGames slug={slug} accentColor={book.accentColor} />
           </>
         ) : (

@@ -20,7 +20,7 @@ function calcTimeLeft(target: Date) {
   };
 }
 
-export default function HalloweenCountdown() {
+export default function HalloweenCountdown({ theme = "dark" }: { theme?: "dark" | "light" }) {
   const [timeLeft, setTimeLeft] = useState(() => calcTimeLeft(getNextHalloween()));
 
   useEffect(() => {
@@ -36,23 +36,27 @@ export default function HalloweenCountdown() {
     { label: "Secs", value: timeLeft.seconds },
   ];
 
+  const isLight = theme === "light";
+
   return (
     <div
       style={{
-        marginTop: 28,
-        padding: "18px 20px",
-        borderRadius: 16,
-        background: "rgba(0,0,0,0.35)",
-        backdropFilter: "blur(8px)",
-        border: "1.5px solid rgba(255,165,0,0.4)",
+        marginTop: isLight ? 40 : 28,
+        marginBottom: isLight ? 8 : 0,
+        padding: isLight ? "24px 28px" : "18px 20px",
+        borderRadius: 20,
+        background: isLight ? "rgba(255,140,0,0.07)" : "rgba(0,0,0,0.35)",
+        backdropFilter: isLight ? undefined : "blur(8px)",
+        border: isLight ? "2px solid rgba(255,140,0,0.25)" : "1.5px solid rgba(255,165,0,0.4)",
         display: "inline-block",
+        textAlign: "center" as const,
       }}
     >
       <p
         style={{
           fontFamily: "var(--font-concert-one), 'Concert One', cursive",
           fontSize: 13,
-          color: "rgba(255,200,80,0.9)",
+          color: isLight ? "#c05c00" : "rgba(255,200,80,0.9)",
           textTransform: "uppercase",
           letterSpacing: "0.14em",
           marginBottom: 12,
@@ -61,14 +65,14 @@ export default function HalloweenCountdown() {
       >
         🎃 Halloween Countdown
       </p>
-      <div style={{ display: "flex", gap: 12 }}>
+      <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
         {units.map(({ label, value }) => (
           <div
             key={label}
             style={{
               textAlign: "center",
               minWidth: 54,
-              background: "rgba(255,255,255,0.08)",
+              background: isLight ? "rgba(255,140,0,0.10)" : "rgba(255,255,255,0.08)",
               borderRadius: 10,
               padding: "8px 10px",
             }}
@@ -77,7 +81,7 @@ export default function HalloweenCountdown() {
               style={{
                 fontFamily: "var(--font-concert-one), 'Concert One', cursive",
                 fontSize: "clamp(22px, 4vw, 32px)",
-                color: "#ff9c1a",
+                color: isLight ? "#e07000" : "#ff9c1a",
                 lineHeight: 1,
                 letterSpacing: "-0.02em",
               }}
@@ -88,7 +92,7 @@ export default function HalloweenCountdown() {
               style={{
                 fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
                 fontSize: 11,
-                color: "rgba(255,255,255,0.65)",
+                color: isLight ? "rgba(100,40,0,0.65)" : "rgba(255,255,255,0.65)",
                 fontWeight: 700,
                 textTransform: "uppercase",
                 letterSpacing: "0.1em",
