@@ -55,13 +55,14 @@ function getDecorations(landIndex: number): React.ReactNode {
   // 3. Poo Poo Face Town — silly poop, toilets, rainbow
   if (landIndex === 3) return (
     <>
-      <span aria-hidden="true" style={{position:"absolute",top:"9%",left:"5%",fontSize:30,opacity:0.7,animation:"adventureFloat 3.2s ease-in-out infinite",pointerEvents:"none"}}>💩</span>
-      <span aria-hidden="true" style={{position:"absolute",top:"32%",right:"4%",fontSize:24,opacity:0.6,animation:"adventureFloat 4.5s ease-in-out infinite 0.8s",pointerEvents:"none"}}>💩</span>
-      <span aria-hidden="true" style={{position:"absolute",bottom:"18%",right:"4%",fontSize:22,opacity:0.5,animation:"adventureFloat 5s ease-in-out infinite 2s",pointerEvents:"none"}}>💩</span>
-      <span aria-hidden="true" style={{position:"absolute",bottom:"28%",left:"4%",fontSize:32,opacity:0.55,animation:"adventureFloat 5.5s ease-in-out infinite 1s",pointerEvents:"none"}}>🌈</span>
-      <span aria-hidden="true" style={{position:"absolute",bottom:"32%",right:"6%",fontSize:22,opacity:0.65,animation:"adventureFloat 3.5s ease-in-out infinite 0.3s",pointerEvents:"none"}}>🚽</span>
-      <span aria-hidden="true" style={{position:"absolute",top:"56%",left:"3%",fontSize:18,opacity:0.48,animation:"adventureFloat 4s ease-in-out infinite 1.6s",pointerEvents:"none"}}>🚽</span>
-      <span aria-hidden="true" style={{position:"absolute",top:"16%",right:"9%",fontSize:18,opacity:0.5,animation:"twinkle 2.8s ease-in-out infinite 0.5s",pointerEvents:"none"}}>⭐</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"11%",left:"5%",fontSize:34,opacity:0.78,animation:"ghostFloat 3.8s ease-in-out infinite",pointerEvents:"none"}}>👻</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"40%",right:"6%",fontSize:28,opacity:0.68,animation:"ghostFloat 4.8s ease-in-out infinite 1.1s",pointerEvents:"none"}}>👻</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"62%",left:"3%",fontSize:20,opacity:0.55,animation:"ghostFloat 6s ease-in-out infinite 2s",pointerEvents:"none"}}>👻</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"20%",right:"4%",fontSize:22,opacity:0.58,animation:"batFly 2.6s ease-in-out infinite",pointerEvents:"none"}}>🦇</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"26%",left:"4%",fontSize:20,opacity:0.52,animation:"batFly 3.2s ease-in-out infinite 0.6s",pointerEvents:"none"}}>🦇</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"4%",right:"3%",fontSize:18,opacity:0.48,pointerEvents:"none"}}>🕸️</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"4%",left:"2%",fontSize:16,opacity:0.42,pointerEvents:"none"}}>🕸️</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"16%",right:"5%",fontSize:20,opacity:0.55,animation:"adventureFloat 5s ease-in-out infinite 1.5s",pointerEvents:"none"}}>🕯️</span>
     </>
   );
   // 4. Hampton's Quest Meadow — balloons floating up, confetti, stars
@@ -163,14 +164,12 @@ function getDecorations(landIndex: number): React.ReactNode {
   // 12. Brian's Haunted House — bobbing ghosts, bats, cobwebs, candles
   if (landIndex === 12) return (
     <>
-      <span aria-hidden="true" style={{position:"absolute",top:"11%",left:"5%",fontSize:34,opacity:0.78,animation:"ghostFloat 3.8s ease-in-out infinite",pointerEvents:"none"}}>👻</span>
-      <span aria-hidden="true" style={{position:"absolute",top:"40%",right:"6%",fontSize:28,opacity:0.68,animation:"ghostFloat 4.8s ease-in-out infinite 1.1s",pointerEvents:"none"}}>👻</span>
-      <span aria-hidden="true" style={{position:"absolute",top:"62%",left:"3%",fontSize:20,opacity:0.55,animation:"ghostFloat 6s ease-in-out infinite 2s",pointerEvents:"none"}}>👻</span>
-      <span aria-hidden="true" style={{position:"absolute",top:"20%",right:"4%",fontSize:22,opacity:0.58,animation:"batFly 2.6s ease-in-out infinite",pointerEvents:"none"}}>🦇</span>
-      <span aria-hidden="true" style={{position:"absolute",bottom:"26%",left:"4%",fontSize:20,opacity:0.52,animation:"batFly 3.2s ease-in-out infinite 0.6s",pointerEvents:"none"}}>🦇</span>
-      <span aria-hidden="true" style={{position:"absolute",top:"4%",right:"3%",fontSize:18,opacity:0.48,pointerEvents:"none"}}>🕸️</span>
-      <span aria-hidden="true" style={{position:"absolute",top:"4%",left:"2%",fontSize:16,opacity:0.42,pointerEvents:"none"}}>🕸️</span>
-      <span aria-hidden="true" style={{position:"absolute",bottom:"16%",right:"5%",fontSize:20,opacity:0.55,animation:"adventureFloat 5s ease-in-out infinite 1.5s",pointerEvents:"none"}}>🕯️</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"11%",left:"5%",fontSize:34,opacity:0.72,animation:"adventureFloat 4s ease-in-out infinite",pointerEvents:"none"}}>🐸</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"40%",right:"6%",fontSize:28,opacity:0.62,animation:"adventureFloat 5s ease-in-out infinite 1.1s",pointerEvents:"none"}}>🐸</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"62%",left:"3%",fontSize:20,opacity:0.5,animation:"adventureFloat 6s ease-in-out infinite 2s",pointerEvents:"none"}}>🐾</span>
+      <span aria-hidden="true" style={{position:"absolute",top:"20%",right:"4%",fontSize:22,opacity:0.55,animation:"twinkle 3s ease-in-out infinite",pointerEvents:"none"}}>🌿</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"26%",left:"4%",fontSize:20,opacity:0.5,animation:"adventureFloat 3.5s ease-in-out infinite 0.6s",pointerEvents:"none"}}>🌿</span>
+      <span aria-hidden="true" style={{position:"absolute",bottom:"16%",right:"5%",fontSize:20,opacity:0.55,animation:"twinkle 4s ease-in-out infinite 1.5s",pointerEvents:"none"}}>⭐</span>
     </>
   );
   return null;
