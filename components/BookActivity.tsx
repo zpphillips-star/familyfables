@@ -1208,7 +1208,7 @@ function BrianHauntActivity({ accentColor, textColor }: { accentColor: string; t
       )}
 
       {/* Thin separator */}
-      <div style={{
+      <div className="brian-haunt-divider" style={{
         height: 1,
         background: "linear-gradient(to right, transparent, rgba(155,111,208,0.5) 20%, rgba(155,111,208,0.5) 80%, transparent)",
         margin: "24px 0",

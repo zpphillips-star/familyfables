@@ -869,6 +869,13 @@ section     { overflow-x: hidden; }
     top: auto !important;
     right: auto !important;
   }
+  .brian-haunt-divider {
+    height: 2px !important;
+    background: linear-gradient(to right, transparent, rgba(180,130,255,0.85) 15%, rgba(220,180,255,1) 50%, rgba(180,130,255,0.85) 85%, transparent) !important;
+    margin: 36px 0 !important;
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(180,130,255,0.4);
+  }
 
   /* CTA cover+buttons — stack vertically, full width */
   .book-cta-container {
