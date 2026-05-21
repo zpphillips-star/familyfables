@@ -48,7 +48,7 @@ function PageSparkle() {
             width: 6 + (i % 3) * 4,
             height: 6 + (i % 3) * 4,
             borderRadius: '50%',
-            background: i % 2 === 0 ? ACCENT : '#9B6FD0',
+            background: i % 2 === 0 ? ACCENT : '#A5D6A7',
             opacity: 0,
             top: `${10 + i * 10}%`,
             left: `${5 + i * 12}%`,
@@ -165,7 +165,7 @@ export default function ReaderPage() {
       <div
         style={{
           minHeight: '100dvh',
-          background: 'linear-gradient(160deg, #1a0a2e 0%, #2d1060 50%, #0d1f3c 100%)',
+          background: 'linear-gradient(160deg, #0e2210 0%, #1a4018 45%, #2d7025 100%)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -220,7 +220,7 @@ export default function ReaderPage() {
         <button
           onClick={() => setStarted(true)}
           style={{
-            background: 'linear-gradient(135deg, #9B6FD0, #7C3AED)',
+            background: 'linear-gradient(135deg, #6DBF6D, #1a4018)',
             color: 'white',
             border: `2px solid ${ACCENT}80`,
             borderRadius: 50,
@@ -228,7 +228,7 @@ export default function ReaderPage() {
             fontSize: '1.1rem',
             fontWeight: 700,
             cursor: 'pointer',
-            boxShadow: '0 6px 24px rgba(155,111,208,0.5)',
+            boxShadow: '0 6px 24px rgba(92,184,92,0.45)',
             letterSpacing: '0.03em',
             marginBottom: 16,
           }}
@@ -267,7 +267,7 @@ export default function ReaderPage() {
     <div
       style={{
         minHeight: '100dvh',
-        background: '#0a0018',
+        background: '#0a1a0c',
         display: 'flex',
         flexDirection: 'column',
         userSelect: 'none',
@@ -282,7 +282,7 @@ export default function ReaderPage() {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '10px 16px',
-        background: 'rgba(0,0,0,0.6)',
+        background: 'rgba(10,26,12,0.82)',
         backdropFilter: 'blur(8px)',
         borderBottom: `1px solid ${ACCENT}26`,
         zIndex: 10,
@@ -419,8 +419,8 @@ export default function ReaderPage() {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '10px 16px',
-        background: 'rgba(0,0,0,0.7)',
-        borderTop: '1px solid rgba(255,255,255,0.08)',
+        background: 'rgba(10,26,12,0.88)',
+        borderTop: '1px solid rgba(92,184,92,0.18)',
         gap: 12,
         flexShrink: 0,
       }}>
@@ -429,8 +429,8 @@ export default function ReaderPage() {
           disabled={pageIdx === 0}
           aria-label="Previous page"
           style={{
-            background: pageIdx === 0 ? 'rgba(255,255,255,0.05)' : 'rgba(155,111,208,0.3)',
-            border: '1px solid rgba(155,111,208,0.4)',
+            background: pageIdx === 0 ? 'rgba(255,255,255,0.05)' : 'rgba(92,184,92,0.22)',
+            border: '1px solid rgba(92,184,92,0.45)',
             borderRadius: 40,
             width: 44, height: 44,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -460,7 +460,7 @@ export default function ReaderPage() {
                   width: i === pageIdx ? 18 : 8,
                   height: 8,
                   borderRadius: 4,
-                  background: i === pageIdx ? ACCENT : i < pageIdx ? 'rgba(155,111,208,0.6)' : 'rgba(255,255,255,0.15)',
+                  background: i === pageIdx ? ACCENT : i < pageIdx ? 'rgba(92,184,92,0.55)' : 'rgba(255,255,255,0.12)',
                   border: 'none',
                   cursor: 'pointer',
                   transition: 'all 0.2s',
@@ -478,8 +478,8 @@ export default function ReaderPage() {
                 if (audioStatus !== 'idle') { stopAudio(); } else { playPage(pageIdx); }
               }}
               style={{
-                background: 'rgba(155,111,208,0.2)',
-                border: '1px solid rgba(155,111,208,0.4)',
+                background: 'rgba(92,184,92,0.18)',
+                border: '1px solid rgba(92,184,92,0.45)',
                 borderRadius: 20,
                 padding: '4px 14px',
                 color: 'rgba(255,255,255,0.7)',
@@ -498,8 +498,8 @@ export default function ReaderPage() {
           disabled={pageIdx === total - 1}
           aria-label="Next page"
           style={{
-            background: pageIdx === total - 1 ? 'rgba(255,255,255,0.05)' : 'rgba(155,111,208,0.3)',
-            border: '1px solid rgba(155,111,208,0.4)',
+            background: pageIdx === total - 1 ? 'rgba(255,255,255,0.05)' : 'rgba(92,184,92,0.22)',
+            border: '1px solid rgba(92,184,92,0.45)',
             borderRadius: 40,
             width: 44, height: 44,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
