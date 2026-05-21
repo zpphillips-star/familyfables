@@ -239,365 +239,490 @@ const SLOT_CONFIG: Record<FaceSlot, { x: number; y: number; opts: ShapeOpt[]; la
   mouth: { x: 230, y: 345, opts: MOUTH_OPTS, label: "Mouth" },
 };
 
-function PumpkinCarver({ accentColor }: { accentColor: string }) {
-  const [sel, setSel] = useState<Record<FaceSlot, string>>({
-    eyeL: "tri", eyeR: "tri", nose: "tri", mouth: "smile",
-  });
+function PumpkinStudio({ accentColor }: { accentColor: string }) {
+  interface PlacedEmoji { id:string; emoji:string; x:number; y:number }
 
-  const pick = (slot: FaceSlot, id: string) => setSel(s => ({ ...s, [slot]: id }));
+  const PUMPKINS = [
+    {name:"Classic",fill:"#E07820",dark:"#9A3F10",stem:"#2C5516"},
+    {name:"Tall",   fill:"#D76818",dark:"#874015",stem:"#244E10"},
+    {name:"Chubby", fill:"#E88028",dark:"#A04618",stem:"#2E5318"},
+    {name:"Lumpy",  fill:"#C04F10",dark:"#7E2F0C",stem:"#182F08"},
+    {name:"Ghost",  fill:"#E6E9F5",dark:"#A8B0C2",stem:"#454850"},
+    {name:"Mini",   fill:"#E96820",dark:"#974010",stem:"#264610"},
+    {name:"Spooky", fill:"#7E2FA8",dark:"#4E1878",stem:"#200038"},
+    {name:"Warty",  fill:"#CC6E18",dark:"#844010",stem:"#1C3C08"},
+    {name:"Giant",  fill:"#BF4E0C",dark:"#7E2008",stem:"#162E00"},
+    {name:"Neon",   fill:"#34C044",dark:"#169624",stem:"#083A08"},
+  ];
 
-  const slots = Object.entries(SLOT_CONFIG) as [FaceSlot, typeof SLOT_CONFIG["eyeL"]][];
+  const THEMES = [
+    {label:"😱 Scary",   bg:"#150015",tc:"#EED0FF",items:["🕷","🕸","🦇","💀","⚡","🌙","👁","🩸"]},
+    {label:"👸 Princess",bg:"#FFF0FB",tc:"#8C2A6A",items:["👑","💎","⭐","🌸","💫","🪄","🎀","💖"]},
+    {label:"🚀 Space",   bg:"#000A22",tc:"#90BAFF",items:["🌟","🚀","🪐","👽","🌙","☄","🛸","✨"]},
+    {label:"🤪 Silly",   bg:"#FFFAE0",tc:"#7A4A00",items:["😜","🤓","🥸","🎉","🎊","👅","🤡","🎈"]},
+    {label:"🧟 Monster", bg:"#081408",tc:"#88DD88",items:["🔩","💚","🦷","🪱","👹","😈","🧪","☢"]},
+    {label:"🌈 Rainbow", bg:"#FFF6F0",tc:"#6A2A90",items:["🌈","☁","⭐","💛","💙","💜","🦋","☀"]},
+    {label:"🦄 Unicorn", bg:"#FEF0FF",tc:"#7E2A9A",items:["🦄","✨","💖","🌸","🌟","🎀","💫","🍬"]},
+    {label:"🦸 Hero",    bg:"#E8F0FF",tc:"#1A2A80",items:["⚡","🛡","⭐","💪","🦸","🔴","🔵","💥"]},
+    {label:"🍂 Harvest", bg:"#FFF4E8",tc:"#6A3000",items:["🍂","🌽","🍎","🌻","🍄","🌾","🌰","🍁"]},
+    {label:"🌊 Ocean",   bg:"#E8F8FF",tc:"#0A3A6A",items:["🐠","⭐","🐚","🦀","🌊","🐙","🦑","🐬"]},
+  ];
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-      {/* SVG Pumpkin */}
-      <svg viewBox="60 100 340 360" width={260} height={270} style={{ display: "block", filter: "drop-shadow(0 8px 24px rgba(180,80,0,0.35))" }}>
-        <defs>
-          <radialGradient id="pcGlow" cx="50%" cy="42%" r="52%">
-            <stop offset="0%"   stopColor="#FFF176" />
-            <stop offset="35%"  stopColor="#FFAA00" />
-            <stop offset="75%"  stopColor="#E85000" />
-            <stop offset="100%" stopColor="#7A1A00" />
-          </radialGradient>
-          <clipPath id="pcBody">
-            <ellipse cx="230" cy="280" rx="78" ry="92" />
-            <ellipse cx="163" cy="286" rx="63" ry="80" />
-            <ellipse cx="297" cy="286" rx="63" ry="80" />
-            <ellipse cx="110" cy="294" rx="46" ry="63" />
-            <ellipse cx="350" cy="294" rx="46" ry="63" />
-          </clipPath>
-          <mask id="pcMask">
-            <rect x="0" y="0" width="460" height="500" fill="white" />
-            {slots.map(([slot, pos]) => {
-              const opt = pos.opts.find(o => o.id === sel[slot]);
-              if (!opt?.d) return null;
-              return <path key={slot} d={opt.d} transform={`translate(${pos.x},${pos.y})`} fill="black" />;
-            })}
-          </mask>
-        </defs>
+  const [pi,  setPi]  = useState(0);
+  const [ti,  setTi]  = useState(0);
+  const [held, setHeld] = useState<string|null>(null);
+  const [placed, setPlaced] = useState<PlacedEmoji[]>([]);
+  const [fs,  setFs]  = useState(false);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
-        {/* Glow layer — always visible, clipped to pumpkin shape */}
-        <g clipPath="url(#pcBody)">
-          <rect x="0" y="0" width="460" height="500" fill="url(#pcGlow)" />
-        </g>
+  const pk = PUMPKINS[pi];
+  const th = THEMES[ti];
+  const bf = "var(--font-catamaran),'Catamaran',sans-serif";
+  const hf = "var(--font-concert-one),'Concert One',cursive";
 
-        {/* Pumpkin body — carved holes reveal the glow */}
-        <g clipPath="url(#pcBody)" mask="url(#pcMask)">
-          <ellipse cx="230" cy="280" rx="78" ry="92" fill="#E8681A" />
-          <ellipse cx="163" cy="286" rx="63" ry="80" fill="#D8600E" />
-          <ellipse cx="297" cy="286" rx="63" ry="80" fill="#D8600E" />
-          <ellipse cx="110" cy="294" rx="46" ry="63" fill="#C85510" />
-          <ellipse cx="350" cy="294" rx="46" ry="63" fill="#C85510" />
-          {/* Rib shadow lines */}
-          <line x1="196" y1="194" x2="196" y2="366" stroke="#AA4408" strokeWidth="7" strokeLinecap="round" opacity="0.45" />
-          <line x1="264" y1="194" x2="264" y2="366" stroke="#AA4408" strokeWidth="7" strokeLinecap="round" opacity="0.45" />
-          <line x1="143" y1="228" x2="143" y2="355" stroke="#AA4408" strokeWidth="5" strokeLinecap="round" opacity="0.35" />
-          <line x1="317" y1="228" x2="317" y2="355" stroke="#AA4408" strokeWidth="5" strokeLinecap="round" opacity="0.35" />
-          {/* Highlight */}
-          <ellipse cx="185" cy="220" rx="22" ry="32" fill="white" opacity="0.07" />
-        </g>
+  const placeAt = (clientX: number, clientY: number, emoji: string) => {
+    const el = canvasRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = Math.min(95, Math.max(5, ((clientX - r.left) / r.width) * 100));
+    const y = Math.min(95, Math.max(5, ((clientY - r.top) / r.height) * 100));
+    setPlaced(p => [...p, { id: Math.random().toString(36).slice(2), emoji, x, y }]);
+    setHeld(null);
+  };
 
-        {/* Stem */}
-        <rect x="222" y="168" width="16" height="36" rx="5" fill="#3b661c" />
-        <path d="M229,172 Q246,152 260,160" stroke="#3b661c" strokeWidth="4" fill="none" strokeLinecap="round" />
-        <path d="M229,170 Q212,148 200,158" stroke="#4a7c25" strokeWidth="3" fill="none" strokeLinecap="round" />
+  const handleCanvasClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (held) placeAt(e.clientX, e.clientY, held);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const em = e.dataTransfer.getData("emoji");
+    if (em) placeAt(e.clientX, e.clientY, em);
+  };
+
+  const removeItem = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setPlaced(p => p.filter(x => x.id !== id));
+  };
+
+  // SVG pumpkin bodies — 10 distinct shapes in 200×200 viewbox
+  const f=pk.fill, d=pk.dark, s=pk.stem;
+
+  const stemSVG = (x:number, y:number, w:number, h:number, color:string) => (
+    <>
+      <rect x={x-w/2} y={y-h} width={w} height={h} rx={w*0.4} fill={color}/>
+      <path d={`M${x+w/2},${y-h*0.6} Q${x+w/2+14},${y-h-6} ${x+w/2+10},${y-h-16}`}
+        stroke={color} strokeWidth={3} fill="none" strokeLinecap="round"/>
+    </>
+  );
+
+  const bodies: React.ReactNode[] = [
+    // 0 Classic 5-lobe
+    <><defs><radialGradient id="glow0" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor={f} stopOpacity={0.4}/><stop offset="100%" stopColor={f} stopOpacity={0}/></radialGradient></defs>
+      <ellipse cx={100} cy={130} rx={80} ry={30} fill="url(#glow0)" opacity={0.6}/>
+      <ellipse cx={24}  cy={122} rx={20} ry={34} fill={d}/>
+      <ellipse cx={176} cy={122} rx={20} ry={34} fill={d}/>
+      <ellipse cx={60}  cy={115} rx={42} ry={54} fill={d}/>
+      <ellipse cx={140} cy={115} rx={42} ry={54} fill={d}/>
+      <ellipse cx={100} cy={110} rx={66} ry={62} fill={f}/>
+      <path d="M100,48 Q97,110 100,172" stroke={d} strokeWidth={3} fill="none" opacity={0.55}/>
+      <path d="M79,55 Q74,110 79,169" stroke={d} strokeWidth={2} fill="none" opacity={0.45}/>
+      <path d="M121,55 Q126,110 121,169" stroke={d} strokeWidth={2} fill="none" opacity={0.45}/>
+      <ellipse cx={83} cy={80} rx={16} ry={20} fill="rgba(255,255,255,0.18)"/>
+      {stemSVG(100, 48, 14, 28, s)}</>,
+
+    // 1 Tall 3-lobe
+    <><ellipse cx={58}  cy={110} rx={36} ry={72} fill={d}/>
+      <ellipse cx={142} cy={110} rx={36} ry={72} fill={d}/>
+      <ellipse cx={100} cy={106} rx={52} ry={84} fill={f}/>
+      <path d="M100,22 Q96,106 100,182" stroke={d} strokeWidth={3} fill="none" opacity={0.5}/>
+      <path d="M80,30 Q74,106 80,180" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
+      <path d="M120,30 Q126,106 120,180" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
+      <ellipse cx={86} cy={70} rx={14} ry={18} fill="rgba(255,255,255,0.16)"/>
+      {stemSVG(100, 22, 12, 26, s)}</>,
+
+    // 2 Chubby 7-lobe
+    <><ellipse cx={12}  cy={126} rx={14} ry={24} fill={d}/>
+      <ellipse cx={188} cy={126} rx={14} ry={24} fill={d}/>
+      <ellipse cx={40}  cy={120} rx={28} ry={40} fill={d}/>
+      <ellipse cx={160} cy={120} rx={28} ry={40} fill={d}/>
+      <ellipse cx={68}  cy={114} rx={44} ry={52} fill={f}/>
+      <ellipse cx={132} cy={114} rx={44} ry={52} fill={f}/>
+      <ellipse cx={100} cy={112} rx={84} ry={52} fill={f}/>
+      <path d="M100,60 Q97,112 100,168" stroke={d} strokeWidth={2} fill="none" opacity={0.45}/>
+      <path d="M82,64 Q78,112 82,166" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
+      <path d="M118,64 Q122,112 118,166" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
+      <path d="M64,68 Q60,112 64,164" stroke={d} strokeWidth={1.5} fill="none" opacity={0.35}/>
+      <path d="M136,68 Q140,112 136,164" stroke={d} strokeWidth={1.5} fill="none" opacity={0.35}/>
+      <ellipse cx={85} cy={88} rx={18} ry={14} fill="rgba(255,255,255,0.16)"/>
+      {stemSVG(100, 60, 20, 22, s)}</>,
+
+    // 3 Lumpy (irregular bumpy)
+    <><ellipse cx={28}  cy={122} rx={22} ry={36} fill={d}/>
+      <ellipse cx={172} cy={122} rx={22} ry={36} fill={d}/>
+      <ellipse cx={62}  cy={118} rx={40} ry={56} fill={d}/>
+      <ellipse cx={138} cy={118} rx={40} ry={56} fill={d}/>
+      <ellipse cx={100} cy={112} rx={68} ry={62} fill={f}/>
+      {/* Bumps */}
+      <circle cx={54} cy={88} r={9} fill={f} opacity={0.9}/>
+      <circle cx={148} cy={92} r={8} fill={f} opacity={0.9}/>
+      <circle cx={80} cy={72} r={7} fill={f} opacity={0.9}/>
+      <circle cx={122} cy={76} r={8} fill={f} opacity={0.85}/>
+      <circle cx={36} cy={110} r={6} fill={f} opacity={0.9}/>
+      <circle cx={168} cy={115} r={5} fill={f} opacity={0.9}/>
+      <path d="M100,48 Q96,112 100,172" stroke={d} strokeWidth={3} fill="none" opacity={0.5}/>
+      <path d="M79,56 Q73,112 79,170" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
+      <path d="M121,56 Q127,112 121,170" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
+      {stemSVG(100, 48, 14, 26, s)}</>,
+
+    // 4 Ghost White
+    <><defs><radialGradient id="ghostGrad" cx="40%" cy="35%" r="60%"><stop offset="0%" stopColor="white"/><stop offset="100%" stopColor={f}/></radialGradient></defs>
+      <ellipse cx={55}  cy={112} rx={42} ry={58} fill={d}/>
+      <ellipse cx={145} cy={112} rx={42} ry={58} fill={d}/>
+      <ellipse cx={100} cy={108} rx={66} ry={65} fill="url(#ghostGrad)"/>
+      <path d="M100,43 Q96,108 100,175" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
+      <path d="M82,50 Q77,108 82,173" stroke={d} strokeWidth={1.5} fill="none" opacity={0.35}/>
+      <path d="M118,50 Q123,108 118,173" stroke={d} strokeWidth={1.5} fill="none" opacity={0.35}/>
+      <ellipse cx={84} cy={78} rx={18} ry={22} fill="rgba(255,255,255,0.6)"/>
+      {stemSVG(100, 43, 13, 26, s)}</>,
+
+    // 5 Mini (small, centered lower)
+    <><ellipse cx={66}  cy={130} rx={34} ry={42} fill={d}/>
+      <ellipse cx={134} cy={130} rx={34} ry={42} fill={d}/>
+      <ellipse cx={100} cy={126} rx={52} ry={50} fill={f}/>
+      <path d="M100,76 Q97,126 100,176" stroke={d} strokeWidth={2.5} fill="none" opacity={0.5}/>
+      <path d="M84,80 Q80,126 84,174" stroke={d} strokeWidth={1.5} fill="none" opacity={0.4}/>
+      <path d="M116,80 Q120,126 116,174" stroke={d} strokeWidth={1.5} fill="none" opacity={0.4}/>
+      <ellipse cx={88} cy={104} rx={12} ry={15} fill="rgba(255,255,255,0.2)"/>
+      {stemSVG(100, 76, 11, 22, s)}</>,
+
+    // 6 Spooky Purple
+    <><defs><radialGradient id="spookyGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#CC80FF" stopOpacity={0.3}/><stop offset="100%" stopColor="#CC80FF" stopOpacity={0}/></radialGradient></defs>
+      <ellipse cx={100} cy={135} rx={82} ry={28} fill="url(#spookyGlow)" opacity={0.8}/>
+      <ellipse cx={24}  cy={122} rx={20} ry={34} fill={d}/>
+      <ellipse cx={176} cy={122} rx={20} ry={34} fill={d}/>
+      <ellipse cx={60}  cy={115} rx={42} ry={54} fill={d}/>
+      <ellipse cx={140} cy={115} rx={42} ry={54} fill={d}/>
+      <ellipse cx={100} cy={110} rx={66} ry={62} fill={f}/>
+      <path d="M100,48 Q96,110 100,172" stroke="#CC80FF" strokeWidth={2.5} fill="none" opacity={0.5}/>
+      <path d="M79,55 Q73,110 79,170" stroke="#CC80FF" strokeWidth={1.5} fill="none" opacity={0.4}/>
+      <path d="M121,55 Q127,110 121,170" stroke="#CC80FF" strokeWidth={1.5} fill="none" opacity={0.4}/>
+      <ellipse cx={83} cy={80} rx={16} ry={20} fill="rgba(255,200,255,0.22)"/>
+      {stemSVG(100, 48, 14, 28, s)}</>,
+
+    // 7 Warty (classic + scattered wart circles)
+    <><ellipse cx={24}  cy={122} rx={20} ry={34} fill={d}/>
+      <ellipse cx={176} cy={122} rx={20} ry={34} fill={d}/>
+      <ellipse cx={60}  cy={115} rx={42} ry={54} fill={d}/>
+      <ellipse cx={140} cy={115} rx={42} ry={54} fill={d}/>
+      <ellipse cx={100} cy={110} rx={66} ry={62} fill={f}/>
+      {/* Warts */}
+      <circle cx={68}  cy={96}  r={6} fill={d}/>
+      <circle cx={62}  cy={112} r={4} fill={d}/>
+      <circle cx={72}  cy={126} r={5} fill={d}/>
+      <circle cx={130} cy={98}  r={6} fill={d}/>
+      <circle cx={138} cy={116} r={4} fill={d}/>
+      <circle cx={128} cy={130} r={5} fill={d}/>
+      <circle cx={88}  cy={148} r={5} fill={d}/>
+      <circle cx={108} cy={152} r={4} fill={d}/>
+      <circle cx={44}  cy={118} r={4} fill={d}/>
+      <circle cx={158} cy={122} r={4} fill={d}/>
+      <path d="M100,48 Q96,110 100,172" stroke={d} strokeWidth={3} fill="none" opacity={0.45}/>
+      <path d="M79,55 Q73,110 79,170" stroke={d} strokeWidth={2} fill="none" opacity={0.35}/>
+      <path d="M121,55 Q127,110 121,170" stroke={d} strokeWidth={2} fill="none" opacity={0.35}/>
+      {stemSVG(100, 48, 14, 28, s)}</>,
+
+    // 8 Giant 9-lobe (very wide, squat)
+    <><ellipse cx={6}   cy={126} rx={10} ry={18} fill={d}/>
+      <ellipse cx={194} cy={126} rx={10} ry={18} fill={d}/>
+      <ellipse cx={26}  cy={122} rx={22} ry={32} fill={d}/>
+      <ellipse cx={174} cy={122} rx={22} ry={32} fill={d}/>
+      <ellipse cx={52}  cy={116} rx={34} ry={44} fill={d}/>
+      <ellipse cx={148} cy={116} rx={34} ry={44} fill={d}/>
+      <ellipse cx={76}  cy={114} rx={46} ry={52} fill={f}/>
+      <ellipse cx={124} cy={114} rx={46} ry={52} fill={f}/>
+      <ellipse cx={100} cy={112} rx={86} ry={54} fill={f}/>
+      <path d="M100,58 Q97,112 100,168" stroke={d} strokeWidth={2.5} fill="none" opacity={0.45}/>
+      <path d="M82,62 Q78,112 82,166" stroke={d} strokeWidth={2} fill="none" opacity={0.38}/>
+      <path d="M118,62 Q122,112 118,166" stroke={d} strokeWidth={2} fill="none" opacity={0.38}/>
+      <path d="M64,66 Q60,112 64,164" stroke={d} strokeWidth={1.5} fill="none" opacity={0.3}/>
+      <path d="M136,66 Q140,112 136,164" stroke={d} strokeWidth={1.5} fill="none" opacity={0.3}/>
+      <ellipse cx={85} cy={92} rx={20} ry={13} fill="rgba(255,255,255,0.16)"/>
+      {stemSVG(100, 58, 20, 20, s)}</>,
+
+    // 9 Neon Green
+    <><defs><radialGradient id="neonGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#80FF80" stopOpacity={0.4}/><stop offset="100%" stopColor="#80FF80" stopOpacity={0}/></radialGradient></defs>
+      <ellipse cx={100} cy={135} rx={78} ry={26} fill="url(#neonGlow)" opacity={0.9}/>
+      <ellipse cx={24}  cy={122} rx={20} ry={34} fill={d}/>
+      <ellipse cx={176} cy={122} rx={20} ry={34} fill={d}/>
+      <ellipse cx={60}  cy={115} rx={42} ry={54} fill={d}/>
+      <ellipse cx={140} cy={115} rx={42} ry={54} fill={d}/>
+      <ellipse cx={100} cy={110} rx={66} ry={62} fill={f}/>
+      <path d="M100,48 Q96,110 100,172" stroke="#60FF60" strokeWidth={2.5} fill="none" opacity={0.5}/>
+      <path d="M79,55 Q73,110 79,170" stroke="#60FF60" strokeWidth={1.5} fill="none" opacity={0.4}/>
+      <path d="M121,55 Q127,110 121,170" stroke="#60FF60" strokeWidth={1.5} fill="none" opacity={0.4}/>
+      <ellipse cx={83} cy={80} rx={16} ry={20} fill="rgba(200,255,200,0.25)"/>
+      {stemSVG(100, 48, 14, 28, s)}</>,
+  ];
+
+  const canvas = (
+    <div ref={canvasRef}
+      onClick={handleCanvasClick}
+      onDragOver={e=>e.preventDefault()}
+      onDrop={handleDrop}
+      style={{position:"relative",width:"100%",maxWidth:280,aspectRatio:"1",cursor:held?"crosshair":"default",
+        borderRadius:20,overflow:"hidden",background:`radial-gradient(circle, ${pk.fill}18 0%, transparent 70%)`,
+        border:`2px solid ${held?accentColor:"transparent"}`,transition:"border 0.2s",flexShrink:0}}>
+      <svg viewBox="0 0 200 200" style={{width:"100%",height:"100%",display:"block"}}>
+        {bodies[pi]}
       </svg>
+      {placed.map(item => (
+        <div key={item.id}
+          onClick={e=>removeItem(item.id,e)}
+          title="Click to remove"
+          style={{position:"absolute",left:`${item.x}%`,top:`${item.y}%`,
+            transform:"translate(-50%,-50%)",fontSize:28,cursor:"pointer",
+            userSelect:"none",lineHeight:1,
+            filter:"drop-shadow(0 2px 4px rgba(0,0,0,0.4))",
+            transition:"transform 0.1s",zIndex:10}}>
+          {item.emoji}
+        </div>
+      ))}
+      {held && <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",
+        background:"rgba(0,0,0,0.65)",color:"#fff",borderRadius:20,padding:"4px 12px",
+        fontSize:12,fontFamily:bf,pointerEvents:"none",whiteSpace:"nowrap"}}>
+        Tap pumpkin to place {held}
+      </div>}
+    </div>
+  );
 
-      {/* Shape pickers */}
-      <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 8 }}>
-        {slots.map(([slot, pos]) => (
-          <div key={slot} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#7b3fa0", textTransform: "uppercase", letterSpacing: "0.05em", width: 62, flexShrink: 0, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
-              {pos.label}
-            </span>
-            <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-              {pos.opts.map(opt => (
-                <button
-                  key={opt.id}
-                  onClick={() => pick(slot, opt.id)}
-                  style={{
-                    width: 34, height: 34, borderRadius: 7,
-                    border: `2px solid ${sel[slot] === opt.id ? accentColor : "#ddd"}`,
-                    backgroundColor: sel[slot] === opt.id ? accentColor + "22" : "rgba(255,255,255,0.8)",
-                    cursor: "pointer", fontSize: 14,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "all 0.15s",
-                    fontFamily: "system-ui",
-                    boxShadow: sel[slot] === opt.id ? `0 2px 8px ${accentColor}44` : "none",
-                  }}
-                >
-                  {opt.label}
-                </button>
-              ))}
+  const controls = (
+    <div style={{display:"flex",flexDirection:"column",gap:12,flex:1,minWidth:0}}>
+      {/* Theme tabs */}
+      <div>
+        <p style={{fontFamily:hf,fontSize:13,color:accentColor,margin:"0 0 6px",textTransform:"uppercase",letterSpacing:"0.08em"}}>🎨 Choose a Theme</p>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+          {THEMES.map((t,i)=>(
+            <button key={i} onClick={()=>setTi(i)}
+              style={{padding:"6px 10px",borderRadius:50,border:`2px solid ${i===ti?accentColor:"#ddd"}`,
+                background:i===ti?accentColor:"#fff",color:i===ti?"#fff":"#444",
+                fontWeight:700,fontSize:12,fontFamily:bf,cursor:"pointer",transition:"all 0.15s"}}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Decoration palette */}
+      <div style={{borderRadius:16,padding:12,background:th.bg,border:`1px solid ${accentColor}44`}}>
+        <p style={{fontFamily:hf,fontSize:12,color:th.tc,margin:"0 0 8px",textTransform:"uppercase",letterSpacing:"0.06em"}}>Drag or click to decorate</p>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:6}}>
+          {th.items.map(em=>(
+            <div key={em}
+              draggable
+              onDragStart={e=>{e.dataTransfer.setData("emoji",em);setHeld(null);}}
+              onClick={()=>setHeld(h=>h===em?null:em)}
+              style={{fontSize:28,textAlign:"center",padding:"8px 4px",borderRadius:12,cursor:"pointer",
+                background:held===em?"rgba(255,255,255,0.9)":"rgba(255,255,255,0.2)",
+                border:`2px solid ${held===em?accentColor:"transparent"}`,
+                transition:"all 0.15s",userSelect:"none",
+                transform:held===em?"scale(1.15)":"scale(1)"}}>
+              {em}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      </div>
+
+      {/* Pumpkin type picker */}
+      <div>
+        <p style={{fontFamily:hf,fontSize:13,color:accentColor,margin:"0 0 6px",textTransform:"uppercase",letterSpacing:"0.08em"}}>🎃 Pumpkin Type</p>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+          {PUMPKINS.map((p,i)=>(
+            <button key={i} onClick={()=>{setPi(i);setPlaced([]);}}
+              style={{padding:"6px 10px",borderRadius:50,border:`2px solid ${i===pi?accentColor:"#ddd"}`,
+                background:i===pi?p.fill:"#fff",color:i===pi?"#fff":"#444",
+                fontWeight:700,fontSize:11,fontFamily:bf,cursor:"pointer",transition:"all 0.15s"}}>
+              {p.name}
+            </button>
+          ))}
+        </div>
+        {placed.length > 0 && (
+          <button onClick={()=>setPlaced([])}
+            style={{marginTop:8,padding:"6px 14px",borderRadius:50,border:"2px solid #FF3B30",
+              background:"#fff",color:"#FF3B30",fontWeight:700,fontSize:12,fontFamily:bf,cursor:"pointer"}}>
+            🗑 Clear All
+          </button>
+        )}
       </div>
     </div>
   );
+
+  const inner = (
+    <div style={{display:"flex",flexDirection:"column",gap:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <span style={{fontFamily:hf,fontSize:"clamp(15px,2.2vw,18px)",color:accentColor}}>🎃 Pumpkin Studio</span>
+        <button onClick={()=>setFs(v=>!v)}
+          style={{padding:"6px 14px",borderRadius:50,border:`2px solid ${accentColor}`,
+            background:fs?accentColor:"#fff",color:fs?"#fff":accentColor,
+            fontWeight:700,fontSize:12,fontFamily:bf,cursor:"pointer"}}>
+          {fs?"✕ Close":"⛶ Expand"}
+        </button>
+      </div>
+      <div style={{display:"flex",gap:16,flexWrap:"wrap",alignItems:"flex-start",justifyContent:"center"}}>
+        {canvas}
+        {controls}
+      </div>
+    </div>
+  );
+
+  if (fs) return (
+    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(10,0,20,0.96)",
+      display:"flex",flexDirection:"column",padding:"clamp(12px,3vw,32px)",overflowY:"auto"}}>
+      {inner}
+    </div>
+  );
+  return inner;
 }
 
-// ── Outfit Designer (Shut-In Button page) ──────────────────────────────────────
-type ODStyle = "round" | "square" | "star" | "heart" | "flower" | "bolt" | "smiley";
-type ODOutfit = "tshirt" | "dress" | "jacket" | "overalls";
-type ODSize = "s" | "m" | "l";
-interface ODBtn { id: string; x: number; y: number; style: ODStyle; color: string; size: number; }
 
-function odAdjustHex(hex: string, amt: number): string {
-  if (!hex.startsWith("#") || hex.length < 7) return hex;
-  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
-  const cl = (n: number) => Math.max(0,Math.min(255,n));
-  return `rgb(${cl(r+amt)},${cl(g+amt)},${cl(b+amt)})`;
-}
-
-const OD_OUTFITS: Record<ODOutfit, { label: string; emoji: string; path: string }> = {
-  tshirt:   { label: "T-Shirt",  emoji: "👕", path: "M118,60 L82,62 L30,64 L20,144 L80,148 L78,338 L222,338 L220,148 L280,144 L270,64 L218,62 L182,60 A50,30 0 0,1 118,60 Z" },
-  dress:    { label: "Dress",    emoji: "👗", path: "M122,60 C112,50 92,56 82,62 L96,118 L204,118 L218,62 C208,56 188,50 178,60 A44,28 0 0,1 122,60 Z M96,118 L55,338 L245,338 L204,118 Z" },
-  jacket:   { label: "Jacket",   emoji: "🧥", path: "M118,58 L82,62 L52,68 L38,80 L24,150 L86,152 L82,338 L218,338 L214,152 L276,150 L262,80 L248,68 L218,62 L182,58 L150,115 L118,58 Z" },
-  overalls: { label: "Overalls", emoji: "👖", path: "M90,168 L78,338 L222,338 L210,168 Z M108,120 L108,168 L192,168 L192,120 Z M108,120 L105,48 L132,48 L138,120 Z M162,120 L168,48 L195,48 L192,120 Z" },
-};
-
-const OD_OUTFIT_COLORS = [
-  "#6B9EE8","#E86B6B","#6BE8A8","#E8C76B",
-  "#C76BE8","#E8906B","#A8D8A8","#F8F0FF",
-  "#2C3E60","#8B3A3A","#1F6B3A","#E8439A",
-];
-
-const OD_BTN_STYLES: { id: ODStyle; label: string; name: string }[] = [
-  { id: "round",  label: "⬤", name: "Round"  },
-  { id: "square", label: "■", name: "Square" },
-  { id: "star",   label: "★", name: "Star"   },
-  { id: "heart",  label: "♥", name: "Heart"  },
-  { id: "flower", label: "✿", name: "Flower" },
-  { id: "bolt",   label: "⚡", name: "Bolt"  },
-  { id: "smiley", label: "☺", name: "Smile"  },
-];
-
-const OD_BTN_COLORS = [
-  "#FF3B30","#FF9500","#FFD60A","#34C759",
-  "#007AFF","#AF52DE","#FF2D55","#FFFFFF",
-  "#1C1C1E","#C9A227",
-];
-
-function ODBtnShape({ b }: { b: ODBtn }) {
-  const r = b.size, h = r * 0.24, c = b.color;
-
-  switch (b.style) {
-    case "round": return (
-      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
-        <circle cx={0} cy={r*0.14} r={r} fill="#00000018"/>
-        <circle r={r} fill={c}/>
-        <circle r={r} fill="none" stroke="white" strokeWidth="1.2" opacity="0.38"/>
-        <circle r={r*0.62} fill="none" stroke="#00000022" strokeWidth="1"/>
-        <circle cx={-h} cy={-h} r={r*0.14} fill="#000" opacity="0.65"/>
-        <circle cx={h}  cy={-h} r={r*0.14} fill="#000" opacity="0.65"/>
-        <circle cx={h}  cy={h}  r={r*0.14} fill="#000" opacity="0.65"/>
-        <circle cx={-h} cy={h}  r={r*0.14} fill="#000" opacity="0.65"/>
-        <line x1={-h} y1={-h} x2={h} y2={h} stroke="#000" strokeWidth="0.7" opacity="0.3"/>
-        <line x1={h} y1={-h} x2={-h} y2={h} stroke="#000" strokeWidth="0.7" opacity="0.3"/>
-        <ellipse cx={-r*0.27} cy={-r*0.3} rx={r*0.22} ry={r*0.12} fill="white" opacity="0.5" transform={`rotate(-35,${-r*0.27},${-r*0.3})`}/>
-      </g>);
-    case "square": return (
-      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
-        <rect x={-r} y={-r+r*0.14} width={r*2} height={r*2} rx={r*0.18} fill="#00000018"/>
-        <rect x={-r} y={-r} width={r*2} height={r*2} rx={r*0.18} fill={c}/>
-        <rect x={-r} y={-r} width={r*2} height={r*2} rx={r*0.18} fill="none" stroke="white" strokeWidth="1.2" opacity="0.38"/>
-        <circle cx={-h} cy={-h} r={r*0.14} fill="#000" opacity="0.65"/>
-        <circle cx={h}  cy={-h} r={r*0.14} fill="#000" opacity="0.65"/>
-        <circle cx={h}  cy={h}  r={r*0.14} fill="#000" opacity="0.65"/>
-        <circle cx={-h} cy={h}  r={r*0.14} fill="#000" opacity="0.65"/>
-        <ellipse cx={-r*0.27} cy={-r*0.3} rx={r*0.22} ry={r*0.12} fill="white" opacity="0.5" transform={`rotate(-35,${-r*0.27},${-r*0.3})`}/>
-      </g>);
-    case "star": { const sd2 = starD(r, r*0.42, 5); return (
-      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
-        <path d={sd2} transform={`translate(0,${r*0.14})`} fill="#00000018"/>
-        <path d={sd2} fill={c}/>
-        <path d={sd2} fill="none" stroke="white" strokeWidth="1" opacity="0.35"/>
-        <circle r={r*0.2} fill="#00000030"/>
-        <ellipse cx={-r*0.18} cy={-r*0.28} rx={r*0.16} ry={r*0.09} fill="white" opacity="0.55" transform={`rotate(-30,${-r*0.18},${-r*0.28})`}/>
-      </g>);}
-    case "heart": { const hp = `M0,${r*.62} C-${r},${r*.08} -${r},-${r*.62} -${r*.48},-${r*.62} C-${r*.22},-${r*.62} 0,-${r*.35} 0,-${r*.35} C0,-${r*.35} ${r*.22},-${r*.62} ${r*.48},-${r*.62} C${r},-${r*.62} ${r},${r*.08} 0,${r*.62} Z`; return (
-      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
-        <path d={hp} transform={`translate(0,${r*0.14})`} fill="#00000018"/>
-        <path d={hp} fill={c}/>
-        <path d={hp} fill="none" stroke="white" strokeWidth="1.2" opacity="0.4"/>
-        <ellipse cx={-r*0.22} cy={-r*0.32} rx={r*0.2} ry={r*0.11} fill="white" opacity="0.5" transform={`rotate(-30,${-r*0.22},${-r*0.32})`}/>
-      </g>);}
-    case "flower": { const pts = Array.from({length:6},(_,i)=>({x:Math.cos(i*Math.PI/3)*r*.58,y:Math.sin(i*Math.PI/3)*r*.58})); return (
-      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
-        {pts.map((p,i)=><circle key={`ps${i}`} cx={p.x} cy={p.y+r*.14} r={r*.48} fill="#00000015"/>)}
-        {pts.map((p,i)=><circle key={`p${i}`} cx={p.x} cy={p.y} r={r*.48} fill={c}/>)}
-        <circle cy={r*.14} r={r*.3} fill="#00000015"/>
-        <circle r={r*.3} fill="#FFD700"/>
-        <ellipse cx={-r*.1} cy={-r*.12} rx={r*.1} ry={r*.07} fill="white" opacity="0.65"/>
-      </g>);}
-    case "bolt": { const bd = `M${r*.12},-${r} L-${r*.52},0 L${r*.18},${r*.05} L-${r*.12},${r} L${r*.52},0 L-${r*.18},-${r*.05} Z`; return (
-      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
-        <path d={bd} transform={`translate(0,${r*0.14})`} fill="#00000018"/>
-        <path d={bd} fill={c}/>
-        <path d={bd} fill="none" stroke="white" strokeWidth="1" opacity="0.4"/>
-        <ellipse cx={r*.05} cy={-r*.35} rx={r*.1} ry={r*.06} fill="white" opacity="0.5" transform={`rotate(20,${r*.05},${-r*.35})`}/>
-      </g>);}
-    case "smiley":
-    default: return (
-      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
-        <circle cy={r*.14} r={r} fill="#00000018"/>
-        <circle r={r} fill={c}/>
-        <circle r={r} fill="none" stroke="white" strokeWidth="1.2" opacity="0.35"/>
-        <circle cx={-r*.3} cy={-r*.2} r={r*.15} fill="#000" opacity="0.65"/>
-        <circle cx={r*.3}  cy={-r*.2} r={r*.15} fill="#000" opacity="0.65"/>
-        <path d={`M-${r*.38},${r*.12} Q0,${r*.5} ${r*.38},${r*.12}`} fill="none" stroke="#000" strokeWidth={r*.12} strokeLinecap="round" opacity="0.65"/>
-        <ellipse cx={-r*0.27} cy={-r*0.3} rx={r*0.22} ry={r*0.12} fill="white" opacity="0.5" transform={`rotate(-35,${-r*0.27},${-r*0.3})`}/>
-      </g>);
-  }
+// ── Shut-In Button: Outfit Designer ──────────────────────────────────────────
+function ODBtnShape({ style, color, size, cx, cy }: { style:string; color:string; size:number; cx:number; cy:number }) {
+  const s = size, h = color, d = "#00000030";
+  if (style === "square")  return <><rect x={cx-s*0.5} y={cy-s*0.5} width={s} height={s} rx={s*0.15} fill={h}/><rect x={cx-s*0.5} y={cy-s*0.5} width={s} height={s} rx={s*0.15} fill="none" stroke={d} strokeWidth={1.5}/><circle cx={cx-s*0.2} cy={cy-s*0.2} r={s*0.12} fill="none" stroke={d} strokeWidth={1}/><circle cx={cx+s*0.2} cy={cy-s*0.2} r={s*0.12} fill="none" stroke={d} strokeWidth={1}/><circle cx={cx-s*0.2} cy={cy+s*0.2} r={s*0.12} fill="none" stroke={d} strokeWidth={1}/><circle cx={cx+s*0.2} cy={cy+s*0.2} r={s*0.12} fill="none" stroke={d} strokeWidth={1}/></>;
+  if (style === "star")    return <><polygon points={starD(s*0.5, s*0.22, 5).replace(/M/,"").replace(/ L/g,",").replace(" Z","")} transform={`translate(${cx},${cy})`} fill={h}/><polygon points={starD(s*0.5, s*0.22, 5).replace(/M/,"").replace(/ L/g,",").replace(" Z","")} transform={`translate(${cx},${cy})`} fill="none" stroke={d} strokeWidth={1}/></>;
+  if (style === "heart")   return <><path d={`M${cx},${cy+s*0.35} C${cx-s*0.65},${cy} ${cx-s*0.65},${cy-s*0.45} ${cx-s*0.32},${cy-s*0.45} C${cx-s*0.1},${cy-s*0.45} ${cx},${cy-s*0.2} ${cx},${cy-s*0.2} C${cx},${cy-s*0.2} ${cx+s*0.1},${cy-s*0.45} ${cx+s*0.32},${cy-s*0.45} C${cx+s*0.65},${cy-s*0.45} ${cx+s*0.65},${cy} ${cx},${cy+s*0.35} Z`} fill={h}/></>;
+  if (style === "flower")  return <>{[0,60,120,180,240,300].map(a=><ellipse key={a} cx={cx+Math.cos(a*Math.PI/180)*s*0.3} cy={cy+Math.sin(a*Math.PI/180)*s*0.3} rx={s*0.25} ry={s*0.18} transform={`rotate(${a},${cx+Math.cos(a*Math.PI/180)*s*0.3},${cy+Math.sin(a*Math.PI/180)*s*0.3})`} fill={h}/>)}<circle cx={cx} cy={cy} r={s*0.22} fill="#FFD700"/></>;
+  if (style === "bolt")    return <><polygon points={`${cx+s*0.1},${cy-s*0.5} ${cx-s*0.15},${cy} ${cx+s*0.05},${cy} ${cx-s*0.1},${cy+s*0.5} ${cx+s*0.2},${cy-s*0.05} ${cx+s*0.05},${cy-s*0.05}`} fill={h}/></>;
+  if (style === "smiley")  return <><circle cx={cx} cy={cy} r={s*0.5} fill={h}/><circle cx={cx-s*0.16} cy={cy-s*0.1} r={s*0.09} fill="#00000060"/><circle cx={cx+s*0.16} cy={cy-s*0.1} r={s*0.09} fill="#00000060"/><path d={`M${cx-s*0.22},${cy+s*0.08} Q${cx},${cy+s*0.3} ${cx+s*0.22},${cy+s*0.08}`} stroke="#00000060" strokeWidth={s*0.06} fill="none" strokeLinecap="round"/></>;
+  // round (default)
+  return <><circle cx={cx} cy={cy} r={s*0.5} fill={h}/><circle cx={cx} cy={cy} r={s*0.5} fill="none" stroke={d} strokeWidth={1.5}/><circle cx={cx-s*0.14} cy={cy-s*0.14} r={s*0.1} fill="none" stroke={d} strokeWidth={1}/><circle cx={cx+s*0.14} cy={cy-s*0.14} r={s*0.1} fill="none" stroke={d} strokeWidth={1}/><circle cx={cx-s*0.14} cy={cy+s*0.14} r={s*0.1} fill="none" stroke={d} strokeWidth={1}/><circle cx={cx+s*0.14} cy={cy+s*0.14} r={s*0.1} fill="none" stroke={d} strokeWidth={1}/><circle cx={cx} cy={cy} r={s*0.15} fill="rgba(255,255,255,0.4)"/></>;
 }
 
 function OutfitDesigner({ accentColor }: { accentColor: string }) {
-  const [outfit, setOutfit] = useState<ODOutfit>("tshirt");
-  const [outfitColor, setOutfitColor] = useState("#6B9EE8");
-  const [btns, setBtns] = useState<ODBtn[]>([]);
-  const [bStyle, setBStyle] = useState<ODStyle>("bolt");
-  const [bColor, setBColor] = useState("#FFD60A");
-  const [bSize, setBSize] = useState<ODSize>("m");
-  const svgRef = useRef<SVGSVGElement>(null);
-  const SIZE_MAP: Record<ODSize,number> = { s:7, m:11, l:16 };
+  interface PlacedBtn { id:string; x:number; y:number; style:string; color:string; size:number }
+  const OUTFITS = ["👕 T-Shirt","👗 Dress","🧥 Jacket","👖 Overalls"];
+  const COLORS  = ["#E55","#E85","#EE5","#5C5","#5BE","#55E","#E5A","#FFF","#888","#222"];
+  const BSTYLES = ["round","square","star","heart","flower","bolt","smiley"];
+  const BCOLORS = ["#E53535","#FF8C00","#FFD700","#28C840","#007AFF","#AF52DE","#FF2D55","#FFFFFF","#888888","#1A1A2E"];
+  const BSIZES  = [12,17,22];
 
-  const handleClick = (e: React.MouseEvent<SVGSVGElement>) => {
-    const svg = svgRef.current; if (!svg) return;
+  const [outfitIdx, setOutfitIdx] = useState(0);
+  const [outfitColor, setOutfitColor] = useState("#3A5FA8");
+  const [bStyle,  setBStyle]  = useState("round");
+  const [bColor,  setBColor]  = useState("#FFD700");
+  const [bSize,   setBSize]   = useState(17);
+  const [placed,  setPlaced]  = useState<PlacedBtn[]>([]);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  const bf = "var(--font-catamaran),'Catamaran',sans-serif";
+  const hf = "var(--font-concert-one),'Concert One',cursive";
+
+  const OUTFIT_PATHS = [
+    // T-shirt
+    "M60,40 L30,60 L40,110 L70,110 L70,160 L130,160 L130,110 L160,110 L170,60 L140,40 L120,30 Q100,20 80,30 Z",
+    // Dress
+    "M70,30 Q100,18 130,30 L145,80 Q160,100 165,160 L35,160 Q40,100 55,80 Z",
+    // Jacket
+    "M55,40 L25,65 L35,115 L70,110 L70,160 L130,160 L130,110 L165,115 L175,65 L145,40 L125,30 L115,50 L100,55 L85,50 L75,30 Z",
+    // Overalls
+    "M65,20 L65,50 L45,50 L35,60 L35,160 L165,160 L165,60 L155,50 L135,50 L135,20 L115,20 L115,40 L85,40 L85,20 Z",
+  ];
+
+  const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (placed.length >= 50) return;
+    const svg = svgRef.current;
+    if (!svg) return;
     const rect = svg.getBoundingClientRect();
-    const x = (e.clientX - rect.left) * (300 / rect.width);
-    const y = (e.clientY - rect.top) * (380 / rect.height);
-    const hit = btns.find(b => Math.hypot(b.x-x, b.y-y) < Math.max(b.size*1.8, 16));
-    if (hit) { setBtns(bs => bs.filter(b => b.id !== hit.id)); return; }
-    setBtns(bs => [...bs.slice(-39), { id: Date.now().toString(36)+Math.random().toString(36).slice(2), x, y, style: bStyle, color: bColor, size: SIZE_MAP[bSize] }]);
+    const vw = 200, vh = 200;
+    const x = ((e.clientX - rect.left) / rect.width) * vw;
+    const y = ((e.clientY - rect.top) / rect.height) * vh;
+    setPlaced(p => [...p, { id: Math.random().toString(36).slice(2), x, y, style: bStyle, color: bColor, size: bSize }]);
   };
 
-  const gradId = `odg_${outfit}`;
-  const lighter = odAdjustHex(outfitColor, 45);
-  const darker  = odAdjustHex(outfitColor, -45);
-  const lapel   = odAdjustHex(outfitColor, -25);
-  const lbl = { fontSize: 11, fontWeight: 700 as const, color: "#7b3fa0", textTransform: "uppercase" as const, letterSpacing: "0.06em", margin: "0 0 5px 0", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" };
+  const removeBtn = (id: string) => setPlaced(p => p.filter(b => b.id !== id));
 
   return (
-    <div style={{ display:"flex", gap:20, flexWrap:"wrap", justifyContent:"center", alignItems:"flex-start" }}>
-      {/* Outfit canvas */}
-      <div>
-        <p style={{ textAlign:"center", fontSize:11, color:"#aaa", margin:"0 0 6px 0", fontFamily:"var(--font-catamaran),'Catamaran',sans-serif" }}>
-          👆 Tap outfit to add a button · Tap a button to remove it
-        </p>
-        <svg ref={svgRef} viewBox="0 0 300 380" width={248} height={314}
-          onClick={handleClick}
-          style={{ display:"block", cursor:"crosshair", background:"linear-gradient(150deg,#f7f2ff,#ede8ff)", borderRadius:18, boxShadow:"0 6px 28px rgba(90,45,130,0.18)" }}>
+    <div style={{ display: "flex", gap: 20, flexWrap: "wrap", alignItems: "flex-start" }}>
+      {/* SVG Canvas */}
+      <div style={{ flex: "0 0 auto" }}>
+        <svg ref={svgRef} viewBox="0 0 200 200" onClick={handleSvgClick}
+          style={{ width: "clamp(180px,40vw,260px)", height: "clamp(180px,40vw,260px)", cursor: "crosshair", borderRadius: 16, background: "#F8F8FF", border: `2px solid ${accentColor}44` }}>
           <defs>
-            <linearGradient id={gradId} x1="15%" y1="0%" x2="85%" y2="100%">
-              <stop offset="0%"   stopColor={lighter}/>
-              <stop offset="40%"  stopColor={outfitColor}/>
-              <stop offset="100%" stopColor={darker}/>
-            </linearGradient>
-            <pattern id="odFab" width="4" height="4" patternUnits="userSpaceOnUse">
-              <line x1="0" y1="2" x2="4" y2="2" stroke="black" strokeWidth="0.25" opacity="0.06"/>
-              <line x1="2" y1="0" x2="2" y2="4" stroke="black" strokeWidth="0.25" opacity="0.06"/>
+            <pattern id="fabricPat" patternUnits="userSpaceOnUse" width={6} height={6}>
+              <rect width={6} height={6} fill={outfitColor}/>
+              <line x1={0} y1={3} x2={6} y2={3} stroke="rgba(255,255,255,0.15)" strokeWidth={1}/>
             </pattern>
           </defs>
-          {/* Outfit body */}
-          <path d={OD_OUTFITS[outfit].path} fill={`url(#${gradId})`}/>
-          <path d={OD_OUTFITS[outfit].path} fill="url(#odFab)"/>
-          {/* Details per outfit */}
-          {outfit==="jacket" && <>
-            <path d="M118,58 L104,76 L124,132 L150,116 Z" fill={lapel}/>
-            <path d="M182,58 L196,76 L176,132 L150,116 Z" fill={lapel}/>
-            <line x1="150" y1="116" x2="150" y2="338" stroke={darker} strokeWidth="1.5" opacity="0.35"/>
-            {/* Pocket */}
-            <rect x="92" y="210" width="32" height="22" rx="4" fill="none" stroke={darker} strokeWidth="1.5" opacity="0.4"/>
-            <rect x="176" y="210" width="32" height="22" rx="4" fill="none" stroke={darker} strokeWidth="1.5" opacity="0.4"/>
-          </>}
-          {outfit==="dress" && <>
-            <line x1="96" y1="118" x2="204" y2="118" stroke={darker} strokeWidth="2" opacity="0.3"/>
-            <line x1="55" y1="228" x2="245" y2="228" stroke={darker} strokeWidth="1" opacity="0.18"/>
-          </>}
-          {outfit==="overalls" && <>
-            <rect x="122" y="132" width="56" height="28" rx="5" fill="none" stroke={darker} strokeWidth="1.5" opacity="0.35"/>
-            {/* Belt line */}
-            <line x1="90" y1="168" x2="210" y2="168" stroke={darker} strokeWidth="2" opacity="0.3"/>
-          </>}
-          {outfit==="tshirt" && <>
-            {/* Subtle collar highlight */}
-            <path d="M118,60 A50,30 0 0,0 182,60" fill="none" stroke="white" strokeWidth="2" opacity="0.25"/>
-          </>}
-          {/* Placed buttons */}
-          {btns.map(b=><ODBtnShape key={b.id} b={b}/>)}
+          <path d={OUTFIT_PATHS[outfitIdx]} fill="url(#fabricPat)" stroke={outfitColor} strokeWidth={2}/>
+          <path d={OUTFIT_PATHS[outfitIdx]} fill="none" stroke="rgba(0,0,0,0.25)" strokeWidth={1.5}/>
+          {placed.map(btn => (
+            <g key={btn.id} onClick={e => { e.stopPropagation(); removeBtn(btn.id); }} style={{ cursor: "pointer" }}>
+              <ODBtnShape style={btn.style} color={btn.color} size={btn.size} cx={btn.x} cy={btn.y}/>
+            </g>
+          ))}
         </svg>
       </div>
 
       {/* Controls */}
-      <div style={{ display:"flex", flexDirection:"column", gap:12, minWidth:220, maxWidth:256 }}>
-        {/* Outfit type */}
+      <div style={{ flex: 1, minWidth: 200, display: "flex", flexDirection: "column", gap: 14 }}>
         <div>
-          <p style={lbl}>Outfit</p>
-          <div style={{ display:"flex", gap:6 }}>
-            {(Object.entries(OD_OUTFITS) as [ODOutfit,typeof OD_OUTFITS["tshirt"]][]).map(([id,o])=>(
-              <button key={id} onClick={()=>{setOutfit(id);setBtns([]);}}
-                style={{ flex:1, padding:"6px 2px", borderRadius:8, border:`2px solid ${outfit===id?accentColor:"#ddd"}`, backgroundColor:outfit===id?accentColor+"22":"rgba(255,255,255,0.8)", cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", gap:2, transition:"all 0.15s" }}>
-                <span style={{ fontSize:20 }}>{o.emoji}</span>
-                <span style={{ fontSize:9, fontWeight:700, color:"#7b3fa0", fontFamily:"var(--font-catamaran),'Catamaran',sans-serif" }}>{o.label}</span>
+          <p style={{ fontFamily: hf, fontSize: 12, color: accentColor, margin: "0 0 6px", textTransform: "uppercase" }}>Outfit</p>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {OUTFITS.map((o, i) => (
+              <button key={i} onClick={() => { setOutfitIdx(i); setPlaced([]); }}
+                style={{ padding: "6px 10px", borderRadius: 50, border: `2px solid ${i===outfitIdx?accentColor:"#ddd"}`, background: i===outfitIdx?accentColor:"#fff", color: i===outfitIdx?"#fff":"#444", fontWeight: 700, fontSize: 11, fontFamily: bf, cursor: "pointer" }}>
+                {o}
               </button>
             ))}
           </div>
         </div>
-        {/* Outfit color */}
         <div>
-          <p style={lbl}>Outfit Color</p>
-          <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
-            {OD_OUTFIT_COLORS.map(c=>(
-              <button key={c} onClick={()=>setOutfitColor(c)}
-                style={{ width:26, height:26, borderRadius:"50%", background:c, border:`3px solid ${outfitColor===c?accentColor:"transparent"}`, cursor:"pointer", padding:0, boxShadow:outfitColor===c?`0 0 0 2px white,0 0 0 4px ${accentColor}`:"0 1px 4px rgba(0,0,0,0.2)", transition:"all 0.15s" }}/>
+          <p style={{ fontFamily: hf, fontSize: 12, color: accentColor, margin: "0 0 6px", textTransform: "uppercase" }}>Outfit Color</p>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {COLORS.map(c => (
+              <div key={c} onClick={() => setOutfitColor(c)}
+                style={{ width: 24, height: 24, borderRadius: "50%", background: c, border: `2px solid ${c===outfitColor?accentColor:"#ccc"}`, cursor: "pointer", transition: "transform 0.1s", transform: c===outfitColor?"scale(1.2)":"scale(1)" }}/>
             ))}
           </div>
         </div>
-        <div style={{ height:1, background:"linear-gradient(90deg,transparent,#c0a0e0,transparent)" }}/>
-        {/* Button style */}
         <div>
-          <p style={lbl}>✨ Button Style</p>
-          <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
-            {OD_BTN_STYLES.map(s=>(
-              <button key={s.id} onClick={()=>setBStyle(s.id)}
-                style={{ width:36, height:36, borderRadius:8, border:`2px solid ${bStyle===s.id?accentColor:"#ddd"}`, backgroundColor:bStyle===s.id?accentColor+"22":"rgba(255,255,255,0.8)", cursor:"pointer", fontSize:16, fontFamily:"system-ui", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:bStyle===s.id?`0 2px 8px ${accentColor}44`:"none", transition:"all 0.15s" }}>
-                {s.label}
+          <p style={{ fontFamily: hf, fontSize: 12, color: accentColor, margin: "0 0 6px", textTransform: "uppercase" }}>Button Style</p>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {BSTYLES.map(st => (
+              <button key={st} onClick={() => setBStyle(st)}
+                style={{ padding: "6px 10px", borderRadius: 50, border: `2px solid ${st===bStyle?accentColor:"#ddd"}`, background: st===bStyle?accentColor:"#fff", color: st===bStyle?"#fff":"#444", fontWeight: 700, fontSize: 11, fontFamily: bf, cursor: "pointer", textTransform: "capitalize" }}>
+                {st}
               </button>
             ))}
           </div>
         </div>
-        {/* Button color */}
         <div>
-          <p style={lbl}>Button Color</p>
-          <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
-            {OD_BTN_COLORS.map(c=>(
-              <button key={c} onClick={()=>setBColor(c)}
-                style={{ width:26, height:26, borderRadius:"50%", background:c, border:`3px solid ${bColor===c?accentColor:"transparent"}`, cursor:"pointer", padding:0, boxShadow:bColor===c?`0 0 0 2px white,0 0 0 4px ${accentColor}`:"0 1px 4px rgba(0,0,0,0.2)", transition:"all 0.15s" }}/>
+          <p style={{ fontFamily: hf, fontSize: 12, color: accentColor, margin: "0 0 6px", textTransform: "uppercase" }}>Button Color</p>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {BCOLORS.map(c => (
+              <div key={c} onClick={() => setBColor(c)}
+                style={{ width: 24, height: 24, borderRadius: "50%", background: c, border: `2px solid ${c===bColor?accentColor:"#ccc"}`, cursor: "pointer", transform: c===bColor?"scale(1.2)":"scale(1)", transition: "transform 0.1s" }}/>
             ))}
           </div>
         </div>
-        {/* Button size */}
         <div>
-          <p style={lbl}>Button Size</p>
-          <div style={{ display:"flex", gap:6 }}>
-            {(["s","m","l"] as ODSize[]).map(sz=>(
-              <button key={sz} onClick={()=>setBSize(sz)}
-                style={{ flex:1, padding:"7px 0", borderRadius:8, border:`2px solid ${bSize===sz?accentColor:"#ddd"}`, backgroundColor:bSize===sz?accentColor+"22":"rgba(255,255,255,0.8)", cursor:"pointer", fontWeight:700, fontSize:sz==="s"?11:sz==="m"?13:15, color:"#5a2d82", fontFamily:"var(--font-catamaran),'Catamaran',sans-serif", transition:"all 0.15s" }}>
-                {sz==="s"?"Small":sz==="m"?"Medium":"Large"}
+          <p style={{ fontFamily: hf, fontSize: 12, color: accentColor, margin: "0 0 6px", textTransform: "uppercase" }}>Size</p>
+          <div style={{ display: "flex", gap: 8 }}>
+            {[["S",12],["M",17],["L",22]].map(([l,v]) => (
+              <button key={l} onClick={() => setBSize(Number(v))}
+                style={{ width: 36, height: 36, borderRadius: "50%", border: `2px solid ${Number(v)===bSize?accentColor:"#ddd"}`, background: Number(v)===bSize?accentColor:"#fff", color: Number(v)===bSize?"#fff":"#444", fontWeight: 700, fontSize: 13, fontFamily: bf, cursor: "pointer" }}>
+                {l}
               </button>
             ))}
           </div>
         </div>
-        {btns.length > 0 && (
-          <button onClick={()=>setBtns([])}
-            style={{ padding:"8px 0", borderRadius:8, border:"none", background:"#fee2e2", color:"#b91c1c", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"var(--font-catamaran),'Catamaran',sans-serif" }}>
-            🗑 Clear all buttons
+        {placed.length > 0 && (
+          <button onClick={() => setPlaced([])}
+            style={{ padding: "6px 14px", borderRadius: 50, border: "2px solid #FF3B30", background: "#fff", color: "#FF3B30", fontWeight: 700, fontSize: 12, fontFamily: bf, cursor: "pointer", alignSelf: "flex-start" }}>
+            🗑 Clear All
           </button>
         )}
-        <p style={{ fontSize:12, color:"#bba8d4", textAlign:"center", margin:0, fontFamily:"var(--font-open-sans),'Open Sans',sans-serif" }}>
-          You can place up to 40 buttons!
-        </p>
+        <p style={{ fontSize: 11, color: "#999", fontFamily: bf, margin: 0 }}>Click outfit to place buttons · Click a button to remove it</p>
       </div>
     </div>
   );
@@ -2233,18 +2358,7 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
     return wrap("Your confidence chant!", "🦃", <GilroyAffirmation accentColor={accentColor} />);
 
   if (slug === "the-lumpiest-pumpkin")
-    return wrap("Carve Your Pumpkin!", "🎃", (
-      <div style={{ display: "flex", gap: 32, flexWrap: "wrap", justifyContent: "center", alignItems: "flex-start" }}>
-        <div style={{ flex: "1 1 260px", maxWidth: 320 }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: "#7b3fa0", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>🎨 Carve Your Own!</p>
-          <PumpkinCarver accentColor={accentColor} />
-        </div>
-        <div style={{ flex: "1 1 240px", maxWidth: 320 }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: "#7b3fa0", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>🎃 Which pumpkin are you?</p>
-          <PumpkinQuiz accentColor={accentColor} textLight={textLight} />
-        </div>
-      </div>
-    ));
+    return wrap("Pumpkin Studio!", "🎃", <PumpkinStudio accentColor={accentColor} />);
 
   if (slug === "the-shut-in-button")
     return wrap("Design Your Outfit!", "✨", <OutfitDesigner accentColor={accentColor} />);
