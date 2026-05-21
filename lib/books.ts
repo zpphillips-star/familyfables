@@ -160,7 +160,7 @@ export const books: Book[] = [
       "In the pumpkin patch, every pumpkin was perfectly round, perfectly smooth, and perfectly ready for the carving contest. Every pumpkin except one — lumpy, lopsided, and totally overlooked. But when a little girl spots it in the corner of the patch, she sees something different: personality. What happens when she brings the lumpiest pumpkin home is a beautiful reminder that the things that make us different are often the things that make us most wonderful.",
     image: "/images/books/lumpiest-pumpkin.png",
     coverImage: "/images/books/lumpiest-pumpkin.png",
-    characterImage: "/images/characters/lumpiest-pumpkin-400.png",
+    characterImage: "/images/characters/herolumpiest.png",
     tag: "Seasonal",
     accentColor: "#E07B39",
     ageRange: "Ages 3–7",
