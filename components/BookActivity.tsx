@@ -783,24 +783,59 @@ function AmberDragonCreator({ accentColor, textLight }: { accentColor: string; t
   const [chosenSize, setChosenSize] = useState<typeof DRAGON_SIZES[0] | null>(null);
   const [dragonName, setDragonName] = useState("");
   const [created, setCreated] = useState(false);
+  const [aiStory, setAiStory] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const tc = textLight ? "rgba(255,255,255,0.9)" : "#2d0a3a";
 
-  function reset() { setStep(0); setChosenColor(null); setChosenPower(null); setChosenSize(null); setDragonName(""); setCreated(false); }
+  function reset() { setStep(0); setChosenColor(null); setChosenPower(null); setChosenSize(null); setDragonName(""); setCreated(false); setAiStory(null); setLoading(false); }
+
+  async function handleCreate() {
+    if (!chosenColor || !chosenPower || !chosenSize) return;
+    setCreated(true);
+    setLoading(true);
+    try {
+      const res = await fetch('/api/amber-dragon', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: dragonName.trim() || "your dragon",
+          color: chosenColor.label,
+          size: chosenSize.label,
+          power: chosenPower.label,
+          powerEmoji: chosenPower.emoji,
+        }),
+      });
+      const data = await res.json();
+      setAiStory(data.story ?? null);
+    } catch {
+      setAiStory(null);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   if (created && chosenColor && chosenPower && chosenSize) {
     const name = dragonName.trim() || "your dragon";
+    const fallback = `Deep in the Dragon Mountains of Sydar lives ${name} — a ${chosenSize.emoji} ${chosenSize.label.toLowerCase()} dragon with gleaming ${chosenColor.label.toLowerCase()} scales who ${chosenPower.desc} ${chosenPower.emoji}.\n\nAmber herself has heard whispers of this dragon. *"${name} is extraordinary,"* she smiled. *"With ${chosenPower.label.toLowerCase()} powers like that, I think we're going to be the greatest dragon team in all of Sydar."*\n\nEvery creature in the land knows ${name}'s name. And now — so does the Dragon Keeper. 🌟`;
+    const storyText = aiStory ?? fallback;
+
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, textAlign: "center" }}>
         <div style={{ fontSize: 60 }}>🐉</div>
         <h3 style={{ fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: 30, color: chosenColor.hex, margin: 0, textShadow: "0 2px 12px rgba(0,0,0,0.4)" }}>
           {dragonName.trim() || "Your Dragon"}
         </h3>
-        <div style={{ background: `linear-gradient(135deg, ${chosenColor.hex}22, ${chosenColor.hex}44)`, border: `2px solid ${chosenColor.hex}88`, borderRadius: 16, padding: "20px 24px", maxWidth: 480, textAlign: "left" }}>
-          <p style={{ fontSize: 15, color: textLight ? "rgba(255,255,255,0.92)" : "#2d0a3a", lineHeight: 1.75, margin: 0 }}>
-            Deep in the Dragon Mountains of Sydar lives <strong>{name}</strong> — a {chosenSize.emoji} {chosenSize.label.toLowerCase()} dragon with gleaming {chosenColor.label.toLowerCase()} scales who {chosenPower.desc} {chosenPower.emoji}.<br /><br />
-            Amber herself has heard whispers of this dragon. <em>&ldquo;{name} is extraordinary,&rdquo;</em> she smiled. <em>&ldquo;With {chosenPower.label.toLowerCase()} powers like that, I think we&apos;re going to be the greatest dragon team in all of Sydar.&rdquo;</em><br /><br />
-            Every creature in the land knows {name}&apos;s name. And now — so does the Dragon Keeper. 🌟
-          </p>
+        <div style={{ background: `linear-gradient(135deg, ${chosenColor.hex}22, ${chosenColor.hex}44)`, border: `2px solid ${chosenColor.hex}88`, borderRadius: 16, padding: "20px 24px", maxWidth: 480, textAlign: "left", minHeight: 120 }}>
+          {loading ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, padding: "16px 0" }}>
+              <div style={{ fontSize: 32, animation: "adventureFloat 1.2s ease-in-out infinite" }}>🐉</div>
+              <p style={{ fontSize: 14, color: textLight ? "rgba(255,255,255,0.7)" : "#7b5ea7", margin: 0, fontStyle: "italic" }}>Weaving your dragon&apos;s story…</p>
+            </div>
+          ) : (
+            <p style={{ fontSize: 15, color: textLight ? "rgba(255,255,255,0.92)" : "#2d0a3a", lineHeight: 1.75, margin: 0, whiteSpace: "pre-line" }}>
+              {storyText}
+            </p>
+          )}
         </div>
         <button onClick={reset} style={{ padding: "10px 24px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
           Create another dragon 🐉
@@ -865,11 +900,11 @@ function AmberDragonCreator({ accentColor, textLight }: { accentColor: string; t
           <p style={{ fontSize: 15, color: tc, fontWeight: 600, margin: 0 }}>Give your dragon a name! 🐉</p>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <input value={dragonName} onChange={e => setDragonName(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && setCreated(true)}
+              onKeyDown={e => e.key === "Enter" && handleCreate()}
               placeholder="My dragon's name is..."
               style={{ flex: "1 1 180px", padding: "12px 16px", borderRadius: 12, border: `2px solid ${accentColor}`, fontSize: 15, outline: "none", backgroundColor: "rgba(255,255,255,0.9)", fontFamily: "var(--font-open-sans),'Open Sans',sans-serif", color: "#2d0a3a" }}
             />
-            <button onClick={() => setCreated(true)}
+            <button onClick={handleCreate}
               style={{ padding: "12px 20px", borderRadius: 12, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
               Create! 🐉
             </button>
