@@ -2118,7 +2118,7 @@ function YouPooPooFace({ accentColor, onBack }: { accentColor: string; onBack: (
         📷 Take My Photo
       </button>
       <input ref={fileInputRef} type="file" accept="image/*" capture="user" onChange={handleFile} style={{ display: "none" }} />
-      <button onClick={onBack} style={{ background: "none", border: "none", color: "#bba8d4", fontSize: 13, cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>← Pick an animal instead</button>
+      <button onClick={onBack} style={{ background: "none", border: "none", color: "#bba8d4", fontSize: 13, cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>← Pick a character instead</button>
     </div>
   );
 
@@ -2136,7 +2136,7 @@ function YouPooPooFace({ accentColor, onBack }: { accentColor: string; onBack: (
       <div style={{ fontSize: 48 }}>😬</div>
       <p style={{ fontSize: 15, color: "#c0392b", margin: 0 }}>{errMsg}</p>
       <button onClick={reset} style={{ padding: "10px 24px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>Try Again</button>
-      <button onClick={onBack} style={{ background: "none", border: "none", color: "#bba8d4", fontSize: 13, cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>← Pick an animal instead</button>
+      <button onClick={onBack} style={{ background: "none", border: "none", color: "#bba8d4", fontSize: 13, cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>← Pick a character instead</button>
     </div>
   );
 
@@ -2301,7 +2301,7 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
 
       {!animal && (
         <p style={{ color: "#bba8d4", fontSize: 14, fontFamily: "var(--font-open-sans),'Open Sans',sans-serif" }}>
-          👆 Pick an animal — or tap 📸 YOU for your own!
+          👆 Pick a character — or tap 📸 YOU for your own!
         </p>
       )}
     </div>
@@ -2649,7 +2649,7 @@ function BrianHauntActivity({ accentColor, textColor }: { accentColor: string; t
             What&apos;s YOUR Poo Poo Face?
           </h2>
           <p style={{ fontSize: 14, color: "#7B6898", textAlign: "center", marginBottom: 28, fontFamily: "var(--font-open-sans),'Open Sans',sans-serif" }}>
-            Pick an animal and find out what face they make! 🐾
+            Pick a character and find out what face they make! 🎭
           </p>
           <PooPooFaceGame accentColor={accentColor} />
         </div>
