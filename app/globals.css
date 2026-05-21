@@ -876,6 +876,14 @@ section     { overflow-x: hidden; }
     border-radius: 2px;
     box-shadow: 0 0 8px rgba(180,130,255,0.4);
   }
+  .brian-mobile-section-divider {
+    display: block;
+    height: 2px;
+    background: linear-gradient(to right, transparent, rgba(180,130,255,0.85) 15%, rgba(220,180,255,1) 50%, rgba(180,130,255,0.85) 85%, transparent);
+    margin: 0 16px 40px;
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(180,130,255,0.4);
+  }
 
   /* CTA cover+buttons — stack vertically, full width */
   .book-cta-container {
@@ -916,6 +924,7 @@ section     { overflow-x: hidden; }
 
 /* ── Always hide poo-poo-face text block (title lives in stacked layout) ─── */
 .poo-hide { display: none !important; }
+.brian-mobile-section-divider { display: none; }
 
 
 /* ── Book detail page — hero bottom padding reduction on mobile/tablet ───── */

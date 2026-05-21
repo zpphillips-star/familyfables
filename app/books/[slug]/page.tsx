@@ -698,6 +698,7 @@ export default async function BookPage({
           }}
           className={isBrianPage ? undefined : "section-read-aloud"}
         >
+          {isBrianPage && <div className="brian-mobile-section-divider" />}
           <div style={{ maxWidth: 680, margin: "0 auto" }}>
             <p
               style={{
