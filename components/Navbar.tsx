@@ -6,20 +6,21 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { books, AMAZON_STORE_URL } from "@/lib/books";
 
-// Book slugs with dark hero gradients → need light (white) text in navbar
-const darkGradientSlugs = [
-  "amber-the-dragon-keeper",
-  "dream-ideas",
-  "ollie-come-home",
-  "frog-a-dog",
-  "brian-the-ghost",
-  "the-lumpiest-pumpkin",
-];
-
-// Extract first hex color from a CSS gradient string
-function gradientFirstColor(gradient: string): string {
-  return gradient.match(/#[0-9a-fA-F]{6}/)?.[0] ?? "#dcf9f3";
-}
+// Per-book dark background for navbar (books with light-start gradients get a custom dark bg)
+const bookDarkBg: Record<string, string> = {
+  "whats-your-poo-poo-face":   "#1a0814",
+  "gilroys-gobble":             "#3d1500",
+  "finding-hampton":            "#0e2210",
+  "the-lumpiest-pumpkin":       "#3e1a00",
+  "one-tom-turkey":             "#2a0e00",
+  "what-a-doodle-do":           "#1a0800",
+  "the-shut-in-button":         "#04122a",
+  "amber-the-dragon-keeper":    "#2d0a3a",
+  "dream-ideas":                "#0a0422",
+  "ollie-come-home":            "#1a2a1a",
+  "frog-a-dog":                 "#1a1a3a",
+  "brian-the-ghost":            "#1a0a2a",
+};
 
 // Build navbar palette from current path
 function useNavTheme() {
@@ -28,17 +29,12 @@ function useNavTheme() {
   const book = slug ? books.find((b) => b.slug === slug) : null;
 
   if (book) {
-    const isDark = darkGradientSlugs.includes(book.slug);
-    const bgColor = isDark
-      ? gradientFirstColor(book.gradient)         // e.g. #0a0422 for dream-ideas
-      : `${book.accentColor}22`;                  // faint tint of accent on light books
-    const borderColor = isDark
-      ? `${book.accentColor}55`
-      : `${book.accentColor}66`;
-    const textColor   = isDark ? "rgba(255,255,255,0.88)" : "#1a1a1a";
-    const logoColor   = isDark ? "#ffffff" : "#1a1a1a";
+    const bgColor     = bookDarkBg[book.slug] ?? "#0d0b1e";
+    const borderColor = `${book.accentColor}55`;
+    const textColor   = "rgba(255,255,255,0.88)";
+    const logoColor   = "#ffffff";
     const shopBg      = book.accentColor;
-    const shopText    = isDark ? "#0a0422" : "#ffffff";
+    const shopText    = "#ffffff";
     return { bgColor, borderColor, textColor, logoColor, shopBg, shopText, mobileMenuBg: bgColor };
   }
 
