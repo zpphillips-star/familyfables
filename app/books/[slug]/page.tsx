@@ -338,6 +338,7 @@ export default async function BookPage({
         {isBrianPage && book.characterImage && (
           <div
             aria-hidden="true"
+            className="brian-ghost-hero"
             style={{
               position: "absolute",
               bottom: -80,
@@ -450,7 +451,7 @@ export default async function BookPage({
                 />
               </div>
             )
-          ) : (
+          ) : !isBrianPage ? (
             <div
               className="book-page-cover"
               style={{
@@ -470,11 +471,11 @@ export default async function BookPage({
                 priority
               />
             </div>
-          )}
+          ) : null}
 
           {/* Text block — hidden for poo-poo-face (text lives inside the stacked layout above) */}
           <div
-            className={`book-page-text-block${isPooPooFace ? " poo-hide" : ""}`}
+            className={`book-page-text-block${isPooPooFace ? " poo-hide" : ""}${isBrianPage ? " brian-text-block" : ""}`}
             style={{
               flex: isBrianPage ? "1 1 100%" : "1 1 280px",
               minWidth: 240,

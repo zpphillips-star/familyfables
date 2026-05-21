@@ -856,6 +856,15 @@ section     { overflow-x: hidden; }
     flex-direction: column !important;
     align-items: center !important;
   }
+  .brian-text-block {
+    max-width: 100% !important;
+  }
+  .brian-ghost-hero {
+    width: 180px !important;
+    bottom: -40px !important;
+    right: -10px !important;
+    opacity: 0.7;
+  }
 
   /* CTA cover+buttons — stack vertically, full width */
   .book-cta-container {
