@@ -1184,10 +1184,6 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
         <div
           style={{
             marginTop: 8,
-            padding: "28px 32px",
-            borderRadius: 24,
-            background: `linear-gradient(135deg, ${accentColor}18, ${accentColor}08)`,
-            border: `2px solid ${accentColor}44`,
             textAlign: "center",
             maxWidth: 420,
             width: "100%",
