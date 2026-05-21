@@ -929,14 +929,15 @@ interface BookActivityProps {
 
 // ── Poo Poo Face Game ─────────────────────────────────────────────────────────
 const ANIMALS = [
-  { name: "Dragon",    emoji: "🐉", face: "😤", caption: "Steam comes out the nose. Every. Single. Time." },
-  { name: "Unicorn",   emoji: "🦄", face: "😬", caption: "Tries to look majestic. Fails spectacularly." },
-  { name: "T-Rex",     emoji: "🦖", face: "😳", caption: "Tiny arms. Can't reach. Maximum struggle face." },
-  { name: "Elephant",  emoji: "🐘", face: "😮", caption: "The trunk does NOT help in this situation." },
-  { name: "Cat",       emoji: "🐱", face: "😒", caption: "Deeply judging everyone within a 3-mile radius." },
-  { name: "Dog",       emoji: "🐶", face: "🥴", caption: "Spins around 47 times first. Then the face." },
-  { name: "Penguin",   emoji: "🐧", face: "😦", caption: "Stands very still. Eyes go very wide. Very wide." },
-  { name: "Sloth",     emoji: "🦥", face: "😪", caption: "Takes so long. The face lasts 20 minutes." },
+  { name: "Astronaut",    emoji: "🧑‍🚀", image: "/images/poo-faces/characters/astronaut.png",   caption: "Zero gravity. Maximum face. Houston, we have a problem." },
+  { name: "Dad",          emoji: "👨",   image: "/images/poo-faces/characters/dad.png",          caption: "The classic Dad Poo Poo Face. It runs in the family." },
+  { name: "Dragon",       emoji: "🐉",   image: "/images/poo-faces/characters/dragon.png",       caption: "Breathes fire AND makes THIS face. Respect." },
+  { name: "Firefighter",  emoji: "🧑‍🚒", image: "/images/poo-faces/characters/firefighter.png", caption: "Brave enough to fight fires. Not this. Never this." },
+  { name: "Football",     emoji: "🏈",   image: "/images/poo-faces/characters/football.png",     caption: "Even the whole team makes it together. Teamwork!" },
+  { name: "Mermaid",      emoji: "🧜",   image: "/images/poo-faces/characters/mermaid.png",      caption: "Under the sea… still makes the face. Every time." },
+  { name: "Monkey",       emoji: "🐒",   image: "/images/poo-faces/characters/monkey.png",       caption: "Monkeys invented the Poo Poo Face. Fact." },
+  { name: "Teacher",      emoji: "👩‍🏫", image: "/images/poo-faces/characters/teacher.png",     caption: "A+ in Poo Poo Faces. Extra credit awarded." },
+  { name: "Unicorn",      emoji: "🦄",   image: "/images/poo-faces/characters/unicorn.png",      caption: "Still magical. Still majestic. Somehow." },
 ];
 
 const SHARE_MSG = `😂 Just made my Poo Poo Face and it's a MASTERPIECE 🤣 Check out "What's Your Poo Poo Face?" at familyfables.com — everybody makes it 💩 @familyfables #PooPooFace #FamilyFables`;
@@ -1195,7 +1196,11 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
             transition: "opacity 0.35s ease, transform 0.35s ease",
           }}
         >
-          <div style={{ fontSize: 72, lineHeight: 1, marginBottom: 8 }}>{animal.face}</div>
+          <img
+            src={animal.image}
+            alt={`${animal.name}'s Poo Poo Face`}
+            style={{ height: 200, width: "auto", maxWidth: "100%", objectFit: "contain", marginBottom: 12 }}
+          />
           <p style={{ fontSize: 18, fontWeight: 800, color: "#5a2d82", marginBottom: 8, fontFamily: "var(--font-concert-one),'Concert One',cursive" }}>
             {animal.emoji} {animal.name}&apos;s Poo Poo Face!
           </p>
@@ -1206,7 +1211,7 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
             onClick={() => { setSelected(null); setRevealed(false); }}
             style={{ marginTop: 16, background: "none", border: "none", color: accentColor, fontWeight: 700, fontSize: 13, cursor: "pointer", textDecoration: "underline", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}
           >
-            Try another animal →
+            Try another →
           </button>
         </div>
       )}
