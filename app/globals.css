@@ -840,13 +840,14 @@ section     { overflow-x: hidden; }
   .brian-ghost-hero {
     position: static !important;
     flex: 0 0 auto !important;
-    width: clamp(280px, 38vw, 480px) !important;
+    width: clamp(300px, 42vw, 520px) !important;
     margin-bottom: -80px !important;
     top: auto !important;
     bottom: auto !important;
     right: auto !important;
     order: 0 !important;
     display: block !important;
+    transform: rotate(2deg) !important;
   }
 }
 
@@ -879,6 +880,7 @@ section     { overflow-x: hidden; }
     width: clamp(200px, 65vw, 280px) !important;
     flex: none !important;
     margin-bottom: 8px !important;
+    transform: none !important;
   }
   .brian-haunt-divider {
     height: 2px !important;

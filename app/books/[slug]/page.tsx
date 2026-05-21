@@ -363,8 +363,8 @@ export default async function BookPage({
             margin: "0 auto",
             width: "100%",
             display: "flex",
-            alignItems: "center",
-            gap: "clamp(32px, 6vw, 80px)",
+            alignItems: isBrianPage ? "flex-end" : "center",
+            gap: isBrianPage ? "clamp(0px, 2vw, 20px)" : "clamp(32px, 6vw, 80px)",
             flexWrap: "wrap",
             position: "relative",
             zIndex: 2,
@@ -453,13 +453,13 @@ export default async function BookPage({
             <div
               aria-hidden="true"
               className="brian-ghost-hero"
-              style={{ flex: "0 0 auto", width: "clamp(280px, 38vw, 480px)", marginBottom: -80, pointerEvents: "none" }}
+              style={{ flex: "0 0 auto", width: "clamp(300px, 42vw, 520px)", marginBottom: -80, pointerEvents: "none", transform: "rotate(2deg)" }}
             >
               <Image
                 src={book.characterImage}
                 alt=""
-                width={480}
-                height={600}
+                width={520}
+                height={650}
                 style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 20px 60px rgba(0,0,0,0.5))" }}
                 priority
               />
