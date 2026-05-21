@@ -1199,7 +1199,7 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
           <img
             src={animal.image}
             alt={`${animal.name}'s Poo Poo Face`}
-            style={{ height: 200, width: "auto", maxWidth: "100%", objectFit: "contain", marginBottom: 12 }}
+            style={{ height: 200, width: "auto", maxWidth: "100%", objectFit: "contain", marginBottom: 12, display: "block", margin: "0 auto 12px auto" }}
           />
           <p style={{ fontSize: 18, fontWeight: 800, color: "#5a2d82", marginBottom: 8, fontFamily: "var(--font-concert-one),'Concert One',cursive" }}>
             {animal.emoji} {animal.name}&apos;s Poo Poo Face!
