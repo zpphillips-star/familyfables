@@ -473,6 +473,7 @@ export default async function BookPage({
               flex: "1 1 280px",
               minWidth: 240,
               maxWidth: isBrianPage ? "50%" : undefined,
+              marginLeft: isBrianPage ? "clamp(-120px, -8vw, -60px)" : undefined,
               ...(isPooPooFace ? { display: "none" } : {}),
             }}
           >

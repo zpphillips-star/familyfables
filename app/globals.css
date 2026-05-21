@@ -874,6 +874,7 @@ section     { overflow-x: hidden; }
   }
   .brian-text-block {
     max-width: 100% !important;
+    margin-left: 0 !important;
   }
   .brian-ghost-hero {
     order: -1 !important;
