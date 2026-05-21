@@ -182,7 +182,7 @@ export const books: Book[] = [
       "Ready for Thanksgiving dinner? So is Tom Turkey — and he's brought a song along for the ride. Set to the unforgettable tune of 'Wheels on the Bus,' One Tom Turkey bounces through all the greatest Thanksgiving traditions: the parade, the pie, the cozy family table. It's a read-aloud that gets louder and sillier with every page — and kids will demand it every November for years to come. Warning: this earworm may not leave until January.",
     image: "/images/books/one-tom-turkey.png",
     coverImage: "/images/books/one-tom-turkey.png",
-    characterImage: "/images/characters/turkey-nobg.png",
+    characterImage: "/images/characters/onetomhero.png",
     tag: "Holiday",
     accentColor: "#C06B39",
     ageRange: "Ages 2–5",
