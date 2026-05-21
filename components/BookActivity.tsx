@@ -1097,7 +1097,7 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
-      {/* Inspiration gallery */}
+      {/* Inspiration gallery — 12 individual mirror faces from the book */}
       <div style={{ width: "100%", textAlign: "center" }}>
         <p style={{
           fontSize: "clamp(13px, 2vw, 15px)",
@@ -1107,33 +1107,29 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
           textTransform: "uppercase",
           margin: "0 0 10px 0",
           fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
-        }}>✨ Get Inspired — Faces from the Book</p>
+        }}>✨ Swipe for Inspiration — Faces from the Book</p>
         <div style={{
           display: "flex",
           gap: 10,
           overflowX: "auto",
-          padding: "4px 8px 12px 8px",
+          padding: "4px 8px 16px 8px",
           scrollbarWidth: "none",
           WebkitOverflowScrolling: "touch",
-          justifyContent: "center",
           flexWrap: "nowrap",
+          msOverflowStyle: "none",
         }}>
-          {/* The big 12-face inspiration grid page */}
-          <div style={{ flex: "0 0 auto", borderRadius: 12, overflow: "hidden", boxShadow: "0 3px 14px rgba(90,45,130,0.22)", border: "2px solid #b97ee0" }}>
-            <img src="/images/reader/poo-poo-face/page-019.jpg" alt="Poo Poo Face inspirations from the book" style={{ height: 180, width: "auto", display: "block" }} />
-          </div>
-          {/* A few individual animal face pages for variety */}
-          {[
-            { src: "/images/reader/poo-poo-face/page-015.jpg", alt: "Unicorn poo poo face" },
-            { src: "/images/reader/poo-poo-face/page-016.jpg", alt: "Dragon poo poo face" },
-            { src: "/images/reader/poo-poo-face/page-017.jpg", alt: "Animal poo poo face" },
-            { src: "/images/reader/poo-poo-face/page-018.jpg", alt: "Animal poo poo face" },
-            { src: "/images/reader/poo-poo-face/page-020.jpg", alt: "Animal poo poo face" },
-          ].map((img, i) => (
-            <div key={i} style={{ flex: "0 0 auto", borderRadius: 12, overflow: "hidden", boxShadow: "0 3px 14px rgba(90,45,130,0.22)", border: "2px solid #b97ee0" }}>
-              <img src={img.src} alt={img.alt} style={{ height: 180, width: "auto", display: "block" }} />
-            </div>
-          ))}
+          {Array.from({ length: 12 }, (_, i) => {
+            const n = String(i + 1).padStart(2, "0");
+            return (
+              <div key={n} style={{ flex: "0 0 auto", borderRadius: 14, overflow: "hidden", boxShadow: "0 3px 14px rgba(90,45,130,0.25)", border: "2px solid #b97ee0" }}>
+                <img
+                  src={`/images/poo-faces/face-${n}.png`}
+                  alt={`Poo poo face ${n}`}
+                  style={{ height: 160, width: "auto", display: "block" }}
+                />
+              </div>
+            );
+          })}
         </div>
         {/* Thin divider below gallery */}
         <div style={{ height: 2, background: "linear-gradient(90deg, transparent 0%, #b97ee0 30%, #fff 50%, #b97ee0 70%, transparent 100%)", margin: "4px auto 4px auto", width: "80%", borderRadius: 2 }} />
