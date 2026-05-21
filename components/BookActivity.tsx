@@ -240,352 +240,336 @@ const SLOT_CONFIG: Record<FaceSlot, { x: number; y: number; opts: ShapeOpt[]; la
 };
 
 function PumpkinStudio({ accentColor }: { accentColor: string }) {
-  interface PlacedEmoji { id:string; emoji:string; x:number; y:number }
-
-  const PUMPKINS = [
-    {name:"Classic",fill:"#E07820",dark:"#9A3F10",stem:"#2C5516"},
-    {name:"Tall",   fill:"#D76818",dark:"#874015",stem:"#244E10"},
-    {name:"Chubby", fill:"#E88028",dark:"#A04618",stem:"#2E5318"},
-    {name:"Lumpy",  fill:"#C04F10",dark:"#7E2F0C",stem:"#182F08"},
-    {name:"Ghost",  fill:"#E6E9F5",dark:"#A8B0C2",stem:"#454850"},
-    {name:"Mini",   fill:"#E96820",dark:"#974010",stem:"#264610"},
-    {name:"Spooky", fill:"#7E2FA8",dark:"#4E1878",stem:"#200038"},
-    {name:"Warty",  fill:"#CC6E18",dark:"#844010",stem:"#1C3C08"},
-    {name:"Giant",  fill:"#BF4E0C",dark:"#7E2008",stem:"#162E00"},
-    {name:"Neon",   fill:"#34C044",dark:"#169624",stem:"#083A08"},
-  ];
-
-  const THEMES = [
-    {label:"😱 Scary",   bg:"#150015",tc:"#EED0FF",items:["🕷","🕸","🦇","💀","⚡","🌙","👁","🩸"]},
-    {label:"👸 Princess",bg:"#FFF0FB",tc:"#8C2A6A",items:["👑","💎","⭐","🌸","💫","🪄","🎀","💖"]},
-    {label:"🚀 Space",   bg:"#000A22",tc:"#90BAFF",items:["🌟","🚀","🪐","👽","🌙","☄","🛸","✨"]},
-    {label:"🤪 Silly",   bg:"#FFFAE0",tc:"#7A4A00",items:["😜","🤓","🥸","🎉","🎊","👅","🤡","🎈"]},
-    {label:"🧟 Monster", bg:"#081408",tc:"#88DD88",items:["🔩","💚","🦷","🪱","👹","😈","🧪","☢"]},
-    {label:"🌈 Rainbow", bg:"#FFF6F0",tc:"#6A2A90",items:["🌈","☁","⭐","💛","💙","💜","🦋","☀"]},
-    {label:"🦄 Unicorn", bg:"#FEF0FF",tc:"#7E2A9A",items:["🦄","✨","💖","🌸","🌟","🎀","💫","🍬"]},
-    {label:"🦸 Hero",    bg:"#E8F0FF",tc:"#1A2A80",items:["⚡","🛡","⭐","💪","🦸","🔴","🔵","💥"]},
-    {label:"🍂 Harvest", bg:"#FFF4E8",tc:"#6A3000",items:["🍂","🌽","🍎","🌻","🍄","🌾","🌰","🍁"]},
-    {label:"🌊 Ocean",   bg:"#E8F8FF",tc:"#0A3A6A",items:["🐠","⭐","🐚","🦀","🌊","🐙","🦑","🐬"]},
-  ];
-
-  const [pi,  setPi]  = useState(0);
-  const [ti,  setTi]  = useState(0);
-  const [held, setHeld] = useState<string|null>(null);
-  const [placed, setPlaced] = useState<PlacedEmoji[]>([]);
-  const [fs,  setFs]  = useState(false);
-  const canvasRef = useRef<HTMLDivElement>(null);
-
-  const pk = PUMPKINS[pi];
-  const th = THEMES[ti];
-  const bf = "var(--font-catamaran),'Catamaran',sans-serif";
   const hf = "var(--font-concert-one),'Concert One',cursive";
+  const bf = "var(--font-catamaran),'Catamaran',sans-serif";
 
-  const placeAt = (clientX: number, clientY: number, emoji: string) => {
-    const el = canvasRef.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = Math.min(95, Math.max(5, ((clientX - r.left) / r.width) * 100));
-    const y = Math.min(95, Math.max(5, ((clientY - r.top) / r.height) * 100));
-    setPlaced(p => [...p, { id: Math.random().toString(36).slice(2), emoji, x, y }]);
-    setHeld(null);
-  };
-
-  const handleCanvasClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (held) placeAt(e.clientX, e.clientY, held);
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const em = e.dataTransfer.getData("emoji");
-    if (em) placeAt(e.clientX, e.clientY, em);
-  };
-
-  const removeItem = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setPlaced(p => p.filter(x => x.id !== id));
-  };
-
-  // SVG pumpkin bodies — 10 distinct shapes in 200×200 viewbox
-  const f=pk.fill, d=pk.dark, s=pk.stem;
-
-  const stemSVG = (x:number, y:number, w:number, h:number, color:string) => (
-    <>
-      <rect x={x-w/2} y={y-h} width={w} height={h} rx={w*0.4} fill={color}/>
-      <path d={`M${x+w/2},${y-h*0.6} Q${x+w/2+14},${y-h-6} ${x+w/2+10},${y-h-16}`}
-        stroke={color} strokeWidth={3} fill="none" strokeLinecap="round"/>
-    </>
-  );
-
-  const bodies: React.ReactNode[] = [
-    // 0 Classic 5-lobe
-    <><defs><radialGradient id="glow0" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor={f} stopOpacity={0.4}/><stop offset="100%" stopColor={f} stopOpacity={0}/></radialGradient></defs>
-      <ellipse cx={100} cy={130} rx={80} ry={30} fill="url(#glow0)" opacity={0.6}/>
-      <ellipse cx={24}  cy={122} rx={20} ry={34} fill={d}/>
-      <ellipse cx={176} cy={122} rx={20} ry={34} fill={d}/>
-      <ellipse cx={60}  cy={115} rx={42} ry={54} fill={d}/>
-      <ellipse cx={140} cy={115} rx={42} ry={54} fill={d}/>
-      <ellipse cx={100} cy={110} rx={66} ry={62} fill={f}/>
-      <path d="M100,48 Q97,110 100,172" stroke={d} strokeWidth={3} fill="none" opacity={0.55}/>
-      <path d="M79,55 Q74,110 79,169" stroke={d} strokeWidth={2} fill="none" opacity={0.45}/>
-      <path d="M121,55 Q126,110 121,169" stroke={d} strokeWidth={2} fill="none" opacity={0.45}/>
-      <ellipse cx={83} cy={80} rx={16} ry={20} fill="rgba(255,255,255,0.18)"/>
-      {stemSVG(100, 48, 14, 28, s)}</>,
-
-    // 1 Tall 3-lobe
-    <><ellipse cx={58}  cy={110} rx={36} ry={72} fill={d}/>
-      <ellipse cx={142} cy={110} rx={36} ry={72} fill={d}/>
-      <ellipse cx={100} cy={106} rx={52} ry={84} fill={f}/>
-      <path d="M100,22 Q96,106 100,182" stroke={d} strokeWidth={3} fill="none" opacity={0.5}/>
-      <path d="M80,30 Q74,106 80,180" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
-      <path d="M120,30 Q126,106 120,180" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
-      <ellipse cx={86} cy={70} rx={14} ry={18} fill="rgba(255,255,255,0.16)"/>
-      {stemSVG(100, 22, 12, 26, s)}</>,
-
-    // 2 Chubby 7-lobe
-    <><ellipse cx={12}  cy={126} rx={14} ry={24} fill={d}/>
-      <ellipse cx={188} cy={126} rx={14} ry={24} fill={d}/>
-      <ellipse cx={40}  cy={120} rx={28} ry={40} fill={d}/>
-      <ellipse cx={160} cy={120} rx={28} ry={40} fill={d}/>
-      <ellipse cx={68}  cy={114} rx={44} ry={52} fill={f}/>
-      <ellipse cx={132} cy={114} rx={44} ry={52} fill={f}/>
-      <ellipse cx={100} cy={112} rx={84} ry={52} fill={f}/>
-      <path d="M100,60 Q97,112 100,168" stroke={d} strokeWidth={2} fill="none" opacity={0.45}/>
-      <path d="M82,64 Q78,112 82,166" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
-      <path d="M118,64 Q122,112 118,166" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
-      <path d="M64,68 Q60,112 64,164" stroke={d} strokeWidth={1.5} fill="none" opacity={0.35}/>
-      <path d="M136,68 Q140,112 136,164" stroke={d} strokeWidth={1.5} fill="none" opacity={0.35}/>
-      <ellipse cx={85} cy={88} rx={18} ry={14} fill="rgba(255,255,255,0.16)"/>
-      {stemSVG(100, 60, 20, 22, s)}</>,
-
-    // 3 Lumpy (irregular bumpy)
-    <><ellipse cx={28}  cy={122} rx={22} ry={36} fill={d}/>
-      <ellipse cx={172} cy={122} rx={22} ry={36} fill={d}/>
-      <ellipse cx={62}  cy={118} rx={40} ry={56} fill={d}/>
-      <ellipse cx={138} cy={118} rx={40} ry={56} fill={d}/>
-      <ellipse cx={100} cy={112} rx={68} ry={62} fill={f}/>
-      {/* Bumps */}
-      <circle cx={54} cy={88} r={9} fill={f} opacity={0.9}/>
-      <circle cx={148} cy={92} r={8} fill={f} opacity={0.9}/>
-      <circle cx={80} cy={72} r={7} fill={f} opacity={0.9}/>
-      <circle cx={122} cy={76} r={8} fill={f} opacity={0.85}/>
-      <circle cx={36} cy={110} r={6} fill={f} opacity={0.9}/>
-      <circle cx={168} cy={115} r={5} fill={f} opacity={0.9}/>
-      <path d="M100,48 Q96,112 100,172" stroke={d} strokeWidth={3} fill="none" opacity={0.5}/>
-      <path d="M79,56 Q73,112 79,170" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
-      <path d="M121,56 Q127,112 121,170" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
-      {stemSVG(100, 48, 14, 26, s)}</>,
-
-    // 4 Ghost White
-    <><defs><radialGradient id="ghostGrad" cx="40%" cy="35%" r="60%"><stop offset="0%" stopColor="white"/><stop offset="100%" stopColor={f}/></radialGradient></defs>
-      <ellipse cx={55}  cy={112} rx={42} ry={58} fill={d}/>
-      <ellipse cx={145} cy={112} rx={42} ry={58} fill={d}/>
-      <ellipse cx={100} cy={108} rx={66} ry={65} fill="url(#ghostGrad)"/>
-      <path d="M100,43 Q96,108 100,175" stroke={d} strokeWidth={2} fill="none" opacity={0.4}/>
-      <path d="M82,50 Q77,108 82,173" stroke={d} strokeWidth={1.5} fill="none" opacity={0.35}/>
-      <path d="M118,50 Q123,108 118,173" stroke={d} strokeWidth={1.5} fill="none" opacity={0.35}/>
-      <ellipse cx={84} cy={78} rx={18} ry={22} fill="rgba(255,255,255,0.6)"/>
-      {stemSVG(100, 43, 13, 26, s)}</>,
-
-    // 5 Mini (small, centered lower)
-    <><ellipse cx={66}  cy={130} rx={34} ry={42} fill={d}/>
-      <ellipse cx={134} cy={130} rx={34} ry={42} fill={d}/>
-      <ellipse cx={100} cy={126} rx={52} ry={50} fill={f}/>
-      <path d="M100,76 Q97,126 100,176" stroke={d} strokeWidth={2.5} fill="none" opacity={0.5}/>
-      <path d="M84,80 Q80,126 84,174" stroke={d} strokeWidth={1.5} fill="none" opacity={0.4}/>
-      <path d="M116,80 Q120,126 116,174" stroke={d} strokeWidth={1.5} fill="none" opacity={0.4}/>
-      <ellipse cx={88} cy={104} rx={12} ry={15} fill="rgba(255,255,255,0.2)"/>
-      {stemSVG(100, 76, 11, 22, s)}</>,
-
-    // 6 Spooky Purple
-    <><defs><radialGradient id="spookyGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#CC80FF" stopOpacity={0.3}/><stop offset="100%" stopColor="#CC80FF" stopOpacity={0}/></radialGradient></defs>
-      <ellipse cx={100} cy={135} rx={82} ry={28} fill="url(#spookyGlow)" opacity={0.8}/>
-      <ellipse cx={24}  cy={122} rx={20} ry={34} fill={d}/>
-      <ellipse cx={176} cy={122} rx={20} ry={34} fill={d}/>
-      <ellipse cx={60}  cy={115} rx={42} ry={54} fill={d}/>
-      <ellipse cx={140} cy={115} rx={42} ry={54} fill={d}/>
-      <ellipse cx={100} cy={110} rx={66} ry={62} fill={f}/>
-      <path d="M100,48 Q96,110 100,172" stroke="#CC80FF" strokeWidth={2.5} fill="none" opacity={0.5}/>
-      <path d="M79,55 Q73,110 79,170" stroke="#CC80FF" strokeWidth={1.5} fill="none" opacity={0.4}/>
-      <path d="M121,55 Q127,110 121,170" stroke="#CC80FF" strokeWidth={1.5} fill="none" opacity={0.4}/>
-      <ellipse cx={83} cy={80} rx={16} ry={20} fill="rgba(255,200,255,0.22)"/>
-      {stemSVG(100, 48, 14, 28, s)}</>,
-
-    // 7 Warty (classic + scattered wart circles)
-    <><ellipse cx={24}  cy={122} rx={20} ry={34} fill={d}/>
-      <ellipse cx={176} cy={122} rx={20} ry={34} fill={d}/>
-      <ellipse cx={60}  cy={115} rx={42} ry={54} fill={d}/>
-      <ellipse cx={140} cy={115} rx={42} ry={54} fill={d}/>
-      <ellipse cx={100} cy={110} rx={66} ry={62} fill={f}/>
-      {/* Warts */}
-      <circle cx={68}  cy={96}  r={6} fill={d}/>
-      <circle cx={62}  cy={112} r={4} fill={d}/>
-      <circle cx={72}  cy={126} r={5} fill={d}/>
-      <circle cx={130} cy={98}  r={6} fill={d}/>
-      <circle cx={138} cy={116} r={4} fill={d}/>
-      <circle cx={128} cy={130} r={5} fill={d}/>
-      <circle cx={88}  cy={148} r={5} fill={d}/>
-      <circle cx={108} cy={152} r={4} fill={d}/>
-      <circle cx={44}  cy={118} r={4} fill={d}/>
-      <circle cx={158} cy={122} r={4} fill={d}/>
-      <path d="M100,48 Q96,110 100,172" stroke={d} strokeWidth={3} fill="none" opacity={0.45}/>
-      <path d="M79,55 Q73,110 79,170" stroke={d} strokeWidth={2} fill="none" opacity={0.35}/>
-      <path d="M121,55 Q127,110 121,170" stroke={d} strokeWidth={2} fill="none" opacity={0.35}/>
-      {stemSVG(100, 48, 14, 28, s)}</>,
-
-    // 8 Giant 9-lobe (very wide, squat)
-    <><ellipse cx={6}   cy={126} rx={10} ry={18} fill={d}/>
-      <ellipse cx={194} cy={126} rx={10} ry={18} fill={d}/>
-      <ellipse cx={26}  cy={122} rx={22} ry={32} fill={d}/>
-      <ellipse cx={174} cy={122} rx={22} ry={32} fill={d}/>
-      <ellipse cx={52}  cy={116} rx={34} ry={44} fill={d}/>
-      <ellipse cx={148} cy={116} rx={34} ry={44} fill={d}/>
-      <ellipse cx={76}  cy={114} rx={46} ry={52} fill={f}/>
-      <ellipse cx={124} cy={114} rx={46} ry={52} fill={f}/>
-      <ellipse cx={100} cy={112} rx={86} ry={54} fill={f}/>
-      <path d="M100,58 Q97,112 100,168" stroke={d} strokeWidth={2.5} fill="none" opacity={0.45}/>
-      <path d="M82,62 Q78,112 82,166" stroke={d} strokeWidth={2} fill="none" opacity={0.38}/>
-      <path d="M118,62 Q122,112 118,166" stroke={d} strokeWidth={2} fill="none" opacity={0.38}/>
-      <path d="M64,66 Q60,112 64,164" stroke={d} strokeWidth={1.5} fill="none" opacity={0.3}/>
-      <path d="M136,66 Q140,112 136,164" stroke={d} strokeWidth={1.5} fill="none" opacity={0.3}/>
-      <ellipse cx={85} cy={92} rx={20} ry={13} fill="rgba(255,255,255,0.16)"/>
-      {stemSVG(100, 58, 20, 20, s)}</>,
-
-    // 9 Neon Green
-    <><defs><radialGradient id="neonGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#80FF80" stopOpacity={0.4}/><stop offset="100%" stopColor="#80FF80" stopOpacity={0}/></radialGradient></defs>
-      <ellipse cx={100} cy={135} rx={78} ry={26} fill="url(#neonGlow)" opacity={0.9}/>
-      <ellipse cx={24}  cy={122} rx={20} ry={34} fill={d}/>
-      <ellipse cx={176} cy={122} rx={20} ry={34} fill={d}/>
-      <ellipse cx={60}  cy={115} rx={42} ry={54} fill={d}/>
-      <ellipse cx={140} cy={115} rx={42} ry={54} fill={d}/>
-      <ellipse cx={100} cy={110} rx={66} ry={62} fill={f}/>
-      <path d="M100,48 Q96,110 100,172" stroke="#60FF60" strokeWidth={2.5} fill="none" opacity={0.5}/>
-      <path d="M79,55 Q73,110 79,170" stroke="#60FF60" strokeWidth={1.5} fill="none" opacity={0.4}/>
-      <path d="M121,55 Q127,110 121,170" stroke="#60FF60" strokeWidth={1.5} fill="none" opacity={0.4}/>
-      <ellipse cx={83} cy={80} rx={16} ry={20} fill="rgba(200,255,200,0.25)"/>
-      {stemSVG(100, 48, 14, 28, s)}</>,
+  interface PumpkinDef { id:string; label:string; emoji:string; body:string }
+  const PUMPKINS: PumpkinDef[] = [
+    {id:"classic", label:"Classic", emoji:"🎃", body:`
+  <ellipse cx='100' cy='172' rx='56' ry='10' fill='rgba(0,0,0,0.18)'/>
+  <ellipse cx='60'  cy='117' rx='20' ry='53' fill='#a03d00'/>
+  <ellipse cx='140' cy='117' rx='20' ry='53' fill='#a03d00'/>
+  <ellipse cx='79'  cy='111' rx='24' ry='61' fill='#c45000'/>
+  <ellipse cx='121' cy='111' rx='24' ry='61' fill='#c45000'/>
+  <ellipse cx='100' cy='108' rx='28' ry='66' fill='#e86000'/>
+  <ellipse cx='100' cy='108' rx='17' ry='62' fill='#ff8c10' opacity='0.75'/>
+  <ellipse cx='92'  cy='90'  rx='9'  ry='22' fill='#ffb040' opacity='0.35'/>
+  <line x1='100' y1='46' x2='100' y2='172' stroke='#a03d00' stroke-width='2'   opacity='0.35'/>
+  <line x1='88'  y1='48' x2='86'  y2='171' stroke='#a03d00' stroke-width='1.5' opacity='0.2'/>
+  <line x1='112' y1='48' x2='114' y2='171' stroke='#a03d00' stroke-width='1.5' opacity='0.2'/>
+  <rect x='95' y='32' width='10' height='25' rx='5' fill='#5d4037'/>
+  <path d='M104 40 Q121 32 124 20' stroke='#7cb342' stroke-width='3.5' fill='none' stroke-linecap='round'/>
+`},
+    {id:"tall", label:"Tall", emoji:"🏔️", body:`
+  <ellipse cx='100' cy='174' rx='46' ry='9'  fill='rgba(0,0,0,0.18)'/>
+  <ellipse cx='66'  cy='112' rx='16' ry='62' fill='#954000'/>
+  <ellipse cx='134' cy='112' rx='16' ry='62' fill='#954000'/>
+  <ellipse cx='82'  cy='106' rx='20' ry='70' fill='#b85200'/>
+  <ellipse cx='118' cy='106' rx='20' ry='70' fill='#b85200'/>
+  <ellipse cx='100' cy='102' rx='24' ry='76' fill='#e06800'/>
+  <ellipse cx='100' cy='102' rx='14' ry='72' fill='#ff9020' opacity='0.7'/>
+  <ellipse cx='93'  cy='82'  rx='8'  ry='24' fill='#ffb040' opacity='0.3'/>
+  <line x1='100' y1='38' x2='100' y2='174' stroke='#954000' stroke-width='2'   opacity='0.35'/>
+  <line x1='90'  y1='40' x2='88'  y2='173' stroke='#954000' stroke-width='1.5' opacity='0.2'/>
+  <line x1='110' y1='40' x2='112' y2='173' stroke='#954000' stroke-width='1.5' opacity='0.2'/>
+  <rect x='95' y='26' width='10' height='22' rx='5' fill='#5d4037'/>
+  <path d='M104 36 Q116 28 118 18' stroke='#7cb342' stroke-width='3' fill='none' stroke-linecap='round'/>
+`},
+    {id:"chubby", label:"Chubby", emoji:"🫃", body:`
+  <ellipse cx='100' cy='168' rx='68' ry='12' fill='rgba(0,0,0,0.18)'/>
+  <ellipse cx='54'  cy='122' rx='28' ry='46' fill='#b04500'/>
+  <ellipse cx='146' cy='122' rx='28' ry='46' fill='#b04500'/>
+  <ellipse cx='100' cy='116' rx='36' ry='54' fill='#e07000'/>
+  <ellipse cx='100' cy='116' rx='22' ry='52' fill='#ff9430' opacity='0.75'/>
+  <ellipse cx='90'  cy='98'  rx='14' ry='20' fill='#ffb850' opacity='0.35'/>
+  <line x1='100' y1='66' x2='100' y2='165' stroke='#b04500' stroke-width='2'   opacity='0.35'/>
+  <line x1='82'  y1='72' x2='78'  y2='164' stroke='#b04500' stroke-width='1.5' opacity='0.2'/>
+  <line x1='118' y1='72' x2='122' y2='164' stroke='#b04500' stroke-width='1.5' opacity='0.2'/>
+  <rect x='95' y='44' width='10' height='28' rx='5' fill='#5d4037'/>
+  <path d='M104 52 Q120 44 122 32' stroke='#7cb342' stroke-width='3.5' fill='none' stroke-linecap='round'/>
+`},
+    {id:"lumpy", label:"Lumpy", emoji:"🤭", body:`
+  <ellipse cx='100' cy='170' rx='55' ry='10' fill='rgba(0,0,0,0.18)'/>
+  <ellipse cx='58'  cy='122' rx='19' ry='48' fill='#8a3800'/>
+  <ellipse cx='142' cy='118' rx='21' ry='50' fill='#8a3800'/>
+  <ellipse cx='76'  cy='114' rx='23' ry='57' fill='#b04a00'/>
+  <ellipse cx='124' cy='116' rx='25' ry='55' fill='#b04a00'/>
+  <ellipse cx='100' cy='110' rx='28' ry='64' fill='#d86000'/>
+  <ellipse cx='100' cy='110' rx='17' ry='60' fill='#f07820' opacity='0.7'/>
+  <circle  cx='68'  cy='88'  r='8'  fill='#8a3800' opacity='0.6'/>
+  <circle  cx='136' cy='92'  r='7'  fill='#8a3800' opacity='0.6'/>
+  <circle  cx='84'  cy='68'  r='6'  fill='#8a3800' opacity='0.5'/>
+  <circle  cx='115' cy='72'  r='5'  fill='#8a3800' opacity='0.5'/>
+  <ellipse cx='90'  cy='92'  rx='8' ry='18' fill='#f8a040' opacity='0.3'/>
+  <line x1='100' y1='48' x2='100' y2='170' stroke='#8a3800' stroke-width='2'   opacity='0.3'/>
+  <rect x='95' y='34' width='10' height='24' rx='5' fill='#5d4037'/>
+  <path d='M104 42 Q118 34 120 24' stroke='#7cb342' stroke-width='3' fill='none' stroke-linecap='round'/>
+`},
+    {id:"ghost", label:"Ghost", emoji:"👻", body:`
+  <ellipse cx='100' cy='174' rx='54' ry='9'  fill='rgba(180,180,220,0.25)'/>
+  <ellipse cx='100' cy='110' rx='48' ry='70' fill='#d0d0e8'/>
+  <ellipse cx='100' cy='110' rx='40' ry='68' fill='#e8e8f4'/>
+  <ellipse cx='100' cy='110' rx='30' ry='64' fill='#f4f4fa'/>
+  <ellipse cx='92'  cy='90'  rx='12' ry='24' fill='white' opacity='0.6'/>
+  <path d='M52 148 Q55 168 60 168 Q65 168 68 148 Q71 168 76 168 Q81 168 84 148 Q87 168 92 168 Q97 168 100 155 Q103 168 108 168 Q113 168 116 148 Q119 168 124 168 Q129 168 132 148 Q135 168 140 168 Q145 168 148 148' fill='white' stroke='#c8c8e0' stroke-width='1'/>
+  <rect x='96' y='34' width='8' height='20' rx='4' fill='#8888aa'/>
+  <path d='M103 40 Q115 34 117 24' stroke='#9999bb' stroke-width='3' fill='none' stroke-linecap='round'/>
+`},
+    {id:"spooky", label:"Spooky", emoji:"🔮", body:`
+  <ellipse cx='100' cy='172' rx='56' ry='10' fill='rgba(0,0,0,0.35)'/>
+  <ellipse cx='60'  cy='117' rx='20' ry='53' fill='#1a0030'/>
+  <ellipse cx='140' cy='117' rx='20' ry='53' fill='#1a0030'/>
+  <ellipse cx='79'  cy='111' rx='24' ry='61' fill='#2d0050'/>
+  <ellipse cx='121' cy='111' rx='24' ry='61' fill='#2d0050'/>
+  <ellipse cx='100' cy='108' rx='28' ry='66' fill='#5500aa'/>
+  <ellipse cx='100' cy='108' rx='17' ry='62' fill='#7700cc' opacity='0.75'/>
+  <ellipse cx='92'  cy='90'  rx='9'  ry='22' fill='#cc44ff' opacity='0.3'/>
+  <line x1='100' y1='46' x2='100' y2='172' stroke='#1a0030' stroke-width='2'   opacity='0.5'/>
+  <line x1='88'  y1='48' x2='86'  y2='171' stroke='#1a0030' stroke-width='1.5' opacity='0.35'/>
+  <line x1='112' y1='48' x2='114' y2='171' stroke='#1a0030' stroke-width='1.5' opacity='0.35'/>
+  <rect x='95' y='32' width='10' height='25' rx='5' fill='#2a2a4a'/>
+  <path d='M104 40 Q121 32 124 20' stroke='#8866cc' stroke-width='3.5' fill='none' stroke-linecap='round'/>
+`},
+    {id:"mini", label:"Mini", emoji:"🍊", body:`
+  <ellipse cx='100' cy='164' rx='40' ry='8'  fill='rgba(0,0,0,0.15)'/>
+  <ellipse cx='74'  cy='124' rx='16' ry='40' fill='#c04500'/>
+  <ellipse cx='126' cy='124' rx='16' ry='40' fill='#c04500'/>
+  <ellipse cx='100' cy='118' rx='22' ry='48' fill='#e86000'/>
+  <ellipse cx='100' cy='118' rx='14' ry='46' fill='#ff9020' opacity='0.75'/>
+  <ellipse cx='94'  cy='104' rx='7'  ry='16' fill='#ffb040' opacity='0.35'/>
+  <line x1='100' y1='76' x2='100' y2='162' stroke='#c04500' stroke-width='1.5' opacity='0.35'/>
+  <line x1='91'  y1='78' x2='90'  y2='161' stroke='#c04500' stroke-width='1'   opacity='0.2'/>
+  <line x1='109' y1='78' x2='110' y2='161' stroke='#c04500' stroke-width='1'   opacity='0.2'/>
+  <rect x='96' y='60' width='8' height='20' rx='4' fill='#5d4037'/>
+  <path d='M103 68 Q114 62 116 52' stroke='#7cb342' stroke-width='2.5' fill='none' stroke-linecap='round'/>
+`},
+    {id:"neon", label:"Neon", emoji:"💚", body:`
+  <ellipse cx='100' cy='172' rx='56' ry='10' fill='rgba(0,80,0,0.25)'/>
+  <ellipse cx='60'  cy='117' rx='20' ry='53' fill='#003a00'/>
+  <ellipse cx='140' cy='117' rx='20' ry='53' fill='#003a00'/>
+  <ellipse cx='79'  cy='111' rx='24' ry='61' fill='#005500'/>
+  <ellipse cx='121' cy='111' rx='24' ry='61' fill='#005500'/>
+  <ellipse cx='100' cy='108' rx='28' ry='66' fill='#00aa00'/>
+  <ellipse cx='100' cy='108' rx='17' ry='62' fill='#22dd22' opacity='0.75'/>
+  <ellipse cx='92'  cy='90'  rx='9'  ry='22' fill='#88ff88' opacity='0.35'/>
+  <line x1='100' y1='46' x2='100' y2='172' stroke='#003a00' stroke-width='2'   opacity='0.4'/>
+  <line x1='88'  y1='48' x2='86'  y2='171' stroke='#003a00' stroke-width='1.5' opacity='0.25'/>
+  <line x1='112' y1='48' x2='114' y2='171' stroke='#003a00' stroke-width='1.5' opacity='0.25'/>
+  <rect x='95' y='32' width='10' height='25' rx='5' fill='#2e5d2e'/>
+  <path d='M104 40 Q121 32 124 20' stroke='#88cc44' stroke-width='3.5' fill='none' stroke-linecap='round'/>
+`},
+    {id:"warty", label:"Warty", emoji:"🐸", body:`
+  <ellipse cx='100' cy='172' rx='56' ry='10' fill='rgba(0,0,0,0.18)'/>
+  <ellipse cx='60'  cy='117' rx='20' ry='53' fill='#8b3a00'/>
+  <ellipse cx='140' cy='117' rx='20' ry='53' fill='#8b3a00'/>
+  <ellipse cx='79'  cy='111' rx='24' ry='61' fill='#b04e00'/>
+  <ellipse cx='121' cy='111' rx='24' ry='61' fill='#b04e00'/>
+  <ellipse cx='100' cy='108' rx='28' ry='66' fill='#d46400'/>
+  <ellipse cx='100' cy='108' rx='17' ry='62' fill='#ee8010' opacity='0.75'/>
+  <circle cx='62'  cy='100' r='5' fill='#7a3200' opacity='0.8'/>
+  <circle cx='64'  cy='134' r='4' fill='#7a3200' opacity='0.7'/>
+  <circle cx='138' cy='108' r='5' fill='#7a3200' opacity='0.8'/>
+  <circle cx='135' cy='138' r='4' fill='#7a3200' opacity='0.7'/>
+  <circle cx='80'  cy='162' r='3' fill='#7a3200' opacity='0.6'/>
+  <circle cx='120' cy='160' r='3' fill='#7a3200' opacity='0.6'/>
+  <ellipse cx='92'  cy='90'  rx='9'  ry='22' fill='#f8a040' opacity='0.3'/>
+  <line x1='100' y1='46' x2='100' y2='172' stroke='#8b3a00' stroke-width='2'   opacity='0.35'/>
+  <rect x='95' y='32' width='10' height='25' rx='5' fill='#5d4037'/>
+  <path d='M104 40 Q121 32 124 20' stroke='#7cb342' stroke-width='3.5' fill='none' stroke-linecap='round'/>
+`},
+    {id:"giant", label:"Giant", emoji:"🫙", body:`
+  <ellipse cx='100' cy='172' rx='70' ry='11' fill='rgba(0,0,0,0.18)'/>
+  <ellipse cx='44'  cy='120' rx='16' ry='45' fill='#8a3500'/>
+  <ellipse cx='156' cy='120' rx='16' ry='45' fill='#8a3500'/>
+  <ellipse cx='62'  cy='116' rx='20' ry='54' fill='#a84500'/>
+  <ellipse cx='138' cy='116' rx='20' ry='54' fill='#a84500'/>
+  <ellipse cx='80'  cy='110' rx='24' ry='62' fill='#cc5a00'/>
+  <ellipse cx='120' cy='110' rx='24' ry='62' fill='#cc5a00'/>
+  <ellipse cx='100' cy='106' rx='28' ry='68' fill='#f07010'/>
+  <ellipse cx='100' cy='106' rx='17' ry='64' fill='#ff9030' opacity='0.75'/>
+  <ellipse cx='92'  cy='86'  rx='10' ry='24' fill='#ffb850' opacity='0.3'/>
+  <line x1='100' y1='42' x2='100' y2='172' stroke='#8a3500' stroke-width='2'   opacity='0.35'/>
+  <line x1='88'  y1='44' x2='86'  y2='172' stroke='#8a3500' stroke-width='1.5' opacity='0.2'/>
+  <line x1='112' y1='44' x2='114' y2='172' stroke='#8a3500' stroke-width='1.5' opacity='0.2'/>
+  <line x1='74'  y1='48' x2='70'  y2='168' stroke='#8a3500' stroke-width='1.5' opacity='0.15'/>
+  <line x1='126' y1='48' x2='130' y2='168' stroke='#8a3500' stroke-width='1.5' opacity='0.15'/>
+  <rect x='95' y='28' width='10' height='26' rx='5' fill='#5d4037'/>
+  <path d='M104 36 Q122 28 125 16' stroke='#7cb342' stroke-width='4' fill='none' stroke-linecap='round'/>
+`},
   ];
 
-  const canvas = (
-    <div ref={canvasRef}
-      onClick={handleCanvasClick}
-      onDragOver={e=>e.preventDefault()}
-      onDrop={handleDrop}
-      style={{position:"relative",width:"100%",maxWidth:280,aspectRatio:"1",cursor:held?"crosshair":"default",
-        borderRadius:20,overflow:"hidden",background:`radial-gradient(circle, ${pk.fill}18 0%, transparent 70%)`,
-        border:`2px solid ${held?accentColor:"transparent"}`,transition:"border 0.2s",flexShrink:0}}>
-      <svg viewBox="0 0 200 200" style={{width:"100%",height:"100%",display:"block"}}>
-        {bodies[pi]}
+  interface FacePart { id:string; label:string; svg:string }
+  interface ThemeDef { id:string; label:string; emoji:string; bg:string; accent:string; eyes:FacePart[]; noses:FacePart[]; mouths:FacePart[] }
+  const THEMES: ThemeDef[] = [
+    {id:"scary",label:"Scary",emoji:"😱",bg:"#1a0800",accent:"#ff4400",eyes:[{id:"tri",label:"Triangle",svg:`<polygon points='65,78 91,78 78,97' fill='#1a0800'/><polygon points='109,78 135,78 122,97' fill='#1a0800'/>`},{id:"dia",label:"Diamond",svg:`<polygon points='78,77 93,90 78,103 63,90' fill='#1a0800'/><polygon points='122,77 137,90 122,103 107,90' fill='#1a0800'/>`},{id:"dot",label:"Classic",svg:`<circle cx='78' cy='90' r='10' fill='#1a0800'/><circle cx='122' cy='90' r='10' fill='#1a0800'/><circle cx='75' cy='87' r='3' fill='white' opacity='0.55'/><circle cx='119' cy='87' r='3' fill='white' opacity='0.55'/>`}],noses:[{id:"tri",label:"Triangle",svg:`<polygon points='96,106 104,106 100,120' fill='#1a0800'/>`},{id:"dia",label:"Diamond",svg:`<polygon points='100,105 108,113 100,121 92,113' fill='#1a0800'/>`}],mouths:[{id:"jag",label:"Jagged",svg:`<path d='M70,128 L80,142 L90,128 L100,142 L110,128 L120,142 L130,128 L130,142 L70,142 Z' fill='#1a0800'/>`},{id:"zig",label:"Zigzag",svg:`<polyline points='70,138 80,128 90,138 100,128 110,138 120,128 130,138' stroke='#1a0800' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/>`},{id:"grin",label:"Buck Teeth",svg:`<path d='M76,130 Q100,150 124,130 L122,130 Q100,144 78,130 Z' fill='#1a0800'/><rect x='90' y='130' width='9' height='13' fill='white' rx='2'/><rect x='101' y='130' width='9' height='13' fill='white' rx='2'/>`}]},
+    {id:"princess",label:"Princess",emoji:"👸",bg:"#fff0f8",accent:"#ff69b4",eyes:[{id:"heart",label:"Hearts",svg:`<path d='M78,96 C78,88 65,81 65,91 C65,101 78,109 78,109 C78,109 91,101 91,91 C91,81 78,88 78,96 Z' fill='#FF69B4'/><path d='M122,96 C122,88 109,81 109,91 C109,101 122,109 122,109 C122,109 135,101 135,91 C135,81 122,88 122,96 Z' fill='#FF69B4'/>`},{id:"star",label:"Stars",svg:`<path d='M78,76 L81,86 L92,83 L84,91 L88,102 L78,96 L68,102 L72,91 L64,83 L75,86 Z' fill='#FFD700'/><path d='M122,76 L125,86 L136,83 L128,91 L132,102 L122,96 L112,102 L116,91 L108,83 L119,86 Z' fill='#FFD700'/>`},{id:"round",label:"Round",svg:`<circle cx='78' cy='90' r='12' fill='#1a0800'/><circle cx='122' cy='90' r='12' fill='#1a0800'/><circle cx='74' cy='86' r='4' fill='white' opacity='0.5'/><circle cx='118' cy='86' r='4' fill='white' opacity='0.5'/>`}],noses:[{id:"heart",label:"Heart",svg:`<path d='M100,120 C100,113 91,107 91,114 C91,121 100,128 100,128 C100,128 109,121 109,114 C109,107 100,113 100,120 Z' fill='#FF69B4'/>`},{id:"star",label:"Star",svg:`<path d='M100,105 L102.5,112 L110,112 L104,117 L106,124 L100,120 L94,124 L96,117 L90,112 L97.5,112 Z' fill='#FFD700'/>`}],mouths:[{id:"hm",label:"Heart",svg:`<path d='M100,150 C100,141 87,133 87,142 C87,151 100,160 100,160 C100,160 113,151 113,142 C113,133 100,141 100,150 Z' fill='#FF69B4'/>`},{id:"smile",label:"Sweet Smile",svg:`<path d='M74,134 Q100,156 126,134' stroke='#1a0800' stroke-width='5' fill='none' stroke-linecap='round'/>`},{id:"wide",label:"Big Smile",svg:`<path d='M66,130 Q100,162 134,130' stroke='#1a0800' stroke-width='6' fill='none' stroke-linecap='round'/>`}]},
+    {id:"space",label:"Space",emoji:"🚀",bg:"#000820",accent:"#4488ff",eyes:[{id:"alien",label:"Alien",svg:`<ellipse cx='78' cy='90' rx='18' ry='13' fill='#00cc55'/><ellipse cx='78' cy='88' rx='7' ry='5' fill='#001a00'/><circle cx='80' cy='87' r='2' fill='white' opacity='0.6'/><ellipse cx='122' cy='90' rx='18' ry='13' fill='#00cc55'/><ellipse cx='122' cy='88' rx='7' ry='5' fill='#001a00'/><circle cx='124' cy='87' r='2' fill='white' opacity='0.6'/>`},{id:"moon",label:"Moon",svg:`<path d='M67,78 A14,14 0 1,1 67,102 A10,10 0 1,0 67,78 Z' fill='#FFD700'/><path d='M111,78 A14,14 0 1,1 111,102 A10,10 0 1,0 111,78 Z' fill='#FFD700'/>`},{id:"star",label:"Stars",svg:`<path d='M78,76 L81,86 L92,83 L84,91 L88,102 L78,96 L68,102 L72,91 L64,83 L75,86 Z' fill='#FFD700'/><path d='M122,76 L125,86 L136,83 L128,91 L132,102 L122,96 L112,102 L116,91 L108,83 L119,86 Z' fill='#FFD700'/>`}],noses:[{id:"star",label:"Star",svg:`<path d='M100,105 L102.5,112 L110,112 L104,117 L106,124 L100,120 L94,124 L96,117 L90,112 L97.5,112 Z' fill='#FFD700'/>`},{id:"dot",label:"Dot",svg:`<circle cx='100' cy='113' r='8' fill='#1a0800'/>`}],mouths:[{id:"o",label:"Surprised",svg:`<ellipse cx='100' cy='142' rx='17' ry='13' fill='#1a0800'/>`},{id:"smile",label:"Cool Smile",svg:`<path d='M74,134 Q100,156 126,134' stroke='#1a0800' stroke-width='5' fill='none' stroke-linecap='round'/>`},{id:"zig",label:"Zigzag",svg:`<polyline points='70,138 80,128 90,138 100,128 110,138 120,128 130,138' stroke='#1a0800' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/>`}]},
+    {id:"silly",label:"Silly",emoji:"🤪",bg:"#fffde0",accent:"#ffcc00",eyes:[{id:"x",label:"X Eyes",svg:`<line x1='66' y1='80' x2='90' y2='100' stroke='#1a0800' stroke-width='6' stroke-linecap='round'/><line x1='90' y1='80' x2='66' y2='100' stroke='#1a0800' stroke-width='6' stroke-linecap='round'/><line x1='110' y1='80' x2='134' y2='100' stroke='#1a0800' stroke-width='6' stroke-linecap='round'/><line x1='134' y1='80' x2='110' y2='100' stroke='#1a0800' stroke-width='6' stroke-linecap='round'/>`},{id:"dot",label:"Dots",svg:`<circle cx='78' cy='90' r='10' fill='#1a0800'/><circle cx='122' cy='90' r='10' fill='#1a0800'/><circle cx='75' cy='87' r='3' fill='white' opacity='0.55'/><circle cx='119' cy='87' r='3' fill='white' opacity='0.55'/>`},{id:"star",label:"Stars",svg:`<path d='M78,76 L81,86 L92,83 L84,91 L88,102 L78,96 L68,102 L72,91 L64,83 L75,86 Z' fill='#FFD700'/><path d='M122,76 L125,86 L136,83 L128,91 L132,102 L122,96 L112,102 L116,91 L108,83 L119,86 Z' fill='#FFD700'/>`}],noses:[{id:"dot",label:"Big Dot",svg:`<circle cx='100' cy='113' r='8' fill='#1a0800'/>`},{id:"heart",label:"Heart",svg:`<path d='M100,120 C100,113 91,107 91,114 C91,121 100,128 100,128 C100,128 109,121 109,114 C109,107 100,113 100,120 Z' fill='#FF69B4'/>`}],mouths:[{id:"o",label:"O Face",svg:`<ellipse cx='100' cy='142' rx='17' ry='13' fill='#1a0800'/>`},{id:"zig",label:"Zigzag",svg:`<polyline points='70,138 80,128 90,138 100,128 110,138 120,128 130,138' stroke='#1a0800' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/>`},{id:"buck",label:"Buck Teeth",svg:`<path d='M76,130 Q100,150 124,130 L122,130 Q100,144 78,130 Z' fill='#1a0800'/><rect x='90' y='130' width='9' height='13' fill='white' rx='2'/><rect x='101' y='130' width='9' height='13' fill='white' rx='2'/>`}]},
+    {id:"monster",label:"Monster",emoji:"🧟",bg:"#0a1a0a",accent:"#22aa44",eyes:[{id:"angry",label:"Angry",svg:`<path d='M64,84 L92,92' stroke='#1a0800' stroke-width='7' stroke-linecap='round'/><path d='M64,92 L92,84' stroke='#1a0800' stroke-width='4' stroke-linecap='round' opacity='0.4'/><path d='M108,84 L136,92' stroke='#1a0800' stroke-width='7' stroke-linecap='round'/><path d='M108,92 L136,84' stroke='#1a0800' stroke-width='4' stroke-linecap='round' opacity='0.4'/>`},{id:"tri",label:"Triangle",svg:`<polygon points='65,78 91,78 78,97' fill='#1a0800'/><polygon points='109,78 135,78 122,97' fill='#1a0800'/>`},{id:"dia",label:"Diamond",svg:`<polygon points='78,77 93,90 78,103 63,90' fill='#1a0800'/><polygon points='122,77 137,90 122,103 107,90' fill='#1a0800'/>`}],noses:[{id:"tri",label:"Triangle",svg:`<polygon points='96,106 104,106 100,120' fill='#1a0800'/>`},{id:"dia",label:"Diamond",svg:`<polygon points='100,105 108,113 100,121 92,113' fill='#1a0800'/>`}],mouths:[{id:"jag",label:"Jagged",svg:`<path d='M70,128 L80,142 L90,128 L100,142 L110,128 L120,142 L130,128 L130,142 L70,142 Z' fill='#1a0800'/>`},{id:"grin",label:"Big Grin",svg:`<path d='M70,130 Q100,160 130,130 L127,130 Q100,152 73,130 Z' fill='#1a0800'/><rect x='84' y='130' width='7' height='9' fill='white' rx='1'/><rect x='96' y='130' width='8' height='9' fill='white' rx='1'/><rect x='109' y='130' width='7' height='9' fill='white' rx='1'/>`},{id:"wide",label:"Wide",svg:`<path d='M66,130 Q100,162 134,130' stroke='#1a0800' stroke-width='6' fill='none' stroke-linecap='round'/>`}]},
+    {id:"rainbow",label:"Rainbow",emoji:"🌈",bg:"#fff8f0",accent:"#ff8800",eyes:[{id:"round",label:"Round",svg:`<circle cx='78' cy='90' r='12' fill='#1a0800'/><circle cx='122' cy='90' r='12' fill='#1a0800'/><circle cx='74' cy='86' r='4' fill='white' opacity='0.5'/><circle cx='118' cy='86' r='4' fill='white' opacity='0.5'/>`},{id:"dot",label:"Dots",svg:`<circle cx='78' cy='90' r='10' fill='#1a0800'/><circle cx='122' cy='90' r='10' fill='#1a0800'/><circle cx='75' cy='87' r='3' fill='white' opacity='0.55'/><circle cx='119' cy='87' r='3' fill='white' opacity='0.55'/>`},{id:"heart",label:"Hearts",svg:`<path d='M78,96 C78,88 65,81 65,91 C65,101 78,109 78,109 C78,109 91,101 91,91 C91,81 78,88 78,96 Z' fill='#FF69B4'/><path d='M122,96 C122,88 109,81 109,91 C109,101 122,109 122,109 C122,109 135,101 135,91 C135,81 122,88 122,96 Z' fill='#FF69B4'/>`}],noses:[{id:"dot",label:"Round",svg:`<circle cx='100' cy='113' r='8' fill='#1a0800'/>`},{id:"star",label:"Star",svg:`<path d='M100,105 L102.5,112 L110,112 L104,117 L106,124 L100,120 L94,124 L96,117 L90,112 L97.5,112 Z' fill='#FFD700'/>`}],mouths:[{id:"smile",label:"Happy Smile",svg:`<path d='M74,134 Q100,156 126,134' stroke='#1a0800' stroke-width='5' fill='none' stroke-linecap='round'/>`},{id:"wide",label:"Big Smile",svg:`<path d='M66,130 Q100,162 134,130' stroke='#1a0800' stroke-width='6' fill='none' stroke-linecap='round'/>`},{id:"grin",label:"Toothy Grin",svg:`<path d='M70,130 Q100,160 130,130 L127,130 Q100,152 73,130 Z' fill='#1a0800'/><rect x='84' y='130' width='7' height='9' fill='white' rx='1'/><rect x='96' y='130' width='8' height='9' fill='white' rx='1'/><rect x='109' y='130' width='7' height='9' fill='white' rx='1'/>`}]},
+    {id:"unicorn",label:"Unicorn",emoji:"🦄",bg:"#f8f0ff",accent:"#cc44ff",eyes:[{id:"heart",label:"Hearts",svg:`<path d='M78,96 C78,88 65,81 65,91 C65,101 78,109 78,109 C78,109 91,101 91,91 C91,81 78,88 78,96 Z' fill='#FF69B4'/><path d='M122,96 C122,88 109,81 109,91 C109,101 122,109 122,109 C122,109 135,101 135,91 C135,81 122,88 122,96 Z' fill='#FF69B4'/>`},{id:"star",label:"Stars",svg:`<path d='M78,76 L81,86 L92,83 L84,91 L88,102 L78,96 L68,102 L72,91 L64,83 L75,86 Z' fill='#FFD700'/><path d='M122,76 L125,86 L136,83 L128,91 L132,102 L122,96 L112,102 L116,91 L108,83 L119,86 Z' fill='#FFD700'/>`},{id:"moon",label:"Moons",svg:`<path d='M67,78 A14,14 0 1,1 67,102 A10,10 0 1,0 67,78 Z' fill='#FFD700'/><path d='M111,78 A14,14 0 1,1 111,102 A10,10 0 1,0 111,78 Z' fill='#FFD700'/>`}],noses:[{id:"heart",label:"Heart",svg:`<path d='M100,120 C100,113 91,107 91,114 C91,121 100,128 100,128 C100,128 109,121 109,114 C109,107 100,113 100,120 Z' fill='#FF69B4'/>`},{id:"star",label:"Star",svg:`<path d='M100,105 L102.5,112 L110,112 L104,117 L106,124 L100,120 L94,124 L96,117 L90,112 L97.5,112 Z' fill='#FFD700'/>`}],mouths:[{id:"hm",label:"Heart Mouth",svg:`<path d='M100,150 C100,141 87,133 87,142 C87,151 100,160 100,160 C100,160 113,151 113,142 C113,133 100,141 100,150 Z' fill='#FF69B4'/>`},{id:"smile",label:"Cute Smile",svg:`<path d='M74,134 Q100,156 126,134' stroke='#1a0800' stroke-width='5' fill='none' stroke-linecap='round'/>`},{id:"wide",label:"Big Smile",svg:`<path d='M66,130 Q100,162 134,130' stroke='#1a0800' stroke-width='6' fill='none' stroke-linecap='round'/>`}]},
+    {id:"hero",label:"Hero",emoji:"🦸",bg:"#1a0a00",accent:"#ff2200",eyes:[{id:"angry",label:"Determined",svg:`<path d='M64,84 L92,92' stroke='#1a0800' stroke-width='7' stroke-linecap='round'/><path d='M64,92 L92,84' stroke='#1a0800' stroke-width='4' stroke-linecap='round' opacity='0.4'/><path d='M108,84 L136,92' stroke='#1a0800' stroke-width='7' stroke-linecap='round'/><path d='M108,92 L136,84' stroke='#1a0800' stroke-width='4' stroke-linecap='round' opacity='0.4'/>`},{id:"bolt",label:"Lightning",svg:`<polygon points='72,76 79,90 74,90 81,104 67,90 73,90' fill='#FFD700'/><polygon points='116,76 123,90 118,90 125,104 111,90 117,90' fill='#FFD700'/>`},{id:"round",label:"Focused",svg:`<circle cx='78' cy='90' r='12' fill='#1a0800'/><circle cx='122' cy='90' r='12' fill='#1a0800'/><circle cx='74' cy='86' r='4' fill='white' opacity='0.5'/><circle cx='118' cy='86' r='4' fill='white' opacity='0.5'/>`}],noses:[{id:"dia",label:"Diamond",svg:`<polygon points='100,105 108,113 100,121 92,113' fill='#1a0800'/>`},{id:"tri",label:"Triangle",svg:`<polygon points='96,106 104,106 100,120' fill='#1a0800'/>`}],mouths:[{id:"grin",label:"Hero Grin",svg:`<path d='M70,130 Q100,160 130,130 L127,130 Q100,152 73,130 Z' fill='#1a0800'/><rect x='84' y='130' width='7' height='9' fill='white' rx='1'/><rect x='96' y='130' width='8' height='9' fill='white' rx='1'/><rect x='109' y='130' width='7' height='9' fill='white' rx='1'/>`},{id:"smirk",label:"Smirk",svg:`<path d='M78,136 Q100,154 126,132' stroke='#1a0800' stroke-width='5' fill='none' stroke-linecap='round'/><path d='M118,132 Q130,134 128,142' stroke='#1a0800' stroke-width='3' fill='none' stroke-linecap='round'/>`},{id:"wide",label:"Strong Jaw",svg:`<path d='M66,130 Q100,162 134,130' stroke='#1a0800' stroke-width='6' fill='none' stroke-linecap='round'/>`}]},
+    {id:"harvest",label:"Harvest",emoji:"🍂",bg:"#fff4e0",accent:"#cc7700",eyes:[{id:"round",label:"Friendly",svg:`<circle cx='78' cy='90' r='12' fill='#1a0800'/><circle cx='122' cy='90' r='12' fill='#1a0800'/><circle cx='74' cy='86' r='4' fill='white' opacity='0.5'/><circle cx='118' cy='86' r='4' fill='white' opacity='0.5'/>`},{id:"tri",label:"Classic",svg:`<polygon points='65,78 91,78 78,97' fill='#1a0800'/><polygon points='109,78 135,78 122,97' fill='#1a0800'/>`},{id:"moon",label:"Moons",svg:`<path d='M67,78 A14,14 0 1,1 67,102 A10,10 0 1,0 67,78 Z' fill='#FFD700'/><path d='M111,78 A14,14 0 1,1 111,102 A10,10 0 1,0 111,78 Z' fill='#FFD700'/>`}],noses:[{id:"dot",label:"Round",svg:`<circle cx='100' cy='113' r='8' fill='#1a0800'/>`},{id:"tri",label:"Triangle",svg:`<polygon points='96,106 104,106 100,120' fill='#1a0800'/>`}],mouths:[{id:"smile",label:"Happy Smile",svg:`<path d='M74,134 Q100,156 126,134' stroke='#1a0800' stroke-width='5' fill='none' stroke-linecap='round'/>`},{id:"wide",label:"Big Grin",svg:`<path d='M66,130 Q100,162 134,130' stroke='#1a0800' stroke-width='6' fill='none' stroke-linecap='round'/>`},{id:"jag",label:"Carved",svg:`<path d='M70,128 L80,142 L90,128 L100,142 L110,128 L120,142 L130,128 L130,142 L70,142 Z' fill='#1a0800'/>`}]},
+    {id:"ocean",label:"Ocean",emoji:"🌊",bg:"#f0f8ff",accent:"#0088cc",eyes:[{id:"alien",label:"Wave Eyes",svg:`<ellipse cx='78' cy='90' rx='18' ry='13' fill='#00cc55'/><ellipse cx='78' cy='88' rx='7' ry='5' fill='#001a00'/><circle cx='80' cy='87' r='2' fill='white' opacity='0.6'/><ellipse cx='122' cy='90' rx='18' ry='13' fill='#00cc55'/><ellipse cx='122' cy='88' rx='7' ry='5' fill='#001a00'/><circle cx='124' cy='87' r='2' fill='white' opacity='0.6'/>`},{id:"round",label:"Bubble Eyes",svg:`<circle cx='78' cy='90' r='12' fill='#1a0800'/><circle cx='122' cy='90' r='12' fill='#1a0800'/><circle cx='74' cy='86' r='4' fill='white' opacity='0.5'/><circle cx='118' cy='86' r='4' fill='white' opacity='0.5'/>`},{id:"moon",label:"Crescent",svg:`<path d='M67,78 A14,14 0 1,1 67,102 A10,10 0 1,0 67,78 Z' fill='#FFD700'/><path d='M111,78 A14,14 0 1,1 111,102 A10,10 0 1,0 111,78 Z' fill='#FFD700'/>`}],noses:[{id:"dot",label:"Bubble Nose",svg:`<circle cx='100' cy='113' r='8' fill='#1a0800'/>`},{id:"heart",label:"Heart",svg:`<path d='M100,120 C100,113 91,107 91,114 C91,121 100,128 100,128 C100,128 109,121 109,114 C109,107 100,113 100,120 Z' fill='#FF69B4'/>`}],mouths:[{id:"smile",label:"Gentle Smile",svg:`<path d='M74,134 Q100,156 126,134' stroke='#1a0800' stroke-width='5' fill='none' stroke-linecap='round'/>`},{id:"o",label:"Bubble O",svg:`<ellipse cx='100' cy='142' rx='17' ry='13' fill='#1a0800'/>`},{id:"wide",label:"Splash Grin",svg:`<path d='M66,130 Q100,162 134,130' stroke='#1a0800' stroke-width='6' fill='none' stroke-linecap='round'/>`}]},
+  ];
+
+  const [pumpkinIdx, setPumpkinIdx] = useState(0);
+  const [themeIdx,   setThemeIdx]   = useState(0);
+  const [faceTab,    setFaceTab]    = useState<'eyes'|'nose'|'mouth'>('eyes');
+  const [selEye,     setSelEye]     = useState<string|null>(null);
+  const [selNose,    setSelNose]    = useState<string|null>(null);
+  const [selMouth,   setSelMouth]   = useState<string|null>(null);
+  const [fullscreen, setFullscreen] = useState(false);
+
+  useEffect(() => { setSelEye(null); setSelNose(null); setSelMouth(null); }, [themeIdx]);
+
+  const pump  = PUMPKINS[pumpkinIdx];
+  const theme = THEMES[themeIdx];
+  const ac    = accentColor;
+
+  const faceHtml = [
+    selEye   ? (theme.eyes.find(e => e.id === selEye)?.svg   ?? '') : '',
+    selNose  ? (theme.noses.find(e => e.id === selNose)?.svg  ?? '') : '',
+    selMouth ? (theme.mouths.find(e => e.id === selMouth)?.svg ?? '') : '',
+  ].join('');
+
+  const tabParts = faceTab === 'eyes' ? theme.eyes : faceTab === 'nose' ? theme.noses : theme.mouths;
+  const tabSel   = faceTab === 'eyes' ? selEye : faceTab === 'nose' ? selNose : selMouth;
+  const tabSet   = faceTab === 'eyes' ? setSelEye : faceTab === 'nose' ? setSelNose : setSelMouth;
+
+  const renderCanvas = (size: number) => (
+    <div style={{position:'relative', width:size, height:size*1.05, flexShrink:0}}>
+      <svg viewBox='0 0 200 200' width={size} height={size} style={{display:'block',overflow:'visible'}}>
+        <g dangerouslySetInnerHTML={{__html: pump.body}}/>
+        {faceHtml && <g dangerouslySetInnerHTML={{__html: faceHtml}}/>}
       </svg>
-      {placed.map(item => (
-        <div key={item.id}
-          onClick={e=>removeItem(item.id,e)}
-          title="Click to remove"
-          style={{position:"absolute",left:`${item.x}%`,top:`${item.y}%`,
-            transform:"translate(-50%,-50%)",fontSize:28,cursor:"pointer",
-            userSelect:"none",lineHeight:1,
-            filter:"drop-shadow(0 2px 4px rgba(0,0,0,0.4))",
-            transition:"transform 0.1s",zIndex:10}}>
-          {item.emoji}
-        </div>
-      ))}
-      {held && <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",
-        background:"rgba(0,0,0,0.65)",color:"#fff",borderRadius:20,padding:"4px 12px",
-        fontSize:12,fontFamily:bf,pointerEvents:"none",whiteSpace:"nowrap"}}>
-        Tap pumpkin to place {held}
-      </div>}
-    </div>
-  );
-
-  const controls = (
-    <div style={{display:"flex",flexDirection:"column",gap:12,flex:1,minWidth:0}}>
-      {/* Theme tabs */}
-      <div>
-        <p style={{fontFamily:hf,fontSize:13,color:accentColor,margin:"0 0 6px",textTransform:"uppercase",letterSpacing:"0.08em"}}>🎨 Choose a Theme</p>
-        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-          {THEMES.map((t,i)=>(
-            <button key={i} onClick={()=>setTi(i)}
-              style={{padding:"6px 10px",borderRadius:50,border:`2px solid ${i===ti?accentColor:"#ddd"}`,
-                background:i===ti?accentColor:"#fff",color:i===ti?"#fff":"#444",
-                fontWeight:700,fontSize:12,fontFamily:bf,cursor:"pointer",transition:"all 0.15s"}}>
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Decoration palette */}
-      <div style={{borderRadius:16,padding:12,background:th.bg,border:`1px solid ${accentColor}44`}}>
-        <p style={{fontFamily:hf,fontSize:12,color:th.tc,margin:"0 0 8px",textTransform:"uppercase",letterSpacing:"0.06em"}}>Drag or click to decorate</p>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:6}}>
-          {th.items.map(em=>(
-            <div key={em}
-              draggable
-              onDragStart={e=>{e.dataTransfer.setData("emoji",em);setHeld(null);}}
-              onClick={()=>setHeld(h=>h===em?null:em)}
-              style={{fontSize:28,textAlign:"center",padding:"8px 4px",borderRadius:12,cursor:"pointer",
-                background:held===em?"rgba(255,255,255,0.9)":"rgba(255,255,255,0.2)",
-                border:`2px solid ${held===em?accentColor:"transparent"}`,
-                transition:"all 0.15s",userSelect:"none",
-                transform:held===em?"scale(1.15)":"scale(1)"}}>
-              {em}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Pumpkin type picker */}
-      <div>
-        <p style={{fontFamily:hf,fontSize:13,color:accentColor,margin:"0 0 6px",textTransform:"uppercase",letterSpacing:"0.08em"}}>🎃 Pumpkin Type</p>
-        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-          {PUMPKINS.map((p,i)=>(
-            <button key={i} onClick={()=>{setPi(i);setPlaced([]);}}
-              style={{padding:"6px 10px",borderRadius:50,border:`2px solid ${i===pi?accentColor:"#ddd"}`,
-                background:i===pi?p.fill:"#fff",color:i===pi?"#fff":"#444",
-                fontWeight:700,fontSize:11,fontFamily:bf,cursor:"pointer",transition:"all 0.15s"}}>
-              {p.name}
-            </button>
-          ))}
-        </div>
-        {placed.length > 0 && (
-          <button onClick={()=>setPlaced([])}
-            style={{marginTop:8,padding:"6px 14px",borderRadius:50,border:"2px solid #FF3B30",
-              background:"#fff",color:"#FF3B30",fontWeight:700,fontSize:12,fontFamily:bf,cursor:"pointer"}}>
-            🗑 Clear All
-          </button>
-        )}
-      </div>
     </div>
   );
 
   const inner = (
-    <div style={{display:"flex",flexDirection:"column",gap:12}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <span style={{fontFamily:hf,fontSize:"clamp(15px,2.2vw,18px)",color:accentColor}}>🎃 Pumpkin Studio</span>
-        <button onClick={()=>setFs(v=>!v)}
-          style={{padding:"6px 14px",borderRadius:50,border:`2px solid ${accentColor}`,
-            background:fs?accentColor:"#fff",color:fs?"#fff":accentColor,
-            fontWeight:700,fontSize:12,fontFamily:bf,cursor:"pointer"}}>
-          {fs?"✕ Close":"⛶ Expand"}
-        </button>
+    <div style={{display:'flex',flexDirection:'column',gap:16}}>
+
+      {/* Title */}
+      <div style={{textAlign:'center',fontFamily:hf,fontSize:'clamp(15px,2.3vw,18px)',color:ac}}>
+        🎃 Pumpkin Studio — Build Your Face!
       </div>
-      <div style={{display:"flex",gap:16,flexWrap:"wrap",alignItems:"flex-start",justifyContent:"center"}}>
-        {canvas}
-        {controls}
+
+      {/* Pumpkin type picker */}
+      <div>
+        <p style={{fontFamily:hf,fontSize:12,color:'#888',margin:'0 0 6px 0',textAlign:'center'}}>Choose Your Pumpkin</p>
+        <div style={{display:'flex',gap:6,overflowX:'auto',paddingBottom:4}}>
+          {PUMPKINS.map((p,i) => (
+            <button key={p.id} onClick={() => setPumpkinIdx(i)}
+              style={{flexShrink:0,padding:'6px 10px',borderRadius:12,border:`2px solid ${i===pumpkinIdx?ac:'#ddd'}`,
+                background:i===pumpkinIdx?`${ac}18`:'#fff',fontFamily:bf,fontSize:11,fontWeight:700,
+                color:i===pumpkinIdx?ac:'#555',cursor:'pointer',whiteSpace:'nowrap'}}>
+              {p.emoji} {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Main area: pumpkin + face picker side by side */}
+      <div style={{display:'flex',gap:16,alignItems:'flex-start',flexWrap:'wrap'}}>
+
+        {/* Pumpkin canvas */}
+        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:8,flex:'0 0 auto'}}>
+          {renderCanvas(200)}
+          <button onClick={() => setFullscreen(true)}
+            style={{padding:'6px 16px',borderRadius:20,border:`1px solid ${ac}`,background:'#fff',
+              color:ac,fontFamily:bf,fontSize:12,fontWeight:700,cursor:'pointer'}}>
+            ⛶ Expand
+          </button>
+        </div>
+
+        {/* Face builder panel */}
+        <div style={{flex:1,minWidth:200,display:'flex',flexDirection:'column',gap:10}}>
+
+          {/* Theme picker */}
+          <div>
+            <p style={{fontFamily:hf,fontSize:12,color:'#888',margin:'0 0 6px 0'}}>Choose Theme</p>
+            <div style={{display:'flex',gap:5,flexWrap:'wrap'}}>
+              {THEMES.map((t,i) => (
+                <button key={t.id} onClick={() => setThemeIdx(i)}
+                  style={{padding:'5px 10px',borderRadius:20,border:`2px solid ${i===themeIdx?t.accent:'#ddd'}`,
+                    background:i===themeIdx?t.bg:'#fff',fontFamily:bf,fontSize:11,fontWeight:700,
+                    color:i===themeIdx?t.accent:'#555',cursor:'pointer'}}>
+                  {t.emoji} {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Face part tabs */}
+          <div style={{background:theme.bg,borderRadius:16,padding:12,border:`2px solid ${theme.accent}44`}}>
+            <div style={{display:'flex',gap:6,marginBottom:10}}>
+              {(['eyes','nose','mouth'] as const).map(tab => (
+                <button key={tab} onClick={() => setFaceTab(tab)}
+                  style={{flex:1,padding:'7px 4px',borderRadius:10,border:`2px solid ${faceTab===tab?theme.accent:'#ddd'}`,
+                    background:faceTab===tab?theme.accent:'#fff',color:faceTab===tab?'#fff':'#666',
+                    fontFamily:hf,fontSize:12,fontWeight:700,cursor:'pointer',textTransform:'capitalize',
+                    transition:'all 0.15s'}}>
+                  {tab==='eyes'?'👁 Eyes':tab==='nose'?'👃 Nose':'👄 Mouth'}
+                </button>
+              ))}
+            </div>
+
+            {/* Face part thumbnails */}
+            <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+              {tabParts.map(part => {
+                const isSel = tabSel === part.id;
+                return (
+                  <button key={part.id} onClick={() => tabSet(isSel ? null : part.id)}
+                    style={{display:'flex',flexDirection:'column',alignItems:'center',gap:4,
+                      padding:'8px 6px',borderRadius:12,border:`2px solid ${isSel?theme.accent:'#ddd'}`,
+                      background:isSel?`${theme.accent}22`:'#fff',cursor:'pointer',
+                      boxShadow:isSel?`0 2px 8px ${theme.accent}55`:'none',transition:'all 0.15s'}}>
+                    <svg viewBox='0 0 200 200' width={56} height={56} style={{display:'block'}}>
+                      <rect width='200' height='200' fill='#ff8c0022' rx='20'/>
+                      <g dangerouslySetInnerHTML={{__html: part.svg}}/>
+                    </svg>
+                    <span style={{fontFamily:bf,fontSize:10,color:isSel?theme.accent:'#666',fontWeight:700}}>
+                      {part.label}
+                    </span>
+                  </button>
+                );
+              })}
+              <button onClick={() => tabSet(null)}
+                style={{display:'flex',flexDirection:'column',alignItems:'center',gap:4,
+                  padding:'8px 6px',borderRadius:12,border:'2px dashed #ccc',
+                  background:tabSel===null?'#f0f0f0':'#fff',cursor:'pointer'}}>
+                <div style={{width:56,height:56,display:'flex',alignItems:'center',justifyContent:'center',fontSize:24}}>✕</div>
+                <span style={{fontFamily:bf,fontSize:10,color:'#888',fontWeight:700}}>None</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Reset button */}
+          <button onClick={() => { setSelEye(null); setSelNose(null); setSelMouth(null); }}
+            style={{alignSelf:'flex-start',padding:'8px 18px',borderRadius:20,border:'2px solid #ddd',
+              background:'#fff',color:'#888',fontFamily:bf,fontSize:12,fontWeight:700,cursor:'pointer'}}>
+            🔄 Clear Face
+          </button>
+        </div>
       </div>
     </div>
   );
 
-  if (fs) return (
-    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(10,0,20,0.96)",
-      display:"flex",flexDirection:"column",padding:"clamp(12px,3vw,32px)",overflowY:"auto"}}>
-      {inner}
+  if (fullscreen) return (
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.9)',zIndex:9999,
+      display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16,padding:20}}>
+      {renderCanvas(Math.min(window.innerWidth - 40, 400))}
+      <button onClick={() => setFullscreen(false)}
+        style={{padding:'12px 32px',borderRadius:30,background:ac,color:'#fff',border:'none',
+          fontSize:16,fontWeight:700,fontFamily:hf,cursor:'pointer'}}>
+        ✕ Close
+      </button>
     </div>
   );
+
   return inner;
 }
 
-
-// ── Shut-In Button: Outfit Designer ──────────────────────────────────────────
 function ODBtnShape({ style, color, size, cx, cy }: { style:string; color:string; size:number; cx:number; cy:number }) {
   const s = size, h = color, d = "#00000030";
   if (style === "square")  return <><rect x={cx-s*0.5} y={cy-s*0.5} width={s} height={s} rx={s*0.15} fill={h}/><rect x={cx-s*0.5} y={cy-s*0.5} width={s} height={s} rx={s*0.15} fill="none" stroke={d} strokeWidth={1.5}/><circle cx={cx-s*0.2} cy={cy-s*0.2} r={s*0.12} fill="none" stroke={d} strokeWidth={1}/><circle cx={cx+s*0.2} cy={cy-s*0.2} r={s*0.12} fill="none" stroke={d} strokeWidth={1}/><circle cx={cx-s*0.2} cy={cy+s*0.2} r={s*0.12} fill="none" stroke={d} strokeWidth={1}/><circle cx={cx+s*0.2} cy={cy+s*0.2} r={s*0.12} fill="none" stroke={d} strokeWidth={1}/></>;
