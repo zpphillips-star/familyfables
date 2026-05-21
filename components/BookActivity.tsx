@@ -937,12 +937,153 @@ const ANIMALS = [
   { name: "Dog",       emoji: "🐶", face: "🥴", caption: "Spins around 47 times first. Then the face." },
   { name: "Penguin",   emoji: "🐧", face: "😦", caption: "Stands very still. Eyes go very wide. Very wide." },
   { name: "Sloth",     emoji: "🦥", face: "😪", caption: "Takes so long. The face lasts 20 minutes." },
-  { name: "YOU",       emoji: "🧒", face: "😖", caption: "You know the face. We ALL know the face. 😂" },
 ];
+
+const SHARE_MSG = `😂 Just made my Poo Poo Face and it's a MASTERPIECE 🤣 Check out "What's Your Poo Poo Face?" at familyfables.com — everybody makes it 💩 @familyfables #PooPooFace #FamilyFables`;
+const BOOK_URL = "https://familyfables.com/books/whats-your-poo-poo-face";
+
+function YouPooPooFace({ accentColor, onBack }: { accentColor: string; onBack: () => void }) {
+  const [phase, setPhase] = useState<"capture" | "processing" | "result" | "error">("capture");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [errMsg, setErrMsg] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const reset = () => { setPhase("capture"); setPreviewUrl(null); setResultUrl(null); setErrMsg(""); };
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      const dataUrl = ev.target?.result as string;
+      setPreviewUrl(dataUrl);
+      setPhase("processing");
+
+      // Submit to existing poo-face pipeline
+      try {
+        const res = await fetch("/api/poo-face", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageBase64: dataUrl }),
+        });
+        const { requestId, error: err } = await res.json();
+        if (err || !requestId) { setErrMsg(err || "Failed to start"); setPhase("error"); return; }
+
+        // Poll
+        let attempts = 0;
+        const poll = async () => {
+          if (attempts++ > 40) { setErrMsg("Took too long — try again!"); setPhase("error"); return; }
+          const r = await fetch(`/api/poo-face?id=${requestId}`);
+          const d = await r.json();
+          if (d.status === "COMPLETED") { setResultUrl(d.imageUrl); setPhase("result"); }
+          else if (d.status === "FAILED") { setErrMsg("Generation failed — try again!"); setPhase("error"); }
+          else setTimeout(poll, 2000);
+        };
+        poll();
+      } catch { setErrMsg("Connection error — try again!"); setPhase("error"); }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSave = async () => {
+    if (!resultUrl) return;
+    try {
+      const res = await fetch(resultUrl);
+      const blob = await res.blob();
+      const file = new File([blob], "my-poo-poo-face.jpg", { type: "image/jpeg" });
+      if (typeof navigator !== "undefined" && navigator.share && (navigator as { canShare?: (d: object) => boolean }).canShare?.({ files: [file] })) {
+        await navigator.share({ title: "My Poo Poo Face!", text: SHARE_MSG, files: [file] });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = "my-poo-poo-face.jpg"; a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+    } catch { /* user cancelled */ }
+  };
+
+  const handleShare = async () => {
+    if (!resultUrl) return;
+    try {
+      const res = await fetch(resultUrl);
+      const blob = await res.blob();
+      const file = new File([blob], "my-poo-poo-face.jpg", { type: "image/jpeg" });
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title: "My Poo Poo Face!", text: SHARE_MSG, files: (navigator as { canShare?: (d: object) => boolean }).canShare?.({ files: [file] }) ? [file] : undefined, url: BOOK_URL });
+        return;
+      }
+    } catch { /* fall through to link sharing */ }
+    // Fallback: open native share sheet via web share link
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(SHARE_MSG)}&url=${encodeURIComponent(BOOK_URL)}`, "_blank");
+  };
+
+  if (phase === "capture") return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, textAlign: "center", padding: "8px 0" }}>
+      <div style={{ fontSize: 56 }}>📸</div>
+      <p style={{ fontSize: 18, fontWeight: 800, color: "#5a2d82", margin: 0, fontFamily: "var(--font-concert-one),'Concert One',cursive" }}>Make YOUR Poo Poo Face!</p>
+      <p style={{ fontSize: 14, color: "#9b80c0", margin: 0, lineHeight: 1.5 }}>Take a photo and we&apos;ll turn it into<br />your very own Poo Poo Face artwork! 🎨</p>
+      <button
+        onClick={() => fileInputRef.current?.click()}
+        style={{ padding: "14px 32px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 800, fontSize: 16, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif", boxShadow: `0 4px 20px ${accentColor}66` }}
+      >
+        📷 Take My Photo
+      </button>
+      <input ref={fileInputRef} type="file" accept="image/*" capture="user" onChange={handleFile} style={{ display: "none" }} />
+      <button onClick={onBack} style={{ background: "none", border: "none", color: "#bba8d4", fontSize: 13, cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>← Pick an animal instead</button>
+    </div>
+  );
+
+  if (phase === "processing") return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, textAlign: "center" }}>
+      {previewUrl && <img src={previewUrl} alt="Your photo" style={{ width: 140, height: 140, borderRadius: "50%", objectFit: "cover", border: `3px solid ${accentColor}`, opacity: 0.7 }} />}
+      <div style={{ fontSize: 40, animation: "adventureFloat 1s ease-in-out infinite" }}>🎨</div>
+      <p style={{ fontSize: 16, fontWeight: 700, color: "#5a2d82", margin: 0, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>Creating your Poo Poo Face artwork…</p>
+      <p style={{ fontSize: 13, color: "#bba8d4", margin: 0 }}>This takes about 15–20 seconds ✨</p>
+    </div>
+  );
+
+  if (phase === "error") return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, textAlign: "center" }}>
+      <div style={{ fontSize: 48 }}>😬</div>
+      <p style={{ fontSize: 15, color: "#c0392b", margin: 0 }}>{errMsg}</p>
+      <button onClick={reset} style={{ padding: "10px 24px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>Try Again</button>
+      <button onClick={onBack} style={{ background: "none", border: "none", color: "#bba8d4", fontSize: 13, cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>← Pick an animal instead</button>
+    </div>
+  );
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, textAlign: "center" }}>
+      {resultUrl && <img src={resultUrl} alt="Your Poo Poo Face artwork" style={{ width: "100%", maxWidth: 320, borderRadius: 20, border: `3px solid ${accentColor}66`, boxShadow: `0 8px 32px ${accentColor}44` }} />}
+      <p style={{ fontSize: 18, fontWeight: 800, color: "#5a2d82", margin: 0, fontFamily: "var(--font-concert-one),'Concert One',cursive" }}>🧒 YOUR Poo Poo Face!</p>
+      <p style={{ fontSize: 14, color: "#9b80c0", margin: 0 }}>Everybody makes it. Even you. 😂</p>
+
+      {/* Action buttons */}
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+        <button onClick={handleSave} style={{ padding: "11px 22px", borderRadius: 50, backgroundColor: accentColor, color: "#fff", fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+          💾 Save to Photos
+        </button>
+        <button onClick={handleShare} style={{ padding: "11px 22px", borderRadius: 50, backgroundColor: "transparent", color: accentColor, fontWeight: 700, fontSize: 14, border: `2px solid ${accentColor}`, cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+          📤 Share
+        </button>
+      </div>
+
+      {/* Fallback platform links (shown if no native share) */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", marginTop: 2 }}>
+        <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(SHARE_MSG)}&url=${encodeURIComponent(BOOK_URL)}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: "#9b80c0", textDecoration: "underline", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>Share on X</a>
+        <span style={{ color: "#ddd" }}>·</span>
+        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(BOOK_URL)}&quote=${encodeURIComponent(SHARE_MSG)}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: "#9b80c0", textDecoration: "underline", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>Facebook</a>
+      </div>
+
+      <button onClick={reset} style={{ background: "none", border: "none", color: "#bba8d4", fontSize: 13, cursor: "pointer", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif", marginTop: 4 }}>Try again →</button>
+    </div>
+  );
+}
 
 function PooPooFaceGame({ accentColor }: { accentColor: string }) {
   const [selected, setSelected] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
+  const [youMode, setYouMode] = useState(false);
 
   const handlePick = (i: number) => {
     setSelected(i);
@@ -951,6 +1092,8 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
   };
 
   const animal = selected !== null ? ANIMALS[selected] : null;
+
+  if (youMode) return <YouPooPooFace accentColor={accentColor} onBack={() => setYouMode(false)} />;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
@@ -976,6 +1119,25 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
             {a.emoji} {a.name}
           </button>
         ))}
+        {/* YOU button — special camera flow */}
+        <button
+          onClick={() => setYouMode(true)}
+          style={{
+            padding: "10px 18px",
+            borderRadius: 50,
+            border: `2px solid ${accentColor}`,
+            backgroundColor: accentColor + "22",
+            color: "#5a2d82",
+            fontWeight: 800,
+            fontSize: 15,
+            cursor: "pointer",
+            fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
+            transition: "all 0.2s ease",
+            boxShadow: `0 2px 12px ${accentColor}44`,
+          }}
+        >
+          📸 YOU
+        </button>
       </div>
 
       {/* Result reveal */}
@@ -1013,7 +1175,7 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
 
       {!animal && (
         <p style={{ color: "#bba8d4", fontSize: 14, fontFamily: "var(--font-open-sans),'Open Sans',sans-serif" }}>
-          👆 Pick an animal above to see their face!
+          👆 Pick an animal — or tap 📸 YOU for your own!
         </p>
       )}
     </div>
