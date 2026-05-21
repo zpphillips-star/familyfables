@@ -835,15 +835,17 @@ section     { overflow-x: hidden; }
   .amber-activity-right { padding-left:  20px !important; }
 }
 
-/* ── Desktop/tablet (≥640px): lock Brian ghost to its absolute hero position ── */
+/* ── Desktop/tablet (≥640px): Brian ghost is a flex sibling — lock it right of the text ── */
 @media (min-width: 640px) {
   .brian-ghost-hero {
-    position: absolute !important;
-    top: 8% !important;
+    position: static !important;
+    flex: 0 0 auto !important;
+    width: clamp(280px, 38vw, 480px) !important;
+    margin-bottom: -80px !important;
+    top: auto !important;
     bottom: auto !important;
-    right: clamp(-40px, -2vw, 20px) !important;
-    width: clamp(280px, 42vw, 560px) !important;
-    margin: 0 !important;
+    right: auto !important;
+    order: 2 !important;
     display: block !important;
   }
 }
@@ -873,14 +875,10 @@ section     { overflow-x: hidden; }
     max-width: 100% !important;
   }
   .brian-ghost-hero {
-    position: static !important;
+    order: -1 !important;
     width: clamp(200px, 65vw, 280px) !important;
-    display: block !important;
-    margin: 0 auto 8px !important;
-    opacity: 1;
-    bottom: auto !important;
-    top: auto !important;
-    right: auto !important;
+    flex: none !important;
+    margin-bottom: 8px !important;
   }
   .brian-haunt-divider {
     height: 2px !important;

@@ -334,31 +334,6 @@ export default async function BookPage({
           {getDecorations(book.landIndex)}
         </div>
 
-        {/* Brian: large ghost image anchored bottom-right, bleeds into section below */}
-        {isBrianPage && book.characterImage && (
-          <div
-            aria-hidden="true"
-            className="brian-ghost-hero"
-            style={{
-              position: "absolute",
-              bottom: -80,
-              right: "clamp(-40px, -2vw, 20px)",
-              width: "clamp(280px, 42vw, 560px)",
-              zIndex: 2,
-              pointerEvents: "none",
-            }}
-          >
-            <Image
-              src={book.characterImage}
-              alt=""
-              width={560}
-              height={700}
-              style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 20px 60px rgba(0,0,0,0.5))" }}
-              priority
-            />
-          </div>
-        )}
-
         {/* Back button */}
         <div style={{ maxWidth: 1100, margin: "0 auto", width: "100%", position: "relative", zIndex: 3, marginBottom: 40 }}>
           <Link
@@ -473,13 +448,31 @@ export default async function BookPage({
             </div>
           ) : null}
 
+          {/* Brian ghost — flex sibling to text block so they sit together as a unit */}
+          {isBrianPage && book.characterImage && (
+            <div
+              aria-hidden="true"
+              className="brian-ghost-hero"
+              style={{ flex: "0 0 auto", width: "clamp(280px, 38vw, 480px)", marginBottom: -80, pointerEvents: "none" }}
+            >
+              <Image
+                src={book.characterImage}
+                alt=""
+                width={480}
+                height={600}
+                style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0 20px 60px rgba(0,0,0,0.5))" }}
+                priority
+              />
+            </div>
+          )}
+
           {/* Text block — hidden for poo-poo-face (text lives inside the stacked layout above) */}
           <div
             className={`book-page-text-block${isPooPooFace ? " poo-hide" : ""}${isBrianPage ? " brian-text-block" : ""}`}
             style={{
-              flex: isBrianPage ? "1 1 100%" : "1 1 280px",
+              flex: "1 1 280px",
               minWidth: 240,
-              maxWidth: isBrianPage ? "55%" : undefined,
+              maxWidth: isBrianPage ? "50%" : undefined,
               ...(isPooPooFace ? { display: "none" } : {}),
             }}
           >
