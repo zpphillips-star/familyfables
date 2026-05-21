@@ -958,7 +958,25 @@ function YouPooPooFace({ accentColor, onBack }: { accentColor: string; onBack: (
     const reader = new FileReader();
     reader.onload = async (ev) => {
       const dataUrl = ev.target?.result as string;
-      setPreviewUrl(dataUrl);
+
+      // Compress to max 800px / quality 0.75 before sending — phone selfies are 3-8MB raw
+      const compressedDataUrl = await new Promise<string>((resolve) => {
+        const img = new window.Image();
+        img.onload = () => {
+          const MAX = 800;
+          const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+          const w = Math.round(img.width * scale);
+          const h = Math.round(img.height * scale);
+          const canvas = document.createElement("canvas");
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext("2d")!;
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL("image/jpeg", 0.75));
+        };
+        img.src = dataUrl;
+      });
+
+      setPreviewUrl(compressedDataUrl);
       setPhase("processing");
 
       // Submit to existing poo-face pipeline
@@ -966,7 +984,7 @@ function YouPooPooFace({ accentColor, onBack }: { accentColor: string; onBack: (
         const res = await fetch("/api/poo-face", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ imageBase64: dataUrl }),
+          body: JSON.stringify({ imageBase64: compressedDataUrl }),
         });
         const { requestId, error: err } = await res.json();
         if (err || !requestId) { setErrMsg(err || "Failed to start"); setPhase("error"); return; }

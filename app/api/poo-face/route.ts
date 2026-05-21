@@ -49,7 +49,7 @@ async function uploadImageToFal(base64: string): Promise<string | null> {
   }
 }
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   let imageBase64: string;
