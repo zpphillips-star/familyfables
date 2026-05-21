@@ -1288,7 +1288,6 @@ function TomTurkeySingAlong({ accentColor }: { accentColor: string }) {
   const stopAll = () => {
     playingRef.current = false;
     if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; audioRef.current = null; }
-    if (urlRef.current) { URL.revokeObjectURL(urlRef.current); urlRef.current = null; }
     setPlaying(false); setWordIdx(-1);
   };
 
@@ -1299,17 +1298,8 @@ function TomTurkeySingAlong({ accentColor }: { accentColor: string }) {
     playingRef.current = true;
 
     try {
-      const verse = PAGES[pIdx].words.join(" ");
-      const res = await fetch("/api/tts-one-tom-turkey", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: verse }),
-      });
-      if (!res.ok || !playingRef.current) { setLoading(false); setPlaying(false); return; }
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      urlRef.current = url;
+      // Use pre-generated AI sung audio files (verse-1.wav … verse-11.wav)
+      const url = `/audio/tom-turkey/verse-${pIdx + 1}.wav`;
 
       const audio = new Audio(url);
       audioRef.current = audio;
@@ -1323,7 +1313,6 @@ function TomTurkeySingAlong({ accentColor }: { accentColor: string }) {
       };
 
       audio.onended = () => {
-        URL.revokeObjectURL(url); urlRef.current = null;
         const np = pIdx + 1;
         if (np < PAGES.length && playingRef.current) {
           startPlayback(np);
