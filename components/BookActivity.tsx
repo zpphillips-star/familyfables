@@ -177,6 +177,150 @@ const PUMPKIN_RESULTS = [
   { emoji: "✨", label: "The Hidden Gem", desc: "People have to look twice to notice how amazing you are. Their loss — and then their gain." },
 ];
 
+// ── Pumpkin Carver helpers ──────────────────────────────────────────────────────
+function starD(outer: number, inner: number, pts: number): string {
+  const arr: string[] = [];
+  for (let i = 0; i < pts * 2; i++) {
+    const a = (i * Math.PI) / pts - Math.PI / 2;
+    const r = i % 2 === 0 ? outer : inner;
+    arr.push(`${(Math.cos(a) * r).toFixed(1)},${(Math.sin(a) * r).toFixed(1)}`);
+  }
+  return `M${arr.join(" L")} Z`;
+}
+
+type FaceSlot = "eyeL" | "eyeR" | "nose" | "mouth";
+interface ShapeOpt { id: string; label: string; d: string; }
+
+const EYE_OPTS: ShapeOpt[] = [
+  { id: "none",  label: "—",  d: "" },
+  { id: "tri",   label: "▲",  d: "M0,-16 L14,12 L-14,12 Z" },
+  { id: "circ",  label: "●",  d: "M-13,0 a13,13 0 1,0 26,0 a13,13 0 1,0 -26,0" },
+  { id: "dia",   label: "◆",  d: "M0,-15 L12,0 L0,15 L-12,0 Z" },
+  { id: "star",  label: "★",  d: starD(14, 6, 5) },
+  { id: "sqr",   label: "■",  d: "M-11,-11 L11,-11 L11,11 L-11,11 Z" },
+];
+const NOSE_OPTS: ShapeOpt[] = [
+  { id: "none",  label: "—",  d: "" },
+  { id: "tri",   label: "▲",  d: "M0,-12 L13,10 L-13,10 Z" },
+  { id: "circ",  label: "●",  d: "M-10,0 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0" },
+  { id: "dia",   label: "◆",  d: "M0,-12 L10,0 L0,12 L-10,0 Z" },
+  { id: "heart", label: "♥",  d: "M0,9 C-15,1 -15,-9 -7,-9 C-3,-9 0,-5 0,-5 C0,-5 3,-9 7,-9 C15,-9 15,1 0,9 Z" },
+];
+const MOUTH_OPTS: ShapeOpt[] = [
+  { id: "none",   label: "—",  d: "" },
+  { id: "smile",  label: "😊", d: "M-36,-2 Q-20,26 0,26 Q20,26 36,-2 L26,-6 Q14,16 0,16 Q-14,16 -26,-6 Z" },
+  { id: "scary",  label: "😱", d: "M-38,-10 L-28,10 L-16,-10 L-4,10 L8,-10 L20,10 L32,-10 L38,8 L38,-14 L-38,-14 Z" },
+  { id: "gap",    label: "😁", d: "M-36,-4 Q-22,20 0,20 Q22,20 36,-4 L26,-6 Q12,12 5,12 L5,-4 L-5,-4 L-5,12 Q-12,12 -26,-6 Z" },
+  { id: "oh",     label: "😮", d: "M-14,0 a14,20 0 1,0 28,0 a14,20 0 1,0 -28,0" },
+  { id: "frown",  label: "😟", d: "M-36,10 Q-20,-18 0,-18 Q20,-18 36,10 L26,14 Q12,-8 0,-8 Q-12,-8 -26,14 Z" },
+];
+
+const SLOT_CONFIG: Record<FaceSlot, { x: number; y: number; opts: ShapeOpt[]; label: string }> = {
+  eyeL:  { x: 168, y: 250, opts: EYE_OPTS,   label: "Left Eye" },
+  eyeR:  { x: 292, y: 250, opts: EYE_OPTS,   label: "Right Eye" },
+  nose:  { x: 230, y: 295, opts: NOSE_OPTS,  label: "Nose" },
+  mouth: { x: 230, y: 345, opts: MOUTH_OPTS, label: "Mouth" },
+};
+
+function PumpkinCarver({ accentColor }: { accentColor: string }) {
+  const [sel, setSel] = useState<Record<FaceSlot, string>>({
+    eyeL: "tri", eyeR: "tri", nose: "tri", mouth: "smile",
+  });
+
+  const pick = (slot: FaceSlot, id: string) => setSel(s => ({ ...s, [slot]: id }));
+
+  const slots = Object.entries(SLOT_CONFIG) as [FaceSlot, typeof SLOT_CONFIG["eyeL"]][];
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+      {/* SVG Pumpkin */}
+      <svg viewBox="60 100 340 360" width={260} height={270} style={{ display: "block", filter: "drop-shadow(0 8px 24px rgba(180,80,0,0.35))" }}>
+        <defs>
+          <radialGradient id="pcGlow" cx="50%" cy="42%" r="52%">
+            <stop offset="0%"   stopColor="#FFF176" />
+            <stop offset="35%"  stopColor="#FFAA00" />
+            <stop offset="75%"  stopColor="#E85000" />
+            <stop offset="100%" stopColor="#7A1A00" />
+          </radialGradient>
+          <clipPath id="pcBody">
+            <ellipse cx="230" cy="280" rx="78" ry="92" />
+            <ellipse cx="163" cy="286" rx="63" ry="80" />
+            <ellipse cx="297" cy="286" rx="63" ry="80" />
+            <ellipse cx="110" cy="294" rx="46" ry="63" />
+            <ellipse cx="350" cy="294" rx="46" ry="63" />
+          </clipPath>
+          <mask id="pcMask">
+            <rect x="0" y="0" width="460" height="500" fill="white" />
+            {slots.map(([slot, pos]) => {
+              const opt = pos.opts.find(o => o.id === sel[slot]);
+              if (!opt?.d) return null;
+              return <path key={slot} d={opt.d} transform={`translate(${pos.x},${pos.y})`} fill="black" />;
+            })}
+          </mask>
+        </defs>
+
+        {/* Glow layer — always visible, clipped to pumpkin shape */}
+        <g clipPath="url(#pcBody)">
+          <rect x="0" y="0" width="460" height="500" fill="url(#pcGlow)" />
+        </g>
+
+        {/* Pumpkin body — carved holes reveal the glow */}
+        <g clipPath="url(#pcBody)" mask="url(#pcMask)">
+          <ellipse cx="230" cy="280" rx="78" ry="92" fill="#E8681A" />
+          <ellipse cx="163" cy="286" rx="63" ry="80" fill="#D8600E" />
+          <ellipse cx="297" cy="286" rx="63" ry="80" fill="#D8600E" />
+          <ellipse cx="110" cy="294" rx="46" ry="63" fill="#C85510" />
+          <ellipse cx="350" cy="294" rx="46" ry="63" fill="#C85510" />
+          {/* Rib shadow lines */}
+          <line x1="196" y1="194" x2="196" y2="366" stroke="#AA4408" strokeWidth="7" strokeLinecap="round" opacity="0.45" />
+          <line x1="264" y1="194" x2="264" y2="366" stroke="#AA4408" strokeWidth="7" strokeLinecap="round" opacity="0.45" />
+          <line x1="143" y1="228" x2="143" y2="355" stroke="#AA4408" strokeWidth="5" strokeLinecap="round" opacity="0.35" />
+          <line x1="317" y1="228" x2="317" y2="355" stroke="#AA4408" strokeWidth="5" strokeLinecap="round" opacity="0.35" />
+          {/* Highlight */}
+          <ellipse cx="185" cy="220" rx="22" ry="32" fill="white" opacity="0.07" />
+        </g>
+
+        {/* Stem */}
+        <rect x="222" y="168" width="16" height="36" rx="5" fill="#3b661c" />
+        <path d="M229,172 Q246,152 260,160" stroke="#3b661c" strokeWidth="4" fill="none" strokeLinecap="round" />
+        <path d="M229,170 Q212,148 200,158" stroke="#4a7c25" strokeWidth="3" fill="none" strokeLinecap="round" />
+      </svg>
+
+      {/* Shape pickers */}
+      <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 8 }}>
+        {slots.map(([slot, pos]) => (
+          <div key={slot} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#7b3fa0", textTransform: "uppercase", letterSpacing: "0.05em", width: 62, flexShrink: 0, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>
+              {pos.label}
+            </span>
+            <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+              {pos.opts.map(opt => (
+                <button
+                  key={opt.id}
+                  onClick={() => pick(slot, opt.id)}
+                  style={{
+                    width: 34, height: 34, borderRadius: 7,
+                    border: `2px solid ${sel[slot] === opt.id ? accentColor : "#ddd"}`,
+                    backgroundColor: sel[slot] === opt.id ? accentColor + "22" : "rgba(255,255,255,0.8)",
+                    cursor: "pointer", fontSize: 14,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    transition: "all 0.15s",
+                    fontFamily: "system-ui",
+                    boxShadow: sel[slot] === opt.id ? `0 2px 8px ${accentColor}44` : "none",
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
 function PumpkinQuiz({ accentColor, textLight }: { accentColor: string; textLight?: boolean }) {
   const [answer, setAnswer] = useState<number | null>(null);
   const qs = ["Smooth & perfect", "A little wobbly but shiny", "Totally lumpy but loveable"];
@@ -1319,7 +1463,18 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
     return wrap("Your confidence chant!", "🦃", <GilroyAffirmation accentColor={accentColor} />);
 
   if (slug === "the-lumpiest-pumpkin")
-    return wrap("Which pumpkin are you?", "🎃", <PumpkinQuiz accentColor={accentColor} textLight={textLight} />);
+    return wrap("Carve Your Pumpkin!", "🎃", (
+      <div style={{ display: "flex", gap: 32, flexWrap: "wrap", justifyContent: "center", alignItems: "flex-start" }}>
+        <div style={{ flex: "1 1 260px", maxWidth: 320 }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: "#7b3fa0", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>🎨 Carve Your Own!</p>
+          <PumpkinCarver accentColor={accentColor} />
+        </div>
+        <div style={{ flex: "1 1 240px", maxWidth: 320 }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: "#7b3fa0", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12, fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" }}>🎃 Which pumpkin are you?</p>
+          <PumpkinQuiz accentColor={accentColor} textLight={textLight} />
+        </div>
+      </div>
+    ));
 
   if (slug === "the-shut-in-button")
     return wrap("What would YOUR magical button do?", "👆", <ShutInButtonActivity accentColor={accentColor} textLight={textLight} />);
