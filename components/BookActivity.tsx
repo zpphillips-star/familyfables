@@ -320,6 +320,272 @@ function PumpkinCarver({ accentColor }: { accentColor: string }) {
   );
 }
 
+// ── Outfit Designer (Shut-In Button page) ──────────────────────────────────────
+type ODStyle = "round" | "square" | "star" | "heart" | "flower" | "bolt" | "smiley";
+type ODOutfit = "tshirt" | "dress" | "jacket" | "overalls";
+type ODSize = "s" | "m" | "l";
+interface ODBtn { id: string; x: number; y: number; style: ODStyle; color: string; size: number; }
+
+function odAdjustHex(hex: string, amt: number): string {
+  if (!hex.startsWith("#") || hex.length < 7) return hex;
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  const cl = (n: number) => Math.max(0,Math.min(255,n));
+  return `rgb(${cl(r+amt)},${cl(g+amt)},${cl(b+amt)})`;
+}
+
+const OD_OUTFITS: Record<ODOutfit, { label: string; emoji: string; path: string }> = {
+  tshirt:   { label: "T-Shirt",  emoji: "👕", path: "M118,60 L82,62 L30,64 L20,144 L80,148 L78,338 L222,338 L220,148 L280,144 L270,64 L218,62 L182,60 A50,30 0 0,1 118,60 Z" },
+  dress:    { label: "Dress",    emoji: "👗", path: "M122,60 C112,50 92,56 82,62 L96,118 L204,118 L218,62 C208,56 188,50 178,60 A44,28 0 0,1 122,60 Z M96,118 L55,338 L245,338 L204,118 Z" },
+  jacket:   { label: "Jacket",   emoji: "🧥", path: "M118,58 L82,62 L52,68 L38,80 L24,150 L86,152 L82,338 L218,338 L214,152 L276,150 L262,80 L248,68 L218,62 L182,58 L150,115 L118,58 Z" },
+  overalls: { label: "Overalls", emoji: "👖", path: "M90,168 L78,338 L222,338 L210,168 Z M108,120 L108,168 L192,168 L192,120 Z M108,120 L105,48 L132,48 L138,120 Z M162,120 L168,48 L195,48 L192,120 Z" },
+};
+
+const OD_OUTFIT_COLORS = [
+  "#6B9EE8","#E86B6B","#6BE8A8","#E8C76B",
+  "#C76BE8","#E8906B","#A8D8A8","#F8F0FF",
+  "#2C3E60","#8B3A3A","#1F6B3A","#E8439A",
+];
+
+const OD_BTN_STYLES: { id: ODStyle; label: string; name: string }[] = [
+  { id: "round",  label: "⬤", name: "Round"  },
+  { id: "square", label: "■", name: "Square" },
+  { id: "star",   label: "★", name: "Star"   },
+  { id: "heart",  label: "♥", name: "Heart"  },
+  { id: "flower", label: "✿", name: "Flower" },
+  { id: "bolt",   label: "⚡", name: "Bolt"  },
+  { id: "smiley", label: "☺", name: "Smile"  },
+];
+
+const OD_BTN_COLORS = [
+  "#FF3B30","#FF9500","#FFD60A","#34C759",
+  "#007AFF","#AF52DE","#FF2D55","#FFFFFF",
+  "#1C1C1E","#C9A227",
+];
+
+function ODBtnShape({ b }: { b: ODBtn }) {
+  const r = b.size, h = r * 0.24, c = b.color;
+
+  switch (b.style) {
+    case "round": return (
+      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
+        <circle cx={0} cy={r*0.14} r={r} fill="#00000018"/>
+        <circle r={r} fill={c}/>
+        <circle r={r} fill="none" stroke="white" strokeWidth="1.2" opacity="0.38"/>
+        <circle r={r*0.62} fill="none" stroke="#00000022" strokeWidth="1"/>
+        <circle cx={-h} cy={-h} r={r*0.14} fill="#000" opacity="0.65"/>
+        <circle cx={h}  cy={-h} r={r*0.14} fill="#000" opacity="0.65"/>
+        <circle cx={h}  cy={h}  r={r*0.14} fill="#000" opacity="0.65"/>
+        <circle cx={-h} cy={h}  r={r*0.14} fill="#000" opacity="0.65"/>
+        <line x1={-h} y1={-h} x2={h} y2={h} stroke="#000" strokeWidth="0.7" opacity="0.3"/>
+        <line x1={h} y1={-h} x2={-h} y2={h} stroke="#000" strokeWidth="0.7" opacity="0.3"/>
+        <ellipse cx={-r*0.27} cy={-r*0.3} rx={r*0.22} ry={r*0.12} fill="white" opacity="0.5" transform={`rotate(-35,${-r*0.27},${-r*0.3})`}/>
+      </g>);
+    case "square": return (
+      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
+        <rect x={-r} y={-r+r*0.14} width={r*2} height={r*2} rx={r*0.18} fill="#00000018"/>
+        <rect x={-r} y={-r} width={r*2} height={r*2} rx={r*0.18} fill={c}/>
+        <rect x={-r} y={-r} width={r*2} height={r*2} rx={r*0.18} fill="none" stroke="white" strokeWidth="1.2" opacity="0.38"/>
+        <circle cx={-h} cy={-h} r={r*0.14} fill="#000" opacity="0.65"/>
+        <circle cx={h}  cy={-h} r={r*0.14} fill="#000" opacity="0.65"/>
+        <circle cx={h}  cy={h}  r={r*0.14} fill="#000" opacity="0.65"/>
+        <circle cx={-h} cy={h}  r={r*0.14} fill="#000" opacity="0.65"/>
+        <ellipse cx={-r*0.27} cy={-r*0.3} rx={r*0.22} ry={r*0.12} fill="white" opacity="0.5" transform={`rotate(-35,${-r*0.27},${-r*0.3})`}/>
+      </g>);
+    case "star": { const sd2 = starD(r, r*0.42, 5); return (
+      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
+        <path d={sd2} transform={`translate(0,${r*0.14})`} fill="#00000018"/>
+        <path d={sd2} fill={c}/>
+        <path d={sd2} fill="none" stroke="white" strokeWidth="1" opacity="0.35"/>
+        <circle r={r*0.2} fill="#00000030"/>
+        <ellipse cx={-r*0.18} cy={-r*0.28} rx={r*0.16} ry={r*0.09} fill="white" opacity="0.55" transform={`rotate(-30,${-r*0.18},${-r*0.28})`}/>
+      </g>);}
+    case "heart": { const hp = `M0,${r*.62} C-${r},${r*.08} -${r},-${r*.62} -${r*.48},-${r*.62} C-${r*.22},-${r*.62} 0,-${r*.35} 0,-${r*.35} C0,-${r*.35} ${r*.22},-${r*.62} ${r*.48},-${r*.62} C${r},-${r*.62} ${r},${r*.08} 0,${r*.62} Z`; return (
+      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
+        <path d={hp} transform={`translate(0,${r*0.14})`} fill="#00000018"/>
+        <path d={hp} fill={c}/>
+        <path d={hp} fill="none" stroke="white" strokeWidth="1.2" opacity="0.4"/>
+        <ellipse cx={-r*0.22} cy={-r*0.32} rx={r*0.2} ry={r*0.11} fill="white" opacity="0.5" transform={`rotate(-30,${-r*0.22},${-r*0.32})`}/>
+      </g>);}
+    case "flower": { const pts = Array.from({length:6},(_,i)=>({x:Math.cos(i*Math.PI/3)*r*.58,y:Math.sin(i*Math.PI/3)*r*.58})); return (
+      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
+        {pts.map((p,i)=><circle key={`ps${i}`} cx={p.x} cy={p.y+r*.14} r={r*.48} fill="#00000015"/>)}
+        {pts.map((p,i)=><circle key={`p${i}`} cx={p.x} cy={p.y} r={r*.48} fill={c}/>)}
+        <circle cy={r*.14} r={r*.3} fill="#00000015"/>
+        <circle r={r*.3} fill="#FFD700"/>
+        <ellipse cx={-r*.1} cy={-r*.12} rx={r*.1} ry={r*.07} fill="white" opacity="0.65"/>
+      </g>);}
+    case "bolt": { const bd = `M${r*.12},-${r} L-${r*.52},0 L${r*.18},${r*.05} L-${r*.12},${r} L${r*.52},0 L-${r*.18},-${r*.05} Z`; return (
+      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
+        <path d={bd} transform={`translate(0,${r*0.14})`} fill="#00000018"/>
+        <path d={bd} fill={c}/>
+        <path d={bd} fill="none" stroke="white" strokeWidth="1" opacity="0.4"/>
+        <ellipse cx={r*.05} cy={-r*.35} rx={r*.1} ry={r*.06} fill="white" opacity="0.5" transform={`rotate(20,${r*.05},${-r*.35})`}/>
+      </g>);}
+    case "smiley":
+    default: return (
+      <g transform={`translate(${b.x},${b.y})`} style={{cursor:"pointer",pointerEvents:"all"}}>
+        <circle cy={r*.14} r={r} fill="#00000018"/>
+        <circle r={r} fill={c}/>
+        <circle r={r} fill="none" stroke="white" strokeWidth="1.2" opacity="0.35"/>
+        <circle cx={-r*.3} cy={-r*.2} r={r*.15} fill="#000" opacity="0.65"/>
+        <circle cx={r*.3}  cy={-r*.2} r={r*.15} fill="#000" opacity="0.65"/>
+        <path d={`M-${r*.38},${r*.12} Q0,${r*.5} ${r*.38},${r*.12}`} fill="none" stroke="#000" strokeWidth={r*.12} strokeLinecap="round" opacity="0.65"/>
+        <ellipse cx={-r*0.27} cy={-r*0.3} rx={r*0.22} ry={r*0.12} fill="white" opacity="0.5" transform={`rotate(-35,${-r*0.27},${-r*0.3})`}/>
+      </g>);
+  }
+}
+
+function OutfitDesigner({ accentColor }: { accentColor: string }) {
+  const [outfit, setOutfit] = useState<ODOutfit>("tshirt");
+  const [outfitColor, setOutfitColor] = useState("#6B9EE8");
+  const [btns, setBtns] = useState<ODBtn[]>([]);
+  const [bStyle, setBStyle] = useState<ODStyle>("bolt");
+  const [bColor, setBColor] = useState("#FFD60A");
+  const [bSize, setBSize] = useState<ODSize>("m");
+  const svgRef = useRef<SVGSVGElement>(null);
+  const SIZE_MAP: Record<ODSize,number> = { s:7, m:11, l:16 };
+
+  const handleClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    const svg = svgRef.current; if (!svg) return;
+    const rect = svg.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (300 / rect.width);
+    const y = (e.clientY - rect.top) * (380 / rect.height);
+    const hit = btns.find(b => Math.hypot(b.x-x, b.y-y) < Math.max(b.size*1.8, 16));
+    if (hit) { setBtns(bs => bs.filter(b => b.id !== hit.id)); return; }
+    setBtns(bs => [...bs.slice(-39), { id: Date.now().toString(36)+Math.random().toString(36).slice(2), x, y, style: bStyle, color: bColor, size: SIZE_MAP[bSize] }]);
+  };
+
+  const gradId = `odg_${outfit}`;
+  const lighter = odAdjustHex(outfitColor, 45);
+  const darker  = odAdjustHex(outfitColor, -45);
+  const lapel   = odAdjustHex(outfitColor, -25);
+  const lbl = { fontSize: 11, fontWeight: 700 as const, color: "#7b3fa0", textTransform: "uppercase" as const, letterSpacing: "0.06em", margin: "0 0 5px 0", fontFamily: "var(--font-catamaran),'Catamaran',sans-serif" };
+
+  return (
+    <div style={{ display:"flex", gap:20, flexWrap:"wrap", justifyContent:"center", alignItems:"flex-start" }}>
+      {/* Outfit canvas */}
+      <div>
+        <p style={{ textAlign:"center", fontSize:11, color:"#aaa", margin:"0 0 6px 0", fontFamily:"var(--font-catamaran),'Catamaran',sans-serif" }}>
+          👆 Tap outfit to add a button · Tap a button to remove it
+        </p>
+        <svg ref={svgRef} viewBox="0 0 300 380" width={248} height={314}
+          onClick={handleClick}
+          style={{ display:"block", cursor:"crosshair", background:"linear-gradient(150deg,#f7f2ff,#ede8ff)", borderRadius:18, boxShadow:"0 6px 28px rgba(90,45,130,0.18)" }}>
+          <defs>
+            <linearGradient id={gradId} x1="15%" y1="0%" x2="85%" y2="100%">
+              <stop offset="0%"   stopColor={lighter}/>
+              <stop offset="40%"  stopColor={outfitColor}/>
+              <stop offset="100%" stopColor={darker}/>
+            </linearGradient>
+            <pattern id="odFab" width="4" height="4" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="2" x2="4" y2="2" stroke="black" strokeWidth="0.25" opacity="0.06"/>
+              <line x1="2" y1="0" x2="2" y2="4" stroke="black" strokeWidth="0.25" opacity="0.06"/>
+            </pattern>
+          </defs>
+          {/* Outfit body */}
+          <path d={OD_OUTFITS[outfit].path} fill={`url(#${gradId})`}/>
+          <path d={OD_OUTFITS[outfit].path} fill="url(#odFab)"/>
+          {/* Details per outfit */}
+          {outfit==="jacket" && <>
+            <path d="M118,58 L104,76 L124,132 L150,116 Z" fill={lapel}/>
+            <path d="M182,58 L196,76 L176,132 L150,116 Z" fill={lapel}/>
+            <line x1="150" y1="116" x2="150" y2="338" stroke={darker} strokeWidth="1.5" opacity="0.35"/>
+            {/* Pocket */}
+            <rect x="92" y="210" width="32" height="22" rx="4" fill="none" stroke={darker} strokeWidth="1.5" opacity="0.4"/>
+            <rect x="176" y="210" width="32" height="22" rx="4" fill="none" stroke={darker} strokeWidth="1.5" opacity="0.4"/>
+          </>}
+          {outfit==="dress" && <>
+            <line x1="96" y1="118" x2="204" y2="118" stroke={darker} strokeWidth="2" opacity="0.3"/>
+            <line x1="55" y1="228" x2="245" y2="228" stroke={darker} strokeWidth="1" opacity="0.18"/>
+          </>}
+          {outfit==="overalls" && <>
+            <rect x="122" y="132" width="56" height="28" rx="5" fill="none" stroke={darker} strokeWidth="1.5" opacity="0.35"/>
+            {/* Belt line */}
+            <line x1="90" y1="168" x2="210" y2="168" stroke={darker} strokeWidth="2" opacity="0.3"/>
+          </>}
+          {outfit==="tshirt" && <>
+            {/* Subtle collar highlight */}
+            <path d="M118,60 A50,30 0 0,0 182,60" fill="none" stroke="white" strokeWidth="2" opacity="0.25"/>
+          </>}
+          {/* Placed buttons */}
+          {btns.map(b=><ODBtnShape key={b.id} b={b}/>)}
+        </svg>
+      </div>
+
+      {/* Controls */}
+      <div style={{ display:"flex", flexDirection:"column", gap:12, minWidth:220, maxWidth:256 }}>
+        {/* Outfit type */}
+        <div>
+          <p style={lbl}>Outfit</p>
+          <div style={{ display:"flex", gap:6 }}>
+            {(Object.entries(OD_OUTFITS) as [ODOutfit,typeof OD_OUTFITS["tshirt"]][]).map(([id,o])=>(
+              <button key={id} onClick={()=>{setOutfit(id);setBtns([]);}}
+                style={{ flex:1, padding:"6px 2px", borderRadius:8, border:`2px solid ${outfit===id?accentColor:"#ddd"}`, backgroundColor:outfit===id?accentColor+"22":"rgba(255,255,255,0.8)", cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", gap:2, transition:"all 0.15s" }}>
+                <span style={{ fontSize:20 }}>{o.emoji}</span>
+                <span style={{ fontSize:9, fontWeight:700, color:"#7b3fa0", fontFamily:"var(--font-catamaran),'Catamaran',sans-serif" }}>{o.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* Outfit color */}
+        <div>
+          <p style={lbl}>Outfit Color</p>
+          <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
+            {OD_OUTFIT_COLORS.map(c=>(
+              <button key={c} onClick={()=>setOutfitColor(c)}
+                style={{ width:26, height:26, borderRadius:"50%", background:c, border:`3px solid ${outfitColor===c?accentColor:"transparent"}`, cursor:"pointer", padding:0, boxShadow:outfitColor===c?`0 0 0 2px white,0 0 0 4px ${accentColor}`:"0 1px 4px rgba(0,0,0,0.2)", transition:"all 0.15s" }}/>
+            ))}
+          </div>
+        </div>
+        <div style={{ height:1, background:"linear-gradient(90deg,transparent,#c0a0e0,transparent)" }}/>
+        {/* Button style */}
+        <div>
+          <p style={lbl}>✨ Button Style</p>
+          <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
+            {OD_BTN_STYLES.map(s=>(
+              <button key={s.id} onClick={()=>setBStyle(s.id)}
+                style={{ width:36, height:36, borderRadius:8, border:`2px solid ${bStyle===s.id?accentColor:"#ddd"}`, backgroundColor:bStyle===s.id?accentColor+"22":"rgba(255,255,255,0.8)", cursor:"pointer", fontSize:16, fontFamily:"system-ui", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:bStyle===s.id?`0 2px 8px ${accentColor}44`:"none", transition:"all 0.15s" }}>
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* Button color */}
+        <div>
+          <p style={lbl}>Button Color</p>
+          <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
+            {OD_BTN_COLORS.map(c=>(
+              <button key={c} onClick={()=>setBColor(c)}
+                style={{ width:26, height:26, borderRadius:"50%", background:c, border:`3px solid ${bColor===c?accentColor:"transparent"}`, cursor:"pointer", padding:0, boxShadow:bColor===c?`0 0 0 2px white,0 0 0 4px ${accentColor}`:"0 1px 4px rgba(0,0,0,0.2)", transition:"all 0.15s" }}/>
+            ))}
+          </div>
+        </div>
+        {/* Button size */}
+        <div>
+          <p style={lbl}>Button Size</p>
+          <div style={{ display:"flex", gap:6 }}>
+            {(["s","m","l"] as ODSize[]).map(sz=>(
+              <button key={sz} onClick={()=>setBSize(sz)}
+                style={{ flex:1, padding:"7px 0", borderRadius:8, border:`2px solid ${bSize===sz?accentColor:"#ddd"}`, backgroundColor:bSize===sz?accentColor+"22":"rgba(255,255,255,0.8)", cursor:"pointer", fontWeight:700, fontSize:sz==="s"?11:sz==="m"?13:15, color:"#5a2d82", fontFamily:"var(--font-catamaran),'Catamaran',sans-serif", transition:"all 0.15s" }}>
+                {sz==="s"?"Small":sz==="m"?"Medium":"Large"}
+              </button>
+            ))}
+          </div>
+        </div>
+        {btns.length > 0 && (
+          <button onClick={()=>setBtns([])}
+            style={{ padding:"8px 0", borderRadius:8, border:"none", background:"#fee2e2", color:"#b91c1c", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"var(--font-catamaran),'Catamaran',sans-serif" }}>
+            🗑 Clear all buttons
+          </button>
+        )}
+        <p style={{ fontSize:12, color:"#bba8d4", textAlign:"center", margin:0, fontFamily:"var(--font-open-sans),'Open Sans',sans-serif" }}>
+          You can place up to 40 buttons!
+        </p>
+      </div>
+    </div>
+  );
+}
+
 
 function PumpkinQuiz({ accentColor, textLight }: { accentColor: string; textLight?: boolean }) {
   const [answer, setAnswer] = useState<number | null>(null);
@@ -1477,7 +1743,7 @@ export default function BookActivity({ slug, accentColor, transparent, textLight
     ));
 
   if (slug === "the-shut-in-button")
-    return wrap("What would YOUR magical button do?", "👆", <ShutInButtonActivity accentColor={accentColor} textLight={textLight} />);
+    return wrap("Design Your Outfit!", "✨", <OutfitDesigner accentColor={accentColor} />);
 
   if (slug === "what-a-doodle-do")
     return wrap("Your morning cheer!", "🐓", <DoodleDoActivity accentColor={accentColor} />);
