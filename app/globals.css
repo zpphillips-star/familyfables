@@ -860,11 +860,14 @@ section     { overflow-x: hidden; }
     max-width: 100% !important;
   }
   .brian-ghost-hero {
-    width: 160px !important;
+    position: static !important;
+    width: clamp(200px, 65vw, 280px) !important;
+    display: block !important;
+    margin: 0 auto 8px !important;
+    opacity: 1;
     bottom: auto !important;
-    top: 50px !important;
-    right: 8px !important;
-    opacity: 0.9;
+    top: auto !important;
+    right: auto !important;
   }
 
   /* CTA cover+buttons — stack vertically, full width */
