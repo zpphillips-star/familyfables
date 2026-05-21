@@ -6,6 +6,23 @@ import HalloweenCountdown from "@/components/HalloweenCountdown";
 
 // ── Per-book activity definitions ─────────────────────────────────────────────
 
+// ── Shared helpers ────────────────────────────────────────────────────────────
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+const BAD_WORDS = ["shit","fuck","ass","bitch","damn","cock","dick","pussy","bastard","cunt","nigger","nigga","faggot","retard","whore","slut","piss"];
+function filterBadWords(w: string): string {
+  let out = w;
+  for (const b of BAD_WORDS) out = out.replace(new RegExp(`\\b${b}\\w*`,"gi"), "🌟");
+  return out.trim();
+}
+
+
 const AFFIRMATIONS = [
   "You are brave, you are bold, you've got a voice — now go use it! 🎉",
   "Your sound is YOUR sound. Nobody else has it. Ever. 🎵",
@@ -726,47 +743,358 @@ function ShutInButtonActivity({ accentColor, textLight }: { accentColor: string;
   );
 }
 
-function DoodleDoActivity({ accentColor }: { accentColor: string }) {
-  const [idx, setIdx] = useState(0);
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <div
-        style={{
-          padding: "20px 24px",
-          borderRadius: 16,
-          background: `linear-gradient(135deg, ${accentColor}22, ${accentColor}44)`,
-          border: `2px solid ${accentColor}`,
-          textAlign: "center",
-        }}
-      >
-        <p
-          style={{
-            fontSize: "clamp(16px, 2.5vw, 20px)",
-            fontFamily: "var(--font-concert-one), 'Concert One', cursive",
-            color: "#3a1a00",
-            lineHeight: 1.4,
-          }}
-        >
-          {CHEERS[idx]}
-        </p>
-      </div>
-      <button
-        onClick={() => setIdx((i) => (i + 1) % CHEERS.length)}
-        style={{
-          alignSelf: "flex-start",
-          padding: "10px 24px",
-          borderRadius: 50,
-          backgroundColor: accentColor,
-          color: "#fff",
-          fontWeight: 700,
-          fontSize: 15,
-          border: "none",
-          cursor: "pointer",
-          fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
-        }}
-      >
-        Another cheer! 🐓
+// ── Doodle-Do: Rhyme Game data ───────────────────────────────────────────────
+interface RhymeItem { w:string; e:string; r:string; d:[string,string,string] }
+const RHYME_SETS: RhymeItem[] = [
+  {w:"cat",  e:"🐱",r:"hat",   d:["dog","bird","tree"]},  {w:"bat",  e:"🦇",r:"mat",   d:["cup","fish","star"]},
+  {w:"rat",  e:"🐀",r:"flat",  d:["bus","moon","shoe"]},  {w:"dog",  e:"🐶",r:"log",   d:["cat","bird","fish"]},
+  {w:"frog", e:"🐸",r:"hog",   d:["duck","hen","ant"]},   {w:"fog",  e:"🌫",r:"jog",   d:["sun","moon","sky"]},
+  {w:"rock", e:"🪨",r:"sock",  d:["tree","car","ship"]},  {w:"clock",e:"🕐",r:"lock",  d:["bed","cup","hat"]},
+  {w:"cake", e:"🎂",r:"lake",  d:["car","dog","sun"]},    {w:"snake",e:"🐍",r:"rake",  d:["hen","bus","pot"]},
+  {w:"tree", e:"🌳",r:"bee",   d:["cat","dog","hat"]},    {w:"sea",  e:"🌊",r:"tea",   d:["cat","dog","hat"]},
+  {w:"night",e:"🌙",r:"light", d:["day","sun","cat"]},    {w:"kite", e:"🪁",r:"bite",  d:["hat","dog","cup"]},
+  {w:"ball", e:"\u26BD",   r:"tall",  d:["cat","dog","hen"]},    {w:"wall", e:"🧱",r:"fall",  d:["car","sun","hat"]},
+  {w:"ring", e:"💍",r:"sing",  d:["dog","cat","bus"]},    {w:"king", e:"👑",r:"wing",  d:["car","sun","leg"]},
+  {w:"moon", e:"🌝",r:"spoon", d:["hat","car","dog"]},    {w:"mouse",e:"🐭",r:"house", d:["dog","cat","sun"]},
+  {w:"car",  e:"🚗",r:"star",  d:["dog","cat","hat"]},    {w:"ship", e:"🚢",r:"drip",  d:["cat","dog","ham"]},
+  {w:"top",  e:"🪀",r:"hop",   d:["cat","dog","sun"]},    {w:"mop",  e:"🧹",r:"drop",  d:["hat","car","dog"]},
+  {w:"sun",  e:"\u2600\uFE0F",r:"run",  d:["cat","dog","hat"]}, {w:"hen",  e:"🐔",r:"ten",   d:["dog","cat","sun"]},
+  {w:"pig",  e:"🐷",r:"big",   d:["cat","duck","hat"]},   {w:"fly",  e:"🪰",r:"sky",   d:["cat","dog","hat"]},
+  {w:"duck", e:"🦆",r:"truck", d:["cat","dog","hen"]},    {w:"cow",  e:"🐄",r:"wow",   d:["cat","dog","hat"]},
+  {w:"fish", e:"🐟",r:"dish",  d:["cat","dog","sun"]},    {w:"rain", e:"🌧\uFE0F",r:"train",d:["cat","dog","sun"]},
+  {w:"boat", e:"\u26F5",   r:"coat",  d:["cat","dog","hat"]},    {w:"bear", e:"🐻",r:"chair", d:["cat","dog","hat"]},
+  {w:"rose", e:"🌹",r:"nose",  d:["cat","dog","hat"]},    {w:"drum", e:"🥁",r:"yum",   d:["cat","dog","hat"]},
+  {w:"goat", e:"🐐",r:"float", d:["cat","dog","sun"]},    {w:"fire", e:"🔥",r:"wire",  d:["cat","dog","hat"]},
+  {w:"ant",  e:"🐜",r:"plant", d:["dog","cat","hat"]},    {w:"door", e:"🚪",r:"floor", d:["cat","dog","hat"]},
+  {w:"bread",e:"🍞",r:"head",  d:["cat","dog","sun"]},    {w:"clown",e:"🤡",r:"crown", d:["cat","dog","hat"]},
+  {w:"jet",  e:"\u2708\uFE0F",r:"wet",d:["cat","dog","hat"]},   {w:"fox",  e:"🦊",r:"box",   d:["cat","dog","hen"]},
+  {w:"star", e:"\u2B50",   r:"jar",   d:["cat","duck","hat"]},   {w:"bee",  e:"🐝",r:"free",  d:["cat","dog","sun"]},
+  {w:"map",  e:"🗺\uFE0F",r:"cap",d:["dog","cat","sun"]},{w:"owl",  e:"🦉",r:"howl",  d:["cat","dog","hen"]},
+];
+
+// ── Doodle-Do: Mad Lib data ───────────────────────────────────────────────────
+interface MLBlank { id:string; label:string; color:string; hints:string[] }
+interface MLStory  { id:string; title:string; tmpl:string; blanks:MLBlank[] }
+const MAD_LIB_STORIES: MLStory[] = [
+  {
+    id:"farm", title:"Doodle's Big Morning",
+    tmpl:"One {ADJECTIVE} morning, Doodle the rooster crowed so loud that a {ANIMAL} fell right off the {NOUN}! Everybody started to {VERB} and shout \"{SOUND}!\" It was the most {ADJECTIVE2} thing that ever happened on Doodle-Do Farm.",
+    blanks:[
+      {id:"ADJECTIVE", label:"Describing Word",color:"#FF9500",hints:["silly","loud","wiggly","fluffy","giant"]},
+      {id:"ANIMAL",    label:"Animal",         color:"#34C759",hints:["pig","duck","cow","horse","goat"]},
+      {id:"NOUN",      label:"Thing",          color:"#007AFF",hints:["fence","tractor","haystack","bucket","tree"]},
+      {id:"VERB",      label:"Action Word",    color:"#FF2D55",hints:["jump","spin","wiggle","dance","honk"]},
+      {id:"SOUND",     label:"Silly Sound",    color:"#AF52DE",hints:["WAAH","WOOHOO","OINK","CLUCK","BOING"]},
+      {id:"ADJECTIVE2",label:"Describing Word",color:"#FF9500",hints:["funniest","craziest","loudest","smelliest","weirdest"]},
+    ]
+  },
+  {
+    id:"adventure", title:"Doodle's Big Adventure",
+    tmpl:"One day, Doodle put on his {CLOTHING} and walked to {PLACE}. He met a {ADJECTIVE} {ANIMAL} who handed him a {FOOD}. It tasted like {ADJECTIVE2} {FOOD2}! Together they {VERB}ed happily all the way home.",
+    blanks:[
+      {id:"CLOTHING",  label:"Clothing",       color:"#007AFF",hints:["boots","hat","cape","scarf","goggles"]},
+      {id:"PLACE",     label:"Silly Place",    color:"#34C759",hints:["the moon","a pizza factory","Grandma's house","the jungle","outer space"]},
+      {id:"ADJECTIVE", label:"Describing Word",color:"#FF9500",hints:["wobbly","sneezy","bouncy","purple","invisible"]},
+      {id:"ANIMAL",    label:"Animal",         color:"#FF2D55",hints:["elephant","penguin","flamingo","walrus","platypus"]},
+      {id:"FOOD",      label:"Food",           color:"#FF6B00",hints:["pizza","banana","pickle","cupcake","spaghetti"]},
+      {id:"ADJECTIVE2",label:"Describing Word",color:"#FF9500",hints:["bubbly","salty","crunchy","wobbly","sparkly"]},
+      {id:"FOOD2",     label:"Another Food",   color:"#FF6B00",hints:["cotton candy","mustard","ice cream","hot sauce","cheese"]},
+      {id:"VERB",      label:"Action Word",    color:"#AF52DE",hints:["skipped","floated","waddled","zoomed","bounced"]},
+    ]
+  },
+  {
+    id:"talent", title:"The Farm Talent Show",
+    tmpl:"The whole farm gathered for the big talent show! Doodle had practiced his {NOUN} for {NUMBER} whole days. When he stepped on stage, he {VERB}ed so {ADJECTIVE}ly that {NUMBER2} {ANIMAL}s fainted! The judge — a very {ADJECTIVE2} {ANIMAL2} — awarded him a golden {NOUN2}. The crowd cheered \"{SOUND}!\"",
+    blanks:[
+      {id:"NOUN",      label:"Talent/Trick",   color:"#007AFF",hints:["juggling","yodeling","hula hooping","karate","tap dancing"]},
+      {id:"NUMBER",    label:"Number",         color:"#FF2D55",hints:["3","7","12","100","1000"]},
+      {id:"VERB",      label:"Action Word",    color:"#AF52DE",hints:["sang","danced","juggled","yelled","spun"]},
+      {id:"ADJECTIVE", label:"Describing Word",color:"#FF9500",hints:["wiggly","loud","fast","sparkly","stinky"]},
+      {id:"NUMBER2",   label:"Number",         color:"#FF2D55",hints:["2","5","17","50","all the"]},
+      {id:"ANIMAL",    label:"Animal",         color:"#34C759",hints:["pigs","cows","sheep","goats","ducks"]},
+      {id:"ADJECTIVE2",label:"Describing Word",color:"#FF9500",hints:["fancy","grumpy","giant","tiny","sparkly"]},
+      {id:"ANIMAL2",   label:"Animal",         color:"#34C759",hints:["owl","horse","goat","dog","turkey"]},
+      {id:"NOUN2",     label:"Prize",          color:"#007AFF",hints:["trophy","pizza","crown","disco ball","rubber chicken"]},
+      {id:"SOUND",     label:"Cheer",          color:"#AF52DE",hints:["HOORAY","CLUCK YEAH","BAWK BAWK","WOO WOO","YAAAAS"]},
+    ]
+  }
+];
+
+// ── Doodle-Do: Rhyme Time game ────────────────────────────────────────────────
+function DoodleRhymeGame({ accentColor }: { accentColor: string }) {
+  const [deck,     setDeck]     = useState<RhymeItem[]>(() => shuffle(RHYME_SETS).slice(0,10));
+  const [idx,      setIdx]      = useState(0);
+  const [score,    setScore]    = useState(0);
+  const [chosen,   setChosen]   = useState<string|null>(null);
+  const [done,     setDone]     = useState(false);
+  const [shuffled, setShuffled] = useState<string[]>(() => {
+    const s = shuffle(RHYME_SETS).slice(0,10);
+    return shuffle([s[0].r, ...s[0].d]);
+  });
+
+  const reset = () => {
+    const nd = shuffle(RHYME_SETS).slice(0,10);
+    setDeck(nd); setIdx(0); setScore(0); setChosen(null); setDone(false);
+    setShuffled(shuffle([nd[0].r, ...nd[0].d]));
+  };
+
+  const pick = (w: string) => {
+    if (chosen) return;
+    const ok = w === deck[idx].r;
+    setChosen(w);
+    if (ok) setScore(s => s+1);
+    setTimeout(() => {
+      const next = idx+1;
+      if (next >= deck.length) { setDone(true); }
+      else { setIdx(next); setShuffled(shuffle([deck[next].r, ...deck[next].d])); setChosen(null); }
+    }, 1300);
+  };
+
+  const hf = "var(--font-concert-one),'Concert One',cursive";
+  const bf = "var(--font-catamaran),'Catamaran',sans-serif";
+  const ac = accentColor;
+
+  if (done) return (
+    <div style={{textAlign:"center",padding:"32px 16px"}}>
+      <div style={{fontSize:72}}>{score>=8?"🏆":score>=5?"🥳":"🐓"}</div>
+      <h3 style={{fontFamily:hf,fontSize:"clamp(22px,4vw,32px)",margin:"12px 0 6px",color:ac}}>
+        {score>=8?"Amazing!":score>=5?"Great job!":"Keep trying!"}
+      </h3>
+      <p style={{fontFamily:bf,fontSize:18,color:"#444",marginBottom:24}}>
+        You got <strong>{score} out of {deck.length}</strong> right! 🎉
+      </p>
+      <button onClick={reset} style={{padding:"12px 32px",borderRadius:50,background:ac,color:"#fff",border:"none",fontSize:17,fontWeight:700,fontFamily:bf,cursor:"pointer"}}>
+        Play Again! 🎵
       </button>
+    </div>
+  );
+
+  const current = deck[idx];
+  return (
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:16,padding:"8px 0"}}>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"center"}}>
+        {deck.map((_,i) => (
+          <div key={i} style={{width:12,height:12,borderRadius:"50%",background:i<idx?"#34C759":i===idx?ac:"#ddd",transition:"background 0.3s"}}/>
+        ))}
+      </div>
+      <p style={{fontFamily:bf,fontSize:14,color:"#888",margin:0}}>Question {idx+1} of {deck.length} \u00B7 Score: {score}</p>
+      <div style={{textAlign:"center",padding:"20px 32px",background:`${ac}11`,borderRadius:20,border:`2px solid ${ac}44`,minWidth:200}}>
+        <div style={{fontSize:72,lineHeight:1.2}}>{current.e}</div>
+        <div style={{fontFamily:hf,fontSize:"clamp(28px,5vw,44px)",color:ac,marginTop:4}}>{current.w.toUpperCase()}</div>
+      </div>
+      <p style={{fontFamily:hf,fontSize:"clamp(16px,2.5vw,20px)",color:"#333",margin:0,textAlign:"center"}}>
+        Which word rhymes with <strong style={{color:ac}}>{current.w}</strong>?
+      </p>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,width:"100%",maxWidth:400}}>
+        {shuffled.map(w => {
+          const isCorrect = w === current.r;
+          const isChosen  = w === chosen;
+          let bg = "#fff", border = "2px solid #ddd", col = "#333";
+          if (chosen) {
+            if (isCorrect)     { bg="#d4f7d4"; border="2px solid #34C759"; col="#1a6a1a"; }
+            else if (isChosen) { bg="#fdd";    border="2px solid #FF3B30"; col="#6a1a1a"; }
+          }
+          return (
+            <button key={w} onClick={() => pick(w)}
+              style={{padding:"16px 12px",borderRadius:14,background:bg,border,color:col,fontSize:"clamp(16px,2.5vw,20px)",fontFamily:hf,fontWeight:700,cursor:chosen?"default":"pointer",transition:"all 0.2s",boxShadow:"0 2px 8px rgba(0,0,0,0.08)"}}>
+              {chosen && isCorrect ? "\u2713 "+w : w}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Doodle-Do: Mad Lib story maker ────────────────────────────────────────────
+function DoodleMadLib({ accentColor }: { accentColor: string }) {
+  const [storyIdx, setStoryIdx] = useState(0);
+  const [fills,    setFills]    = useState<Record<string,string>>({});
+  const [activeId, setActiveId] = useState<string>(MAD_LIB_STORIES[0].blanks[0].id);
+  const [custom,   setCustom]   = useState("");
+  const [reading,  setReading]  = useState(false);
+  const [speaking, setSpeaking] = useState(false);
+  const story = MAD_LIB_STORIES[storyIdx];
+
+  useEffect(() => {
+    setFills({}); setCustom(""); setReading(false);
+    setActiveId(story.blanks[0].id);
+  }, [storyIdx]);
+
+  const allFilled = story.blanks.every(b => fills[b.id]?.trim());
+  const hf = "var(--font-concert-one),'Concert One',cursive";
+  const bf = "var(--font-catamaran),'Catamaran',sans-serif";
+  const ac = accentColor;
+
+  const fillWord = (blankId: string, word: string) => {
+    const clean = filterBadWords(word);
+    if (!clean) return;
+    setFills(f => ({ ...f, [blankId]: clean }));
+    const ni = story.blanks.findIndex(b => b.id === blankId) + 1;
+    if (ni < story.blanks.length) setActiveId(story.blanks[ni].id);
+    setCustom("");
+  };
+
+  const activeBlank = story.blanks.find(b => b.id === activeId);
+
+  // Build story with inline colored chips
+  const buildStory = () => {
+    const nodes: React.ReactNode[] = [];
+    let rest = story.tmpl;
+    story.blanks.forEach((b, i) => {
+      const split = rest.indexOf("{"+b.id+"}");
+      if (split === -1) return;
+      nodes.push(<span key={"t"+i}>{rest.slice(0,split)}</span>);
+      const val = fills[b.id];
+      const isActive = !reading && b.id === activeId;
+      nodes.push(
+        <span key={"b"+i} onClick={() => !reading && setActiveId(b.id)}
+          style={{display:"inline-block",padding:"2px 10px",borderRadius:8,
+            background:val?`${b.color}22`:`${b.color}11`,
+            border:`2px solid ${isActive?b.color:val?b.color+"88":"#ddd"}`,
+            color:val?b.color:"#aaa",fontWeight:700,
+            cursor:reading?"default":"pointer",minWidth:60,textAlign:"center",
+            margin:"0 2px",transition:"all 0.2s",fontSize:"0.95em"}}>
+          {val || b.label}
+        </span>
+      );
+      rest = rest.slice(split + b.id.length + 2);
+    });
+    nodes.push(<span key="end">{rest}</span>);
+    return nodes;
+  };
+
+  const fullText = story.blanks.reduce((t,b) => t.replace("{"+b.id+"}", fills[b.id]||"_____"), story.tmpl).replace(/\\"/g,'"');
+
+  const readAloud = () => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(fullText);
+    utt.rate = 0.85; utt.pitch = 1.1;
+    utt.onend = () => setSpeaking(false);
+    setSpeaking(true);
+    window.speechSynthesis.speak(utt);
+  };
+
+  const stopSpeaking = () => { if (typeof window !== "undefined") window.speechSynthesis?.cancel(); setSpeaking(false); };
+
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:16}}>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+        {MAD_LIB_STORIES.map((s,i) => (
+          <button key={s.id} onClick={()=>setStoryIdx(i)}
+            style={{padding:"8px 16px",borderRadius:50,border:`2px solid ${i===storyIdx?ac:"#ddd"}`,
+              background:i===storyIdx?ac:"#fff",color:i===storyIdx?"#fff":"#555",
+              fontWeight:700,fontSize:13,fontFamily:bf,cursor:"pointer"}}>
+            {s.title}
+          </button>
+        ))}
+      </div>
+      <div style={{padding:"16px 20px",borderRadius:16,background:`${ac}0d`,border:`2px solid ${ac}33`,
+        fontSize:"clamp(15px,2.2vw,18px)",fontFamily:bf,lineHeight:1.9,color:"#222"}}>
+        {buildStory()}
+      </div>
+      {!reading ? (
+        <>
+          {activeBlank && (
+            <div style={{padding:"16px",borderRadius:16,border:`2px solid ${activeBlank.color}`,background:`${activeBlank.color}0d`}}>
+              <p style={{fontFamily:hf,fontSize:"clamp(14px,2vw,17px)",color:activeBlank.color,margin:"0 0 10px",fontWeight:700}}>
+                Pick a {activeBlank.label.toUpperCase()}:
+              </p>
+              <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
+                {activeBlank.hints.map(h => (
+                  <button key={h} onClick={()=>fillWord(activeId,h)}
+                    style={{padding:"8px 14px",borderRadius:50,border:`2px solid ${activeBlank.color}`,
+                      background:fills[activeId]===h?activeBlank.color:"#fff",
+                      color:fills[activeId]===h?"#fff":activeBlank.color,
+                      fontWeight:700,fontSize:14,fontFamily:bf,cursor:"pointer"}}>
+                    {h}
+                  </button>
+                ))}
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <input value={custom} onChange={e=>setCustom(e.target.value)}
+                  onKeyDown={e=>e.key==="Enter"&&custom.trim()&&fillWord(activeId,custom)}
+                  placeholder="Or type your own..."
+                  style={{flex:1,padding:"8px 14px",borderRadius:50,border:`2px solid ${activeBlank.color}88`,
+                    fontSize:14,fontFamily:bf,outline:"none",color:"#333"}}/>
+                <button onClick={()=>custom.trim()&&fillWord(activeId,custom)} disabled={!custom.trim()}
+                  style={{padding:"8px 18px",borderRadius:50,background:activeBlank.color,color:"#fff",
+                    border:"none",fontWeight:700,fontSize:14,fontFamily:bf,cursor:"pointer",
+                    opacity:custom.trim()?1:0.4}}>
+                  Use it!
+                </button>
+              </div>
+            </div>
+          )}
+          {allFilled && (
+            <button onClick={()=>setReading(true)}
+              style={{padding:"14px 32px",borderRadius:50,background:ac,color:"#fff",border:"none",
+                fontSize:"clamp(16px,2.5vw,20px)",fontWeight:700,fontFamily:hf,cursor:"pointer",
+                alignSelf:"center",boxShadow:`0 4px 16px ${ac}66`}}>
+              📖 Read the Story!
+            </button>
+          )}
+        </>
+      ) : (
+        <div style={{display:"flex",flexDirection:"column",gap:12,alignItems:"center",padding:"16px",borderRadius:16,background:`${ac}11`,border:`2px solid ${ac}44`}}>
+          <p style={{fontFamily:hf,fontSize:"clamp(18px,3vw,24px)",color:ac,margin:0}}>🎉 Your story is ready!</p>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap",justifyContent:"center"}}>
+            <button onClick={speaking?stopSpeaking:readAloud}
+              style={{padding:"10px 24px",borderRadius:50,background:speaking?"#FF3B30":ac,color:"#fff",
+                border:"none",fontSize:15,fontWeight:700,fontFamily:bf,cursor:"pointer"}}>
+              {speaking?"\u23F9 Stop":"🔊 Read to Me!"}
+            </button>
+            <button onClick={()=>{setReading(false);stopSpeaking();}}
+              style={{padding:"10px 24px",borderRadius:50,background:"#fff",color:ac,border:`2px solid ${ac}`,fontSize:15,fontWeight:700,fontFamily:bf,cursor:"pointer"}}>
+              \u270F\uFE0F Change Words
+            </button>
+            <button onClick={()=>{setFills({});setReading(false);stopSpeaking();setActiveId(story.blanks[0].id);}}
+              style={{padding:"10px 24px",borderRadius:50,background:"#fff",color:"#888",border:"2px solid #ddd",fontSize:15,fontWeight:700,fontFamily:bf,cursor:"pointer"}}>
+              🔄 Start Over
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DoodleDoActivity({ accentColor }: { accentColor: string }) {
+  const [tab, setTab] = useState<"cheer"|"rhyme"|"story">("cheer");
+  const [cheerIdx, setCheerIdx] = useState(0);
+  const hf = "var(--font-concert-one),'Concert One',cursive";
+  const bf = "var(--font-catamaran),'Catamaran',sans-serif";
+  const tabs: {id:"cheer"|"rhyme"|"story"; label:string}[] = [
+    {id:"cheer",label:"🐓 Morning Cheer"},
+    {id:"rhyme",label:"🎵 Rhyme Time"},
+    {id:"story",label:"📖 Story Maker"},
+  ];
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:16}}>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+        {tabs.map(t => (
+          <button key={t.id} onClick={() => setTab(t.id)}
+            style={{padding:"10px 18px",borderRadius:50,border:`2px solid ${t.id===tab?accentColor:"#ddd"}`,
+              background:t.id===tab?accentColor:"#fff",color:t.id===tab?"#fff":"#555",
+              fontWeight:700,fontSize:"clamp(13px,1.8vw,15px)",fontFamily:bf,cursor:"pointer",transition:"all 0.2s"}}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+      {tab === "cheer" && (
+        <div style={{display:"flex",flexDirection:"column",gap:16}}>
+          <div style={{padding:"20px 24px",borderRadius:16,background:`linear-gradient(135deg,${accentColor}22,${accentColor}44)`,border:`2px solid ${accentColor}`,textAlign:"center"}}>
+            <p style={{fontSize:"clamp(16px,2.5vw,20px)",fontFamily:hf,color:"#3a1a00",lineHeight:1.4}}>{CHEERS[cheerIdx]}</p>
+          </div>
+          <button onClick={() => setCheerIdx(i => (i+1)%CHEERS.length)}
+            style={{alignSelf:"flex-start",padding:"10px 24px",borderRadius:50,backgroundColor:accentColor,color:"#fff",fontWeight:700,fontSize:15,border:"none",cursor:"pointer",fontFamily:bf}}>
+            Another cheer! 🐓
+          </button>
+        </div>
+      )}
+      {tab === "rhyme" && <DoodleRhymeGame accentColor={accentColor} />}
+      {tab === "story" && <DoodleMadLib accentColor={accentColor} />}
     </div>
   );
 }
