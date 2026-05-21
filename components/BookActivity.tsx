@@ -874,7 +874,7 @@ const RHYME_SETS: RhymeItem[] = [
   {w:"cat",  e:"🐱",r:"hat",   d:["dog","bird","tree"]},  {w:"bat",  e:"🦇",r:"mat",   d:["cup","fish","star"]},
   {w:"rat",  e:"🐀",r:"flat",  d:["bus","moon","shoe"]},  {w:"dog",  e:"🐶",r:"log",   d:["cat","bird","fish"]},
   {w:"frog", e:"🐸",r:"hog",   d:["duck","hen","ant"]},   {w:"fog",  e:"🌫",r:"jog",   d:["sun","moon","sky"]},
-  {w:"rock", e:"🪨",r:"sock",  d:["tree","car","ship"]},  {w:"clock",e:"🕐",r:"lock",  d:["bed","cup","hat"]},
+  {w:"rock", e:"🪨",r:"sock",  d:["tree","car","ship"]},  {w:"bell", e:"🔔",r:"shell", d:["hat","tree","sun"]},
   {w:"cake", e:"🎂",r:"lake",  d:["car","dog","sun"]},    {w:"snake",e:"🐍",r:"rake",  d:["hen","bus","pot"]},
   {w:"tree", e:"🌳",r:"bee",   d:["cat","dog","hat"]},    {w:"sea",  e:"🌊",r:"tea",   d:["cat","dog","hat"]},
   {w:"night",e:"🌙",r:"light", d:["day","sun","cat"]},    {w:"kite", e:"🪁",r:"bite",  d:["hat","dog","cup"]},
@@ -1002,7 +1002,7 @@ function DoodleRhymeGame({ accentColor }: { accentColor: string }) {
           <div key={i} style={{width:12,height:12,borderRadius:"50%",background:i<idx?"#34C759":i===idx?ac:"#ddd",transition:"background 0.3s"}}/>
         ))}
       </div>
-      <p style={{fontFamily:bf,fontSize:14,color:"#888",margin:0}}>Question {idx+1} of {deck.length} \u00B7 Score: {score}</p>
+      <p style={{fontFamily:bf,fontSize:14,color:"#888",margin:0}}>Question {idx+1} of {deck.length} · Score: {score}</p>
       <div style={{textAlign:"center",padding:"20px 32px",background:`${ac}11`,borderRadius:20,border:`2px solid ${ac}44`,minWidth:200}}>
         <div style={{fontSize:72,lineHeight:1.2}}>{current.e}</div>
         <div style={{fontFamily:hf,fontSize:"clamp(28px,5vw,44px)",color:ac,marginTop:4}}>{current.w.toUpperCase()}</div>
@@ -1039,6 +1039,8 @@ function DoodleMadLib({ accentColor }: { accentColor: string }) {
   const [custom,   setCustom]   = useState("");
   const [reading,  setReading]  = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  const [ttsLoading, setTtsLoading] = useState(false);
+  const audioRef = useRef<HTMLAudioElement|null>(null);
   const story = MAD_LIB_STORIES[storyIdx];
 
   useEffect(() => {
@@ -1091,17 +1093,35 @@ function DoodleMadLib({ accentColor }: { accentColor: string }) {
 
   const fullText = story.blanks.reduce((t,b) => t.replace("{"+b.id+"}", fills[b.id]||"_____"), story.tmpl).replace(/\\"/g,'"');
 
-  const readAloud = () => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(fullText);
-    utt.rate = 0.85; utt.pitch = 1.1;
-    utt.onend = () => setSpeaking(false);
-    setSpeaking(true);
-    window.speechSynthesis.speak(utt);
+  const readAloud = async () => {
+    if (ttsLoading || speaking) return;
+    setTtsLoading(true);
+    try {
+      const res = await fetch("/api/tts-what-a-doodle-do", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: fullText }),
+      });
+      if (!res.ok) throw new Error("TTS failed");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      audio.onended = () => { setSpeaking(false); URL.revokeObjectURL(url); };
+      audio.onerror = () => { setSpeaking(false); };
+      setSpeaking(true);
+      audio.play();
+    } catch { setSpeaking(false); }
+    finally { setTtsLoading(false); }
   };
 
-  const stopSpeaking = () => { if (typeof window !== "undefined") window.speechSynthesis?.cancel(); setSpeaking(false); };
+  const stopSpeaking = () => {
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    setSpeaking(false);
+  };
+
+  useEffect(() => () => { if (audioRef.current) audioRef.current.pause(); }, []);
 
   return (
     <div style={{display:"flex",flexDirection:"column",gap:16}}>
@@ -1165,10 +1185,10 @@ function DoodleMadLib({ accentColor }: { accentColor: string }) {
         <div style={{display:"flex",flexDirection:"column",gap:12,alignItems:"center",padding:"16px",borderRadius:16,background:`${ac}11`,border:`2px solid ${ac}44`}}>
           <p style={{fontFamily:hf,fontSize:"clamp(18px,3vw,24px)",color:ac,margin:0}}>🎉 Your story is ready!</p>
           <div style={{display:"flex",gap:10,flexWrap:"wrap",justifyContent:"center"}}>
-            <button onClick={speaking?stopSpeaking:readAloud}
+            <button onClick={speaking?stopSpeaking:readAloud} disabled={ttsLoading}
               style={{padding:"10px 24px",borderRadius:50,background:speaking?"#FF3B30":ac,color:"#fff",
-                border:"none",fontSize:15,fontWeight:700,fontFamily:bf,cursor:"pointer"}}>
-              {speaking?"\u23F9 Stop":"🔊 Read to Me!"}
+                border:"none",fontSize:15,fontWeight:700,fontFamily:bf,cursor:ttsLoading?"wait":"pointer",opacity:ttsLoading?0.7:1}}>
+              {ttsLoading ? "⏳ Loading…" : speaking ? "⏹ Stop" : "🔊 Read to Me!"}
             </button>
             <button onClick={()=>{setReading(false);stopSpeaking();}}
               style={{padding:"10px 24px",borderRadius:50,background:"#fff",color:ac,border:`2px solid ${ac}`,fontSize:15,fontWeight:700,fontFamily:bf,cursor:"pointer"}}>
