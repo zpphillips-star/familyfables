@@ -1121,7 +1121,7 @@ function PooPooFaceGame({ accentColor }: { accentColor: string }) {
           {Array.from({ length: 12 }, (_, i) => {
             const n = String(i + 1).padStart(2, "0");
             return (
-              <div key={n} style={{ flex: "0 0 auto", borderRadius: 14, overflow: "hidden", boxShadow: "0 3px 14px rgba(90,45,130,0.25)", border: "2px solid #b97ee0" }}>
+              <div key={n} style={{ flex: "0 0 auto" }}>
                 <img
                   src={`/images/poo-faces/face-${n}.png`}
                   alt={`Poo poo face ${n}`}
