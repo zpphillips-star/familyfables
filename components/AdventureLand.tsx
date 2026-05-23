@@ -42,17 +42,42 @@ export interface AdventureLandProps {
  * The seam sits at y=80 in the 160px viewBox.
  * Both top AND bottom edges are curved — ribbon is ~50-60px thick.
  */
-/** Thin 1px line — the only separator between sections */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function ThinLineDivider({ fill }: { fill: string }) {
-  return null; // line is rendered via borderBottom on the section itself
+/** Gentle wave — thin SVG (~36px) at bottom of section, fills with next section's color */
+function HillDivider({ fill }: { fill: string }) {
+  return (
+    <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 36, pointerEvents: "none", zIndex: 1 }}>
+      <svg viewBox="0 0 1440 36" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+        <path d="M0,22 C240,4 480,34 720,16 C960,0 1200,28 1440,12 L1440,36 L0,36 Z" fill={fill} />
+      </svg>
+    </div>
+  );
+}
+
+function WaveDivider({ fill }: { fill: string }) {
+  return (
+    <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 36, pointerEvents: "none", zIndex: 1 }}>
+      <svg viewBox="0 0 1440 36" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+        <path d="M0,18 C360,36 720,0 1080,24 C1260,34 1380,10 1440,18 L1440,36 L0,36 Z" fill={fill} />
+      </svg>
+    </div>
+  );
+}
+
+function SlopeDivider({ fill }: { fill: string }) {
+  return (
+    <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 36, pointerEvents: "none", zIndex: 1 }}>
+      <svg viewBox="0 0 1440 36" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+        <path d="M0,26 Q360,6 720,24 Q1080,40 1440,14 L1440,36 L0,36 Z" fill={fill} />
+      </svg>
+    </div>
+  );
 }
 
 const DIVIDER_MAP = {
-  hill: ThinLineDivider,
-  wave: ThinLineDivider,
-  cloud: ThinLineDivider,
-  slope: ThinLineDivider,
+  hill: HillDivider,
+  wave: WaveDivider,
+  cloud: HillDivider,
+  slope: SlopeDivider,
 };
 
 export default function AdventureLand({
@@ -95,7 +120,6 @@ export default function AdventureLand({
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
-        borderBottom: "1px solid rgba(0,0,0,0.18)",
         cursor: "pointer",
       }}
     >
@@ -125,7 +149,7 @@ export default function AdventureLand({
         style={{
           maxWidth: 1100,
           margin: "0 auto",
-          padding: "72px clamp(24px, 6vw, 80px) 72px",
+          padding: "72px clamp(24px, 6vw, 80px) 90px",
           display: "flex",
           flexDirection: isEven ? "row-reverse" : "row",
           alignItems: "center",
