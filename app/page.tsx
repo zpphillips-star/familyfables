@@ -202,7 +202,7 @@ const landDefs: LandDef[] = [
     characterAlt: "Hampton",
     gradient: "linear-gradient(to bottom, #e8f5e9 0%, #a5d6a7 30%, #66bb6a 60%, #43a047 100%)",
     endColor: "#43a047",
-    nextGradientColor: "#0a0422",
+    nextGradientColor: "#fff8e1",
     dividerType: "slope",
     activities: [
       { label: "Explore this Land →", href: "/books/finding-hampton", variant: "primary" },
@@ -211,33 +211,10 @@ const landDefs: LandDef[] = [
     textColor: "#1b3a1e",
     flip: false,
   },
-  // 5. Dream Land
-  {
-    id: "dream-ideas", bookSlug: "dream-ideas",
-    index: 5,
-    emoji: "🌙",
-    landName: "Dream Land",
-    tagline: "Your best idea ever is waiting in a dream",
-    bookTitle: "Dream Ideas",
-    coverImage: "/images/books/dream-ideas.png",
-    characterImage: "/images/characters/dream-ideas-400-height.png",
-    characterAlt: "Dream Ideas character",
-    gradient: "linear-gradient(to bottom, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 100%)",
-    endColor: "#4a2da0",
-    nextGradientColor: "#fff8e1",
-    dividerType: "cloud",
-    activities: [
-      { label: "🎵 Play Lullaby", href: "/activities", variant: "primary" },
-      { label: "Explore this Land →", href: "/books/dream-ideas", variant: "secondary" },
-    ],
-    accentColor: "#5B9BD5",
-    textColor: "#e8d8ff",
-    flip: true,
-  },
-  // 6. Gilroy's Harvest Forest
+  // 5. Gilroy's Harvest Forest
   {
     id: "gilroys-gobble", bookSlug: "gilroys-gobble",
-    index: 6,
+    index: 5,
     emoji: "🦃",
     landName: "Gilroy's Harvest Forest",
     tagline: "Be different — your voice is yours and yours alone",
@@ -247,7 +224,7 @@ const landDefs: LandDef[] = [
     characterAlt: "Gilroy the turkey",
     gradient: "linear-gradient(to bottom, #fff8e1 0%, #ffcc80 30%, #ffa726 65%, #e65100 100%)",
     endColor: "#e65100",
-    nextGradientColor: "#3e1a00",
+    nextGradientColor: "#0a0422",
     dividerType: "hill",
     activities: [
       { label: "Explore this Land →", href: "/books/gilroys-gobble", variant: "primary" },
@@ -255,6 +232,29 @@ const landDefs: LandDef[] = [
     accentColor: "#F4A839",
     textColor: "#3e1a00",
     flip: false,
+  },
+  // 6. Dream Land
+  {
+    id: "dream-ideas", bookSlug: "dream-ideas",
+    index: 6,
+    emoji: "🌙",
+    landName: "Dream Land",
+    tagline: "Your best idea ever is waiting in a dream",
+    bookTitle: "Dream Ideas",
+    coverImage: "/images/books/dream-ideas.png",
+    characterImage: "/images/characters/dream-ideas-400-height.png",
+    characterAlt: "Dream Ideas character",
+    gradient: "linear-gradient(to bottom, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 100%)",
+    endColor: "#4a2da0",
+    nextGradientColor: "#3e1a00",
+    dividerType: "cloud",
+    activities: [
+      { label: "🎵 Play Lullaby", href: "/activities", variant: "primary" },
+      { label: "Explore this Land →", href: "/books/dream-ideas", variant: "secondary" },
+    ],
+    accentColor: "#5B9BD5",
+    textColor: "#e8d8ff",
+    flip: true,
   },
   // 7. Lumpiest Pumpkin Patch
   {
