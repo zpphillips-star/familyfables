@@ -37,48 +37,52 @@ export interface AdventureLandProps {
 }
 
 /**
- * Ribbon dividers — positioned at bottom:-80px so they straddle the seam
- * between two sections (80px into current section, 80px into next).
- * The seam sits at y=80 in the 160px viewBox.
- * Both top AND bottom edges are curved — ribbon is ~50-60px thick.
+ * WaveSeam — rendered BETWEEN sections (not inside them).
+ * Two fully-opaque SVG paths: topColor above curve, bottomColor below.
+ * No transparency, no gradient bleed, no overflow clipping issues.
  */
-/** Wave divider — exact same code as book detail page hero wave */
-function HillDivider({ fill }: { fill: string }) {
+export function WaveSeam({
+  topColor,
+  bottomColor,
+  type = "hill",
+}: {
+  topColor: string;
+  bottomColor: string;
+  type?: "hill" | "wave" | "slope" | "cloud";
+}) {
+  const paths: Record<string, string> = {
+    hill:  "M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z",
+    wave:  "M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z",
+    slope: "M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z",
+    cloud: "M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z",
+  };
+  const d = paths[type] ?? paths.hill;
   return (
-    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
-      <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-        <path d="M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z" fill={fill} />
+    <div
+      aria-hidden="true"
+      style={{
+        height: 64,
+        marginTop: -64,
+        position: "relative",
+        zIndex: 30,
+        pointerEvents: "none",
+        overflow: "hidden",
+        flexShrink: 0,
+      }}
+    >
+      <svg
+        viewBox="0 0 1440 64"
+        preserveAspectRatio="none"
+        style={{ width: "100%", height: "100%", display: "block" }}
+      >
+        {/* Fill entire area with section-above end color */}
+        <rect width="1440" height="64" fill={topColor} />
+        {/* Overpaint below the wave curve with section-below start color */}
+        <path d={d} fill={bottomColor} />
       </svg>
     </div>
   );
 }
-
-function WaveDivider({ fill }: { fill: string }) {
-  return (
-    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
-      <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-        <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" fill={fill} />
-      </svg>
-    </div>
-  );
-}
-
-function SlopeDivider({ fill }: { fill: string }) {
-  return (
-    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
-      <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-        <path d="M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z" fill={fill} />
-      </svg>
-    </div>
-  );
-}
-
-const DIVIDER_MAP = {
-  hill: HillDivider,
-  wave: WaveDivider,
-  cloud: HillDivider,
-  slope: SlopeDivider,
-};
 
 export default function AdventureLand({
   id,
@@ -100,12 +104,8 @@ export default function AdventureLand({
   flip = false,
   decorations,
 }: AdventureLandProps) {
-  const Divider = DIVIDER_MAP[dividerType];
   const isEven = index % 2 === 0;
   const router = useRouter();
-  // Extract first hex color from gradient — used as solid cap so wave from previous
-  // section meets a solid pixel (same pattern as book detail page backgroundColor)
-  const gradientStartColor = gradient.match(/#[0-9a-fA-F]{6}/)?.[0] ?? "#000000";
 
   return (
     <section
@@ -126,9 +126,6 @@ export default function AdventureLand({
         cursor: "pointer",
       }}
     >
-      {/* ── Solid color cap — pixel-perfect seam with previous section's wave fill ── */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, backgroundColor: gradientStartColor, zIndex: 5, pointerEvents: "none" }} />
-
       {/* ── Decorations ─────────────────────────────────────────────── */}
       {decorations && (
         <div
@@ -308,11 +305,7 @@ export default function AdventureLand({
           </div>
         </div>
       </div>
-
-      {/* ── Section divider into next land ──────────────────────────── */}
-      <Divider fill={nextGradientColor} />
     </section>
   );
 }
-
 
