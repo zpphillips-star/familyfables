@@ -37,52 +37,22 @@ export interface AdventureLandProps {
 }
 
 /**
- * WaveSeam — rendered BETWEEN sections (not inside them).
- * Two fully-opaque SVG paths: topColor above curve, bottomColor below.
- * No transparency, no gradient bleed, no overflow clipping issues.
+ * Replace WaveSeam with a simple inline wave rendered at the bottom of each section
+ * in normal flow — no absolute positioning, no overflow tricks.
  */
-export function WaveSeam({
-  topColor,
-  bottomColor,
-  type = "hill",
-}: {
-  topColor: string;
-  bottomColor: string;
-  type?: "hill" | "wave" | "slope" | "cloud";
+export function WaveSeam({ topColor, bottomColor, type = "hill" }: {
+  topColor: string; bottomColor: string; type?: string;
 }) {
-  const paths: Record<string, string> = {
-    hill:  "M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z",
-    wave:  "M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z",
-    slope: "M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z",
-    cloud: "M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z",
-  };
-  const d = paths[type] ?? paths.hill;
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        height: 64,
-        marginTop: -64,
-        position: "relative",
-        zIndex: 30,
-        pointerEvents: "none",
-        overflow: "hidden",
-        flexShrink: 0,
-      }}
-    >
-      <svg
-        viewBox="0 0 1440 64"
-        preserveAspectRatio="none"
-        style={{ width: "100%", height: "100%", display: "block" }}
-      >
-        {/* Fill entire area with section-above end color */}
-        <rect width="1440" height="64" fill={topColor} />
-        {/* Overpaint below the wave curve with section-below start color */}
-        <path d={d} fill={bottomColor} />
-      </svg>
-    </div>
-  );
+  // kept for export compatibility but no longer used
+  return null;
 }
+
+const WAVE_PATHS: Record<string, string> = {
+  hill:  "M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z",
+  wave:  "M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z",
+  slope: "M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z",
+  cloud: "M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z",
+};
 
 export default function AdventureLand({
   id,
@@ -142,7 +112,7 @@ export default function AdventureLand({
         style={{
           maxWidth: 1100,
           margin: "0 auto",
-          padding: "32px clamp(24px, 6vw, 80px) 96px",
+          padding: "32px clamp(24px, 6vw, 80px) 24px",
           display: "flex",
           flexDirection: isEven ? "row-reverse" : "row",
           alignItems: "center",
@@ -304,6 +274,20 @@ export default function AdventureLand({
             })}
           </div>
         </div>
+      </div>
+
+      {/* ── Wave divider in normal flow — sits right below content, no absolute positioning ── */}
+      <div
+        aria-hidden="true"
+        style={{ height: 64, flexShrink: 0, position: "relative", zIndex: 2, pointerEvents: "none" }}
+      >
+        <svg
+          viewBox="0 0 1440 64"
+          preserveAspectRatio="none"
+          style={{ width: "100%", height: "100%", display: "block" }}
+        >
+          <path d={WAVE_PATHS[dividerType] ?? WAVE_PATHS.hill} fill={nextGradientColor} />
+        </svg>
       </div>
     </section>
   );

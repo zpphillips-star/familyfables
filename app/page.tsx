@@ -786,20 +786,12 @@ export default function AdventurelandPage() {
       </section>
 
       {/* ═══ THE 12 LANDS ════════════════════════════════════════════════════ */}
-      {landDefs.map((land, i) => (
-        <React.Fragment key={land.id}>
-          <AdventureLand
-            {...land}
-            decorations={<LandDecorations slug={land.bookSlug} />}
-          />
-          {i < landDefs.length - 1 && (
-            <WaveSeam
-              topColor={land.endColor}
-              bottomColor={land.nextGradientColor}
-              type={land.dividerType}
-            />
-          )}
-        </React.Fragment>
+      {landDefs.map((land) => (
+        <AdventureLand
+          key={land.id}
+          {...land}
+          decorations={<LandDecorations slug={land.bookSlug} />}
+        />
       ))}
 
       {/* ═══ END OF ADVENTURE ════════════════════════════════════════════════ */}
