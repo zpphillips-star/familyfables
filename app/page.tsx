@@ -134,9 +134,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/amber-no-background.png",
     characterAlt: "Amber the Dragon Keeper",
     gradient: "linear-gradient(155deg, #2d0a3a 0%, #5a1060 30%, #8b1a6b 60%, #c0394a 100%)",
-    nextGradientColor: "#fff3e0",
-    dividerType: "hill",
-    activities: [
+    nextGradientColor: "#fff3e0",    activities: [
       { label: "📖 Read It To Me", href: "/read/amber-dragon-keeper", variant: "primary" },
       { label: "Explore this Land →", href: "/books/amber-the-dragon-keeper", variant: "secondary" },
     ],
@@ -156,9 +154,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/poo-poo-dragon.png",
     characterAlt: "Poo Poo Dragon",
     gradient: "linear-gradient(150deg, #fff3e0 0%, #ffe08a 30%, #ffb3c6 70%, #ff8fab 100%)",
-    nextGradientColor: "#1a0a2a",
-    dividerType: "wave",
-    activities: [
+    nextGradientColor: "#1a0a2a",    activities: [
       { label: "📖 Read It To Me", href: "/read/poo-poo-face", variant: "primary" },
       { label: "Explore this Land →", href: "/books/whats-your-poo-poo-face", variant: "secondary" },
     ],
@@ -177,9 +173,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/brian-the-ghost.jpg",
     characterImage: undefined,
     gradient: "linear-gradient(155deg, #1a0a2a 0%, #2d1260 35%, #4a1a80 65%, #7b5ea7 100%)",
-    nextGradientColor: "#e8f5e9",
-    dividerType: "slope",
-    activities: [
+    nextGradientColor: "#e8f5e9",    activities: [
       { label: "Explore this Land →", href: "/books/brian-the-ghost", variant: "primary" },
     ],
     accentColor: "#7B5EA7",
@@ -198,9 +192,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/finding-hampton-400-height.png",
     characterAlt: "Hampton",
     gradient: "linear-gradient(155deg, #e8f5e9 0%, #a5d6a7 30%, #66bb6a 60%, #43a047 100%)",
-    nextGradientColor: "#0a0422",
-    dividerType: "slope",
-    activities: [
+    nextGradientColor: "#0a0422",    activities: [
       { label: "Explore this Land →", href: "/books/finding-hampton", variant: "primary" },
     ],
     accentColor: "#5CB85C",
@@ -219,9 +211,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/dream-ideas-400-height.png",
     characterAlt: "Dream Ideas character",
     gradient: "linear-gradient(160deg, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 100%)",
-    nextGradientColor: "#fff8e1",
-    dividerType: "cloud",
-    activities: [
+    nextGradientColor: "#fff8e1",    activities: [
       { label: "🎵 Play Lullaby", href: "/activities", variant: "primary" },
       { label: "Explore this Land →", href: "/books/dream-ideas", variant: "secondary" },
     ],
@@ -241,9 +231,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/gilroys-gobble-483-height.png",
     characterAlt: "Gilroy the turkey",
     gradient: "linear-gradient(150deg, #fff8e1 0%, #ffcc80 30%, #ffa726 65%, #e65100 100%)",
-    nextGradientColor: "#3e1a00",
-    dividerType: "hill",
-    activities: [
+    nextGradientColor: "#3e1a00",    activities: [
       { label: "Explore this Land →", href: "/books/gilroys-gobble", variant: "primary" },
     ],
     accentColor: "#F4A839",
@@ -262,9 +250,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/lumpiest-pumpkin-400.png",
     characterAlt: "The Lumpiest Pumpkin",
     gradient: "linear-gradient(155deg, #3e1a00 0%, #6a2a0a 25%, #bf5600 55%, #ff8c00 80%, #ff6b35 100%)",
-    nextGradientColor: "#1a2a1a",
-    dividerType: "wave",
-    activities: [
+    nextGradientColor: "#1a2a1a",    activities: [
       { label: "Explore this Land →", href: "/books/the-lumpiest-pumpkin", variant: "primary" },
     ],
     accentColor: "#E07B39",
@@ -283,9 +269,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/ollie-383-height.png",
     characterAlt: "Ollie the cat",
     gradient: "linear-gradient(155deg, #1a2a1a 0%, #2d4a20 30%, #4a7c3f 60%, #6db85c 100%)",
-    nextGradientColor: "#e3f0ff",
-    dividerType: "slope",
-    activities: [
+    nextGradientColor: "#e3f0ff",    activities: [
       { label: "Explore this Land →", href: "/books/ollie-come-home", variant: "primary" },
     ],
     accentColor: "#5CB85C",
@@ -304,9 +288,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/shut-in-button-400.png",
     characterAlt: "The Shut-In Button",
     gradient: "linear-gradient(150deg, #e3f0ff 0%, #b3d4f5 30%, #7bb8f0 60%, #4a9de0 100%)",
-    nextGradientColor: "#fff9e6",
-    dividerType: "hill",
-    activities: [
+    nextGradientColor: "#fff9e6",    activities: [
       { label: "Explore this Land →", href: "/books/the-shut-in-button", variant: "primary" },
     ],
     accentColor: "#5B9BD5",
@@ -325,9 +307,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/doodle-do-without-background.png",
     characterAlt: "The Doodle-Do rooster",
     gradient: "linear-gradient(155deg, #fff9e6 0%, #ffe57f 30%, #ffca28 60%, #ff8f00 100%)",
-    nextGradientColor: "#fff3e8",
-    dividerType: "wave",
-    activities: [
+    nextGradientColor: "#fff3e8",    activities: [
       { label: "Explore this Land →", href: "/books/what-a-doodle-do", variant: "primary" },
     ],
     accentColor: "#E86BB5",
@@ -346,9 +326,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/turkey.jpg",
     characterAlt: "Tom Turkey",
     gradient: "linear-gradient(150deg, #fff3e8 0%, #ffccaa 30%, #e08040 60%, #c0560a 100%)",
-    nextGradientColor: "#1a1a3a",
-    dividerType: "slope",
-    activities: [
+    nextGradientColor: "#1a1a3a",    activities: [
       { label: "Explore this Land →", href: "/books/one-tom-turkey", variant: "primary" },
     ],
     accentColor: "#C06B39",
@@ -367,9 +345,7 @@ const landDefs: LandDef[] = [
     characterImage: "/images/characters/bailey-frog-a-dog-400.png",
     characterAlt: "Bailey the frog-dog",
     gradient: "linear-gradient(155deg, #1a1a3a 0%, #2a3a20 30%, #3a6a2a 60%, #4a9b35 100%)",
-    nextGradientColor: "#050212",
-    dividerType: "hill",
-    activities: [
+    nextGradientColor: "#050212",    activities: [
       { label: "Explore this Land →", href: "/books/frog-a-dog", variant: "primary" },
     ],
     accentColor: "#9B6FD0",
@@ -844,3 +820,4 @@ export default function AdventurelandPage() {
     </>
   );
 }
+

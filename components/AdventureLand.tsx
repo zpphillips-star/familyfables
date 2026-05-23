@@ -27,7 +27,6 @@ export interface AdventureLandProps {
   characterAlt?: string;
   gradient: string; // CSS gradient string for this land
   nextGradientColor: string; // solid color of NEXT section for divider
-  dividerType?: "hill" | "wave" | "cloud" | "slope";
   activities: LandActivity[];
   accentColor: string;
   textColor?: string;
@@ -37,48 +36,35 @@ export interface AdventureLandProps {
 }
 
 /**
- * Ribbon dividers — positioned at bottom:-80px so they straddle the seam
- * between two sections (80px into current section, 80px into next).
- * The seam sits at y=80 in the 160px viewBox.
- * Both top AND bottom edges are curved — ribbon is ~50-60px thick.
+ * 12 unique organic squiggle paths — all same gentle wave style,
+ * each with a different amplitude, phase, and curve profile.
+ * All use viewBox "0 0 1440 64" and fill downward to y=64.
  */
-/** Clean bottom-seal wave — fills downward with the next section's color */
-function HillDivider({ fill }: { fill: string }) {
-  return (
-    <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 1 }}>
-      <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-        <path d="M0,38 C240,10 480,58 720,30 C960,4 1200,52 1440,24 L1440,64 L0,64 Z" fill={fill} />
-      </svg>
-    </div>
-  );
-}
-
-function WaveDivider({ fill }: { fill: string }) {
-  return (
-    <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 1 }}>
-      <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-        <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" fill={fill} />
-      </svg>
-    </div>
-  );
-}
-
-function SlopeDivider({ fill }: { fill: string }) {
-  return (
-    <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 1 }}>
-      <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-        <path d="M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z" fill={fill} />
-      </svg>
-    </div>
-  );
-}
-
-const DIVIDER_MAP = {
-  hill: HillDivider,
-  wave: WaveDivider,
-  cloud: HillDivider, // fallback
-  slope: SlopeDivider,
+const SQUIGGLE_PATHS: Record<number, string> = {
+  1:  "M0,38 C240,10 480,58 720,30 C960,4 1200,52 1440,24 L1440,64 L0,64 Z",
+  2:  "M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z",
+  3:  "M0,28 C200,52 400,12 600,44 C800,58 1000,14 1200,46 C1320,56 1400,30 1440,36 L1440,64 L0,64 Z",
+  4:  "M0,42 C300,16 600,54 900,20 C1100,4 1300,48 1440,30 L1440,64 L0,64 Z",
+  5:  "M0,20 C180,50 360,8 540,40 C720,58 900,16 1080,48 C1200,60 1340,26 1440,34 L1440,64 L0,64 Z",
+  6:  "M0,48 C240,18 480,58 720,26 C960,2 1200,52 1440,20 L1440,64 L0,64 Z",
+  7:  "M0,36 C360,10 720,58 1080,16 C1260,2 1380,50 1440,32 L1440,64 L0,64 Z",
+  8:  "M0,24 C160,56 320,6 480,46 C640,58 800,10 960,42 C1120,60 1280,18 1440,40 L1440,64 L0,64 Z",
+  9:  "M0,40 C280,12 560,54 840,18 C1020,2 1240,58 1440,26 L1440,64 L0,64 Z",
+  10: "M0,30 C200,60 500,4 720,52 C900,64 1100,8 1440,36 L1440,64 L0,64 Z",
+  11: "M0,44 C240,14 480,60 720,24 C960,6 1200,56 1440,28 L1440,64 L0,64 Z",
+  12: "M0,22 C300,54 600,10 900,48 C1100,60 1280,12 1440,38 L1440,64 L0,64 Z",
 };
+
+function SquiggleDivider({ fill, index }: { fill: string; index: number }) {
+  const d = SQUIGGLE_PATHS[index] ?? SQUIGGLE_PATHS[1];
+  return (
+    <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 1 }}>
+      <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
+        <path d={d} fill={fill} />
+      </svg>
+    </div>
+  );
+}
 
 export default function AdventureLand({
   id,
@@ -93,14 +79,12 @@ export default function AdventureLand({
   characterAlt,
   gradient,
   nextGradientColor,
-  dividerType = "hill",
   activities,
   accentColor,
   textColor = "#ffffff",
   flip = false,
   decorations,
 }: AdventureLandProps) {
-  const Divider = DIVIDER_MAP[dividerType];
   const isEven = index % 2 === 0;
   const router = useRouter();
 
@@ -319,7 +303,7 @@ export default function AdventureLand({
       </div>
 
       {/* ── Section divider into next land ──────────────────────────── */}
-      <Divider fill={nextGradientColor} />
+      <SquiggleDivider fill={nextGradientColor} index={index} />
     </section>
   );
 }
