@@ -79,9 +79,8 @@ export const books: Book[] = [
     moods: ['bedtime', 'read-aloud'],
     themes: ["🌙 Bedtime", "🎵 Singalong", "💡 Imagination"],
     gradient: "linear-gradient(160deg, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 100%)",
-        landIndex: 5,
+        landIndex: 6,
     hasReadAloud: true,
-    amazonUrl: "https://www.amazon.com/dp/1951173147",
   },
   {
     id: "amber-dragon-keeper",
@@ -125,7 +124,7 @@ export const books: Book[] = [
     moods: ['feel-good'],
     themes: ["🦃 Confidence", "🎶 Be Yourself", "❤️ Feel-Good"],
     gradient: "linear-gradient(150deg, #fff8e1 0%, #ffcc80 30%, #ffa726 65%, #e65100 100%)",
-        landIndex: 6,
+        landIndex: 5,
     hasReadAloud: true,
   },
   {
