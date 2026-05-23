@@ -133,7 +133,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/amber-cover-square.jpg",
     characterImage: "/images/characters/amber-no-background.png",
     characterAlt: "Amber the Dragon Keeper",
-    gradient: "linear-gradient(155deg, #2d0a3a 0%, #5a1060 30%, #8b1a6b 60%, #c0394a 85%, #fff3e0 100%)",
+    gradient: "linear-gradient(155deg, #2d0a3a 0%, #5a1060 30%, #8b1a6b 60%, #c0394a 100%)",
     nextGradientColor: "#fff3e0",
     dividerType: "hill",
     activities: [
@@ -155,7 +155,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/poo-poo-face.png",
     characterImage: "/images/characters/poo-poo-dragon.png",
     characterAlt: "Poo Poo Dragon",
-    gradient: "linear-gradient(150deg, #fff3e0 0%, #ffe08a 30%, #ffb3c6 70%, #ff8fab 85%, #1a0a2a 100%)",
+    gradient: "linear-gradient(150deg, #fff3e0 0%, #ffe08a 30%, #ffb3c6 70%, #ff8fab 100%)",
     nextGradientColor: "#1a0a2a",
     dividerType: "wave",
     activities: [
@@ -176,7 +176,7 @@ const landDefs: LandDef[] = [
     bookTitle: "Brian the Ghost",
     coverImage: "/images/books/brian-the-ghost.jpg",
     characterImage: undefined,
-    gradient: "linear-gradient(155deg, #1a0a2a 0%, #2d1260 35%, #4a1a80 65%, #7b5ea7 85%, #e8f5e9 100%)",
+    gradient: "linear-gradient(155deg, #1a0a2a 0%, #2d1260 35%, #4a1a80 65%, #7b5ea7 100%)",
     nextGradientColor: "#e8f5e9",
     dividerType: "slope",
     activities: [
@@ -197,7 +197,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/finding-hampton.png",
     characterImage: "/images/characters/finding-hampton-400-height.png",
     characterAlt: "Hampton",
-    gradient: "linear-gradient(155deg, #e8f5e9 0%, #a5d6a7 30%, #66bb6a 60%, #43a047 85%, #0a0422 100%)",
+    gradient: "linear-gradient(155deg, #e8f5e9 0%, #a5d6a7 30%, #66bb6a 60%, #43a047 100%)",
     nextGradientColor: "#0a0422",
     dividerType: "slope",
     activities: [
@@ -218,7 +218,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/dream-ideas.png",
     characterImage: "/images/characters/dream-ideas-400-height.png",
     characterAlt: "Dream Ideas character",
-    gradient: "linear-gradient(160deg, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 85%, #fff8e1 100%)",
+    gradient: "linear-gradient(160deg, #0a0422 0%, #1a1060 35%, #2d1b80 65%, #4a2da0 100%)",
     nextGradientColor: "#fff8e1",
     dividerType: "cloud",
     activities: [
@@ -240,7 +240,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/gilroys-gobble.png",
     characterImage: "/images/characters/gilroys-gobble-483-height.png",
     characterAlt: "Gilroy the turkey",
-    gradient: "linear-gradient(150deg, #fff8e1 0%, #ffcc80 30%, #ffa726 65%, #e65100 85%, #3e1a00 100%)",
+    gradient: "linear-gradient(150deg, #fff8e1 0%, #ffcc80 30%, #ffa726 65%, #e65100 100%)",
     nextGradientColor: "#3e1a00",
     dividerType: "hill",
     activities: [
@@ -261,7 +261,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/lumpiest-pumpkin.png",
     characterImage: "/images/characters/lumpiest-pumpkin-400.png",
     characterAlt: "The Lumpiest Pumpkin",
-    gradient: "linear-gradient(155deg, #3e1a00 0%, #6a2a0a 25%, #bf5600 55%, #ff8c00 75%, #ff6b35 85%, #1a2a1a 100%)",
+    gradient: "linear-gradient(155deg, #3e1a00 0%, #6a2a0a 25%, #bf5600 55%, #ff8c00 80%, #ff6b35 100%)",
     nextGradientColor: "#1a2a1a",
     dividerType: "wave",
     activities: [
@@ -282,7 +282,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/ollie-come-home.png",
     characterImage: "/images/characters/ollie-383-height.png",
     characterAlt: "Ollie the cat",
-    gradient: "linear-gradient(155deg, #1a2a1a 0%, #2d4a20 30%, #4a7c3f 60%, #6db85c 85%, #e3f0ff 100%)",
+    gradient: "linear-gradient(155deg, #1a2a1a 0%, #2d4a20 30%, #4a7c3f 60%, #6db85c 100%)",
     nextGradientColor: "#e3f0ff",
     dividerType: "slope",
     activities: [
@@ -303,7 +303,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/shut-in-button.png",
     characterImage: "/images/characters/shut-in-button-400.png",
     characterAlt: "The Shut-In Button",
-    gradient: "linear-gradient(150deg, #e3f0ff 0%, #b3d4f5 30%, #7bb8f0 60%, #4a9de0 85%, #fff9e6 100%)",
+    gradient: "linear-gradient(150deg, #e3f0ff 0%, #b3d4f5 30%, #7bb8f0 60%, #4a9de0 100%)",
     nextGradientColor: "#fff9e6",
     dividerType: "hill",
     activities: [
@@ -324,7 +324,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/what-a-doodle-do.jpg",
     characterImage: "/images/characters/doodle-do-without-background.png",
     characterAlt: "The Doodle-Do rooster",
-    gradient: "linear-gradient(155deg, #fff9e6 0%, #ffe57f 30%, #ffca28 60%, #ff8f00 85%, #fff3e8 100%)",
+    gradient: "linear-gradient(155deg, #fff9e6 0%, #ffe57f 30%, #ffca28 60%, #ff8f00 100%)",
     nextGradientColor: "#fff3e8",
     dividerType: "wave",
     activities: [
@@ -345,7 +345,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/one-tom-turkey.png",
     characterImage: "/images/characters/turkey.jpg",
     characterAlt: "Tom Turkey",
-    gradient: "linear-gradient(150deg, #fff3e8 0%, #ffccaa 30%, #e08040 60%, #c0560a 85%, #1a1a3a 100%)",
+    gradient: "linear-gradient(150deg, #fff3e8 0%, #ffccaa 30%, #e08040 60%, #c0560a 100%)",
     nextGradientColor: "#1a1a3a",
     dividerType: "slope",
     activities: [
@@ -366,7 +366,7 @@ const landDefs: LandDef[] = [
     coverImage: "/images/books/frog-a-dog.png",
     characterImage: "/images/characters/bailey-frog-a-dog-400.png",
     characterAlt: "Bailey the frog-dog",
-    gradient: "linear-gradient(155deg, #1a1a3a 0%, #2a3a20 30%, #3a6a2a 60%, #4a9b35 85%, #050212 100%)",
+    gradient: "linear-gradient(155deg, #1a1a3a 0%, #2a3a20 30%, #3a6a2a 60%, #4a9b35 100%)",
     nextGradientColor: "#050212",
     dividerType: "hill",
     activities: [
