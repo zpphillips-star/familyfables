@@ -93,6 +93,8 @@ export default function AdventureLand({
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
+        padding: "48px clamp(24px, 6vw, 80px) 88px",
         cursor: "pointer",
       }}
     >
@@ -112,7 +114,7 @@ export default function AdventureLand({
         style={{
           maxWidth: 1100,
           margin: "0 auto",
-          padding: "32px clamp(24px, 6vw, 80px) 24px",
+          padding: "0",
           display: "flex",
           flexDirection: isEven ? "row-reverse" : "row",
           alignItems: "center",
@@ -276,16 +278,12 @@ export default function AdventureLand({
         </div>
       </div>
 
-      {/* ── Wave divider in normal flow — sits right below content, no absolute positioning ── */}
+      {/* ── Wave — position absolute, bottom -1, exactly matching book page ── */}
       <div
         aria-hidden="true"
-        style={{ height: 64, flexShrink: 0, position: "relative", zIndex: 2, pointerEvents: "none" }}
+        style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}
       >
-        <svg
-          viewBox="0 0 1440 64"
-          preserveAspectRatio="none"
-          style={{ width: "100%", height: "100%", display: "block" }}
-        >
+        <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
           <path d={WAVE_PATHS[dividerType] ?? WAVE_PATHS.hill} fill={nextGradientColor} />
         </svg>
       </div>
