@@ -42,12 +42,12 @@ export interface AdventureLandProps {
  * The seam sits at y=80 in the 160px viewBox.
  * Both top AND bottom edges are curved — ribbon is ~50-60px thick.
  */
-/** Wave divider — 64px, bottom:-1 to eliminate seam, fills with next section's color */
+/** Wave divider — exact same code as book detail page hero wave */
 function HillDivider({ fill }: { fill: string }) {
   return (
-    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 3 }}>
+    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
       <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-        <path d="M0,40 C360,14 720,58 1080,22 C1260,8 1380,50 1440,30 L1440,64 L0,64 Z" fill={fill} />
+        <path d="M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z" fill={fill} />
       </svg>
     </div>
   );
@@ -55,7 +55,7 @@ function HillDivider({ fill }: { fill: string }) {
 
 function WaveDivider({ fill }: { fill: string }) {
   return (
-    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 3 }}>
+    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
       <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
         <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" fill={fill} />
       </svg>
@@ -65,7 +65,7 @@ function WaveDivider({ fill }: { fill: string }) {
 
 function SlopeDivider({ fill }: { fill: string }) {
   return (
-    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 3 }}>
+    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
       <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
         <path d="M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z" fill={fill} />
       </svg>
@@ -117,28 +117,16 @@ export default function AdventureLand({
       style={{
         position: "relative",
         background: gradient,
-        overflowX: "hidden",
-        overflowY: "visible",
+        overflow: "visible",
         display: "flex",
         flexDirection: "column",
         cursor: "pointer",
-        zIndex: 14 - index,
       }}
     >
-      {/* ── Milestone marker (continuous dotted path node) ──────────── */}
-      {/*
-       * The wrap spans the full section height (top:0 → bottom:0).
-       * A dotted line div runs the entire height behind the number badge,
-       * so when adjacent sections stack, their lines meet seamlessly — creating
-       * one unbroken dotted thread from Land 1 to Land 12.
-       * Hidden on mobile via globals.css (.adventure-milestone-wrap display:none).
-       */}
-      {/* Colored badge removed — "Land #" label lives inline with the title */}
-
       {/* ── Decorations ─────────────────────────────────────────────── */}
       {decorations && (
         <div
-          style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1 }}
+          style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}
           aria-hidden="true"
         >
           {decorations}
