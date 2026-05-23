@@ -45,7 +45,7 @@ export interface AdventureLandProps {
 /** Wave divider — exact same code as book detail page hero wave */
 function HillDivider({ fill }: { fill: string }) {
   return (
-    <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
       <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
         <path d="M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z" fill={fill} />
       </svg>
@@ -55,7 +55,7 @@ function HillDivider({ fill }: { fill: string }) {
 
 function WaveDivider({ fill }: { fill: string }) {
   return (
-    <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
       <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
         <path d="M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z" fill={fill} />
       </svg>
@@ -65,7 +65,7 @@ function WaveDivider({ fill }: { fill: string }) {
 
 function SlopeDivider({ fill }: { fill: string }) {
   return (
-    <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
+    <div style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}>
       <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }} aria-hidden="true">
         <path d="M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z" fill={fill} />
       </svg>
@@ -103,6 +103,9 @@ export default function AdventureLand({
   const Divider = DIVIDER_MAP[dividerType];
   const isEven = index % 2 === 0;
   const router = useRouter();
+  // Extract first hex color from gradient — used as solid cap so wave from previous
+  // section meets a solid pixel (same pattern as book detail page backgroundColor)
+  const gradientStartColor = gradient.match(/#[0-9a-fA-F]{6}/)?.[0] ?? "#000000";
 
   return (
     <section
@@ -123,6 +126,9 @@ export default function AdventureLand({
         cursor: "pointer",
       }}
     >
+      {/* ── Solid color cap — pixel-perfect seam with previous section's wave fill ── */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, backgroundColor: gradientStartColor, zIndex: 5, pointerEvents: "none" }} />
+
       {/* ── Decorations ─────────────────────────────────────────────── */}
       {decorations && (
         <div
@@ -308,4 +314,5 @@ export default function AdventureLand({
     </section>
   );
 }
+
 
