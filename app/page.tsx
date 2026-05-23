@@ -136,7 +136,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #2d0a3a 0%, #5a1060 30%, #8b1a6b 60%, #c0394a 100%)",
     endColor: "#c0394a",
     nextGradientColor: "#fff3e0",
-    dividerType: "hill",
+    dividerType: "crest",
     activities: [
       { label: "📖 Read It To Me", href: "/read/amber-dragon-keeper", variant: "primary" },
       { label: "Explore this Land →", href: "/books/amber-the-dragon-keeper", variant: "secondary" },
@@ -159,7 +159,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #fff3e0 0%, #ffe08a 30%, #ffb3c6 70%, #ff8fab 100%)",
     endColor: "#ff8fab",
     nextGradientColor: "#1a0a2a",
-    dividerType: "wave",
+    dividerType: "bump",
     activities: [
       { label: "📖 Read It To Me", href: "/read/poo-poo-face", variant: "primary" },
       { label: "Explore this Land →", href: "/books/whats-your-poo-poo-face", variant: "secondary" },
@@ -181,7 +181,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #1a0a2a 0%, #2d1260 35%, #4a1a80 65%, #7b5ea7 100%)",
     endColor: "#7b5ea7",
     nextGradientColor: "#e8f5e9",
-    dividerType: "slope",
+    dividerType: "steep",
     activities: [
       { label: "Explore this Land →", href: "/books/brian-the-ghost", variant: "primary" },
     ],
@@ -203,7 +203,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #e8f5e9 0%, #a5d6a7 30%, #66bb6a 60%, #43a047 100%)",
     endColor: "#43a047",
     nextGradientColor: "#fff8e1",
-    dividerType: "slope",
+    dividerType: "arch",
     activities: [
       { label: "Explore this Land →", href: "/books/finding-hampton", variant: "primary" },
     ],
@@ -225,7 +225,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #fff8e1 0%, #ffcc80 30%, #ffa726 65%, #e65100 100%)",
     endColor: "#e65100",
     nextGradientColor: "#0a0422",
-    dividerType: "hill",
+    dividerType: "wave",
     activities: [
       { label: "Explore this Land →", href: "/books/gilroys-gobble", variant: "primary" },
     ],
@@ -270,7 +270,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #3e1a00 0%, #6a2a0a 25%, #bf5600 55%, #ff8c00 80%, #ff6b35 100%)",
     endColor: "#ff6b35",
     nextGradientColor: "#1a2a1a",
-    dividerType: "wave",
+    dividerType: "slope",
     activities: [
       { label: "Explore this Land →", href: "/books/the-lumpiest-pumpkin", variant: "primary" },
     ],
@@ -292,7 +292,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #1a2a1a 0%, #2d4a20 30%, #4a7c3f 60%, #6db85c 100%)",
     endColor: "#6db85c",
     nextGradientColor: "#e3f0ff",
-    dividerType: "slope",
+    dividerType: "gentle",
     activities: [
       { label: "Explore this Land →", href: "/books/ollie-come-home", variant: "primary" },
     ],
@@ -314,7 +314,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #e3f0ff 0%, #b3d4f5 30%, #7bb8f0 60%, #4a9de0 100%)",
     endColor: "#4a9de0",
     nextGradientColor: "#fff9e6",
-    dividerType: "hill",
+    dividerType: "zigzag",
     activities: [
       { label: "Explore this Land →", href: "/books/the-shut-in-button", variant: "primary" },
     ],
@@ -336,7 +336,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #fff9e6 0%, #ffe57f 30%, #ffca28 60%, #ff8f00 100%)",
     endColor: "#ff8f00",
     nextGradientColor: "#fff3e8",
-    dividerType: "wave",
+    dividerType: "ripple",
     activities: [
       { label: "Explore this Land →", href: "/books/what-a-doodle-do", variant: "primary" },
     ],
@@ -358,7 +358,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #fff3e8 0%, #ffccaa 30%, #e08040 60%, #c0560a 100%)",
     endColor: "#c0560a",
     nextGradientColor: "#1a1a3a",
-    dividerType: "slope",
+    dividerType: "hill",
     activities: [
       { label: "Explore this Land →", href: "/books/one-tom-turkey", variant: "primary" },
     ],
@@ -380,7 +380,7 @@ const landDefs: LandDef[] = [
     gradient: "linear-gradient(to bottom, #1a1a3a 0%, #2a3a20 30%, #3a6a2a 60%, #4a9b35 100%)",
     endColor: "#4a9b35",
     nextGradientColor: "#050212",
-    dividerType: "hill",
+    dividerType: "sweep",
     activities: [
       { label: "Explore this Land →", href: "/books/frog-a-dog", variant: "primary" },
     ],

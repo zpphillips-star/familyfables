@@ -27,7 +27,7 @@ export interface AdventureLandProps {
   characterAlt?: string;
   gradient: string; // CSS gradient string for this land
   nextGradientColor: string; // solid color of NEXT section for divider
-  dividerType?: "hill" | "wave" | "cloud" | "slope";
+  dividerType?: "hill" | "wave" | "cloud" | "slope" | "crest" | "bump" | "steep" | "arch" | "gentle" | "zigzag" | "ripple" | "sweep";
   activities: LandActivity[];
   accentColor: string;
   textColor?: string;
@@ -48,10 +48,20 @@ export function WaveSeam({ topColor, bottomColor, type = "hill" }: {
 }
 
 const WAVE_PATHS: Record<string, string> = {
-  hill:  "M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z",
-  wave:  "M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z",
-  slope: "M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z",
-  cloud: "M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z",
+  // existing 4 — all truly distinct shapes
+  hill:   "M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z",
+  wave:   "M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z",
+  slope:  "M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z",
+  cloud:  "M0,48 C80,28 160,52 240,36 C320,20 400,48 480,32 C560,16 640,44 720,30 C800,16 880,42 960,28 C1040,14 1120,40 1200,26 C1280,12 1380,36 1440,22 L1440,64 L0,64 Z",
+  // 8 new shapes — one per remaining land
+  crest:  "M0,60 C180,60 280,4 440,8 C600,12 700,52 900,48 C1100,44 1280,20 1440,18 L1440,64 L0,64 Z",
+  bump:   "M0,54 C200,54 340,6 720,6 C1100,6 1240,54 1440,54 L1440,64 L0,64 Z",
+  steep:  "M0,56 C120,56 200,12 360,8 C520,4 580,56 720,52 C860,48 960,8 1100,6 C1200,4 1340,48 1440,52 L1440,64 L0,64 Z",
+  arch:   "M0,62 C360,62 540,2 720,2 C900,2 1080,62 1440,62 L1440,64 L0,64 Z",
+  gentle: "M0,52 C480,38 960,60 1440,46 L1440,64 L0,64 Z",
+  zigzag: "M0,38 L240,18 L480,50 L720,14 L960,46 L1200,12 L1440,36 L1440,64 L0,64 Z",
+  ripple: "M0,44 C160,28 200,52 360,38 C520,24 560,48 720,36 C880,24 920,50 1080,38 C1240,26 1340,46 1440,36 L1440,64 L0,64 Z",
+  sweep:  "M0,58 C480,58 960,4 1440,4 L1440,64 L0,64 Z",
 };
 
 export default function AdventureLand({
