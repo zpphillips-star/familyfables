@@ -117,10 +117,12 @@ export default function AdventureLand({
       style={{
         position: "relative",
         background: gradient,
-        overflow: "hidden",
+        overflowX: "hidden",
+        overflowY: "visible",
         display: "flex",
         flexDirection: "column",
         cursor: "pointer",
+        zIndex: 14 - index,
       }}
     >
       {/* ── Milestone marker (continuous dotted path node) ──────────── */}
