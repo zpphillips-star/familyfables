@@ -27,7 +27,7 @@ export interface AdventureLandProps {
   characterAlt?: string;
   gradient: string; // CSS gradient string for this land
   nextGradientColor: string; // solid color of NEXT section for divider
-  dividerType?: "hill" | "wave" | "cloud" | "slope" | "crest" | "bump" | "steep" | "arch" | "gentle" | "zigzag" | "ripple" | "sweep";
+  dividerType?: string; // legacy — ignored, divider shape driven by index
   activities: LandActivity[];
   accentColor: string;
   textColor?: string;
@@ -47,21 +47,24 @@ export function WaveSeam({ topColor, bottomColor, type = "hill" }: {
   return null;
 }
 
-const WAVE_PATHS: Record<string, string> = {
-  // existing 4 — all truly distinct shapes
-  hill:   "M0,40 C360,16 720,58 1080,22 C1260,10 1380,50 1440,32 L1440,64 L0,64 Z",
-  wave:   "M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z",
-  slope:  "M0,44 Q360,8 720,40 Q1080,68 1440,26 L1440,64 L0,64 Z",
-  cloud:  "M0,48 C80,28 160,52 240,36 C320,20 400,48 480,32 C560,16 640,44 720,30 C800,16 880,42 960,28 C1040,14 1120,40 1200,26 C1280,12 1380,36 1440,22 L1440,64 L0,64 Z",
-  // 8 new shapes — one per remaining land
-  crest:  "M0,60 C180,60 280,4 440,8 C600,12 700,52 900,48 C1100,44 1280,20 1440,18 L1440,64 L0,64 Z",
-  bump:   "M0,54 C200,54 340,6 720,6 C1100,6 1240,54 1440,54 L1440,64 L0,64 Z",
-  steep:  "M0,56 C120,56 200,12 360,8 C520,4 580,56 720,52 C860,48 960,8 1100,6 C1200,4 1340,48 1440,52 L1440,64 L0,64 Z",
-  arch:   "M0,62 C360,62 540,2 720,2 C900,2 1080,62 1440,62 L1440,64 L0,64 Z",
-  gentle: "M0,52 C480,38 960,60 1440,46 L1440,64 L0,64 Z",
-  zigzag: "M0,38 L240,18 L480,50 L720,14 L960,46 L1200,12 L1440,36 L1440,64 L0,64 Z",
-  ripple: "M0,44 C160,28 200,52 360,38 C520,24 560,48 720,36 C880,24 920,50 1080,38 C1240,26 1340,46 1440,36 L1440,64 L0,64 Z",
-  sweep:  "M0,58 C480,58 960,4 1440,4 L1440,64 L0,64 Z",
+/**
+ * 12 unique organic squiggle paths — all same gentle sinusoidal wave style,
+ * each with a different amplitude, phase, and curve profile.
+ * Keyed by land index (1–12). No zigzags, triangles, or arches — pure waves.
+ */
+const WAVE_PATHS: Record<number, string> = {
+  1:  "M0,38 C240,10 480,58 720,30 C960,4 1200,52 1440,24 L1440,64 L0,64 Z",
+  2:  "M0,32 C240,56 540,8 840,46 C1060,60 1280,14 1440,38 L1440,64 L0,64 Z",
+  3:  "M0,28 C200,52 400,12 600,44 C800,58 1000,14 1200,46 C1320,56 1400,30 1440,36 L1440,64 L0,64 Z",
+  4:  "M0,42 C300,16 600,54 900,20 C1100,4 1300,48 1440,30 L1440,64 L0,64 Z",
+  5:  "M0,20 C180,50 360,8 540,40 C720,58 900,16 1080,48 C1200,60 1340,26 1440,34 L1440,64 L0,64 Z",
+  6:  "M0,48 C240,18 480,58 720,26 C960,2 1200,52 1440,20 L1440,64 L0,64 Z",
+  7:  "M0,36 C360,10 720,58 1080,16 C1260,2 1380,50 1440,32 L1440,64 L0,64 Z",
+  8:  "M0,24 C160,56 320,6 480,46 C640,58 800,10 960,42 C1120,60 1280,18 1440,40 L1440,64 L0,64 Z",
+  9:  "M0,40 C280,12 560,54 840,18 C1020,2 1240,58 1440,26 L1440,64 L0,64 Z",
+  10: "M0,30 C200,60 500,4 720,52 C900,64 1100,8 1440,36 L1440,64 L0,64 Z",
+  11: "M0,44 C240,14 480,60 720,24 C960,6 1200,56 1440,28 L1440,64 L0,64 Z",
+  12: "M0,22 C300,54 600,10 900,48 C1100,60 1280,12 1440,38 L1440,64 L0,64 Z",
 };
 
 export default function AdventureLand({
@@ -294,7 +297,7 @@ export default function AdventureLand({
         style={{ position: "absolute", bottom: -1, left: 0, width: "100%", height: 64, pointerEvents: "none", zIndex: 4 }}
       >
         <svg viewBox="0 0 1440 64" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
-          <path d={WAVE_PATHS[dividerType] ?? WAVE_PATHS.hill} fill={nextGradientColor} />
+          <path d={WAVE_PATHS[index] ?? WAVE_PATHS[1]} fill={nextGradientColor} />
         </svg>
       </div>
     </section>
