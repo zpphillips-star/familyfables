@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback, CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const SLUG = 'the-shut-in-button';
+const SLUG = 'shut-in-button';
 const TITLE = 'The Shut-In Button';
 const ACCENT = '#A8D8EA';
 
@@ -555,3 +555,4 @@ export default function ReaderPage() {
     </div>
   );
 }
+
