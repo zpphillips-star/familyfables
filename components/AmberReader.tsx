@@ -219,19 +219,26 @@ export default function AmberReader({
     if (page.audioUrl) {
       const audio = new Audio(page.audioUrl);
       audioRef.current = audio;
-      let playing = false;
-      audio.onplaying = () => { playing = true; setAudioStatus('playing'); };
+      let started = false;
+      audio.onplaying = () => { started = true; setAudioStatus('playing'); };
       audio.onended = () => { setAudioStatus('idle'); onEnd?.(); };
       audio.onerror = () => {
-        // Only fall back to TTS if the MP3 never started — prevents dual voice
-        if (!playing) playTTS(page.text!, onEnd);
+        // Only fall back to TTS if this is still the active audio element AND
+        // it never actually started playing — prevents dual-voice when stopAudio()
+        // clears audioRef mid-load (setting src='' triggers onerror on the old element)
+        if (audioRef.current === audio && !started) {
+          playTTS(page.text!, onEnd);
+        } else {
+          setAudioStatus('idle');
+        }
       };
       try {
         await audio.play();
         return;
       } catch {
-        // Only fall back if not already playing (e.g. AbortError after play started)
-        if (!playing) playTTS(page.text!, onEnd);
+        if (audioRef.current === audio && !started) {
+          playTTS(page.text!, onEnd);
+        }
         return;
       }
     }
