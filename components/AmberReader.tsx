@@ -594,19 +594,22 @@ export default function AmberReader({
       {/* ── Fullscreen button ───────────────────────────────────────────────── */}
       <button
         onClick={toggleFullscreen}
-        aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+        aria-label={isFullscreen ? 'Exit full screen' : 'Full screen'}
         style={{
           position: 'fixed', top: 96, right: 12,
-          background: 'rgba(0,0,0,0.5)',
-          border: `1px solid ${accentColor}33`,
-          borderRadius: '50%',
-          width: 38, height: 38,
+          background: 'rgba(0,0,0,0.6)',
+          border: `1px solid ${accentColor}55`,
+          borderRadius: 20,
+          padding: '6px 12px',
+          color: 'rgba(255,255,255,0.85)',
+          fontSize: '0.75rem',
+          fontWeight: 600,
+          letterSpacing: '0.02em',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '1rem', cursor: 'pointer', zIndex: 20,
-          color: '#fff',
+          cursor: 'pointer', zIndex:20,
         }}
       >
-        {isFullscreen ? '⊠' : '⛶'}
+        {isFullscreen ? '✕ Exit Full Screen' : '⛶ Full Screen'}
       </button>
 
       {/* ── Map overlay ────────────────────────────────────────────────────── */}

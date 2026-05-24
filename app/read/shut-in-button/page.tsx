@@ -271,6 +271,11 @@ export default function ReaderPage() {
           🔘 Read It To Me!
         </button>
 
+        <p style={{
+          color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem',
+          margin: '8px 0 0', letterSpacing: '0.03em',
+        }}>📱 Rotate your screen for full screen</p>
+
         <label style={{
           display: 'flex', alignItems: 'center', gap: 8,
           color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem', cursor: 'pointer',
@@ -549,13 +554,15 @@ export default function ReaderPage() {
                 background: 'rgba(123,94,167,0.18)',
                 border: '1px solid rgba(123,94,167,0.45)',
                 borderRadius: 20,
-                padding: '4px 10px',
-                color: 'rgba(255,255,255,0.7)',
-                fontSize: '0.85rem',
+                padding: '6px 14px',
+                color: 'rgba(255,255,255,0.85)',
+                fontSize: '0.82rem',
+                fontWeight: 600,
+                letterSpacing: '0.02em',
                 cursor: 'pointer',
               }}
               aria-label="Toggle fullscreen"
-            >{isFullscreen ? '⊠' : '⛶'}</button>
+            >{isFullscreen ? '✕ Exit Full Screen' : '⛶ Full Screen'}</button>
           </div>
         </div>
 
