@@ -221,7 +221,7 @@ export default function ReaderPage() {
           marginBottom: 32, border: `3px solid ${ACCENT}66`,
         }}>
           <Image
-            src={`/images/reader/${SLUG}/${PAGES[0].img.split('/').pop()}`}
+            src={PAGES[0].img}
             alt={TITLE}
             width={200} height={200}
             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
