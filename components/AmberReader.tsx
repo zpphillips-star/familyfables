@@ -322,12 +322,12 @@ export default function AmberReader({
 
   // ── Shared image style ─────────────────────────────────────────────────────
   const imgStyle: CSSProperties = {
-    maxWidth: isLandscape ? '100dvw' : '100%',
-    maxHeight: isLandscape ? '100dvh' : 'calc(100dvh - 160px)',
+    maxWidth: (isLandscape || isFullscreen) ? '100dvw' : '100%',
+    maxHeight: (isLandscape || isFullscreen) ? '100dvh' : 'calc(100dvh - 160px)',
     objectFit: 'contain',
-    borderRadius: isLandscape ? 0 : 8,
+    borderRadius: (isLandscape || isFullscreen) ? 0 : 8,
     display: 'block',
-    boxShadow: isLandscape ? 'none' : '0 8px 40px rgba(0,0,0,0.8)',
+    boxShadow: (isLandscape || isFullscreen) ? 'none' : '0 8px 40px rgba(0,0,0,0.8)',
     userSelect: 'none',
     pointerEvents: 'none',
   };
@@ -713,7 +713,7 @@ export default function AmberReader({
 
       {/* ── Page area ──────────────────────────────────────────────────────── */}
       <div
-        style={isLandscape ? {
+        style={(isLandscape || isFullscreen) ? {
           position: 'fixed', inset: 0, zIndex: 9999,
           background: '#000',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -729,7 +729,7 @@ export default function AmberReader({
         }}
         onClick={goNext}
       >
-        {isLandscape && (
+        {(isLandscape || isFullscreen) && (
           <button
             onClick={(e) => { e.stopPropagation(); setIsLandscape(false); }}
             style={{
