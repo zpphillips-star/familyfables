@@ -731,7 +731,7 @@ export default function AmberReader({
       >
         {(isLandscape || isFullscreen) && (
           <button
-            onClick={(e) => { e.stopPropagation(); setIsLandscape(false); }}
+            onClick={(e) => { e.stopPropagation(); setIsLandscape(false); setIsFullscreen(false); if (document.fullscreenElement) document.exitFullscreen(); }}
             style={{
               position: 'absolute', top: 8, right: 8, zIndex: 10,
               background: 'rgba(0,0,0,0.55)',
