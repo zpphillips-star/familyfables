@@ -125,6 +125,20 @@ export default function AmberReader({
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const touchX = useRef<number | null>(null);
+  const [isLandscape, setIsLandscape] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      setIsLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 600);
+    };
+    check();
+    window.addEventListener('resize', check);
+    window.addEventListener('orientationchange', check);
+    return () => {
+      window.removeEventListener('resize', check);
+      window.removeEventListener('orientationchange', check);
+    };
+  }, []);
 
   const current = pages[pageIdx];
 
@@ -290,12 +304,12 @@ export default function AmberReader({
 
   // ── Shared image style ─────────────────────────────────────────────────────
   const imgStyle: CSSProperties = {
-    maxWidth: '100%',
-    maxHeight: 'calc(100dvh - 160px)',
+    maxWidth: isLandscape ? '100dvw' : '100%',
+    maxHeight: isLandscape ? '100dvh' : 'calc(100dvh - 160px)',
     objectFit: 'contain',
-    borderRadius: 8,
+    borderRadius: isLandscape ? 0 : 8,
     display: 'block',
-    boxShadow: '0 8px 40px rgba(0,0,0,0.8)',
+    boxShadow: isLandscape ? 'none' : '0 8px 40px rgba(0,0,0,0.8)',
     userSelect: 'none',
     pointerEvents: 'none',
   };
@@ -660,7 +674,12 @@ export default function AmberReader({
 
       {/* ── Page area ──────────────────────────────────────────────────────── */}
       <div
-        style={{
+        style={isLandscape ? {
+          position: 'fixed', inset: 0, zIndex: 9999,
+          background: '#000',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', overflow: 'hidden',
+        } : {
           flex: 1,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -671,6 +690,23 @@ export default function AmberReader({
         }}
         onClick={goNext}
       >
+        {isLandscape && (
+          <button
+            onClick={(e) => { e.stopPropagation(); setIsLandscape(false); }}
+            style={{
+              position: 'absolute', top: 8, right: 8, zIndex: 10,
+              background: 'rgba(0,0,0,0.55)',
+              border: '1px solid rgba(255,255,255,0.25)',
+              borderRadius: '50%',
+              width: 32, height: 32,
+              color: 'rgba(255,255,255,0.8)',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+            aria-label="Exit fullscreen"
+          >✕</button>
+        )}
         {flipState ? (
           // ── Flip animation ───────────────────────────────────────────────
           <div style={{ position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
