@@ -52,7 +52,6 @@ function useNavTheme() {
 
 const navLinks = [
   { href: "/", label: "home" },
-  { href: "/books", label: "bookstore" },
   { href: "/about", label: "about us" },
 ];
 

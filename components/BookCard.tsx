@@ -11,7 +11,7 @@ export default function BookCard({ book, size = "normal" }: BookCardProps) {
   const isLarge = size === "large";
   // Derive read URL from hasReadAloud flag + book id (avoids adding a redundant readUrl field)
   const readUrl = book.hasReadAloud ? `/read/${book.id}` : undefined;
-  const coverHref = readUrl ?? AMAZON_STORE_URL;
+  const coverHref = readUrl ?? (book.amazonUrl ?? AMAZON_STORE_URL);
   const isExternal = !readUrl;
 
   return (
@@ -68,7 +68,7 @@ export default function BookCard({ book, size = "normal" }: BookCardProps) {
             </Link>
           )}
           <a
-            href={AMAZON_STORE_URL}
+            href={book.amazonUrl ?? AMAZON_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-shine inline-block text-center py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-200 hover:opacity-90 hover:shadow-md"

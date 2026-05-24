@@ -33,7 +33,7 @@ export default function AboutPage() {
               lineHeight: 1.1,
             }}
           >
-            About US
+            Chapter One
           </h2>
           <h1
             style={{
@@ -45,9 +45,9 @@ export default function AboutPage() {
               lineHeight: 1.1,
             }}
           >
-            Family Run,
+            Every Story
             <br />
-            Lots Of Fun
+            Starts Somewhere
           </h1>
           <p
             className="text-lg"
@@ -56,8 +56,8 @@ export default function AboutPage() {
               fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
             }}
           >
-            Our story: how one boy from Brooklyn inspired a children&apos;s book company
-            that brings joy to families everywhere.
+            How one boy from Brooklyn sparked a children&apos;s book company
+            built to bring joy to families everywhere.
           </p>
         </div>
       </section>
@@ -331,7 +331,7 @@ export default function AboutPage() {
               {
                 emoji: "🚀",
                 title: "Growing the Catalog",
-                desc: "Eight beloved books and counting — each one crafted to bring smiles to children and families everywhere.",
+                desc: "Twelve beloved books and counting — each one crafted to bring smiles to children and families everywhere.",
                 color: "#E86BB5",
               },
             ].map((step, i) => (
