@@ -219,17 +219,19 @@ export default function AmberReader({
     if (page.audioUrl) {
       const audio = new Audio(page.audioUrl);
       audioRef.current = audio;
-      audio.onplaying = () => setAudioStatus('playing');
+      let playing = false;
+      audio.onplaying = () => { playing = true; setAudioStatus('playing'); };
       audio.onended = () => { setAudioStatus('idle'); onEnd?.(); };
       audio.onerror = () => {
-        // Fallback to TTS
-        playTTS(page.text!, onEnd);
+        // Only fall back to TTS if the MP3 never started — prevents dual voice
+        if (!playing) playTTS(page.text!, onEnd);
       };
       try {
         await audio.play();
         return;
       } catch {
-        playTTS(page.text!, onEnd);
+        // Only fall back if not already playing (e.g. AbortError after play started)
+        if (!playing) playTTS(page.text!, onEnd);
         return;
       }
     }
