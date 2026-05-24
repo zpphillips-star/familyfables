@@ -139,7 +139,6 @@ const landDefs: LandDef[] = [
     dividerType: "crest",
     activities: [
       { label: "📖 Read It To Me", href: "/read/amber-dragon-keeper", variant: "primary" },
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/1951173007", external: true, variant: "secondary" },
       { label: "Explore this Land →", href: "/books/amber-the-dragon-keeper", variant: "secondary" },
     ],
     accentColor: "#E86BB5",
@@ -163,7 +162,6 @@ const landDefs: LandDef[] = [
     dividerType: "bump",
     activities: [
       { label: "📖 Read It To Me", href: "/read/poo-poo-face", variant: "primary" },
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/1951173163", external: true, variant: "secondary" },
       { label: "Explore this Land →", href: "/books/whats-your-poo-poo-face", variant: "secondary" },
     ],
     accentColor: "#9B6FD0",
@@ -185,7 +183,6 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#e8f5e9",
     dividerType: "steep",
     activities: [
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/1951173228", external: true, variant: "primary" },
       { label: "Explore this Land →", href: "/books/brian-the-ghost", variant: "secondary" },
     ],
     accentColor: "#7B5EA7",
@@ -208,7 +205,6 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#fff8e1",
     dividerType: "arch",
     activities: [
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/195117318X", external: true, variant: "primary" },
       { label: "Explore this Land →", href: "/books/finding-hampton", variant: "secondary" },
     ],
     accentColor: "#5CB85C",
@@ -231,7 +227,6 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#0a0422",
     dividerType: "wave",
     activities: [
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/1539937615", external: true, variant: "primary" },
       { label: "Explore this Land →", href: "/books/gilroys-gobble", variant: "secondary" },
     ],
     accentColor: "#F4A839",
@@ -255,7 +250,6 @@ const landDefs: LandDef[] = [
     dividerType: "cloud",
     activities: [
       { label: "🎵 Play Lullaby", href: "/activities", variant: "primary" },
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/1951173147", external: true, variant: "secondary" },
       { label: "Explore this Land →", href: "/books/dream-ideas", variant: "secondary" },
     ],
     accentColor: "#5B9BD5",
@@ -278,7 +272,6 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#1a2a1a",
     dividerType: "slope",
     activities: [
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/195117304X", external: true, variant: "primary" },
       { label: "Explore this Land →", href: "/books/the-lumpiest-pumpkin", variant: "secondary" },
     ],
     accentColor: "#E07B39",
@@ -301,7 +294,6 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#e3f0ff",
     dividerType: "gentle",
     activities: [
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/1951173074", external: true, variant: "primary" },
       { label: "Explore this Land →", href: "/books/ollie-come-home", variant: "secondary" },
     ],
     accentColor: "#5CB85C",
@@ -324,7 +316,6 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#fff9e6",
     dividerType: "zigzag",
     activities: [
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/1721813829", external: true, variant: "primary" },
       { label: "Explore this Land →", href: "/books/the-shut-in-button", variant: "secondary" },
     ],
     accentColor: "#5B9BD5",
@@ -347,7 +338,6 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#fff3e8",
     dividerType: "ripple",
     activities: [
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/1951173023", external: true, variant: "primary" },
       { label: "Explore this Land →", href: "/books/what-a-doodle-do", variant: "secondary" },
     ],
     accentColor: "#E86BB5",
@@ -370,7 +360,6 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#1a1a3a",
     dividerType: "hill",
     activities: [
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/1951173201", external: true, variant: "primary" },
       { label: "Explore this Land →", href: "/books/one-tom-turkey", variant: "secondary" },
     ],
     accentColor: "#C06B39",
@@ -393,7 +382,6 @@ const landDefs: LandDef[] = [
     nextGradientColor: "#050212",
     dividerType: "sweep",
     activities: [
-      { label: "🛒 Buy on Amazon", href: "https://www.amazon.com/dp/1977632084", external: true, variant: "primary" },
       { label: "Explore this Land →", href: "/books/frog-a-dog", variant: "secondary" },
     ],
     accentColor: "#9B6FD0",
