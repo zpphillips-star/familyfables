@@ -126,19 +126,31 @@ export default function AmberReader({
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const touchX = useRef<number | null>(null);
   const [isLandscape, setIsLandscape] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const check = () => {
       setIsLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 600);
+      setIsFullscreen(!!document.fullscreenElement);
     };
     check();
     window.addEventListener('resize', check);
     window.addEventListener('orientationchange', check);
+    document.addEventListener('fullscreenchange', check);
     return () => {
       window.removeEventListener('resize', check);
       window.removeEventListener('orientationchange', check);
+      document.removeEventListener('fullscreenchange', check);
     };
   }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  }, []);;
 
   const current = pages[pageIdx];
 
@@ -571,6 +583,24 @@ export default function AmberReader({
         }}
       >
         🗺️
+      </button>
+
+      {/* ── Fullscreen button ───────────────────────────────────────────────── */}
+      <button
+        onClick={toggleFullscreen}
+        aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+        style={{
+          position: 'fixed', top: 96, right: 12,
+          background: 'rgba(0,0,0,0.5)',
+          border: `1px solid ${accentColor}33`,
+          borderRadius: '50%',
+          width: 38, height: 38,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '1rem', cursor: 'pointer', zIndex: 20,
+          color: '#fff',
+        }}
+      >
+        {isFullscreen ? '⊠' : '⛶'}
       </button>
 
       {/* ── Map overlay ────────────────────────────────────────────────────── */}
