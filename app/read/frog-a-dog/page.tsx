@@ -10,21 +10,21 @@ const ACCENT = '#7FDD7F';
 
 // ── Story pages: illustration + narration text ────────────────────────────
 const PAGES = [
-  { img: '/images/reader/frog-a-dog/page-04.jpg', text: `All dusk and all dawn, Bailey hung by the pond, with hopes to become the frog that she longed.`, pn: 4 },
-  { img: '/images/reader/frog-a-dog/page-06.jpg', text: `But when she'd appear, they'd snicker and sneer. “A dog is no frog! You don't belong here.”`, pn: 6 },
-  { img: '/images/reader/frog-a-dog/page-08.jpg', text: `“That nose. And those ears. And your eyes, how they peer. What's that over there? A tail? Oh, dear!”`, pn: 8 },
-  { img: '/images/reader/frog-a-dog/page-10.jpg', text: `Still Bailey had pride for who was inside, but could not fit in, no matter how much she tried.`, pn: 10 },
-  { img: '/images/reader/frog-a-dog/page-12.jpg', text: `So, to trick the whole crew, Bailey tried something new. On Halloween day, she slipped on a costume.`, pn: 12 },
-  { img: '/images/reader/frog-a-dog/page-14.jpg', text: `Bailey returned to the spot. The frogs gave it no thought. She blended in with them all, and was taught quite a lot.`, pn: 14 },
-  { img: '/images/reader/frog-a-dog/page-16.jpg', text: `How to swim, how to eat, how to even belly flop. She learned how to hop, how to croak, how to plop.`, pn: 16 },
-  { img: '/images/reader/frog-a-dog/page-18.jpg', text: `By the end of the day it was quite easy to say that this army of frogs had a new protégé.`, pn: 18 },
-  { img: '/images/reader/frog-a-dog/page-20.jpg', text: `Then to their surprise, she shed her disguise. They saw her paws, her fur, and her puppy dog eyes.`, pn: 20 },
-  { img: '/images/reader/frog-a-dog/page-22.jpg', text: `“You tricked us, you dog. Get out of our bog! Like we've said all along — a dog is no frog.”`, pn: 22 },
-  { img: '/images/reader/frog-a-dog/page-24.jpg', text: `“I may have big ears, but I've known it for years. In my heart I'm like you — a frog tried and true.”`, pn: 24 },
-  { img: '/images/reader/frog-a-dog/page-26.jpg', text: `She swam, and she ate, and even belly flopped. With that, Bailey hopped. She croaked, and she plopped.`, pn: 26 },
-  { img: '/images/reader/frog-a-dog/page-28.jpg', text: `The frogs looked amazed. Even awarded her praise. For despite how she looked, she was them in all ways.`, pn: 28 },
-  { img: '/images/reader/frog-a-dog/page-30.jpg', text: `So the frogs learned their lesson — that it's not what you're dressed in. It's who's inside that defines you. Of that, there's no question.`, pn: 30 },
-  { img: '/images/reader/frog-a-dog/page-32.jpg', text: `Now all dusk and all dawn, Bailey hangs by the pond, with a smile on her face — for she truly belongs.`, pn: 32 },
+  { img: '/images/reader/frog-a-dog/page-04.jpg', text: null, pn: 4 },
+  { img: '/images/reader/frog-a-dog/page-06.jpg', text: null, pn: 6 },
+  { img: '/images/reader/frog-a-dog/page-08.jpg', text: null, pn: 8 },
+  { img: '/images/reader/frog-a-dog/page-10.jpg', text: null, pn: 10 },
+  { img: '/images/reader/frog-a-dog/page-12.jpg', text: null, pn: 12 },
+  { img: '/images/reader/frog-a-dog/page-14.jpg', text: null, pn: 14 },
+  { img: '/images/reader/frog-a-dog/page-16.jpg', text: null, pn: 16 },
+  { img: '/images/reader/frog-a-dog/page-18.jpg', text: null, pn: 18 },
+  { img: '/images/reader/frog-a-dog/page-20.jpg', text: null, pn: 20 },
+  { img: '/images/reader/frog-a-dog/page-22.jpg', text: null, pn: 22 },
+  { img: '/images/reader/frog-a-dog/page-24.jpg', text: null, pn: 24 },
+  { img: '/images/reader/frog-a-dog/page-26.jpg', text: null, pn: 26 },
+  { img: '/images/reader/frog-a-dog/page-28.jpg', text: null, pn: 28 },
+  { img: '/images/reader/frog-a-dog/page-30.jpg', text: null, pn: 30 },
+  { img: '/images/reader/frog-a-dog/page-32.jpg', text: null, pn: 32 },
 ];
 
 const FLIP_MS = 600;

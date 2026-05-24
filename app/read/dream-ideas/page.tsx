@@ -11,7 +11,7 @@ const ACCENT = '#C8A4FF';
 // ── Story pages: illustration + narration text ────────────────────────────
 const PAGES = [
   { img: '/images/reader/dream-ideas/page-04.jpg', text: `All these dream ideas stirring in your head will make you go to sleep inside your super comfy bed, with your pillow.`, pn: 4 },
-  { img: '/images/reader/dream-ideas/page-05.jpg', text: `You could dream of all the things you wish to be and want and know. But in case you need ideas, here's a list to help you go.`, pn: 5 },
+  { img: '/images/reader/dream-ideas/page-05.jpg', text: null, pn: 5 },
   { img: '/images/reader/dream-ideas/page-06.jpg', text: `You could dream of a treehouse built with branches and green leaves, and many tiny flowers that have many tiny bees.`, pn: 6 },
   { img: '/images/reader/dream-ideas/page-07.jpg', text: `You could fly up in the sky or dive down deep into the sea, and swim with all the fishies, narwhals, even manatees.`, pn: 7 },
   { img: '/images/reader/dream-ideas/page-08.jpg', text: `You could be a country music star from Nashville, Tennessee, and sing to a huge sold-out crowd at the Grand Ol' Opry.`, pn: 8 },
@@ -19,8 +19,8 @@ const PAGES = [
   { img: '/images/reader/dream-ideas/page-10.jpg', text: `You could travel back in time and paint with Leo DaVinci, or ride a pterodactyl next to Cera and Petrie.`, pn: 10 },
   { img: '/images/reader/dream-ideas/page-11.jpg', text: `You could live in a great castle that has one great golden key, and be the princess who can't sleep because of one small pea.`, pn: 11 },
   { img: '/images/reader/dream-ideas/page-12.jpg', text: `You could bike around on Mars on one wheel, or two, or three, or drive a giant big rig with as many as eighteen.`, pn: 12 },
-  { img: '/images/reader/dream-ideas/page-13.jpg', text: `You could be a famous actor starring in a comedy, and walk down the red carpet as an Oscar nominee.`, pn: 13 },
-  { img: '/images/reader/dream-ideas/page-14.jpg', text: `You could teach a herd of elephants to sing their ABCs, or shrink down super-duper small to see if bees have knees.`, pn: 14 },
+  { img: '/images/reader/dream-ideas/page-13.jpg', text: null, pn: 13 },
+  { img: '/images/reader/dream-ideas/page-14.jpg', text: null, pn: 14 },
   { img: '/images/reader/dream-ideas/page-15.jpg', text: `You could ask the King of England if he'd pour a spot of tea, or take a train to Hogwarts and meet Hermione.`, pn: 15 },
   { img: '/images/reader/dream-ideas/page-16.jpg', text: `You could walk a winter wonderland in search of a Yeti, then throw him a surprise party that's filled with confetti.`, pn: 16 },
   { img: '/images/reader/dream-ideas/page-17.jpg', text: `But whatever you want to be tonight is yours to make it be. So drift away to dreamland and sleep so happily.`, pn: 17 },
