@@ -83,14 +83,21 @@ export default function ReaderPage() {
 
   useEffect(() => {
     const check = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 600);
+      const land = window.innerWidth > window.innerHeight && window.innerHeight < 600;
+      setIsLandscape(land);
+      if (land && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
     };
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
     check();
     window.addEventListener('resize', check);
     window.addEventListener('orientationchange', check);
+    document.addEventListener('fullscreenchange', onFsChange);
     return () => {
       window.removeEventListener('resize', check);
       window.removeEventListener('orientationchange', check);
+      document.removeEventListener('fullscreenchange', onFsChange);
     };
   }, []);
 
@@ -109,10 +116,11 @@ export default function ReaderPage() {
 
   const playPage = useCallback(async (idx: number) => {
     stopAudio();
+    const audioUrl = PAGES[idx].audioUrl;
+    if (!audioUrl) { setAudioStatus('idle'); return; }
     setAudioStatus('loading');
     try {
-      const mp3Url = `/audio/reader/${SLUG}/page-${String(PAGES[idx].pn).padStart(3, '0')}.mp3`;
-      const audio = new Audio(mp3Url);
+      const audio = new Audio(audioUrl);
       audioRef.current = audio;
       audio.onended = () => setAudioStatus('idle');
       audio.onerror = () => setAudioStatus('idle');
@@ -328,7 +336,7 @@ export default function ReaderPage() {
 
       {/* Page spread */}
       <div
-        style={isLandscape ? {
+        style={(isLandscape || isFullscreen) ? {
           position: 'fixed', inset: 0, zIndex: 9999,
           background: '#000',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -524,6 +532,19 @@ export default function ReaderPage() {
             >
               {audioStatus === 'idle' ? '🔊 Read aloud' : audioStatus === 'loading' ? '⏳ Loading…' : '⏹ Stop'}
             </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
+              style={{
+                background: 'rgba(123,94,167,0.18)',
+                border: '1px solid rgba(123,94,167,0.45)',
+                borderRadius: 20,
+                padding: '4px 10px',
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+              }}
+              aria-label="Toggle fullscreen"
+            >{isFullscreen ? '⊠' : '⛶'}</button>
           </div>
         </div>
 

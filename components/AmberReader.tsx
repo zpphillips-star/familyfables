@@ -130,8 +130,12 @@ export default function AmberReader({
 
   useEffect(() => {
     const check = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 600);
+      const land = window.innerWidth > window.innerHeight && window.innerHeight < 600;
+      setIsLandscape(land);
       setIsFullscreen(!!document.fullscreenElement);
+      if (land && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
     };
     check();
     window.addEventListener('resize', check);

@@ -12,27 +12,24 @@ const BARN   = '#2a0e00';
 
 // ── Story pages: illustration + narration text ────────────────────────────
 const PAGES = [
-  { img: '/images/reader/what-a-doodle-do/page-04.jpg', text: `beanstalk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-004.mp3', pn: 4 },
-  { img: '/images/reader/what-a-doodle-do/page-05.jpg', text: `sleepwalk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-005.mp3', pn: 5 },
-  { img: '/images/reader/what-a-doodle-do/page-06.jpg', text: `chalk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-006.mp3', pn: 6 },
-  { img: '/images/reader/what-a-doodle-do/page-08.jpg', text: `bedrock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-008.mp3', pn: 8 },
-  { img: '/images/reader/what-a-doodle-do/page-11.jpg', text: `lock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-011.mp3', pn: 11 },
-  { img: '/images/reader/what-a-doodle-do/page-12.jpg', text: `talk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-012.mp3', pn: 12 },
-  { img: '/images/reader/what-a-doodle-do/page-13.jpg', text: `bach-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-013.mp3', pn: 13 },
-  { img: '/images/reader/what-a-doodle-do/page-14.jpg', text: `wok-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-014.mp3', pn: 14 },
-  { img: '/images/reader/what-a-doodle-do/page-16.jpg', text: `sherlock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-016.mp3', pn: 16 },
-  { img: '/images/reader/what-a-doodle-do/page-17.jpg', text: `block-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-017.mp3', pn: 17 },
-  { img: '/images/reader/what-a-doodle-do/page-22.jpg', text: `boardwalk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-022.mp3', pn: 22 },
-  { img: '/images/reader/what-a-doodle-do/page-23.jpg', text: `shamrock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-023.mp3', pn: 23 },
-  { img: '/images/reader/what-a-doodle-do/page-24.jpg', text: `walk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-024.mp3', pn: 24 },
-  { img: '/images/reader/what-a-doodle-do/page-25.jpg', text: `croc-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-025.mp3', pn: 25 },
-  { img: '/images/reader/what-a-doodle-do/page-26.jpg', text: `jock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-026.mp3', pn: 26 },
-  { img: '/images/reader/what-a-doodle-do/page-27.jpg', text: `doc-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-027.mp3', pn: 27 },
-  { img: '/images/reader/what-a-doodle-do/page-28.jpg', text: `clock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-028.mp3', pn: 28 },
-  { img: '/images/reader/what-a-doodle-do/page-30.jpg', text: `sock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-030.mp3', pn: 30 },
-  { img: '/images/reader/what-a-doodle-do/page-32.jpg', text: `catwalk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-032.mp3', pn: 32 },
-  { img: '/images/reader/what-a-doodle-do/page-33.jpg', text: `mohawk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/page-033.mp3', pn: 33 },
-  { img: '/images/reader/what-a-doodle-do/page-34.jpg', text: `COCK-A-DOODLE-DO!!!`, audioUrl: '/audio/reader/what-a-doodle-do/page-034.mp3', pn: 34 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-001.jpg', text: null, audioUrl: null, pn: 1 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-002.jpg', text: `beanstalk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-002.mp3', pn: 2 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-003.jpg', text: `sleepwalk-a-doodle-do! chalk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-003.mp3', pn: 3 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-004.jpg', text: `bedrock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-004.mp3', pn: 4 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-005.jpg', text: null, audioUrl: null, pn: 5 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-006.jpg', text: `lock-a-doodle-do! talk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-006.mp3', pn: 6 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-007.jpg', text: `bach-a-doodle-do! wok-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-007.mp3', pn: 7 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-008.jpg', text: `sherlock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-008.mp3', pn: 8 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-009.jpg', text: `block-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-009.mp3', pn: 9 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-010.jpg', text: null, audioUrl: null, pn: 10 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-011.jpg', text: `boardwalk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-011.mp3', pn: 11 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-012.jpg', text: `shamrock-a-doodle-do! walk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-012.mp3', pn: 12 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-013.jpg', text: `croc-a-doodle-do! jock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-013.mp3', pn: 13 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-014.jpg', text: `doc-a-doodle-do! clock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-014.mp3', pn: 14 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-015.jpg', text: `sock-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-015.mp3', pn: 15 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-016.jpg', text: `catwalk-a-doodle-do!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-016.mp3', pn: 16 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-017.jpg', text: `mohawk-a-doodle-do! COCK-A-DOODLE-DO!!!`, audioUrl: '/audio/reader/what-a-doodle-do/spread-017.mp3', pn: 17 },
+  { img: '/images/reader/what-a-doodle-do/spreads/spread-018.jpg', text: null, audioUrl: null, pn: 18 },
 ];
 
 const FLIP_MS = 600;
@@ -92,14 +89,21 @@ export default function ReaderPage() {
 
   useEffect(() => {
     const check = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 600);
+      const land = window.innerWidth > window.innerHeight && window.innerHeight < 600;
+      setIsLandscape(land);
+      if (land && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
     };
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
     check();
     window.addEventListener('resize', check);
     window.addEventListener('orientationchange', check);
+    document.addEventListener('fullscreenchange', onFsChange);
     return () => {
       window.removeEventListener('resize', check);
       window.removeEventListener('orientationchange', check);
+      document.removeEventListener('fullscreenchange', onFsChange);
     };
   }, []);
 
@@ -118,10 +122,11 @@ export default function ReaderPage() {
 
   const playPage = useCallback(async (idx: number) => {
     stopAudio();
+    const audioUrl = PAGES[idx].audioUrl;
+    if (!audioUrl) { setAudioStatus('idle'); return; }
     setAudioStatus('loading');
     try {
-      const mp3Url = `/audio/reader/${SLUG}/page-${String(PAGES[idx].pn).padStart(3, '0')}.mp3`;
-      const audio = new Audio(mp3Url);
+      const audio = new Audio(audioUrl);
       audioRef.current = audio;
       audio.onended = () => setAudioStatus('idle');
       audio.onerror = () => setAudioStatus('idle');
@@ -337,7 +342,7 @@ export default function ReaderPage() {
 
       {/* Page spread */}
       <div
-        style={isLandscape ? {
+        style={(isLandscape || isFullscreen) ? {
           position: 'fixed', inset: 0, zIndex: 9999,
           background: '#000',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -533,6 +538,19 @@ export default function ReaderPage() {
             >
               {audioStatus === 'idle' ? '🔊 Read aloud' : audioStatus === 'loading' ? '⏳ Loading…' : '⏹ Stop'}
             </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
+              style={{
+                background: 'rgba(123,94,167,0.18)',
+                border: '1px solid rgba(123,94,167,0.45)',
+                borderRadius: 20,
+                padding: '4px 10px',
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+              }}
+              aria-label="Toggle fullscreen"
+            >{isFullscreen ? '⊠' : '⛶'}</button>
           </div>
         </div>
 

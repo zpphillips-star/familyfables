@@ -10,31 +10,24 @@ const ACCENT = '#FFB347';
 
 // ── Story pages: illustration + narration text ────────────────────────────
 const PAGES = [
-  { img: '/images/reader/gilroys-gobble/page-004.jpg', text: `Overjoyed to see the red fall leaves fall, Gilroy belted out quite an odd turkey call. "Wee Loo Lee Loo!"`, audioUrl: '/audio/reader/gilroys-gobble/page-004.mp3', pn: 4 },
-  { img: '/images/reader/gilroys-gobble/page-006.jpg', text: `Olivia the owl was watching from above, then asked a question with her owly love: "What was that, my dear? That was no 'Hoo.'"`, audioUrl: '/audio/reader/gilroys-gobble/page-006.mp3', pn: 6 },
-  { img: '/images/reader/gilroys-gobble/page-007.jpg', text: `"That's my turkey call. It's what turkeys do."`, audioUrl: '/audio/reader/gilroys-gobble/page-007.mp3', pn: 7 },
-  { img: '/images/reader/gilroys-gobble/page-008.jpg', text: `"Here, let me help. Do what I do. Let me hear your turkey... Hooooo!"`, audioUrl: '/audio/reader/gilroys-gobble/page-008.mp3', pn: 8 },
-  { img: '/images/reader/gilroys-gobble/page-009.jpg', text: `Trying to fit in, and without further ado, Gilroy let out a "Wee Loo Lee Loo!"`, audioUrl: '/audio/reader/gilroys-gobble/page-009.mp3', pn: 9 },
-  { img: '/images/reader/gilroys-gobble/page-010.jpg', text: `Overheard by Corey, the cow on the farm, Gilroy wobbled to him, charmed by his charm.`, audioUrl: '/audio/reader/gilroys-gobble/page-010.mp3', pn: 10 },
-  { img: '/images/reader/gilroys-gobble/page-011.jpg', text: `"You've got charisma, kid. I'll give you that much. What you've really got to do is add a cow's touch."`, audioUrl: '/audio/reader/gilroys-gobble/page-011.mp3', pn: 11 },
-  { img: '/images/reader/gilroys-gobble/page-012.jpg', text: `"Now, watch me closely. Balance on four legs, and moo your turkey... Mooooo!" Taking his advice, Gilroy dropped to his wings and let out a "Wee Loo Lee Loo!"`, audioUrl: '/audio/reader/gilroys-gobble/page-012.mp3', pn: 12 },
-  { img: '/images/reader/gilroys-gobble/page-013.jpg', text: `"Wee Loo Lee Loo!"`, audioUrl: '/audio/reader/gilroys-gobble/page-013.mp3', pn: 13 },
-  { img: '/images/reader/gilroys-gobble/page-014.jpg', text: `"That sounds so close," snapped the rooster on the roof, "to what a bird should sound like. That thing on your face — we call it a beak. Use it like mine and speak bird speak."`, audioUrl: '/audio/reader/gilroys-gobble/page-014.mp3', pn: 14 },
-  { img: '/images/reader/gilroys-gobble/page-016.jpg', text: `"First, puff out your chest and feather your do. Then let us hear your turkey... Cock-a-doodle-Doo!" Taking his advice, Gilroy mirrored his moves and let out a "Wee Loo Lee Loo!"`, audioUrl: '/audio/reader/gilroys-gobble/page-016.mp3', pn: 16 },
-  { img: '/images/reader/gilroys-gobble/page-017.jpg', text: `"Wee Loo Lee Loo!"`, audioUrl: '/audio/reader/gilroys-gobble/page-017.mp3', pn: 17 },
-  { img: '/images/reader/gilroys-gobble/page-018.jpg', text: `"Hey, Gilroy the turkey! You look a little tense. Don't mind the others. They haven't a clue. The remedy you seek is in the form of a 'Coo.'"`, audioUrl: '/audio/reader/gilroys-gobble/page-018.mp3', pn: 18 },
-  { img: '/images/reader/gilroys-gobble/page-020.jpg', text: `"Jump up here with me and follow my moves. Then let us hear your turkey... Coo Coo Ka Choo." Taking his advice, Gilroy popped on the post and let out a "Wee Loo Lee Loo."`, audioUrl: '/audio/reader/gilroys-gobble/page-020.mp3', pn: 20 },
-  { img: '/images/reader/gilroys-gobble/page-021.jpg', text: `"Wee Loo Lee Loo."`, audioUrl: '/audio/reader/gilroys-gobble/page-021.mp3', pn: 21 },
-  { img: '/images/reader/gilroys-gobble/page-022.jpg', text: `At the pond nearby swam a spotted looney loon.`, audioUrl: '/audio/reader/gilroys-gobble/page-022.mp3', pn: 22 },
-  { img: '/images/reader/gilroys-gobble/page-023.jpg', text: `"Come here, young turkey. You've got to sing my tune." Right then she yelled out, "Loo Loo Loo! Loo Dee Loo Dee Loo!"`, audioUrl: '/audio/reader/gilroys-gobble/page-023.mp3', pn: 23 },
-  { img: '/images/reader/gilroys-gobble/page-024.jpg', text: `"All your calls are different! I don't know which one to choose. They all sound great, but they all sound like you!"`, audioUrl: '/audio/reader/gilroys-gobble/page-024.mp3', pn: 24 },
-  { img: '/images/reader/gilroys-gobble/page-027.jpg', text: `Gilroy wandered off thinking, "I'm doing this all wrong. How am I going to find the right turkey song?"`, audioUrl: '/audio/reader/gilroys-gobble/page-027.mp3', pn: 27 },
-  { img: '/images/reader/gilroys-gobble/page-028.jpg', text: `Then off in the distance, he heard a "Tut Tut Too Doo." It came from a turkey, but wasn't something he knew.`, audioUrl: '/audio/reader/gilroys-gobble/page-028.mp3', pn: 28 },
-  { img: '/images/reader/gilroys-gobble/page-029.jpg', text: `"Tut Tut Too Doo."`, audioUrl: '/audio/reader/gilroys-gobble/page-029.mp3', pn: 29 },
-  { img: '/images/reader/gilroys-gobble/page-030.jpg', text: `"What is that sound? Did that come from you? Please teach it to me so I can sound like I'm supposed to."`, audioUrl: '/audio/reader/gilroys-gobble/page-030.mp3', pn: 30 },
-  { img: '/images/reader/gilroys-gobble/page-032.jpg', text: `"You're not a loon, cow, rooster, or owl. You are who you are, Gilroy the fowl. So no matter your call, make sure it's your own — from the time you're a baby until your full grown."`, audioUrl: '/audio/reader/gilroys-gobble/page-032.mp3', pn: 32 },
-  { img: '/images/reader/gilroys-gobble/page-034.jpg', text: `The advice sank in, as he looked all around. Gilroy saw each animal sounding their sound. They all looked happy, for they were who they were, no matter what they wore: feathers or fur.`, audioUrl: '/audio/reader/gilroys-gobble/page-034.mp3', pn: 34 },
-  { img: '/images/reader/gilroys-gobble/page-035.jpg', text: `Gilroy smiled a big smile. He finally knew. He was himself — a turkey — through and through. With that he joined the rest of the crew, and let out his own Gilroy "Wee Loo Lee Loo!"`, audioUrl: '/audio/reader/gilroys-gobble/page-035.mp3', pn: 35 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-001.jpg', text: null, audioUrl: null, pn: 1 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-002.jpg', text: `Overjoyed to see the red fall leaves fall, Gilroy belted out quite an odd turkey call. "Wee Loo Lee Loo!`, audioUrl: '/audio/reader/gilroys-gobble/spread-002.mp3', pn: 2 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-003.jpg', text: `Olivia the owl was watching from above, then asked a question with her owly love: "What was that, my dear? That was no 'Hoo.`, audioUrl: '/audio/reader/gilroys-gobble/spread-003.mp3', pn: 3 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-004.jpg', text: `That's my turkey call. It's what turkeys do. Here, let me help. Do what I do. Let me hear your turkey... Hooooo!`, audioUrl: '/audio/reader/gilroys-gobble/spread-004.mp3', pn: 4 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-005.jpg', text: `Trying to fit in, and without further ado, Gilroy let out a "Wee Loo Lee Loo! Overheard by Corey, the cow on the farm, Gilroy wobbled to him, charmed by his charm.`, audioUrl: '/audio/reader/gilroys-gobble/spread-005.mp3', pn: 5 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-006.jpg', text: `You've got charisma, kid. I'll give you that much. What you've really got to do is add a cow's touch. Now, watch me closely. Balance on four legs, and moo your turkey... Mooooo!" Taking his advice, Gilroy dropped to his wings and let out a "Wee Loo Lee Loo!`, audioUrl: '/audio/reader/gilroys-gobble/spread-006.mp3', pn: 6 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-007.jpg', text: `Wee Loo Lee Loo! That sounds so close," snapped the rooster on the roof, "to what a bird should sound like. That thing on your face — we call it a beak. Use it like mine and speak bird speak.`, audioUrl: '/audio/reader/gilroys-gobble/spread-007.mp3', pn: 7 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-008.jpg', text: `First, puff out your chest and feather your do. Then let us hear your turkey... Cock-a-doodle-Doo!" Taking his advice, Gilroy mirrored his moves and let out a "Wee Loo Lee Loo!`, audioUrl: '/audio/reader/gilroys-gobble/spread-008.mp3', pn: 8 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-009.jpg', text: `Wee Loo Lee Loo! Hey, Gilroy the turkey! You look a little tense. Don't mind the others. They haven't a clue. The remedy you seek is in the form of a 'Coo.`, audioUrl: '/audio/reader/gilroys-gobble/spread-009.mp3', pn: 9 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-010.jpg', text: `Jump up here with me and follow my moves. Then let us hear your turkey... Coo Coo Ka Choo." Taking his advice, Gilroy popped on the post and let out a "Wee Loo Lee Loo.`, audioUrl: '/audio/reader/gilroys-gobble/spread-010.mp3', pn: 10 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-011.jpg', text: `Wee Loo Lee Loo. At the pond nearby swam a spotted looney loon.`, audioUrl: '/audio/reader/gilroys-gobble/spread-011.mp3', pn: 11 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-012.jpg', text: `Come here, young turkey. You've got to sing my tune." Right then she yelled out, "Loo Loo Loo! Loo Dee Loo Dee Loo! All your calls are different! I don't know which one to choose. They all sound great, but they all sound like you!`, audioUrl: '/audio/reader/gilroys-gobble/spread-012.mp3', pn: 12 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-013.jpg', text: null, audioUrl: null, pn: 13 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-014.jpg', text: `Gilroy wandered off thinking, "I'm doing this all wrong. How am I going to find the right turkey song? Then off in the distance, he heard a "Tut Tut Too Doo." It came from a turkey, but wasn't something he knew.`, audioUrl: '/audio/reader/gilroys-gobble/spread-014.mp3', pn: 14 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-015.jpg', text: `Tut Tut Too Doo. What is that sound? Did that come from you? Please teach it to me so I can sound like I'm supposed to.`, audioUrl: '/audio/reader/gilroys-gobble/spread-015.mp3', pn: 15 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-016.jpg', text: `You're not a loon, cow, rooster, or owl. You are who you are, Gilroy the fowl. So no matter your call, make sure it's your own — from the time you're a baby until your full grown.`, audioUrl: '/audio/reader/gilroys-gobble/spread-016.mp3', pn: 16 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-017.jpg', text: `The advice sank in, as he looked all around. Gilroy saw each animal sounding their sound. They all looked happy, for they were who they were, no matter what they wore: feathers or fur.`, audioUrl: '/audio/reader/gilroys-gobble/spread-017.mp3', pn: 17 },
+  { img: '/images/reader/gilroys-gobble/spreads/spread-018.jpg', text: `Gilroy smiled a big smile. He finally knew. He was himself — a turkey — through and through. With that he joined the rest of the crew, and let out his own Gilroy "Wee Loo Lee Loo!`, audioUrl: '/audio/reader/gilroys-gobble/spread-018.mp3', pn: 18 },
 ];
 
 const FLIP_MS = 600;
@@ -94,14 +87,21 @@ export default function ReaderPage() {
 
   useEffect(() => {
     const check = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 600);
+      const land = window.innerWidth > window.innerHeight && window.innerHeight < 600;
+      setIsLandscape(land);
+      if (land && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
     };
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
     check();
     window.addEventListener('resize', check);
     window.addEventListener('orientationchange', check);
+    document.addEventListener('fullscreenchange', onFsChange);
     return () => {
       window.removeEventListener('resize', check);
       window.removeEventListener('orientationchange', check);
+      document.removeEventListener('fullscreenchange', onFsChange);
     };
   }, []);
 
@@ -120,10 +120,11 @@ export default function ReaderPage() {
 
   const playPage = useCallback(async (idx: number) => {
     stopAudio();
+    const audioUrl = PAGES[idx].audioUrl;
+    if (!audioUrl) { setAudioStatus('idle'); return; }
     setAudioStatus('loading');
     try {
-      const mp3Url = `/audio/reader/${SLUG}/page-${String(PAGES[idx].pn).padStart(3, '0')}.mp3`;
-      const audio = new Audio(mp3Url);
+      const audio = new Audio(audioUrl);
       audioRef.current = audio;
       audio.onended = () => setAudioStatus('idle');
       audio.onerror = () => setAudioStatus('idle');
@@ -339,7 +340,7 @@ export default function ReaderPage() {
 
       {/* Page spread */}
       <div
-        style={isLandscape ? {
+        style={(isLandscape || isFullscreen) ? {
           position: 'fixed', inset: 0, zIndex: 9999,
           background: '#000',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -535,6 +536,19 @@ export default function ReaderPage() {
             >
               {audioStatus === 'idle' ? '🔊 Read aloud' : audioStatus === 'loading' ? '⏳ Loading…' : '⏹ Stop'}
             </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
+              style={{
+                background: 'rgba(123,94,167,0.18)',
+                border: '1px solid rgba(123,94,167,0.45)',
+                borderRadius: 20,
+                padding: '4px 10px',
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+              }}
+              aria-label="Toggle fullscreen"
+            >{isFullscreen ? '⊠' : '⛶'}</button>
           </div>
         </div>
 

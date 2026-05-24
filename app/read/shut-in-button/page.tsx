@@ -10,28 +10,31 @@ const ACCENT = '#A8D8EA';
 
 // ── Story pages: illustration + narration text ────────────────────────────
 const PAGES = [
-  { img: '/images/reader/the-shut-in-button/page-005.jpg', text: null, pn: 5 },
-  { img: '/images/reader/the-shut-in-button/page-007.jpg', text: null, pn: 7 },
-  { img: '/images/reader/the-shut-in-button/page-009.jpg', text: null, pn: 9 },
-  { img: '/images/reader/the-shut-in-button/page-011.jpg', text: null, pn: 11 },
-  { img: '/images/reader/the-shut-in-button/page-013.jpg', text: null, pn: 13 },
-  { img: '/images/reader/the-shut-in-button/page-015.jpg', text: null, pn: 15 },
-  { img: '/images/reader/the-shut-in-button/page-017.jpg', text: null, pn: 17 },
-  { img: '/images/reader/the-shut-in-button/page-019.jpg', text: null, pn: 19 },
-  { img: '/images/reader/the-shut-in-button/page-021.jpg', text: null, pn: 21 },
-  { img: '/images/reader/the-shut-in-button/page-023.jpg', text: null, pn: 23 },
-  { img: '/images/reader/the-shut-in-button/page-025.jpg', text: null, pn: 25 },
-  { img: '/images/reader/the-shut-in-button/page-027.jpg', text: null, pn: 27 },
-  { img: '/images/reader/the-shut-in-button/page-029.jpg', text: null, pn: 29 },
-  { img: '/images/reader/the-shut-in-button/page-031.jpg', text: null, pn: 31 },
-  { img: '/images/reader/the-shut-in-button/page-033.jpg', text: null, pn: 33 },
-  { img: '/images/reader/the-shut-in-button/page-035.jpg', text: null, pn: 35 },
-  { img: '/images/reader/the-shut-in-button/page-037.jpg', text: null, pn: 37 },
-  { img: '/images/reader/the-shut-in-button/page-039.jpg', text: null, pn: 39 },
-  { img: '/images/reader/the-shut-in-button/page-041.jpg', text: null, pn: 41 },
-  { img: '/images/reader/the-shut-in-button/page-043.jpg', text: null, pn: 43 },
-  { img: '/images/reader/the-shut-in-button/page-045.jpg', text: null, pn: 45 },
-  { img: '/images/reader/the-shut-in-button/page-047.jpg', text: null, pn: 47 },
+  { img: '/images/reader/shut-in-button/spreads/spread-001.jpg', text: null, audioUrl: null, pn: 1 },
+  { img: '/images/reader/shut-in-button/spreads/spread-002.jpg', text: null, audioUrl: null, pn: 2 },
+  { img: '/images/reader/shut-in-button/spreads/spread-003.jpg', text: null, audioUrl: null, pn: 3 },
+  { img: '/images/reader/shut-in-button/spreads/spread-004.jpg', text: null, audioUrl: null, pn: 4 },
+  { img: '/images/reader/shut-in-button/spreads/spread-005.jpg', text: null, audioUrl: null, pn: 5 },
+  { img: '/images/reader/shut-in-button/spreads/spread-006.jpg', text: null, audioUrl: null, pn: 6 },
+  { img: '/images/reader/shut-in-button/spreads/spread-007.jpg', text: null, audioUrl: null, pn: 7 },
+  { img: '/images/reader/shut-in-button/spreads/spread-008.jpg', text: null, audioUrl: null, pn: 8 },
+  { img: '/images/reader/shut-in-button/spreads/spread-009.jpg', text: null, audioUrl: null, pn: 9 },
+  { img: '/images/reader/shut-in-button/spreads/spread-010.jpg', text: null, audioUrl: null, pn: 10 },
+  { img: '/images/reader/shut-in-button/spreads/spread-011.jpg', text: null, audioUrl: null, pn: 11 },
+  { img: '/images/reader/shut-in-button/spreads/spread-012.jpg', text: null, audioUrl: null, pn: 12 },
+  { img: '/images/reader/shut-in-button/spreads/spread-013.jpg', text: null, audioUrl: null, pn: 13 },
+  { img: '/images/reader/shut-in-button/spreads/spread-014.jpg', text: null, audioUrl: null, pn: 14 },
+  { img: '/images/reader/shut-in-button/spreads/spread-015.jpg', text: null, audioUrl: null, pn: 15 },
+  { img: '/images/reader/shut-in-button/spreads/spread-016.jpg', text: null, audioUrl: null, pn: 16 },
+  { img: '/images/reader/shut-in-button/spreads/spread-017.jpg', text: null, audioUrl: null, pn: 17 },
+  { img: '/images/reader/shut-in-button/spreads/spread-018.jpg', text: null, audioUrl: null, pn: 18 },
+  { img: '/images/reader/shut-in-button/spreads/spread-019.jpg', text: null, audioUrl: null, pn: 19 },
+  { img: '/images/reader/shut-in-button/spreads/spread-020.jpg', text: null, audioUrl: null, pn: 20 },
+  { img: '/images/reader/shut-in-button/spreads/spread-021.jpg', text: null, audioUrl: null, pn: 21 },
+  { img: '/images/reader/shut-in-button/spreads/spread-022.jpg', text: null, audioUrl: null, pn: 22 },
+  { img: '/images/reader/shut-in-button/spreads/spread-023.jpg', text: null, audioUrl: null, pn: 23 },
+  { img: '/images/reader/shut-in-button/spreads/spread-024.jpg', text: null, audioUrl: null, pn: 24 },
+  { img: '/images/reader/shut-in-button/spreads/spread-025.jpg', text: null, audioUrl: null, pn: 25 },
 ];
 
 const FLIP_MS = 600;
@@ -91,14 +94,21 @@ export default function ReaderPage() {
 
   useEffect(() => {
     const check = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 600);
+      const land = window.innerWidth > window.innerHeight && window.innerHeight < 600;
+      setIsLandscape(land);
+      if (land && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
     };
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
     check();
     window.addEventListener('resize', check);
     window.addEventListener('orientationchange', check);
+    document.addEventListener('fullscreenchange', onFsChange);
     return () => {
       window.removeEventListener('resize', check);
       window.removeEventListener('orientationchange', check);
+      document.removeEventListener('fullscreenchange', onFsChange);
     };
   }, []);
 
@@ -117,10 +127,11 @@ export default function ReaderPage() {
 
   const playPage = useCallback(async (idx: number) => {
     stopAudio();
+    const audioUrl = PAGES[idx].audioUrl;
+    if (!audioUrl) { setAudioStatus('idle'); return; }
     setAudioStatus('loading');
     try {
-      const mp3Url = `/audio/reader/${SLUG}/page-${String(PAGES[idx].pn).padStart(3, '0')}.mp3`;
-      const audio = new Audio(mp3Url);
+      const audio = new Audio(audioUrl);
       audioRef.current = audio;
       audio.onended = () => setAudioStatus('idle');
       audio.onerror = () => setAudioStatus('idle');
@@ -336,7 +347,7 @@ export default function ReaderPage() {
 
       {/* Page spread */}
       <div
-        style={isLandscape ? {
+        style={(isLandscape || isFullscreen) ? {
           position: 'fixed', inset: 0, zIndex: 9999,
           background: '#000',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -532,6 +543,19 @@ export default function ReaderPage() {
             >
               {audioStatus === 'idle' ? '🔊 Read aloud' : audioStatus === 'loading' ? '⏳ Loading…' : '⏹ Stop'}
             </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
+              style={{
+                background: 'rgba(123,94,167,0.18)',
+                border: '1px solid rgba(123,94,167,0.45)',
+                borderRadius: 20,
+                padding: '4px 10px',
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+              }}
+              aria-label="Toggle fullscreen"
+            >{isFullscreen ? '⊠' : '⛶'}</button>
           </div>
         </div>
 

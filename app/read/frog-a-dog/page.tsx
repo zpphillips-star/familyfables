@@ -10,21 +10,23 @@ const ACCENT = '#7FDD7F';
 
 // ── Story pages: illustration + narration text ────────────────────────────
 const PAGES = [
-  { img: '/images/reader/frog-a-dog/page-04.jpg', text: null, pn: 4 },
-  { img: '/images/reader/frog-a-dog/page-06.jpg', text: null, pn: 6 },
-  { img: '/images/reader/frog-a-dog/page-08.jpg', text: null, pn: 8 },
-  { img: '/images/reader/frog-a-dog/page-10.jpg', text: null, pn: 10 },
-  { img: '/images/reader/frog-a-dog/page-12.jpg', text: null, pn: 12 },
-  { img: '/images/reader/frog-a-dog/page-14.jpg', text: null, pn: 14 },
-  { img: '/images/reader/frog-a-dog/page-16.jpg', text: null, pn: 16 },
-  { img: '/images/reader/frog-a-dog/page-18.jpg', text: null, pn: 18 },
-  { img: '/images/reader/frog-a-dog/page-20.jpg', text: null, pn: 20 },
-  { img: '/images/reader/frog-a-dog/page-22.jpg', text: null, pn: 22 },
-  { img: '/images/reader/frog-a-dog/page-24.jpg', text: null, pn: 24 },
-  { img: '/images/reader/frog-a-dog/page-26.jpg', text: null, pn: 26 },
-  { img: '/images/reader/frog-a-dog/page-28.jpg', text: null, pn: 28 },
-  { img: '/images/reader/frog-a-dog/page-30.jpg', text: null, pn: 30 },
-  { img: '/images/reader/frog-a-dog/page-32.jpg', text: null, pn: 32 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-001.jpg', text: null, audioUrl: null, pn: 1 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-002.jpg', text: null, audioUrl: null, pn: 2 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-003.jpg', text: null, audioUrl: null, pn: 3 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-004.jpg', text: null, audioUrl: null, pn: 4 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-005.jpg', text: null, audioUrl: null, pn: 5 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-006.jpg', text: null, audioUrl: null, pn: 6 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-007.jpg', text: null, audioUrl: null, pn: 7 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-008.jpg', text: null, audioUrl: null, pn: 8 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-009.jpg', text: null, audioUrl: null, pn: 9 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-010.jpg', text: null, audioUrl: null, pn: 10 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-011.jpg', text: null, audioUrl: null, pn: 11 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-012.jpg', text: null, audioUrl: null, pn: 12 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-013.jpg', text: null, audioUrl: null, pn: 13 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-014.jpg', text: null, audioUrl: null, pn: 14 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-015.jpg', text: null, audioUrl: null, pn: 15 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-016.jpg', text: null, audioUrl: null, pn: 16 },
+  { img: '/images/reader/frog-a-dog/spreads/spread-017.jpg', text: null, audioUrl: null, pn: 17 },
 ];
 
 const FLIP_MS = 600;
@@ -84,14 +86,21 @@ export default function ReaderPage() {
 
   useEffect(() => {
     const check = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 600);
+      const land = window.innerWidth > window.innerHeight && window.innerHeight < 600;
+      setIsLandscape(land);
+      if (land && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
     };
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
     check();
     window.addEventListener('resize', check);
     window.addEventListener('orientationchange', check);
+    document.addEventListener('fullscreenchange', onFsChange);
     return () => {
       window.removeEventListener('resize', check);
       window.removeEventListener('orientationchange', check);
+      document.removeEventListener('fullscreenchange', onFsChange);
     };
   }, []);
 
@@ -110,10 +119,11 @@ export default function ReaderPage() {
 
   const playPage = useCallback(async (idx: number) => {
     stopAudio();
+    const audioUrl = PAGES[idx].audioUrl;
+    if (!audioUrl) { setAudioStatus('idle'); return; }
     setAudioStatus('loading');
     try {
-      const mp3Url = `/audio/reader/${SLUG}/page-${String(PAGES[idx].pn).padStart(3, '0')}.mp3`;
-      const audio = new Audio(mp3Url);
+      const audio = new Audio(audioUrl);
       audioRef.current = audio;
       audio.onended = () => setAudioStatus('idle');
       audio.onerror = () => setAudioStatus('idle');
@@ -329,7 +339,7 @@ export default function ReaderPage() {
 
       {/* Page spread */}
       <div
-        style={isLandscape ? {
+        style={(isLandscape || isFullscreen) ? {
           position: 'fixed', inset: 0, zIndex: 9999,
           background: '#000',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -525,6 +535,19 @@ export default function ReaderPage() {
             >
               {audioStatus === 'idle' ? '🔊 Read aloud' : audioStatus === 'loading' ? '⏳ Loading…' : '⏹ Stop'}
             </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
+              style={{
+                background: 'rgba(123,94,167,0.18)',
+                border: '1px solid rgba(123,94,167,0.45)',
+                borderRadius: 20,
+                padding: '4px 10px',
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+              }}
+              aria-label="Toggle fullscreen"
+            >{isFullscreen ? '⊠' : '⛶'}</button>
           </div>
         </div>
 
