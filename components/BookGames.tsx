@@ -2,6 +2,7 @@
 import { useState, lazy, Suspense } from "react";
 import GameModal from "@/components/games/GameModal";
 import { GAME_DATA } from "@/lib/gameData";
+import ShutInPlatformer from "@/components/ShutInPlatformer";
 
 const WordSearch = lazy(() => import("@/components/games/WordSearch"));
 const Crossword = lazy(() => import("@/components/games/Crossword"));
@@ -9,7 +10,7 @@ const MemoryMatch = lazy(() => import("@/components/games/MemoryMatch"));
 const WordUnscramble = lazy(() => import("@/components/games/WordUnscramble"));
 const Maze = lazy(() => import("@/components/games/Maze"));
 
-type GameKey = "wordsearch" | "crossword" | "memory" | "unscramble" | "maze";
+type GameKey = "wordsearch" | "crossword" | "memory" | "unscramble" | "maze" | "platformer";
 
 function pickN<T>(arr: T[], n: number): T[] {
   const shuffled = [...arr].sort(() => Math.random() - 0.5);
@@ -30,6 +31,8 @@ const GAME_CARDS: GameCard[] = [
   { key: "unscramble",  emoji: "🔡", title: "Word Unscramble", color: "#10b981" },
   { key: "maze",        emoji: "🗺️", title: "Maze",            color: "#f97316" },
 ];
+
+const PLATFORMER_CARD: GameCard = { key: "platformer", emoji: "🎮", title: "Platformer!", color: "#4a9de0" };
 
 interface Props {
   slug: string;
@@ -64,7 +67,9 @@ export default function BookGames({ slug, accentColor }: Props) {
 
   if (!gameData || !gameWords) return null;
 
-  const allCards = [...GAME_CARDS];
+  const allCards = slug === "the-shut-in-button"
+    ? [PLATFORMER_CARD, ...GAME_CARDS]
+    : [...GAME_CARDS];
   const activeCard = allCards.find(c => c.key === open);
 
   return (
@@ -138,6 +143,9 @@ export default function BookGames({ slug, accentColor }: Props) {
           onClose={() => setOpen(null)}
         >
           <Suspense fallback={<LoadingSpinner color={accentColor} />}>
+            {open === "platformer" && (
+              <ShutInPlatformer />
+            )}
             {open === "wordsearch" && (
               <WordSearch slug={slug} words={gameWords.wordSearch} accentColor={accentColor} />
             )}
