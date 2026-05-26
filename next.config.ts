@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/yikes',
+        destination: 'https://youtu.be/dQw4w9WgXcQ',
+        permanent: false,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
