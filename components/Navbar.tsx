@@ -38,15 +38,15 @@ function useNavTheme() {
     return { bgColor, borderColor, textColor, logoColor, shopBg, shopText, mobileMenuBg: bgColor };
   }
 
-  // Default teal theme for home / books list / about
+  // Default dark theme for home / books list / about
   return {
-    bgColor: "#dcf9f3",
-    borderColor: "#b0e8dc",
-    textColor: "#009380",
-    logoColor: "#009380",
-    shopBg: "#ff9c1a",
+    bgColor: "#050212",
+    borderColor: "rgba(124,58,237,0.3)",
+    textColor: "rgba(255,255,255,0.82)",
+    logoColor: "#ffffff",
+    shopBg: "#7c3aed",
     shopText: "#ffffff",
-    mobileMenuBg: "#dcf9f3",
+    mobileMenuBg: "#0d0b1e",
   };
 }
 
