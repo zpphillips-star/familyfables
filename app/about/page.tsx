@@ -386,7 +386,7 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/books"
+              href="/"
               className="btn-shine inline-block px-8 py-3.5 font-bold text-white shadow-lg hover:shadow-xl transition-all active:scale-95"
               style={{ backgroundColor: "#ff9c1a", borderRadius: "4px" }}
             >

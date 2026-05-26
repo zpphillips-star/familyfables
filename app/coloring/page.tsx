@@ -145,7 +145,7 @@ export default function ColoringPage() {
             Love the story? Grab the full book! 🐉
           </p>
           <Link
-            href="/books"
+            href="/"
             className="btn-shine inline-block px-8 py-3 rounded-full font-bold text-sm shadow-md transition-transform hover:scale-105 active:scale-95"
             style={{ backgroundColor: '#F4A839', color: '#2D1B69' }}
           >
