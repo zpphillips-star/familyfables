@@ -60,7 +60,6 @@ export const books: Book[] = [
         landIndex: 2,
     amazonUrl: "https://www.amazon.com/dp/1951173163",
     hasReadAloud: true,
-    amazonUrl: "https://www.amazon.com/dp/1951173163",
   },
   {
     id: "dream-ideas",

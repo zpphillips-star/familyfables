@@ -69,7 +69,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <Image
-              src="/images/logo-detail-860.png"
+              src="/images/logo-final-teal.png"
               alt="Family Fables"
               width={52}
               height={52}
