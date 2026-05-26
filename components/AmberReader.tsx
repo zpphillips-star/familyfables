@@ -703,7 +703,7 @@ export default function AmberReader({
           href="/read"
           style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.8rem', textDecoration: 'none', padding: '4px 8px' }}
         >
-          ← Stories
+          ← Adventure Land
         </Link>
         <span style={{
           color: `${accentColor}bb`,
