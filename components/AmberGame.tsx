@@ -518,7 +518,7 @@ export default function AmberGame() {
                 Play Again!
               </button>
               <a
-                href="https://www.amazon.com/stores/page/1DEB841F-05B8-46B0-A42E-55B618C36B12"
+                href="https://www.amazon.com/dp/1951173007"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

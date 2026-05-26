@@ -60,6 +60,7 @@ export const books: Book[] = [
         landIndex: 2,
     amazonUrl: "https://www.amazon.com/dp/1951173163",
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1951173163",
   },
   {
     id: "dream-ideas",
@@ -83,6 +84,7 @@ export const books: Book[] = [
         landIndex: 6,
     amazonUrl: "https://www.amazon.com/dp/1951173147",
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1951173147",
   },
   {
     id: "amber-dragon-keeper",
@@ -129,6 +131,7 @@ export const books: Book[] = [
         landIndex: 5,
     amazonUrl: "https://www.amazon.com/dp/1539937615",
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1539937615",
   },
   {
     id: "finding-hampton",
@@ -152,6 +155,7 @@ export const books: Book[] = [
         landIndex: 4,
     amazonUrl: "https://www.amazon.com/dp/195117318X",
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/195117318X",
   },
   {
     id: "lumpiest-pumpkin",
@@ -175,6 +179,7 @@ export const books: Book[] = [
         landIndex: 7,
     amazonUrl: "https://www.amazon.com/dp/195117304X",
     hasReadAloud: false,
+    amazonUrl: "https://www.amazon.com/dp/195117304X",
   },
   {
     id: "one-tom-turkey",
@@ -198,6 +203,7 @@ export const books: Book[] = [
         landIndex: 11,
     amazonUrl: "https://www.amazon.com/dp/1951173201",
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1951173201",
   },
   {
     id: "ollie-come-home",
@@ -221,6 +227,7 @@ export const books: Book[] = [
         landIndex: 8,
     amazonUrl: "https://www.amazon.com/dp/1951173074",
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1951173074",
   },
   {
     id: "what-a-doodle-do",
@@ -244,6 +251,7 @@ export const books: Book[] = [
         landIndex: 10,
     amazonUrl: "https://www.amazon.com/dp/1951173023",
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1951173023",
   },
   {
     id: "shut-in-button",
@@ -267,6 +275,7 @@ export const books: Book[] = [
         landIndex: 9,
     amazonUrl: "https://www.amazon.com/dp/1721813829",
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1721813829",
   },
   {
     id: "frog-a-dog",
@@ -290,6 +299,7 @@ export const books: Book[] = [
         landIndex: 12,
     amazonUrl: "https://www.amazon.com/dp/1977632084",
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1977632084",
   },
   {
     id: "brian-the-ghost",
@@ -312,5 +322,6 @@ export const books: Book[] = [
     gradient: "linear-gradient(155deg, #1a0a2a 0%, #2d1260 35%, #4a1a80 65%, #7b5ea7 100%)",
     amazonUrl: "https://www.amazon.com/dp/1951173228",
     hasReadAloud: true,
+    amazonUrl: "https://www.amazon.com/dp/1951173228",
   },
 ];

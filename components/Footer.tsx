@@ -91,7 +91,7 @@ export default function Footer() {
             {/* Shop */}
             <div>
               <a
-                href="https://www.amazon.com/familyfables"
+                href="https://www.amazon.com/stores/page/1DEB841F-05B8-46B0-A42E-55B618C36B12?ingress=3"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:opacity-75 transition-opacity"
