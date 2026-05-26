@@ -107,6 +107,7 @@ export const books: Book[] = [
     hasReadAloud: true,
     amazonUrl: "https://www.amazon.com/dp/1951173007",
   },
+  {
     slug: "gilroys-gobble", landName: "Gilroy's Harvest Forest", landEmoji: "🦃",
     title: "Gilroy's Gobble",
     description:
