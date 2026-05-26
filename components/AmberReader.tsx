@@ -700,7 +700,7 @@ export default function AmberReader({
         zIndex: 10, flexShrink: 0,
       }}>
         <Link
-          href="/read"
+          href="/"
           style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.8rem', textDecoration: 'none', padding: '4px 8px' }}
         >
           ← Adventure Land
