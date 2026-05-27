@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import BlogTracker from "@/components/BlogTracker";
 
 export const metadata: Metadata = {
   title: "Why Imaginative Children's Books Matter (And 5 That Spark Big Ideas)",
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 export default function ImaginationBooksPost() {
   return (
     <div style={{ minHeight: "80vh", background: "#fdf4ff" }}>
+      <BlogTracker postSlug="kids-books-about-imagination" postTitle="Why Imaginative Children's Books Matter" />
       <section
         style={{
           background: "linear-gradient(135deg, #4a0080 0%, #7b1fa2 50%, #ab47bc 100%)",

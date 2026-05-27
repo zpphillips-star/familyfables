@@ -3,6 +3,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import {
+  trackReadAloudStarted,
+  trackReadAloudPageTurned,
+  trackReadAloudCompleted,
+} from "@/lib/analytics";
 
 interface BookReaderProps {
   bookSlug: string;
@@ -38,6 +43,30 @@ export default function BookReader({
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
   const autoPlayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ── Analytics tracking ────────────────────────────────────────────────────
+  const trackedStartRef = useRef(false);
+  const trackedPagesRef = useRef<Set<number>>(new Set());
+
+  useEffect(() => {
+    if (!showStartOverlay && !trackedStartRef.current) {
+      trackedStartRef.current = true;
+      trackReadAloudStarted(bookSlug);
+    }
+  }, [showStartOverlay, bookSlug]);
+
+  useEffect(() => {
+    if (showStartOverlay) return;
+    if (!trackedPagesRef.current.has(currentPage)) {
+      trackedPagesRef.current.add(currentPage);
+      if (currentPage > 0) {
+        trackReadAloudPageTurned(bookSlug, currentPage + 1);
+      }
+      if (currentPage === totalPages - 1) {
+        trackReadAloudCompleted(bookSlug);
+      }
+    }
+  }, [currentPage, showStartOverlay, bookSlug, totalPages]);
 
   // Check audio support
   useEffect(() => {

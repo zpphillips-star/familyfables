@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import BlogTracker from "@/components/BlogTracker";
 
 export const metadata: Metadata = {
   title: "Best Children's Books for Bedtime",
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 export default function BedtimeBooksPost() {
   return (
     <div style={{ minHeight: "80vh", background: "#f0f8ff" }}>
+      <BlogTracker postSlug="best-childrens-books-for-bedtime" postTitle="Best Children's Books for Bedtime" />
       {/* Header */}
       <section
         style={{

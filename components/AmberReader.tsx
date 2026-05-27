@@ -3,6 +3,11 @@
 import { useState, useRef, useEffect, useCallback, CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  trackReadAloudStarted,
+  trackReadAloudPageTurned,
+  trackReadAloudCompleted,
+} from '@/lib/analytics';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 export interface ReaderPage {
@@ -16,6 +21,8 @@ export interface ReaderPage {
 
 export interface AmberReaderProps {
   title: string;
+  /** Slug used for analytics (e.g. "amber-dragon-keeper"). Defaults to slugified title. */
+  bookSlug?: string;
   /** Emoji shown in header & start screen */
   emoji: string;
   /** Cover image for the start screen (e.g. book cover PNG/JPG) */
@@ -99,6 +106,7 @@ function MusicalNotes({ color }: { color: string }) {
 
 export default function AmberReader({
   title,
+  bookSlug,
   emoji,
   coverImg,
   pages,
@@ -109,6 +117,8 @@ export default function AmberReader({
   startNote,
 }: AmberReaderProps) {
   const total = pages.length;
+  // Derive a slug from title if none provided
+  const slug = bookSlug ?? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
   const [started, setStarted] = useState(false);
   const [pageIdx, setPageIdx] = useState(0);
@@ -120,6 +130,32 @@ export default function AmberReader({
   const [audioStatus, setAudioStatus] = useState<'idle' | 'loading' | 'playing'>('idle');
   const [autoPlay, setAutoPlay] = useState(true);
   const [mapOpen, setMapOpen] = useState(false);
+
+  // ── Analytics tracking ────────────────────────────────────────────────────
+  const trackedStartRef = useRef(false);
+  const trackedPagesRef = useRef<Set<number>>(new Set());
+
+  useEffect(() => {
+    if (started && !trackedStartRef.current) {
+      trackedStartRef.current = true;
+      trackReadAloudStarted(slug);
+    }
+  }, [started, slug]);
+
+  useEffect(() => {
+    if (!started) return;
+    if (!trackedPagesRef.current.has(pageIdx)) {
+      trackedPagesRef.current.add(pageIdx);
+      // Track page turns (skip first page as it's the start event)
+      if (pageIdx > 0) {
+        trackReadAloudPageTurned(slug, pageIdx + 1);
+      }
+      // Track completion on last page
+      if (pageIdx === total - 1) {
+        trackReadAloudCompleted(slug);
+      }
+    }
+  }, [pageIdx, started, slug, total]);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);

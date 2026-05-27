@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import BlogTracker from "@/components/BlogTracker";
 
 export const metadata: Metadata = {
   title: "Interactive Kids Books Online: How Digital Storybooks Are Changing Story Time",
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 export default function InteractiveBooksPost() {
   return (
     <div style={{ minHeight: "80vh", background: "#f5fff8" }}>
+      <BlogTracker postSlug="interactive-kids-books-online" postTitle="Interactive Kids Books Online" />
       {/* Header */}
       <section
         style={{

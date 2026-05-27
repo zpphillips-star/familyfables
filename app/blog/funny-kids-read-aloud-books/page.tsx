@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import BlogTracker from "@/components/BlogTracker";
 
 export const metadata: Metadata = {
   title: "The 5 Funniest Read-Aloud Books for Kids",
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 export default function FunnyReadAloudPost() {
   return (
     <div style={{ minHeight: "80vh", background: "#f9f5ff" }}>
+      <BlogTracker postSlug="funny-kids-read-aloud-books" postTitle="The 5 Funniest Read-Aloud Books for Kids" />
       {/* Header */}
       <section
         style={{

@@ -137,7 +137,7 @@ export default function Footer() {
           style={{ color: theme.copyrightColor }}
         >
           <p>Copyright {new Date().getFullYear()} | Family Fables LLC</p>
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center">
             {[
               { label: "Facebook", url: "https://www.facebook.com/familyfables/" },
               { label: "Instagram", url: "https://www.instagram.com/familyfables/" },
@@ -153,6 +153,15 @@ export default function Footer() {
                 {label}
               </a>
             ))}
+            {/* Discreet dashboard link — subtle, for internal use */}
+            <a
+              href="/dashboard"
+              style={{ color: theme.socialColor, fontSize: "13px", opacity: 0.4 }}
+              className="hover:opacity-70 transition-opacity"
+              title="Analytics Dashboard"
+            >
+              📊
+            </a>
           </div>
         </div>
       </div>

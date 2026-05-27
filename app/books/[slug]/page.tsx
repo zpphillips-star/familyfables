@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import { books, AMAZON_STORE_URL } from "@/lib/books";
 import BookActivity from "@/components/BookActivity";
 import BookGames from "@/components/BookGames";
+import BookPageAnalytics from "@/components/BookPageAnalytics";
+import AmazonButton from "@/components/AmazonButton";
 
 // ── Static params for all 12 book slugs ──────────────────────────────────────
 export async function generateStaticParams() {
@@ -253,6 +255,8 @@ export default async function BookPage({
 
   return (
     <>
+      {/* ── Analytics: fire book_viewed event on mount ──────────────────── */}
+      <BookPageAnalytics bookSlug={slug} bookTitle={book.title} />
       {/* ── JSON-LD Book Schema ─────────────────────────────────────────── */}
       <script
         type="application/ld+json"
@@ -932,9 +936,9 @@ export default async function BookPage({
                 )}
                 {/* Right — buy buttons, centered */}
                 <div className="book-cta-btn-group" style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
-                  <a href={amazonUrl} target="_blank" rel="noopener noreferrer" className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", borderRadius: 50, backgroundColor: "#ff9c1a", color: "#fff", fontWeight: 900, fontSize: 17, textDecoration: "none", boxShadow: "0 6px 24px rgba(255,156,26,0.5)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease", whiteSpace: "nowrap" }}>
+                  <AmazonButton bookSlug={slug} bookTitle={book.title} href={amazonUrl} className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", borderRadius: 50, backgroundColor: "#ff9c1a", color: "#fff", fontWeight: 900, fontSize: 17, textDecoration: "none", boxShadow: "0 6px 24px rgba(255,156,26,0.5)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease", whiteSpace: "nowrap" }}>
                     Get {book.title} on Amazon →
-                  </a>
+                  </AmazonButton>
                   <a href="/" className="book-cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", borderRadius: 50, backgroundColor: "rgba(255,255,255,0.15)", color: "#fff", fontWeight: 700, fontSize: 16, textDecoration: "none", border: "2px solid rgba(255,255,255,0.5)", backdropFilter: "blur(4px)", fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif", transition: "transform 0.2s ease, box-shadow 0.2s ease", whiteSpace: "nowrap" }}>
                     ← Go Home
                   </a>
@@ -1021,10 +1025,10 @@ export default async function BookPage({
           </p>
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
-            <a
+            <AmazonButton
+              bookSlug={slug}
+              bookTitle={book.title}
               href={amazonUrl}
-              target="_blank"
-              rel="noopener noreferrer"
               className="book-cta-btn"
               style={{
                 display: "inline-flex",
@@ -1043,7 +1047,7 @@ export default async function BookPage({
               }}
             >
               Get {book.title} on Amazon →
-            </a>
+            </AmazonButton>
 
             <Link
               href="/"
