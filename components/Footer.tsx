@@ -64,7 +64,7 @@ export default function Footer() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Image src="/images/logo-detail-860.png" alt="Family Fables" width={44} height={44} />
+                <Image src="/images/logo-detail-860.png" alt="Family Fables children's books logo" width={44} height={44} />
                 <span
                   className="text-xl"
                   style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", color: "#ffffff" }}
@@ -102,13 +102,27 @@ export default function Footer() {
             </div>
 
             {/* About Us */}
-            <div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <Link
                 href="/about"
                 className="hover:opacity-75 transition-opacity"
                 style={{ color: theme.linkColor, display: "inline-block", fontWeight: 700, fontSize: "26px", textTransform: "uppercase", letterSpacing: "0.1em", fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
               >
                 About Us
+              </Link>
+              <Link
+                href="/blog"
+                className="hover:opacity-75 transition-opacity"
+                style={{ color: theme.linkColor, display: "inline-block", fontWeight: 700, fontSize: "18px", textTransform: "uppercase", letterSpacing: "0.1em", fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
+              >
+                Blog
+              </Link>
+              <Link
+                href="/press"
+                className="hover:opacity-75 transition-opacity"
+                style={{ color: theme.linkColor, display: "inline-block", fontWeight: 700, fontSize: "18px", textTransform: "uppercase", letterSpacing: "0.1em", fontFamily: "var(--font-concert-one), 'Concert One', cursive" }}
+              >
+                Press Kit
               </Link>
             </div>
 

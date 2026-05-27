@@ -30,12 +30,13 @@ const catamaran = Catamaran({
   display: "swap",
 });
 export const metadata: Metadata = {
+  metadataBase: new URL("https://familyfables.org"),
   title: {
     default: "Family Fables \u2014 Children\u2019s Books",
     template: "%s | Family Fables",
   },
   description:
-    "Family Fables publishes joyful, whimsical children\u2019s books that bring families together — stories that warm little hearts and spark big imaginations.",
+    "Family Fables publishes joyful, whimsical children\u2019s books that bring families together \u2014 funny read-aloud stories, bedtime books, and interactive adventures for kids ages 2\u201310.",
   keywords: [
     "children\u2019s books",
     "family books",
@@ -43,14 +44,36 @@ export const metadata: Metadata = {
     "family fables",
     "Z.P. Phillips",
     "Victor Plotkin",
+    "funny kids books",
+    "read aloud books for kids",
+    "bedtime books for children",
+    "interactive kids books online",
   ],
+  alternates: {
+    canonical: "https://familyfables.org",
+  },
   openGraph: {
     title: "Family Fables \u2014 Children\u2019s Books",
     description:
-      "Joyful children\u2019s books that spark imagination and create lasting family memories.",
+      "Funny, joyful, interactive children\u2019s books for bedtime and beyond. Read aloud online or get your copy on Amazon.",
     url: "https://familyfables.org",
     siteName: "Family Fables",
     type: "website",
+    images: [
+      {
+        url: "/images/logo-detail-860.png",
+        width: 860,
+        height: 860,
+        alt: "Family Fables \u2014 Children\u2019s Books",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Family Fables \u2014 Children\u2019s Books",
+    description:
+      "Funny, joyful children\u2019s books. Read aloud online or get your copy on Amazon.",
+    images: ["/images/logo-detail-860.png"],
   },
 };
 

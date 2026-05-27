@@ -53,6 +53,7 @@ function useNavTheme() {
 const navLinks = [
   { href: "/", label: "home" },
   { href: "/about", label: "about us" },
+  { href: "/blog", label: "blog" },
 ];
 
 export default function Navbar() {
@@ -70,7 +71,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2 group">
             <Image
               src="/images/logo-final-teal.png"
-              alt="Family Fables"
+              alt="Family Fables children's books home"
               width={52}
               height={52}
               className="group-hover:scale-110 transition-transform duration-200"

@@ -6,7 +6,32 @@ import HiddenAboutSecret from "@/components/HiddenAboutSecret";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn the story behind Family Fables — how Z.P. Phillips honored his grandfather Victor Plotkin'\''s creative legacy by founding a children'\''s book company.",
+    "Learn the story behind Family Fables — how Z.P. Phillips honored his grandfather Victor Plotkin's creative legacy by founding a children's book company.",
+  alternates: {
+    canonical: "https://familyfables.org/about",
+  },
+  openGraph: {
+    title: "About Family Fables | Children\u2019s Books by Z.P. Phillips",
+    description:
+      "Z.P. Phillips founded Family Fables to honor his grandfather Victor Plotkin\u2019s creative legacy. Discover the story behind our joyful children\u2019s books.",
+    url: "https://familyfables.org/about",
+    type: "website",
+    images: [
+      {
+        url: "/images/logo-detail-860.png",
+        width: 860,
+        height: 860,
+        alt: "Family Fables logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Family Fables | Children\u2019s Books by Z.P. Phillips",
+    description:
+      "Z.P. Phillips founded Family Fables to honor his grandfather\u2019s creative legacy.",
+    images: ["/images/logo-detail-860.png"],
+  },
 };
 
 export default function AboutPage() {

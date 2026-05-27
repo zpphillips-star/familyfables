@@ -88,7 +88,7 @@ function CoverContent({ book, isLarge, hasReadAloud }: { book: Book; isLarge: bo
       {book.image ? (
         <Image
           src={book.image}
-          alt={book.title}
+          alt={`${book.title} children's book cover`}
           fill
           className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
           sizes={isLarge ? "400px" : "300px"}

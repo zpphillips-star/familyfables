@@ -21,9 +21,36 @@ export async function generateMetadata({
   const { slug } = await params;
   const book = books.find((b) => b.slug === slug);
   if (!book) return {};
+  const url = `https://familyfables.org/books/${slug}`;
+  const ogImage = book.coverImage.startsWith("/")
+    ? book.coverImage
+    : `/${book.coverImage}`;
   return {
     title: `${book.title} | Family Fables`,
     description: book.description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: `${book.title} \u2014 Family Fables Children\u2019s Book`,
+      description: book.description,
+      url,
+      type: "book",
+      images: [
+        {
+          url: ogImage,
+          width: 800,
+          height: 800,
+          alt: `${book.title} book cover`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${book.title} \u2014 Family Fables`,
+      description: book.description,
+      images: [ogImage],
+    },
   };
 }
 
@@ -226,6 +253,45 @@ export default async function BookPage({
 
   return (
     <>
+      {/* ── JSON-LD Book Schema ─────────────────────────────────────────── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Book",
+            name: book.title,
+            description: book.longDescription || book.description,
+            image: `https://familyfables.org${book.coverImage}`,
+            url: `https://familyfables.org/books/${slug}`,
+            author: {
+              "@type": "Person",
+              name: "Z.P. Phillips",
+              url: "https://familyfables.org/about",
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "Family Fables",
+              url: "https://familyfables.org",
+            },
+            genre: "Children's Picture Book",
+            audience: {
+              "@type": "Audience",
+              audienceType: book.ageRange,
+            },
+            inLanguage: "en",
+            isAccessibleForFree: true,
+            offers: {
+              "@type": "Offer",
+              availability: "https://schema.org/InStock",
+              seller: {
+                "@type": "Organization",
+                name: "Amazon",
+              },
+            },
+          }),
+        }}
+      />
       {/* ── Global keyframes ── */}
       <style>{`
         @keyframes bookFloat {
@@ -861,7 +927,7 @@ export default async function BookPage({
                 {/* Left — book cover */}
                 {book.coverImage && (
                   <div style={{ flex: "0 0 auto", width: 180, height: 180, borderRadius: 24, overflow: "hidden", boxShadow: "0 16px 48px rgba(0,0,0,0.55)" }}>
-                    <Image src={book.coverImage} alt={book.title} width={180} height={180} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <Image src={book.coverImage} alt={book.title} width={180} height={180} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
                 )}
                 {/* Right — buy buttons, centered */}
@@ -923,6 +989,7 @@ export default async function BookPage({
                 alt={book.title}
                 width={100}
                 height={100}
+                loading="lazy"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
@@ -1006,6 +1073,124 @@ export default async function BookPage({
         )} {/* end !activityFirst CTA */}
       </div>{/* end gradient wrapper */}
 
+      {/* ══════════════════════════════════════════════════════════════════
+          YOU MIGHT ALSO LIKE — internal links to improve crawl depth
+      ══════════════════════════════════════════════════════════════════ */}
+      {(() => {
+        const related = books
+          .filter((b) => b.slug !== slug)
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 3);
+        return (
+          <section
+            style={{
+              background: "#f9f5ff",
+              padding: "64px 24px",
+              textAlign: "center",
+            }}
+          >
+            <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+              <p
+                style={{
+                  fontSize: 13,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  color: "#009380",
+                  marginBottom: 8,
+                  fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif",
+                }}
+              >
+                More Adventures Await
+              </p>
+              <h2
+                style={{
+                  fontFamily: "var(--font-concert-one), 'Concert One', cursive",
+                  fontSize: "clamp(22px, 3.5vw, 36px)",
+                  color: "#2D1B69",
+                  marginBottom: 40,
+                }}
+              >
+                You Might Also Like
+              </h2>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 24,
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                }}
+              >
+                {related.map((relBook) => (
+                  <Link
+                    key={relBook.slug}
+                    href={`/books/${relBook.slug}`}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 12,
+                      textDecoration: "none",
+                      width: "clamp(140px, 22vw, 220px)",
+                      padding: "16px",
+                      borderRadius: 20,
+                      background: "#ffffff",
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        borderRadius: 14,
+                        overflow: "hidden",
+                        boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+                      }}
+                    >
+                      <Image
+                        src={relBook.coverImage}
+                        alt={`${relBook.title} book cover`}
+                        width={220}
+                        height={220}
+                        loading="lazy"
+                        style={{
+                          width: "100%",
+                          height: "auto",
+                          display: "block",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </div>
+                    <p
+                      style={{
+                        fontFamily:
+                          "var(--font-concert-one), 'Concert One', cursive",
+                        fontSize: "clamp(13px, 2vw, 16px)",
+                        color: "#2D1B69",
+                        lineHeight: 1.2,
+                        textAlign: "center",
+                      }}
+                    >
+                      {relBook.title}
+                    </p>
+                    <span
+                      style={{
+                        fontSize: 12,
+                        color: "#009380",
+                        fontWeight: 700,
+                        fontFamily:
+                          "var(--font-catamaran), 'Catamaran', sans-serif",
+                      }}
+                    >
+                      {relBook.ageRange}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
     </>
   );
