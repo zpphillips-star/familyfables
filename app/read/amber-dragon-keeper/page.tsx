@@ -26,7 +26,7 @@ const PAGES: ReaderPage[] = [
   {
     img: '/images/reader/amber-dragon-keeper/page-04.jpg',
     audioUrl: '/audio/amber-dragon-keeper/page-06.mp3',
-    text: "To know that you must first know the dragons. What is a dragon keeper?",
+    text: "What is a dragon keeper? To know that, you must first know the dragons.",
   },
   {
     img: '/images/reader/amber-dragon-keeper/page-05.jpg',
@@ -81,7 +81,7 @@ const PAGES: ReaderPage[] = [
   {
     img: '/images/reader/amber-dragon-keeper/page-15.jpg',
     audioUrl: '/audio/amber-dragon-keeper/page-17.mp3',
-    text: "Then, Amber would enter the magical cave and come out of the closet into her bedroom on the other side. For Amber and Cinnamon, the ends were always happy. Cinnamon would fly Amber to the Glowing Mountains where Amber would give her friend a biiiigggg hug goodbye, and they would smile knowing they were that much closer to seeing each other again.",
+    text: "Then, Amber would enter the magical cave and come out of the closet into her bedroom on the other side. For Amber and Cinnamon, the ends were always happy. Cinnamon would fly Amber to the Glowing Mountains, where Amber would give her friend a biiiigggg hug goodbye, and they would smile knowing they were that much closer to seeing each other again.",
   },
   {
     img: '/images/reader/amber-dragon-keeper/page-16.jpg',
@@ -91,7 +91,7 @@ const PAGES: ReaderPage[] = [
   {
     img: '/images/reader/amber-dragon-keeper/page-17.jpg',
     audioUrl: '/audio/amber-dragon-keeper/page-19.mp3',
-    text: "Whether her parents thought her adventures were dreams or not, Amber always knew the truth. Every night when she walked through the magical closet to visit Cinnamon and the other dragons of Sydar she became...",
+    text: "Whether her parents thought her adventures were dreams or not, Amber always knew the truth. Every night, when she walked through the magical closet to visit Cinnamon and the other dragons of Sydar, she became...",
   },
   {
     img: '/images/reader/amber-dragon-keeper/page-18.jpg',
