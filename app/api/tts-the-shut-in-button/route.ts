@@ -1,5 +1,5 @@
 // The Shut-In Button TTS endpoint
-// Voice: fable — whimsical British storyteller; perfect for this charming comfort-zone story
+// Voice: nova — OpenAI's warm, friendly female voice
 // Model: tts-1-hd — highest quality
 
 export const maxDuration = 60;
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       model: 'tts-1-hd',
-      voice: 'fable',
+      voice: 'nova',
       input: text,
       speed: 1.0,
     }),

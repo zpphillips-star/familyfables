@@ -1,5 +1,5 @@
 // What-a-Doodle-Do TTS endpoint
-// Voice: fable — fun, morning energy; the rooster demands a playful British voice
+// Voice: nova — OpenAI's warm, friendly female voice
 // Model: tts-1-hd — highest quality
 
 export const maxDuration = 60;
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       model: 'tts-1-hd',
-      voice: 'fable',
+      voice: 'nova',
       input: text,
       speed: 1.0,
     }),

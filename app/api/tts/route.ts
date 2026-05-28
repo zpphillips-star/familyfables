@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       model: 'tts-1-hd',
-      voice: 'fable',
+      voice: 'nova',
       input: text,
       speed: 1.0,
     }),
