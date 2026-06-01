@@ -1,197 +1,400 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const pages = [
-  { num: 4,  file: 'page04-300dpi.png', label: 'Page 4'  },
-  { num: 5,  file: 'page05-300dpi.png', label: 'Page 5'  },
-  { num: 6,  file: 'page06-300dpi.png', label: 'Page 6'  },
-  { num: 7,  file: 'page07-300dpi.png', label: 'Page 7'  },
-  { num: 8,  file: 'page08-300dpi.png', label: 'Page 8'  },
-  { num: 9,  file: 'page09-300dpi.png', label: 'Page 9'  },
-  { num: 10, file: 'page10-300dpi.png', label: 'Page 10' },
-  { num: 11, file: 'page11-300dpi.png', label: 'Page 11' },
+interface ColoringPage {
+  file: string;
+  label: string;
+}
+
+interface Book {
+  slug: string;
+  title: string;
+  emoji: string;
+  pages: ColoringPage[];
+}
+
+const books: Book[] = [
+  {
+    slug: 'amber-dragon-keeper',
+    title: 'Amber the Dragon Keeper',
+    emoji: '🐉',
+    pages: [
+      { file: 'page05-300dpi.png', label: 'Page 5' },
+      { file: 'page08-300dpi.png', label: 'Page 8' },
+      { file: 'page09-300dpi.png', label: 'Page 9' },
+      { file: 'page10-300dpi.png', label: 'Page 10' },
+      { file: 'page11-300dpi.png', label: 'Page 11' },
+    ],
+  },
+  {
+    slug: 'brian-the-ghost',
+    title: 'Brian the Ghost',
+    emoji: '👻',
+    pages: [
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
+    ],
+  },
+  {
+    slug: 'dream-ideas',
+    title: 'Dream Ideas',
+    emoji: '💭',
+    pages: [
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
+    ],
+  },
+  {
+    slug: 'finding-hampton',
+    title: 'Finding Hampton',
+    emoji: '🐾',
+    pages: [
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
+    ],
+  },
+  {
+    slug: 'frog-a-dog',
+    title: 'Frog-a-Dog',
+    emoji: '🐸',
+    pages: [
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
+    ],
+  },
+  {
+    slug: 'gilroys-gobble',
+    title: "Gilroy's Gobble",
+    emoji: '🦃',
+    pages: [
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
+    ],
+  },
+  {
+    slug: 'ollie-come-home',
+    title: 'Ollie Come Home',
+    emoji: '🏠',
+    pages: [
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
+    ],
+  },
+  {
+    slug: 'one-tom-turkey',
+    title: 'One Tom Turkey',
+    emoji: '🦃',
+    pages: [
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
+    ],
+  },
+  {
+    slug: 'poo-poo-face',
+    title: "What's Your Poo Poo Face?",
+    emoji: '💩',
+    pages: [
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
+    ],
+  },
+  {
+    slug: 'the-shut-in-button',
+    title: 'The Shut-in Button',
+    emoji: '🔘',
+    pages: [
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
+    ],
+  },
+  {
+    slug: 'what-a-doodle-do',
+    title: 'What a Doodle Do',
+    emoji: '✏️',
+    pages: [
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
+    ],
+  },
+];
+
+const bookColors = [
+  { from: '#7C3AED', to: '#4F46E5' },
+  { from: '#0EA5E9', to: '#6366F1' },
+  { from: '#10B981', to: '#0EA5E9' },
+  { from: '#F59E0B', to: '#EF4444' },
+  { from: '#EC4899', to: '#8B5CF6' },
+  { from: '#14B8A6', to: '#3B82F6' },
+  { from: '#F97316', to: '#EF4444' },
+  { from: '#8B5CF6', to: '#EC4899' },
+  { from: '#22C55E', to: '#16A34A' },
+  { from: '#3B82F6', to: '#1D4ED8' },
+  { from: '#EF4444', to: '#F97316' },
 ];
 
 export default function ColoringPage() {
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const [lightboxTitle, setLightboxTitle] = useState('');
+
+  const openLightbox = (src: string, title: string) => {
+    setLightboxSrc(src);
+    setLightboxTitle(title);
+  };
+
+  const closeLightbox = () => setLightboxSrc(null);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FDF8F2' }}>
+    <main style={{ background: '#FDF8F2', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+      {/* Hero */}
+      <div style={{
+        background: 'linear-gradient(135deg, #7C3AED 0%, #0EA5E9 50%, #10B981 100%)',
+        padding: '60px 24px',
+        textAlign: 'center',
+        color: 'white',
+      }}>
+        <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, margin: 0, marginBottom: '16px' }}>
+          Free Coloring Pages from ALL Our Books! 🎨
+        </h1>
+        <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.4rem)', margin: 0, opacity: 0.95, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
+          Print and color characters from every Family Fables story — always free!
+        </p>
+      </div>
 
-      {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section
-        className="relative overflow-hidden py-20 px-4 text-center"
-        style={{ background: 'linear-gradient(160deg, #EDE0FF 0%, #D6F5F0 100%)' }}
-      >
-        {/* Decorative floaters */}
-        <span className="absolute top-8 left-10 text-5xl float-slow select-none" aria-hidden>🐉</span>
-        <span className="absolute top-12 right-12 text-4xl float-mid select-none" aria-hidden>✏️</span>
-        <span className="absolute bottom-10 left-1/4 text-3xl float-fast select-none" aria-hidden>🖍️</span>
-        <span className="absolute bottom-8 right-1/4 text-4xl float-slow select-none" aria-hidden>⭐</span>
-
-        <div className="relative z-10 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mb-5"
-            style={{ backgroundColor: '#9B6FD0', color: 'white' }}>
-            🎨 Free Printables
-          </div>
-          <h1
-            className="font-display mb-4 leading-tight"
-            style={{ color: '#2D1B69', fontSize: 'clamp(3rem, 7vw, 6rem)' }}
-          >
-            Color Amber&apos;s World! 🐉
-          </h1>
-          <p className="text-lg mb-2" style={{ color: '#5A4080' }}>
-            Free coloring pages from <em>Amber the Dragon Keeper</em>
-          </p>
-          <p className="text-sm" style={{ color: '#7B6898' }}>
-            Print as many copies as you want. Best on standard 8.5×11&quot; paper. Always free. 💜
-          </p>
-        </div>
-
-        {/* Blob bottom */}
-        <div className="absolute left-0 right-0 bottom-0" aria-hidden style={{ lineHeight: 0 }}>
-          <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-            style={{ display: 'block', width: '100%', height: 60 }}>
-            <path d="M0,60 L0,28 Q200,0 400,32 Q600,60 800,24 Q1000,0 1200,30 Q1360,50 1440,20 L1440,60 Z"
-              fill="#FDF8F2"/>
-          </svg>
-        </div>
-      </section>
-
-      {/* ── Grid ───────────────────────────────────────────────────────── */}
-      <section className="max-w-5xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-          {pages.map((p) => {
-            const src = `/coloring-pages/amber-dragon-keeper/${p.file}`;
-            return (
-              <div
-                key={p.num}
-                className="group rounded-2xl overflow-hidden flex flex-col"
-                style={{
-                  backgroundColor: 'white',
-                  boxShadow: '0 4px 20px rgba(107,63,160,0.10)',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)';
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 32px rgba(107,63,160,0.18)';
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLDivElement).style.transform = '';
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 20px rgba(107,63,160,0.10)';
-                }}
-              >
-                {/* Thumbnail — click to preview */}
-                <button
-                  className="relative w-full overflow-hidden bg-gray-50 cursor-zoom-in"
-                  style={{ aspectRatio: '1 / 1' }}
-                  onClick={() => setLightbox(src)}
-                  aria-label={`Preview ${p.label}`}
-                >
-                  <Image
-                    src={src}
-                    alt={`Amber the Dragon Keeper coloring page ${p.num}`}
-                    fill
-                    className="object-contain p-2 group-hover:scale-105 transition-transform duration-400"
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  />
-                  {/* Preview hint */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    style={{ background: 'rgba(155,111,208,0.15)' }}>
-                    <span className="text-2xl">🔍</span>
-                  </div>
-                </button>
-
-                {/* Footer */}
-                <div className="p-3 flex items-center justify-between">
-                  <span className="text-xs font-bold" style={{ color: '#9B6FD0' }}>{p.label}</span>
-                  <a
-                    href={src}
-                    download={`amber-dragon-keeper-${p.label.toLowerCase().replace(' ', '-')}.png`}
-                    className="btn-shine flex items-center gap-1 px-3 rounded-full text-xs font-bold transition-transform hover:scale-105 active:scale-95"
-                    style={{ backgroundColor: '#6B3FA0', color: 'white', minHeight: '48px' }}
-                  >
-                    ⬇ Print
-                  </a>
-                </div>
+      {/* Book sections */}
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px' }}>
+        {books.map((book, bookIdx) => {
+          const color = bookColors[bookIdx % bookColors.length];
+          return (
+            <section key={book.slug} style={{ marginBottom: '64px' }}>
+              {/* Book header */}
+              <div style={{
+                background: `linear-gradient(135deg, ${color.from}, ${color.to})`,
+                borderRadius: '16px 16px 0 0',
+                padding: '20px 28px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+              }}>
+                <span style={{ fontSize: '2rem' }}>{book.emoji}</span>
+                <h2 style={{ margin: 0, color: 'white', fontSize: 'clamp(1.2rem, 3vw, 1.8rem)', fontWeight: 800 }}>
+                  {book.title}
+                </h2>
               </div>
-            );
-          })}
-        </div>
 
-        {/* ── How to print tip ─────────────────────────────────────────── */}
-        <div className="mt-14 rounded-3xl p-8 text-center"
-          style={{ background: 'linear-gradient(135deg, #F0E8FF, #E0F7F4)' }}>
-          <div className="text-4xl mb-3">🖨️</div>
-          <h2
-            className="text-2xl font-display mb-2"
-            style={{ color: '#2D1B69', fontFamily: "var(--font-catamaran), 'Catamaran', sans-serif" }}
-          >
-            Printing Tips
-          </h2>
-          <p className="text-sm max-w-md mx-auto" style={{ color: '#5A4080' }}>
-            Download any page and open it with your photo viewer or browser, then print.
-            For best results, select <strong>Fit to Page</strong> and use <strong>standard 8.5×11&quot;</strong> paper.
-            These pages are 300 DPI — they&apos;ll look crisp on any printer. 🌟
-          </p>
-        </div>
+              {/* Page grid */}
+              <div style={{
+                background: 'white',
+                borderRadius: '0 0 16px 16px',
+                padding: '24px',
+                boxShadow: `0 4px 24px ${color.from}33`,
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+                gap: '16px',
+              }}>
+                {book.pages.map((page) => {
+                  const imgSrc = `/coloring-pages/${book.slug}/${page.file}`;
+                  return (
+                    <div
+                      key={page.file}
+                      style={{
+                        background: '#FAFAFA',
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        boxShadow: `0 2px 12px ${color.from}40`,
+                        cursor: 'pointer',
+                        transition: 'transform 0.2s, box-shadow 0.2s',
+                      }}
+                      onMouseEnter={e => {
+                        (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px) scale(1.02)';
+                        (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 24px ${color.from}60`;
+                      }}
+                      onMouseLeave={e => {
+                        (e.currentTarget as HTMLDivElement).style.transform = '';
+                        (e.currentTarget as HTMLDivElement).style.boxShadow = `0 2px 12px ${color.from}40`;
+                      }}
+                      onClick={() => openLightbox(imgSrc, `${book.title} — ${page.label}`)}
+                    >
+                      <div style={{ position: 'relative', aspectRatio: '1', background: '#F3F3F3' }}>
+                        <Image
+                          src={imgSrc}
+                          alt={`${book.title} ${page.label} coloring page`}
+                          fill
+                          style={{ objectFit: 'contain', padding: '8px' }}
+                          unoptimized
+                        />
+                      </div>
+                      <div style={{ padding: '10px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.8rem', color: '#555', fontWeight: 600 }}>{page.label}</span>
+                        <a
+                          href={imgSrc}
+                          download
+                          onClick={e => e.stopPropagation()}
+                          style={{
+                            background: `linear-gradient(135deg, ${color.from}, ${color.to})`,
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '6px',
+                            padding: '4px 10px',
+                            fontSize: '0.75rem',
+                            fontWeight: 700,
+                            textDecoration: 'none',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          ⬇ Print
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
 
-        {/* ── CTA back to books ─────────────────────────────────────────── */}
-        <div className="mt-10 text-center">
-          <p className="text-sm mb-4" style={{ color: '#7B6898' }}>
-            Love the story? Grab the full book! 🐉
+        {/* Printing tips */}
+        <section style={{
+          background: 'linear-gradient(135deg, #FFF7ED, #FEF3C7)',
+          borderRadius: '16px',
+          padding: '32px',
+          marginBottom: '48px',
+        }}>
+          <h2 style={{ color: '#92400E', fontSize: '1.5rem', fontWeight: 800, marginTop: 0 }}>🖨️ Printing Tips</h2>
+          <ul style={{ color: '#78350F', lineHeight: 1.8, fontSize: '1rem' }}>
+            <li>Use <strong>Letter size paper (8.5&quot; × 11&quot;)</strong> for best fit</li>
+            <li>Set printer to <strong>&quot;Fit to Page&quot;</strong> or <strong>&quot;Scale to Fit&quot;</strong></li>
+            <li>Select <strong>Black &amp; White</strong> mode to save color ink</li>
+            <li>Heavier paper (65 lb cardstock) works great with markers</li>
+            <li>Crayons, colored pencils, and washable markers all work beautifully!</li>
+          </ul>
+        </section>
+
+        {/* CTA */}
+        <div style={{ textAlign: 'center', paddingBottom: '32px' }}>
+          <p style={{ color: '#666', fontSize: '1.1rem', marginBottom: '16px' }}>
+            Want to read the full stories? Check out all our books!
           </p>
           <Link
-            href="/"
-            className="btn-shine inline-block px-8 py-3 rounded-full font-bold text-sm shadow-md transition-transform hover:scale-105 active:scale-95"
-            style={{ backgroundColor: '#F4A839', color: '#2D1B69' }}
+            href="/books"
+            style={{
+              display: 'inline-block',
+              background: 'linear-gradient(135deg, #7C3AED, #0EA5E9)',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '50px',
+              padding: '14px 36px',
+              fontSize: '1.1rem',
+              fontWeight: 800,
+              boxShadow: '0 4px 20px rgba(124,58,237,0.4)',
+            }}
           >
-            See All Our Books ✨
+            📚 See All Our Books
           </Link>
         </div>
-      </section>
+      </div>
 
-      {/* ── Lightbox ──────────────────────────────────────────────────── */}
-      {lightbox && (
+      {/* Lightbox */}
+      {lightboxSrc && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0,0,0,0.80)' }}
-          onClick={() => setLightbox(null)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.85)',
+            zIndex: 9999,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px',
+          }}
+          onClick={closeLightbox}
         >
           <div
-            className="relative w-full max-w-2xl rounded-2xl overflow-hidden bg-white"
+            style={{
+              background: 'white',
+              borderRadius: '16px',
+              padding: '16px',
+              maxWidth: '90vw',
+              maxHeight: '90vh',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '12px',
+            }}
             onClick={e => e.stopPropagation()}
           >
-            <Image
-              src={lightbox}
-              alt="Coloring page preview"
-              width={2550}
-              height={2550}
-              className="w-full h-auto"
-            />
-            <div className="p-4 flex justify-between items-center">
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+              <h3 style={{ margin: 0, fontSize: '1rem', color: '#333' }}>{lightboxTitle}</h3>
               <button
-                className="text-sm font-semibold px-4 py-3 rounded-lg transition-colors hover:bg-gray-100 active:scale-95"
-                style={{ color: '#7B6898' }}
-                onClick={() => setLightbox(null)}
-              >
-                ✕ Close
-              </button>
-              <a
-                href={lightbox}
-                download
-                className="btn-shine px-5 py-3 rounded-full text-sm font-bold active:scale-95 transition-transform"
-                style={{ backgroundColor: '#6B3FA0', color: 'white', minHeight: '48px', display: 'inline-flex', alignItems: 'center' }}
-              >
-                ⬇ Download Full Size
-              </a>
+                onClick={closeLightbox}
+                style={{
+                  background: '#EEE',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: 32,
+                  height: 32,
+                  cursor: 'pointer',
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                }}
+              >×</button>
             </div>
+            <img
+              src={lightboxSrc}
+              alt={lightboxTitle}
+              style={{ maxWidth: '80vw', maxHeight: '75vh', objectFit: 'contain', borderRadius: '8px' }}
+            />
+            <a
+              href={lightboxSrc}
+              download
+              style={{
+                background: 'linear-gradient(135deg, #7C3AED, #0EA5E9)',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '50px',
+                padding: '10px 28px',
+                fontWeight: 700,
+                fontSize: '1rem',
+              }}
+            >
+              ⬇ Download &amp; Print
+            </a>
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }
