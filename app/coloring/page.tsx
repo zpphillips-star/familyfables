@@ -16,17 +16,27 @@ interface Book {
   pages: ColoringPage[];
 }
 
+// Landscape (2:1) books: amber-dragon-keeper, dream-ideas, finding-hampton, one-tom-turkey, poo-poo-face
+// Square (1:1) books: brian-the-ghost, frog-a-dog, gilroys-gobble, ollie-come-home, the-shut-in-button, what-a-doodle-do
+const LANDSCAPE_BOOKS = new Set([
+  'amber-dragon-keeper',
+  'dream-ideas',
+  'finding-hampton',
+  'one-tom-turkey',
+  'poo-poo-face',
+]);
+
 const books: Book[] = [
   {
     slug: 'amber-dragon-keeper',
     title: 'Amber the Dragon Keeper',
     emoji: '🐉',
     pages: [
-      { file: 'page05-300dpi.png', label: 'Page 5' },
-      { file: 'page08-300dpi.png', label: 'Page 8' },
-      { file: 'page09-300dpi.png', label: 'Page 9' },
-      { file: 'page10-300dpi.png', label: 'Page 10' },
-      { file: 'page11-300dpi.png', label: 'Page 11' },
+      { file: 'page-01.png', label: 'Page 1' },
+      { file: 'page-02.png', label: 'Page 2' },
+      { file: 'page-03.png', label: 'Page 3' },
+      { file: 'page-04.png', label: 'Page 4' },
+      { file: 'page-05.png', label: 'Page 5' },
     ],
   },
   {
@@ -168,10 +178,12 @@ const bookColors = [
 export default function ColoringPage() {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [lightboxTitle, setLightboxTitle] = useState('');
+  const [lightboxLandscape, setLightboxLandscape] = useState(false);
 
-  const openLightbox = (src: string, title: string) => {
+  const openLightbox = (src: string, title: string, isLandscape: boolean) => {
     setLightboxSrc(src);
     setLightboxTitle(title);
+    setLightboxLandscape(isLandscape);
   };
 
   const closeLightbox = () => setLightboxSrc(null);
@@ -197,6 +209,7 @@ export default function ColoringPage() {
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px' }}>
         {books.map((book, bookIdx) => {
           const color = bookColors[bookIdx % bookColors.length];
+          const isLandscape = LANDSCAPE_BOOKS.has(book.slug);
           return (
             <section key={book.slug} style={{ marginBottom: '64px' }}>
               {/* Book header */}
@@ -221,7 +234,9 @@ export default function ColoringPage() {
                 padding: '24px',
                 boxShadow: `0 4px 24px ${color.from}33`,
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+                gridTemplateColumns: isLandscape
+                  ? 'repeat(auto-fill, minmax(280px, 1fr))'
+                  : 'repeat(auto-fill, minmax(160px, 1fr))',
                 gap: '16px',
               }}>
                 {book.pages.map((page) => {
@@ -245,9 +260,13 @@ export default function ColoringPage() {
                         (e.currentTarget as HTMLDivElement).style.transform = '';
                         (e.currentTarget as HTMLDivElement).style.boxShadow = `0 2px 12px ${color.from}40`;
                       }}
-                      onClick={() => openLightbox(imgSrc, `${book.title} — ${page.label}`)}
+                      onClick={() => openLightbox(imgSrc, `${book.title} — ${page.label}`, isLandscape)}
                     >
-                      <div style={{ position: 'relative', aspectRatio: '1', background: '#F3F3F3' }}>
+                      <div style={{
+                        position: 'relative',
+                        aspectRatio: isLandscape ? '2 / 1' : '1 / 1',
+                        background: '#F3F3F3',
+                      }}>
                         <Image
                           src={imgSrc}
                           alt={`${book.title} ${page.label} coloring page`}
@@ -375,7 +394,14 @@ export default function ColoringPage() {
             <img
               src={lightboxSrc}
               alt={lightboxTitle}
-              style={{ maxWidth: '80vw', maxHeight: '75vh', objectFit: 'contain', borderRadius: '8px' }}
+              style={{
+                maxWidth: lightboxLandscape ? '90vw' : '80vw',
+                maxHeight: '75vh',
+                width: lightboxLandscape ? '90vw' : 'auto',
+                height: 'auto',
+                objectFit: 'contain',
+                borderRadius: '8px',
+              }}
             />
             <a
               href={lightboxSrc}
