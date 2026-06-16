@@ -2437,7 +2437,7 @@ function BrianHauntActivity({ accentColor, textColor }: { accentColor: string; t
   const [loading, setLoading] = useState(false);
 
   const fallback = (i: string) =>
-    `Ooooh, ${i}! Brian says that's the friendliest haunting he's ever heard of — he'd float right in and wave at everyone. 👻✨`;
+    `Ooooh, haunting ${i}! Brian says that's the friendliest ghost visit he's ever heard of — he'd float right in and wave hello with the biggest smile. 👻✨`;
 
   async function submit() {
     const val = input.trim();
@@ -2462,14 +2462,14 @@ function BrianHauntActivity({ accentColor, textColor }: { accentColor: string; t
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14, textAlign: "left" }}>
       <p style={{ fontSize: 16, color: textColor ?? "rgba(255,255,255,0.9)", lineHeight: 1.55, margin: 0 }}>
-        Brian the Ghost haunts with kindness — just lots of friendly waving. If you were a ghost, what would YOU haunt?
+        Brian haunts with kindness — friendly waves, big smiles, no scares. If you were a ghost, who would be the most fun to haunt?
       </p>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && !loading && submit()}
-          placeholder="I would haunt..."
+          placeholder="I'd haunt..."
           disabled={loading}
           style={{
             flex: "1 1 200px",
@@ -2543,7 +2543,7 @@ function BrianHauntActivity({ accentColor, textColor }: { accentColor: string; t
               👻 Fun Activity
             </p>
             <h2 style={{ fontFamily: "var(--font-concert-one), 'Concert One', cursive", fontSize: "clamp(22px, 3.5vw, 36px)", color: textLight ? "#ffffff" : "#1a1060", marginBottom: 24, lineHeight: 1.2 }}>
-              What would YOU haunt?
+              Who would YOU haunt? 👻
             </h2>
             <BrianHauntActivity
               accentColor={accentColor}
