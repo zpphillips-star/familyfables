@@ -14,8 +14,8 @@ function slugSeed(slug: string) {
   return slug.split("").reduce((acc, c) => Math.imul(acc, 31) + c.charCodeAt(0), 7) >>> 0;
 }
 
-// 8 directions: right, down-right, down, down-left, left, up-left, up, up-right
-const DIRS = [[0,1],[1,1],[1,0],[1,-1],[0,-1],[-1,-1],[-1,0],[-1,1]] as const;
+// 3 directions: right, down, down-right (forward only — no backwards words)
+const DIRS = [[0,1],[1,0],[1,1]] as const;
 const FILL = "ABCDEFGHIJKLMNOPRSTUWBCDFGHKLMNPRSTVWXYZ";
 const GRID_SIZE = 11;
 
@@ -120,8 +120,7 @@ export default function WordSearch({ slug, words, accentColor }: Props) {
   const onPointerUp = useCallback(() => {
     if (!dragging || selection.length < 2) { setDragging(false); setStartCell(null); setSelection([]); return; }
     const selected = selection.map(([r,c]) => grid[r][c]).join("");
-    const rev = selected.split("").reverse().join("");
-    const match = words.find(w => !found.has(w) && (w === selected || w === rev));
+    const match = words.find(w => !found.has(w) && w === selected);
     if (match) {
       const next = new Set(found); next.add(match);
       setFound(next);
