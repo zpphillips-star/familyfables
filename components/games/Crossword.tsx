@@ -23,6 +23,415 @@ function buildCrossword(entries: CrosswordWordDef[]): { placements: Placement[];
       const c = dir === "across" ? col + i : col;
       const ex = get(r, c);
       if (ex && ex !== word[i]) return false;
+      if (!ex) {
+        const sameRow = dir === "across";
+        const adj1 = sameRow ? get(r - 1, c) : get(r, c - 1);
+        const adj2 = sameRow ? get(r + 1, c) : get(r, c + 1);
+        if (adj1 || adj2) return false;
+      }
+    }
+    const preR = dir === "across" ? row : row - 1;
+    const preC = dir === "across" ? col - 1 : col;
+    const postR = dir === "across" ? row : row + word.length;
+    const postC = dir === "across" ? col + word.length : col;
+    if (get(preR, preC) || get(postR, postC)) return false;
+    return true;
+  }
+
+  function place(word: string, row: number, col: number, dir: "across" | "down") {
+    for (let i = 0; i < word.length; i++) set(dir === "across" ? row : row + i, dir === "across" ? col + i : col, word[i]);
+    placements.push({ word, row, col, dir, num: clueNum++ });
+  }
+
+  place(words[0], 0, 0, "across");
+
+  for (let wi = 1; wi < words.length; wi++) {
+    const word = words[wi];
+    let placed = false;
+    for (const p of placements) {
+      if (placed) break;
+      const newDir = p.dir === "across" ? "down" : "across";
+      for (let pi = 0; pi < p.word.length && !placed; pi++) {
+        for (let wi2 = 0; wi2 < word.length && !placed; wi2++) {
+          if (p.word[pi] !== word[wi2]) continue;
+          const intR = p.dir === "across" ? p.row : p.row + pi;
+          const intC = p.dir === "across" ? p.col + pi : p.col;
+          const nr = newDir === "across" ? intR : intR - wi2;
+          const nc = newDir === "across" ? intC - wi2 : intC;
+          if (canPlace(word, nr, nc, newDir)) { place(word, nr, nc, newDir); placed = true; }
+        }
+      }
+    }
+    if (!placed) {
+      const maxRow = placements.reduce((m, p) => Math.max(m, p.dir === "down" ? p.row + p.word.length - 1 : p.row), 0);
+      place(word, maxRow + 2, 0, "across");
+    }
+  }
+
+  const allKeys = [...cellMap.keys()].map(k => k.split(",").map(Number));
+  const minR = Math.min(...allKeys.map(k => k[0]));
+  const minC = Math.min(...allKeys.map(k => k[1]));
+  const norm = placements.map(p => ({ ...p, row: p.row - minR, col: p.col - minC }));
+  const maxR = norm.reduce((m, p) => Math.max(m, p.dir === "down" ? p.row + p.word.length - 1 : p.row), 0);
+  const maxC = norm.reduce((m, p) => Math.max(m, p.dir === "across" ? p.col + p.word.length - 1 : p.col), 0);
+
+  return { placements: norm, rows: maxR + 1, cols: maxC + 1 };
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
+
+interface Props {
+  words: CrosswordWordDef[];
+  accentColor: string;
+}
+
+const KB_ROWS = [
+  ["Q","W","E","R","T","Y","U","I","O","P"],
+  ["A","S","D","F","G","H","J","K","L"],
+  ["Z","X","C","V","B","N","M","⌫"],
+];
+
+export default function Crossword({ words, accentColor }: Props) {
+  const { placements, rows, cols } = useMemo(() => buildCrossword(words), [words]);
+  const wordMap = useMemo(() => Object.fromEntries(words.map(w => [w.word, w])), [words]);
+
+  const [userGrid, setUserGrid] = useState<Record<string, string>>({});
+  const [checked, setChecked] = useState(false);
+  const [won, setWon] = useState(false);
+  const [activeCell, setActiveCell] = useState<string | null>(null);
+  const [activeDir, setActiveDir] = useState<"across" | "down">("across");
+  const gridWrapRef = useRef<HTMLDivElement>(null);
+  const [cellSize, setCellSize] = useState(36);
+
+  const solution = useMemo(() => {
+    const m: Record<string, string> = {};
+    for (const p of placements)
+      for (let i = 0; i < p.word.length; i++) {
+        const r = p.dir === "across" ? p.row : p.row + i;
+        const c = p.dir === "across" ? p.col + i : p.col;
+        m[`${r},${c}`] = p.word[i];
+      }
+    return m;
+  }, [placements]);
+
+  const startNums = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const p of placements) m[`${p.row},${p.col}`] = p.num;
+    return m;
+  }, [placements]);
+
+  const acrossClues = useMemo(() =>
+    placements.filter(p => p.dir === "across").sort((a, b) => a.num - b.num), [placements]);
+  const downClues = useMemo(() =>
+    placements.filter(p => p.dir === "down").sort((a, b) => a.num - b.num), [placements]);
+
+  // Scale grid to fit container
+  useEffect(() => {
+    const measure = () => {
+      if (!gridWrapRef.current) return;
+      const available = gridWrapRef.current.clientWidth - 4;
+      const ideal = Math.floor(available / cols);
+      setCellSize(Math.max(24, Math.min(40, ideal)));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (gridWrapRef.current) ro.observe(gridWrapRef.current);
+    return () => ro.disconnect();
+  }, [cols]);
+
+  // Which cells are in the active word
+  const activeCells = useMemo(() => {
+    const set = new Set<string>();
+    if (!activeCell) return set;
+    const [fr, fc] = activeCell.split(",").map(Number);
+    for (const p of placements) {
+      if (p.dir !== activeDir) continue;
+      for (let i = 0; i < p.word.length; i++) {
+        const r = p.dir === "across" ? p.row : p.row + i;
+        const c = p.dir === "across" ? p.col + i : p.col;
+        if (r === fr && c === fc) {
+          for (let j = 0; j < p.word.length; j++) {
+            const rr = p.dir === "across" ? p.row : p.row + j;
+            const cc = p.dir === "across" ? p.col + j : p.col;
+            set.add(`${rr},${cc}`);
+          }
+        }
+      }
+    }
+    return set;
+  }, [activeCell, activeDir, placements]);
+
+  // Active clue text
+  const activeClue = useMemo(() => {
+    if (!activeCell) return null;
+    const [fr, fc] = activeCell.split(",").map(Number);
+    for (const p of placements) {
+      if (p.dir !== activeDir) continue;
+      for (let i = 0; i < p.word.length; i++) {
+        const r = p.dir === "across" ? p.row : p.row + i;
+        const c = p.dir === "across" ? p.col + i : p.col;
+        if (r === fr && c === fc) {
+          const def = wordMap[p.word];
+          return { num: p.num, dir: p.dir, clue: def?.clue ?? "", emoji: def?.emoji ?? "" };
+        }
+      }
+    }
+    return null;
+  }, [activeCell, activeDir, placements, wordMap]);
+
+  const getNextCell = useCallback((key: string, dir: "across" | "down", delta: 1 | -1): string | null => {
+    const [r, c] = key.split(",").map(Number);
+    const nr = dir === "down" ? r + delta : r;
+    const nc = dir === "across" ? c + delta : c;
+    const nk = `${nr},${nc}`;
+    return solution[nk] ? nk : null;
+  }, [solution]);
+
+  const handleCellTap = useCallback((key: string) => {
+    if (key === activeCell) {
+      // Toggle direction if cell has both across and down words
+      const hasAcross = placements.some(p => p.dir === "across" && activeCells.has(key));
+      const hasDown = placements.some(p => p.dir === "down" && activeCells.has(key));
+      if (hasAcross && hasDown) setActiveDir(d => d === "across" ? "down" : "across");
+    } else {
+      setActiveCell(key);
+      // Pick whichever direction has a word through this cell (prefer current dir)
+      const hasCurrentDir = placements.some(p => {
+        if (p.dir !== activeDir) return false;
+        const [fr, fc] = key.split(",").map(Number);
+        for (let i = 0; i < p.word.length; i++) {
+          const r = p.dir === "across" ? p.row : p.row + i;
+          const c = p.dir === "across" ? p.col + i : p.col;
+          if (r === fr && c === fc) return true;
+        }
+        return false;
+      });
+      if (!hasCurrentDir) setActiveDir(d => d === "across" ? "down" : "across");
+    }
+  }, [activeCell, activeDir, activeCells, placements]);
+
+  const handleKey = useCallback((letter: string) => {
+    if (!activeCell) return;
+    if (letter === "⌫") {
+      setUserGrid(prev => {
+        const next = { ...prev };
+        if (next[activeCell]) { delete next[activeCell]; }
+        else {
+          const prev2 = getNextCell(activeCell, activeDir, -1);
+          if (prev2) { delete next[prev2]; setActiveCell(prev2); }
+        }
+        return next;
+      });
+      setChecked(false);
+      return;
+    }
+    setUserGrid(prev => ({ ...prev, [activeCell]: letter }));
+    setChecked(false);
+    const next = getNextCell(activeCell, activeDir, 1);
+    if (next) setActiveCell(next);
+  }, [activeCell, activeDir, getNextCell]);
+
+  const checkAnswers = useCallback(() => {
+    setChecked(true);
+    const allCorrect = Object.entries(solution).every(([k, v]) => userGrid[k] === v);
+    if (allCorrect) setWon(true);
+  }, [solution, userGrid]);
+
+  if (won) return (
+    <div style={{ textAlign: "center", padding: "32px 16px" }}>
+      <div style={{ fontSize: 64, marginBottom: 12 }}>🎊</div>
+      <h3 style={{ fontFamily: "var(--font-concert-one),'Concert One',cursive", fontSize: 28, color: accentColor, marginBottom: 8 }}>Crossword Complete!</h3>
+      <p style={{ color: "#555", fontSize: 16 }}>You&apos;re a word wizard! 🧙‍♂️</p>
+      <div style={{ fontSize: 40, marginTop: 16 }}>⭐⭐⭐</div>
+    </div>
+  );
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, height: "100%", minHeight: 0 }}>
+
+      {/* Grid — scales to fill width */}
+      <div ref={gridWrapRef} style={{ width: "100%", overflowX: "hidden" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`,
+            gridTemplateRows: `repeat(${rows}, ${cellSize}px)`,
+            gap: 2,
+            width: "fit-content",
+            margin: "0 auto",
+          }}
+        >
+          {Array.from({ length: rows }, (_, r) =>
+            Array.from({ length: cols }, (_, c) => {
+              const k = `${r},${c}`;
+              const inGrid = !!solution[k];
+              const num = startNums[k];
+              const isActive = activeCell === k;
+              const isHighlighted = activeCells.has(k);
+              const userLetter = userGrid[k] || "";
+              const isCorrect = checked && userLetter === solution[k];
+              const isWrong = checked && !!userLetter && userLetter !== solution[k];
+
+              if (!inGrid) return (
+                <div key={k} style={{ width: cellSize, height: cellSize, background: "#1a1060", borderRadius: 3 }} />
+              );
+
+              return (
+                <div
+                  key={k}
+                  onClick={() => handleCellTap(k)}
+                  style={{
+                    width: cellSize, height: cellSize, position: "relative",
+                    border: `2px solid ${isActive ? accentColor : isHighlighted ? `${accentColor}99` : "#ccc"}`,
+                    borderRadius: 3,
+                    background: isCorrect ? "#dcfce7" : isWrong ? "#fee2e2" : isActive ? `${accentColor}30` : isHighlighted ? `${accentColor}12` : "#fff",
+                    cursor: "pointer",
+                    userSelect: "none",
+                    transition: "background 0.1s, border-color 0.1s",
+                  }}
+                >
+                  {num && (
+                    <span style={{ position: "absolute", top: 1, left: 2, fontSize: Math.max(7, cellSize * 0.22), fontWeight: 700, color: "#666", lineHeight: 1 }}>
+                      {num}
+                    </span>
+                  )}
+                  <span style={{
+                    position: "absolute", inset: 0,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: Math.max(12, cellSize * 0.42), fontWeight: 700,
+                    fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
+                    color: isCorrect ? "#16a34a" : isWrong ? "#dc2626" : "#1a1060",
+                    paddingTop: num ? Math.max(4, cellSize * 0.15) : 0,
+                    textTransform: "uppercase",
+                  }}>
+                    {userLetter}
+                  </span>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      {/* Active clue banner */}
+      <div style={{
+        minHeight: 36,
+        background: activeClue ? `${accentColor}18` : "#f3f4f6",
+        borderRadius: 10,
+        padding: "7px 12px",
+        fontSize: 13,
+        color: "#333",
+        fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
+        lineHeight: 1.4,
+      }}>
+        {activeClue
+          ? <><strong style={{ color: accentColor }}>{activeClue.num}{activeClue.dir === "across" ? "A" : "D"}.</strong> {activeClue.emoji} {activeClue.clue} <span style={{ fontSize: 11, color: "#999" }}>(tap cell to switch direction)</span></>
+          : <span style={{ color: "#aaa" }}>Tap a square to start</span>
+        }
+      </div>
+
+      {/* Clues — compact scrollable */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, maxHeight: 90, overflowY: "auto", fontSize: 12 }}>
+        {[{ label: "Across", list: acrossClues }, { label: "Down", list: downClues }].map(({ label, list }) => (
+          <div key={label}>
+            <div style={{ fontWeight: 800, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: accentColor, marginBottom: 4 }}>{label}</div>
+            {list.map(p => {
+              const def = wordMap[p.word];
+              const isCurrent = activeClue?.num === p.num && activeClue?.dir === p.dir;
+              return (
+                <div
+                  key={p.num}
+                  onClick={() => { setActiveCell(`${p.row},${p.col}`); setActiveDir(p.dir); }}
+                  style={{ fontSize: 11, color: isCurrent ? accentColor : "#555", cursor: "pointer", lineHeight: 1.4, fontWeight: isCurrent ? 700 : 400 }}
+                >
+                  <strong>{p.num}.</strong> {def?.emoji} {def?.clue}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      {/* Custom keyboard */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center" }}>
+        {KB_ROWS.map((row, ri) => (
+          <div key={ri} style={{ display: "flex", gap: 4 }}>
+            {row.map(letter => (
+              <button
+                key={letter}
+                onPointerDown={e => { e.preventDefault(); handleKey(letter); }}
+                style={{
+                  width: letter === "⌫" ? 44 : 30,
+                  height: 38,
+                  borderRadius: 6,
+                  border: "none",
+                  background: letter === "⌫" ? "#e5e7eb" : activeCell ? accentColor : "#e5e7eb",
+                  color: letter === "⌫" ? "#374151" : activeCell ? "#fff" : "#9ca3af",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  cursor: activeCell ? "pointer" : "default",
+                  fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
+                  transition: "background 0.1s",
+                  touchAction: "manipulation",
+                }}
+              >
+                {letter}
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      {/* Check button */}
+      <button
+        onClick={checkAnswers}
+        style={{
+          padding: "10px 28px",
+          borderRadius: 50,
+          backgroundColor: accentColor,
+          color: "#fff",
+          fontWeight: 700,
+          fontSize: 14,
+          border: "none",
+          cursor: "pointer",
+          fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
+          alignSelf: "center",
+        }}
+      >
+        Check Answers ✓
+      </button>
+
+      {checked && !won && (
+        <p style={{ textAlign: "center", fontSize: 13, color: "#888", margin: 0 }}>
+          Keep going — some letters still need fixing! 🔤
+        </p>
+      )}
+    </div>
+  );
+}
+
+
+// ── Auto-place crossword words on a grid ─────────────────────────────────────
+
+interface Placement {
+  word: string; row: number; col: number; dir: "across" | "down"; num: number;
+}
+
+function buildCrossword(entries: CrosswordWordDef[]): { placements: Placement[]; rows: number; cols: number } {
+  const words = [...entries].sort((a, b) => b.word.length - a.word.length).map(e => e.word);
+  const cellMap = new Map<string, string>(); // "r,c" -> letter
+  const placements: Placement[] = [];
+  let clueNum = 1;
+
+  function get(r: number, c: number) { return cellMap.get(`${r},${c}`); }
+  function set(r: number, c: number, ch: string) { cellMap.set(`${r},${c}`, ch); }
+
+  function canPlace(word: string, row: number, col: number, dir: "across" | "down"): boolean {
+    for (let i = 0; i < word.length; i++) {
+      const r = dir === "across" ? row : row + i;
+      const c = dir === "across" ? col + i : col;
+      const ex = get(r, c);
+      if (ex && ex !== word[i]) return false;
       // Only crossing (perpendicular) overlaps allowed — no parallel touching
       if (!ex) {
         const sameRow = dir === "across";
