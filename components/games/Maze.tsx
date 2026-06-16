@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 interface Props {
   slug: string;
   accentColor: string;
+  onClose?: () => void;
 }
 
 const W = 9;
@@ -61,7 +62,7 @@ function getPlayerEmoji(slug: string): string {
   return "⭐";
 }
 
-export default function Maze({ slug, accentColor }: Props) {
+export default function Maze({ slug, accentColor, onClose }: Props) {
   const [walls] = useState<Walls>(() => generateMaze(slug));
   const [playerPos, setPlayerPos] = useState({ r: 0, c: 0 });
   const [timerStarted, setTimerStarted] = useState(false);
@@ -178,54 +179,106 @@ export default function Maze({ slug, accentColor }: Props) {
         <span style={{ fontSize:14, color:"#555" }}>{won ? "🏆 Finished!" : "Drag to move • Find 🏠"}</span>
       </div>
 
-      {/* Win panel */}
-      {won && (
-        <div style={{ background:"#f0fdf4", border:"2px solid #86efac", borderRadius:16, padding:"20px", maxWidth:svgW, margin:"0 auto 16px" }}>
-          <div style={{ fontSize:40, marginBottom:8 }}>🏠</div>
-          <h3 style={{ fontFamily:"var(--font-catamaran),'Catamaran',sans-serif", fontSize:20, fontWeight:800, color:"#1a1060", marginBottom:4 }}>
-            You found the way home!
-          </h3>
-          <p style={{ fontSize:14, color:"#555", marginBottom:8 }}>Time: {elapsed} seconds</p>
-          <p style={{ fontSize:24, marginBottom:16 }}>{stars}</p>
-          <button onClick={playAgain} style={{ background:accentColor, color:"#fff", border:"none", borderRadius:10, padding:"10px 24px", fontSize:15, fontWeight:800, cursor:"pointer" }}>
-            Play Again
-          </button>
-        </div>
-      )}
+      {/* Maze + win overlay wrapper */}
+      <div style={{ position: "relative", display: "inline-block", maxWidth: "100%" }}>
 
-      {/* Maze SVG — drag/pointer controlled */}
-      <div
-        style={{ display:"inline-block", maxWidth:"100%", overflowX:"auto", cursor: won ? "default" : "grab", touchAction:"none" }}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
-      >
-        <svg
-          ref={svgRef}
-          viewBox={`0 0 ${svgW} ${svgH}`}
-          width={svgW}
-          height={svgH}
-          style={{ display:"block", maxWidth:"100%" }}
+        {/* Maze SVG — drag/pointer controlled */}
+        <div
+          style={{ display:"inline-block", maxWidth:"100%", overflowX:"auto", cursor: won ? "default" : "grab", touchAction:"none" }}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
         >
-          <rect x={0} y={0} width={svgW} height={svgH} fill="#fefce8" />
-          {wallLines.map((l, i) => (
-            <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="#374151" strokeWidth={2} />
-          ))}
-          {/* Outer border with entrance/exit gaps */}
-          <line x1={CELL} y1={0} x2={svgW} y2={0} stroke="#374151" strokeWidth={3} />
-          <line x1={svgW} y1={0} x2={svgW} y2={svgH} stroke="#374151" strokeWidth={3} />
-          <line x1={0} y1={0} x2={0} y2={svgH} stroke="#374151" strokeWidth={3} />
-          <line x1={0} y1={svgH} x2={(W-1)*CELL} y2={svgH} stroke="#374151" strokeWidth={3} />
-          {/* Goal */}
-          {!(playerPos.r===H-1 && playerPos.c===W-1) && (
-            <text x={(W-1)*CELL+CELL/2} y={(H-1)*CELL+CELL/2+10} textAnchor="middle" fontSize={CELL*0.65}>🏠</text>
-          )}
-          {/* Player */}
-          <text x={playerPos.c*CELL+CELL/2} y={playerPos.r*CELL+CELL/2+10} textAnchor="middle" fontSize={CELL*0.65}>
-            {playerEmoji}
-          </text>
-        </svg>
+          <svg
+            ref={svgRef}
+            viewBox={`0 0 ${svgW} ${svgH}`}
+            width={svgW}
+            height={svgH}
+            style={{ display:"block", maxWidth:"100%" }}
+          >
+            <rect x={0} y={0} width={svgW} height={svgH} fill="#fefce8" />
+            {wallLines.map((l, i) => (
+              <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="#374151" strokeWidth={2} />
+            ))}
+            {/* Outer border with entrance/exit gaps */}
+            <line x1={CELL} y1={0} x2={svgW} y2={0} stroke="#374151" strokeWidth={3} />
+            <line x1={svgW} y1={0} x2={svgW} y2={svgH} stroke="#374151" strokeWidth={3} />
+            <line x1={0} y1={0} x2={0} y2={svgH} stroke="#374151" strokeWidth={3} />
+            <line x1={0} y1={svgH} x2={(W-1)*CELL} y2={svgH} stroke="#374151" strokeWidth={3} />
+            {/* Goal */}
+            {!(playerPos.r===H-1 && playerPos.c===W-1) && (
+              <text x={(W-1)*CELL+CELL/2} y={(H-1)*CELL+CELL/2+10} textAnchor="middle" fontSize={CELL*0.65}>🏠</text>
+            )}
+            {/* Player */}
+            <text x={playerPos.c*CELL+CELL/2} y={playerPos.r*CELL+CELL/2+10} textAnchor="middle" fontSize={CELL*0.65}>
+              {playerEmoji}
+            </text>
+          </svg>
+        </div>
+
+        {/* Win overlay — centered popup on top of the maze */}
+        {won && (
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "rgba(0,0,0,0.45)",
+            borderRadius: 8,
+          }}>
+            <div style={{
+              background: "#fff",
+              borderRadius: 20,
+              padding: "28px 32px",
+              textAlign: "center",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.3)",
+              minWidth: 200,
+            }}>
+              <div style={{ fontSize: 48, marginBottom: 6 }}>🏠</div>
+              <h3 style={{ fontFamily:"var(--font-catamaran),'Catamaran',sans-serif", fontSize: 18, fontWeight: 800, color: "#1a1060", margin: "0 0 4px" }}>
+                You found the way home!
+              </h3>
+              <p style={{ fontSize: 13, color: "#666", margin: "0 0 6px" }}>Time: {elapsed}s</p>
+              <p style={{ fontSize: 28, margin: "0 0 20px" }}>{stars}</p>
+              <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+                <button
+                  onClick={playAgain}
+                  style={{
+                    background: accentColor,
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 12,
+                    padding: "12px 22px",
+                    fontSize: 15,
+                    fontWeight: 800,
+                    cursor: "pointer",
+                    fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
+                  }}
+                >
+                  🔄 Try Again
+                </button>
+                <button
+                  onClick={onClose}
+                  style={{
+                    background: "#f3f4f6",
+                    color: "#374151",
+                    border: "none",
+                    borderRadius: 12,
+                    padding: "12px 22px",
+                    fontSize: 15,
+                    fontWeight: 800,
+                    cursor: "pointer",
+                    fontFamily: "var(--font-catamaran),'Catamaran',sans-serif",
+                  }}
+                >
+                  🚪 Exit
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Hint text */}

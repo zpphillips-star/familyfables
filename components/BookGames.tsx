@@ -159,7 +159,7 @@ export default function BookGames({ slug, accentColor }: Props) {
               <WordUnscramble words={gameWords.unscramble} accentColor={accentColor} />
             )}
             {open === "maze" && (
-              <Maze slug={slug} accentColor={accentColor} />
+              <Maze slug={slug} accentColor={accentColor} onClose={() => setOpen(null)} />
             )}
           </Suspense>
         </GameModal>
